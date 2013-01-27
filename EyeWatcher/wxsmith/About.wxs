@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxDialog" name="About">
+		<id_arg>0</id_arg>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
+					<label>EyeWatcher by Robert Morin, 2013&#x0A;&#x0A;[Grab a GPL license and put it there]</label>
+				</object>
+				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<border>5</border>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStdDialogButtonSizer" variable="StdDialogButtonSizer1" member="no">
+					<object class="button">
+						<object class="wxButton" name="wxID_OK">
+							<label></label>
+						</object>
+					</object>
+				</object>
+				<flag>wxALL|wxALIGN_RIGHT|wxALIGN_BOTTOM</flag>
+				<border>5</border>
+			</object>
+		</object>
+	</object>
+</wxsmith>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxFrame" name="EyeWatcherFrame">
+		<id_arg>0</id_arg>
+		<object class="wxBoxSizer" variable="mainBoxSizer" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="buttonsBoxSizer" member="no">
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON1" variable="pauseButton" member="yes">
+							<label>Pause</label>
+							<minsize>-1,-1</minsize>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON2" variable="stopButton" member="yes">
+							<label>Stop</label>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON3" variable="playButton" member="yes">
+							<label>Start</label>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON4" variable="optionsButton" member="yes">
+							<label>Options</label>
+							<handler function="OnOptionsButtonClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON5" variable="aboutButton" member="yes">
+							<label>About</label>
+							<handler function="OnaboutButtonClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+			</object>
+			<object class="sizeritem">
+				<object class="wxGridSizer" variable="timesGrid" member="no">
+					<cols>4</cols>
+					<rows>2</rows>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="onBoxSizer" member="no">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT1" variable="onLabel" member="yes">
+									<label>Time on PC</label>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT2" variable="onTime" member="yes">
+									<label>99:99</label>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="lastBoxSizer" member="no">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT3" variable="lastLabel" member="yes">
+									<label>Last Pause</label>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT4" variable="lastTime" member="yes">
+									<label>99:99</label>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="offBoxSizer" member="no">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT5" variable="offLabel" member="yes">
+									<label>Time in Pause</label>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT6" variable="offTime" member="yes">
+									<label>99:99</label>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="remainingBoxSizer" member="no">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT7" variable="remainingLabel" member="yes">
+									<label>Time Left</label>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT8" variable="remainingTime" member="yes">
+									<label>99:99</label>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<border>5</border>
+				<option>1</option>
+			</object>
+		</object>
+		<object class="wxTimer" name="ID_TIMER1" variable="eyeWatcherTimer" member="yes">
+			<handler function="OneyeWatcherTimerTrigger" entry="EVT_TIMER" />
+		</object>
+	</object>
+</wxsmith>
