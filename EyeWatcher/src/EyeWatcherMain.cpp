@@ -12,6 +12,7 @@
 #include "OptionsDialog.h"
 #include "AboutDialog.h"
 #include <wx/msgdlg.h>
+#include <stdexcept>
 
 //(*InternalHeaders(EyeWatcherFrame)
 #include <wx/string.h>
@@ -148,8 +149,17 @@ void EyeWatcherFrame::OnAbout(wxCommandEvent& event)
 
 void EyeWatcherFrame::OnOptionsButtonClick(wxCommandEvent& event)
 {
-    OptionsDialog dialog(this);
-    dialog.ShowModal();
+    try
+    {
+        OptionsDialog dialog(this);
+        dialog.ShowModal();
+    }
+    catch (std::logic_error e)
+    {
+        wxMessageDialog *dial = new wxMessageDialog(NULL,
+            wxString(e.what(), wxConvUTF8), wxT("Error"), wxOK | wxICON_ERROR);
+        dial->ShowModal();
+    }
 }
 
 void EyeWatcherFrame::OnaboutButtonClick(wxCommandEvent& event)

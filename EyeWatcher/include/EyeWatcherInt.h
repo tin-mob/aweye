@@ -10,7 +10,6 @@ class EyeWatcherInt
 {
     public:
         static EyeWatcherInt* Instance();
-        static void DisplayMsg(std::string msg);
 
         ~EyeWatcherInt();
 

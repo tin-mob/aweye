@@ -18,13 +18,6 @@ EyeWatcherInt* EyeWatcherInt::Instance()
     return EyeWatcherInt::m_Instance;
 }
 
-void EyeWatcherInt::DisplayMsg(std::string msg)
-{
-    wxMessageDialog *dial = new wxMessageDialog(NULL,
-        wxT("Error loading file"), wxT("Error"), wxOK | wxICON_ERROR);
-    dial->ShowModal();
-}
-
 EyeWatcherInt::EyeWatcherInt() : m_Config(NULL), m_TimeKeeper(NULL)
 {
     //ctor
