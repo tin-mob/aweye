@@ -7,19 +7,17 @@
 class TKStateOff : public TKState
 {
     public:
-        static TKStateOff* Instance();
+        TKStateOff();
         virtual ~TKStateOff();
 
-        virtual void updateStatus(TimeKeeper* parent, int lastInterval);
-        virtual int getTimerInterval(TimeKeeper* parent);
-        virtual int getInterval(TimeKeeper* parent);
-        virtual int getTimeLeft(TimeKeeper* parent);
-        virtual std::string getName();
+        virtual void updateStatus(TimeKeeper* parent);
+        virtual int getTimerInterval(const TimeKeeper* parent) const;
+        virtual bool isLate(const TimeKeeper* parent) const;
+        virtual int getInterval(const TimeKeeper* parent) const;
+        virtual int getTimeLeft(const TimeKeeper* parent) const;
 
     protected:
-        TKStateOff();
     private:
-        static TKStateOff* m_Instance;
 };
 
 #endif // TKSTATEOFF_H

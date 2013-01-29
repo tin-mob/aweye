@@ -1,7 +1,6 @@
 #ifndef TIMEKEEPER_H
 #define TIMEKEEPER_H
 
-#include <time.h>
 #include <string>
 #include <map>
 #include "TKState.h"
@@ -11,25 +10,29 @@ class TKStateHere;
 class TKStateAway;
 class TKStateOff;
 class Config;
+class AbstractTimeHandler;
 
 class TimeKeeper
 {
     public:
+        enum Status { OFF, HERE, AWAY };
+
         TimeKeeper(Config* config);
+        TimeKeeper(Config* config, AbstractTimeHandler* timeHandler, AbstractWebcamHandler* webcamHandler);
         virtual ~TimeKeeper();
 
         void start();
         void stop();
 
-        void updateStatus(int lastInterval);
-        int getTimerInterval();
-        std::string getAlarmMsg();
+        void updateStatus();
+        int getTimerInterval() const;
+        bool isLate() const;
 
-        std::string getStatus();
-        int getInterval();
-        int getTimeLeft();
-        int getHereStamp();
-        int getAwayStamp();
+        TimeKeeper::Status getStatus() const;
+        int getInterval() const;
+        int getTimeLeft() const;
+        int getHereStamp() const;
+        int getAwayStamp() const;
 
     protected:
     private:
@@ -39,15 +42,15 @@ class TimeKeeper
         friend class TKStateAway;
         friend class TKStateOff;
 
-        enum WatcherStateEnum { OFF, HERE, AWAY };
-        std::map<WatcherStateEnum,TKState*> m_states;
+        void initStates();
 
-        WatcherStateEnum m_CurrentState;
+        std::map<Status,TKState*> m_States;
+        Status m_CurrentState;
 
+        AbstractTimeHandler* m_TimeHandler;
         AbstractWebcamHandler* m_WebcamHandler;
         time_t m_HereStamp;
         time_t m_AwayStamp;
-        std::string m_Msg;
         Config* m_Config;
 };
 

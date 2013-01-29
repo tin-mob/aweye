@@ -3,17 +3,7 @@
 #include "TimeKeeper.h"
 #include "WebcamHandler.h"
 #include "TKStateAway.h"
-
-TKStateHere* TKStateHere::m_Instance = NULL;
-
-TKStateHere* TKStateHere::Instance()
-{
-    if (TKStateHere::m_Instance == NULL)
-    {
-        TKStateHere::m_Instance = new TKStateHere();
-    }
-    return TKStateHere::m_Instance;
-}
+#include "AbstractTimeHandler.h"
 
 TKStateHere::TKStateHere()
 {
@@ -25,37 +15,37 @@ TKStateHere::~TKStateHere()
     //dtor
 }
 
-void TKStateHere::updateStatus(TimeKeeper* parent, int lastInterval)
+void TKStateHere::updateStatus(TimeKeeper* parent)
 {
-    Config* config = parent->m_Config;
-    bool isHere = parent->m_WebcamHandler->isHere();
-    std::string msg = "";
-
-    if (isHere)
+    const bool isHere = parent->m_WebcamHandler->isHere();
+    if (!isHere)
     {
-        if (parent->m_HereStamp + lastInterval > config->getWorkLength())
-        {
-             msg = "Time for a pause";
-        }
+        parent->m_AwayStamp = parent->m_TimeHandler->getTime();
+        parent->m_CurrentState = TimeKeeper::AWAY;
     }
-    else
-    {
-        parent->m_AwayStamp = time(NULL);
-        //parent->m_CurrentState = AwayWatcherState::Instance();
-    }
-
-    parent->m_Msg = msg;
 }
 
-int TKStateHere::getTimerInterval(TimeKeeper* parent)
+int TKStateHere::getTimerInterval(const TimeKeeper* parent) const
 {
-    Config* config = parent->m_Config;
-    time_t now = time(NULL);
+    const Config* config = parent->m_Config;
+    const time_t now = parent->m_TimeHandler->getTime();
     int timerInterval = config->getCheckFreq();
 
-    // special case: work period ending soon
-    int hereInterval = now - parent->m_HereStamp;
-    if (hereInterval + config->getCheckFreq() > config->getWorkLength())
+    unsigned int hereInterval = now - parent->m_HereStamp;
+    // work period ended
+    if (hereInterval >= config->getWorkLength())
+    {
+        if (config->getCheckFreq() > config->getRemFreq())
+        {
+            timerInterval = config->getRemFreq();
+        }
+        else
+        {
+            timerInterval = config->getCheckFreq();
+        }
+    }
+    // work period ending soon
+    else if (hereInterval + config->getCheckFreq() > config->getWorkLength())
     {
         timerInterval = config->getWorkLength() - hereInterval;
     }
@@ -63,18 +53,18 @@ int TKStateHere::getTimerInterval(TimeKeeper* parent)
     return timerInterval;
 }
 
-int TKStateHere::getInterval(TimeKeeper* parent)
+bool TKStateHere::isLate(const TimeKeeper* parent) const
 {
-    return time(NULL) - parent->m_HereStamp;
+    return (parent->m_TimeHandler->getTime() - parent->m_HereStamp) >= parent->m_Config->getWorkLength();
 }
 
-int TKStateHere::getTimeLeft(TimeKeeper* parent)
+int TKStateHere::getInterval(const TimeKeeper* parent) const
 {
-    Config* config = parent->m_Config;
-    return parent->m_HereStamp + config->getWorkLength() - time(NULL);
+    return parent->m_TimeHandler->getTime() - parent->m_HereStamp;
 }
 
-std::string TKStateHere::getName()
+int TKStateHere::getTimeLeft(const TimeKeeper* parent) const
 {
-    return "Here";
+    const Config* config = parent->m_Config;
+    return parent->m_HereStamp + config->getWorkLength() - parent->m_TimeHandler->getTime();
 }

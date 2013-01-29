@@ -1,7 +1,7 @@
 #include "WebcamHandler.h"
 #include <boost/filesystem.hpp>
 
-/// @todo: catch this in view, file path cross-platform
+/// @todo: find a way to manage paths (Win/Linux)
 WebcamHandler::WebcamHandler(std::string faceCascadeName) :
 m_VideoCapture(0)
 {

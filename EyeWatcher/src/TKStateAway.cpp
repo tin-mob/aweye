@@ -3,17 +3,7 @@
 #include "TimeKeeper.h"
 #include "WebcamHandler.h"
 #include "TKStateHere.h"
-
-TKStateAway* TKStateAway::m_Instance = NULL;
-
-TKStateAway* TKStateAway::Instance()
-{
-    if (TKStateAway::m_Instance == NULL)
-    {
-        TKStateAway::m_Instance = new TKStateAway();
-    }
-    return TKStateAway::m_Instance;
-}
+#include "AbstractTimeHandler.h"
 
 TKStateAway::TKStateAway()
 {
@@ -25,36 +15,35 @@ TKStateAway::~TKStateAway()
     //dtor
 }
 
-void TKStateAway::updateStatus(TimeKeeper* parent, int lastInterval)
+void TKStateAway::updateStatus(TimeKeeper* parent)
 {
-    bool isHere = parent->m_WebcamHandler->isHere();
+    const bool isHere = parent->m_WebcamHandler->isHere();
     std::string msg = "";
 
-    if (parent->m_AwayStamp + lastInterval > parent->m_Config->getPauseLength())
+    if (parent->m_TimeHandler->getTime() - parent->m_AwayStamp > parent->m_Config->getPauseLength())
     {
-        if (!isHere)
+        if (isHere)
         {
-            msg = "You can come back..";
-        }
-        else
-        {
-            parent->m_HereStamp = time(NULL);
-            //parent->m_CurrentState = parent->WatcherStateEnum.HERE;
+            parent->m_HereStamp = parent->m_TimeHandler->getTime();
+            parent->m_CurrentState = TimeKeeper::HERE;
         }
     }
-
-    parent->m_Msg = msg;
 }
 
-int TKStateAway::getTimerInterval(TimeKeeper* parent)
+int TKStateAway::getTimerInterval(const TimeKeeper* parent) const
 {
-    Config* config = parent->m_Config;
-    time_t now = time(NULL);
+    const Config* config = parent->m_Config;
+    const time_t now = parent->m_TimeHandler->getTime();
     int timerInterval = config->getCheckFreq();
 
-    // special case: pause period ending soon
-    int pauseInterval = now - parent->m_AwayStamp;
-    if (pauseInterval + config->getCheckFreq() > config->getPauseLength())
+    unsigned int pauseInterval = now - parent->m_AwayStamp;
+    // work period ended
+    if (pauseInterval >= config->getPauseLength())
+    {
+        timerInterval = config->getCheckFreq();
+    }
+    // pause period ending soon
+    else if (pauseInterval + config->getCheckFreq() > config->getPauseLength())
     {
         timerInterval = config->getPauseLength() - pauseInterval;
     }
@@ -62,18 +51,18 @@ int TKStateAway::getTimerInterval(TimeKeeper* parent)
     return timerInterval;
 }
 
-int TKStateAway::getInterval(TimeKeeper* parent)
+bool TKStateAway::isLate(const TimeKeeper* parent) const
 {
-    return time(NULL) - parent->m_AwayStamp;
+    return (parent->m_AwayStamp - parent->m_HereStamp) >= parent->m_Config->getWorkLength();
 }
 
-int TKStateAway::getTimeLeft(TimeKeeper* parent)
+int TKStateAway::getInterval(const TimeKeeper* parent) const
 {
-    Config* config = parent->m_Config;
-    return parent->m_AwayStamp + config->getPauseLength() - time(NULL);
+    return parent->m_TimeHandler->getTime() - parent->m_AwayStamp;
 }
 
-std::string TKStateAway::getName()
+int TKStateAway::getTimeLeft(const TimeKeeper* parent) const
 {
-    return "Away";
+    const Config* config = parent->m_Config;
+    return parent->m_AwayStamp + config->getPauseLength() - parent->m_TimeHandler->getTime();
 }

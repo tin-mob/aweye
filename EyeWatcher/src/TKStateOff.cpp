@@ -2,17 +2,6 @@
 #include "Config.h"
 #include "TimeKeeper.h"
 
-TKStateOff* TKStateOff::m_Instance = NULL;
-
-TKStateOff* TKStateOff::Instance()
-{
-    if (TKStateOff::m_Instance == NULL)
-    {
-        TKStateOff::m_Instance = new TKStateOff();
-    }
-    return TKStateOff::m_Instance;
-}
-
 TKStateOff::TKStateOff()
 {
     //ctor
@@ -24,29 +13,29 @@ TKStateOff::~TKStateOff()
 }
 
 
-void TKStateOff::updateStatus(TimeKeeper* parent, int lastInterval)
+void TKStateOff::updateStatus(TimeKeeper* parent)
 {
     parent->m_HereStamp = 0;
     parent->m_AwayStamp = 0;
 }
 
-int TKStateOff::getTimerInterval(TimeKeeper* parent)
-{
-    Config* config = parent->m_Config;
-    return config->getCheckFreq();
-}
-
-int TKStateOff::getInterval(TimeKeeper* parent)
+int TKStateOff::getTimerInterval(const TimeKeeper*) const
 {
     return 0;
 }
 
-int TKStateOff::getTimeLeft(TimeKeeper* parent)
+bool TKStateOff::isLate(const TimeKeeper*) const
+{
+    return false;
+}
+
+int TKStateOff::getInterval(const TimeKeeper*) const
 {
     return 0;
 }
 
-std::string TKStateOff::getName()
+int TKStateOff::getTimeLeft(const TimeKeeper* parent) const
 {
-    return "Off";
+    const Config* config = parent->m_Config;
+    return config->getWorkLength();
 }

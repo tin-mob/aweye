@@ -5,8 +5,6 @@
 #include <stdexcept>
 #include <wx/msgdlg.h>
 
-/// @todo: check everywhere constness...
-
 EyeWatcherInt* EyeWatcherInt::m_Instance = NULL;
 
 EyeWatcherInt* EyeWatcherInt::Instance()

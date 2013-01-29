@@ -13,7 +13,6 @@ const bool Config::default_EmailAlarm = false;
 const unsigned int Config::default_CheckFreq = 30;
 const std::string Config::default_EmailAddr = "";
 
-/// @todo:handle everywhere for more robustness, throw in function declaration?
 Config::Config(std::string filename)
 {
     //ctor

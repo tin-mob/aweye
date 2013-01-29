@@ -10,11 +10,11 @@ class TKState
     public:
         virtual ~TKState() {}
 
-        virtual void updateStatus(TimeKeeper* parent, int lastInterval) = 0;
-        virtual int getTimerInterval(TimeKeeper* parent) = 0;
-        virtual int getInterval(TimeKeeper* parent) = 0;
-        virtual int getTimeLeft(TimeKeeper* parent) = 0;
-        virtual std::string getName() = 0;
+        virtual void updateStatus(TimeKeeper* parent) = 0;
+        virtual int getTimerInterval(const TimeKeeper* parent) const = 0;
+        virtual bool isLate(const TimeKeeper* parent) const = 0;
+        virtual int getInterval(const TimeKeeper* parent) const = 0;
+        virtual int getTimeLeft(const TimeKeeper* parent) const = 0;
 
     protected:
     private:

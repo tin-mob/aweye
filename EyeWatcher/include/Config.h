@@ -21,15 +21,15 @@ class Config
         void save();
 
         // getter/setter
-        unsigned int getWorkLength() { return m_WorkLength; }
-        unsigned int getPauseLength() { return m_PauseLength; }
-        unsigned int getRemFreq() { return m_RemFreq; }
-        bool getStartup() { return m_Startup; }
-        bool getSoundAlarm() { return m_SoundAlarm; }
-        bool getPopupAlarm() { return m_PopupAlarm; }
-        bool getEmailAlarm() { return m_EmailAlarm; }
-        unsigned int getCheckFreq() { return m_CheckFreq; }
-        std::string getEmailAddr() { return m_EmailAddr; }
+        unsigned int getWorkLength() const { return m_WorkLength; }
+        unsigned int getPauseLength() const { return m_PauseLength; }
+        unsigned int getRemFreq() const { return m_RemFreq; }
+        bool getStartup() const { return m_Startup; }
+        bool getSoundAlarm() const { return m_SoundAlarm; }
+        bool getPopupAlarm() const { return m_PopupAlarm; }
+        bool getEmailAlarm() const { return m_EmailAlarm; }
+        unsigned int getCheckFreq() const { return m_CheckFreq; }
+        std::string getEmailAddr() const { return m_EmailAddr; }
 
         void setWorkLength(unsigned int val) { m_WorkLength = val; }
         void setPauseLength(unsigned int val) { m_PauseLength = val; }
