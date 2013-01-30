@@ -266,5 +266,101 @@ SUITE(TestWatcherInt)
             checkTimeKeeper(keeper, TimeKeeper::HERE, m_CheckFreq, false, interval, m_WorkLength - interval, startingTime, pauseTime);
         }
     }
+
+    TEST_FIXTURE(TimeKeeperFixture, TestCancelledPause)
+    {
+        MockupTimeHandler* timeHandler = new MockupTimeHandler();
+        MockupWebcamHandler* webcamHandler = new MockupWebcamHandler();
+        TimeKeeper keeper(&m_Config, timeHandler, webcamHandler);
+
+        time_t startingTime = timeHandler->getTime();
+        time_t pauseTime = 0;
+        keeper.start();
+
+        {
+            timeHandler->setTime(timeHandler->getTime() + 6);
+            webcamHandler->pushResult(true);
+            keeper.updateStatus();
+
+            time_t interval = timeHandler->getTime() - startingTime;
+            checkTimeKeeper(keeper, TimeKeeper::HERE, m_RemFreq, true, interval, m_WorkLength - interval, startingTime, 0);
+        }
+        {
+            pauseTime = timeHandler->getTime();
+            webcamHandler->pushResult(false);
+            keeper.updateStatus();
+
+            time_t interval = timeHandler->getTime() - pauseTime;
+            checkTimeKeeper(keeper, TimeKeeper::AWAY, m_CheckFreq, true, interval, m_PauseLength - interval, startingTime, pauseTime);
+        }
+        {
+            timeHandler->setTime(timeHandler->getTime() + 1);
+            webcamHandler->pushResult(true);
+            keeper.updateStatus();
+
+            time_t interval = timeHandler->getTime() - pauseTime;
+            checkTimeKeeper(keeper, TimeKeeper::HERE, m_CheckFreq, true, interval, m_PauseLength - interval, startingTime, pauseTime);
+        }
+        {
+            timeHandler->setTime(timeHandler->getTime() + 1);
+            webcamHandler->pushResult(true);
+            keeper.updateStatus();
+
+            time_t interval = timeHandler->getTime() - startingTime;
+            checkTimeKeeper(keeper, TimeKeeper::HERE, m_CheckFreq, true, interval, m_WorkLength - interval, startingTime, 0);
+        }
+    }
+
+    TEST_FIXTURE(TimeKeeperFixture, TestInterruptedPause)
+    {
+        MockupTimeHandler* timeHandler = new MockupTimeHandler();
+        MockupWebcamHandler* webcamHandler = new MockupWebcamHandler();
+        TimeKeeper keeper(&m_Config, timeHandler, webcamHandler);
+
+        time_t startingTime = timeHandler->getTime();
+        time_t pauseTime = 0;
+        keeper.start();
+
+        {
+            timeHandler->setTime(timeHandler->getTime() + 6);
+            webcamHandler->pushResult(true);
+            keeper.updateStatus();
+
+            time_t interval = timeHandler->getTime() - startingTime;
+            checkTimeKeeper(keeper, TimeKeeper::HERE, m_RemFreq, true, interval, m_WorkLength - interval, startingTime, 0);
+        }
+        {
+            pauseTime = timeHandler->getTime();
+            webcamHandler->pushResult(false);
+            keeper.updateStatus();
+
+            time_t interval = timeHandler->getTime() - pauseTime;
+            checkTimeKeeper(keeper, TimeKeeper::AWAY, m_CheckFreq, true, interval, m_PauseLength - interval, startingTime, pauseTime);
+        }
+        {
+            timeHandler->setTime(timeHandler->getTime() + 1);
+            webcamHandler->pushResult(true);
+            keeper.updateStatus();
+
+            time_t interval = timeHandler->getTime() - pauseTime;
+            checkTimeKeeper(keeper, TimeKeeper::HERE, m_CheckFreq, true, interval, m_PauseLength - interval, startingTime, pauseTime);
+        }
+        {
+            timeHandler->setTime(timeHandler->getTime() + 1);
+            webcamHandler->pushResult(false);
+            keeper.updateStatus();
+
+            time_t interval = timeHandler->getTime() - pauseTime;
+            checkTimeKeeper(keeper, TimeKeeper::AWAY, m_CheckFreq, true, interval, m_PauseLength - interval, startingTime, pauseTime);
+        }
+        {
+            timeHandler->setTime(timeHandler->getTime() + m_PauseLength);
+            webcamHandler->pushResult(false);
+            keeper.updateStatus();
+
+            time_t interval = timeHandler->getTime() - pauseTime;
+            checkTimeKeeper(keeper, TimeKeeper::AWAY, m_CheckFreq, true, interval, m_PauseLength - interval, startingTime, pauseTime);
+        }
+    }
 }
 

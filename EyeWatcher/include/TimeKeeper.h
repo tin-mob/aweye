@@ -52,6 +52,7 @@ class TimeKeeper
         time_t m_HereStamp;
         time_t m_AwayStamp;
         Config* m_Config;
+        unsigned int m_NumTolerated;
 };
 
 #endif // TIMEKEEPER_H

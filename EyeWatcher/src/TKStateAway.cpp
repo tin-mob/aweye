@@ -24,8 +24,15 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
     {
         if (isHere)
         {
-            parent->m_HereStamp = parent->m_TimeHandler->getTime();
-            parent->m_CurrentState = TimeKeeper::HERE;
+            if (parent->m_NumTolerated < parent->m_Config->getPauseTol())
+            {
+                ++parent->m_NumTolerated;
+            }
+            else
+            {
+                parent->m_HereStamp = parent->m_TimeHandler->getTime();
+                parent->m_CurrentState = TimeKeeper::HERE;
+            }
         }
     }
 }

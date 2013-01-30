@@ -40,6 +40,7 @@ Thumbs.db
 # Code::Blocks project files #
 ##############################
 *.cbp
+*.cbTemp
 *.depend
 *.layout
 */bin/

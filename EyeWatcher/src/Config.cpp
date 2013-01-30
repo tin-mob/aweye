@@ -6,11 +6,12 @@
 const unsigned int Config::default_WorkLength = 50*60;
 const unsigned int Config::default_PauseLength = 10*60;
 const unsigned int Config::default_RemFreq = 2*60;
+const unsigned int Config::default_CheckFreq = 30;
+const unsigned int Config::default_PauseTol = 1;
 const bool Config::default_Startup = false;
 const bool Config::default_SoundAlarm = false;
 const bool Config::default_PopupAlarm = true;
 const bool Config::default_EmailAlarm = false;
-const unsigned int Config::default_CheckFreq = 30;
 const std::string Config::default_EmailAddr = "";
 
 Config::Config(std::string filename)
@@ -71,11 +72,12 @@ void Config::generate(boost::property_tree::ptree &pt)
     this->m_WorkLength = pt.get("WorkLength", Config::default_WorkLength);
     this->m_PauseLength = pt.get("PauseLength", Config::default_PauseLength);
     this->m_RemFreq = pt.get("RemFreq", Config::default_RemFreq);
+    this->m_CheckFreq = pt.get("CheckFreq", Config::default_CheckFreq);
+    this->m_PauseTol = pt.get("PauseTol", Config::default_PauseTol);
     this->m_Startup = pt.get("Startup", Config::default_Startup);
     this->m_SoundAlarm = pt.get("SoundAlarm", Config::default_SoundAlarm);
     this->m_PopupAlarm = pt.get("PopupAlarm", Config::default_PopupAlarm);
     this->m_EmailAlarm = pt.get("EmailAlarm", Config::default_EmailAlarm);
-    this->m_CheckFreq = pt.get("CheckFreq", Config::default_CheckFreq);
     this->m_EmailAddr = pt.get("EmailAddr", Config::default_EmailAddr);
 }
 
@@ -89,11 +91,12 @@ void Config::save()
    pt.put("WorkLength", this->m_WorkLength);
    pt.put("PauseLength", this->m_PauseLength);
    pt.put("RemFreq", this->m_RemFreq);
+   pt.put("CheckFreq", this->m_CheckFreq);
+   pt.put("PauseTol", this->m_PauseTol);
    pt.put("Startup", this->m_Startup);
    pt.put("SoundAlarm", this->m_SoundAlarm);
    pt.put("PopupAlarm", this->m_PopupAlarm);
    pt.put("EmailAlarm", this->m_EmailAlarm);
-   pt.put("CheckFreq", this->m_CheckFreq);
    pt.put("EmailAddr", this->m_EmailAddr);
 
    // Write the property tree to the XML file.

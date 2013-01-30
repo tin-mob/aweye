@@ -6,7 +6,7 @@
 #include "TimeHandler.h"
 #include "Config.h"
 
-TimeKeeper::TimeKeeper(Config* config) : m_HereStamp(0), m_AwayStamp(0), m_Config(config)
+TimeKeeper::TimeKeeper(Config* config) : m_HereStamp(0), m_AwayStamp(0), m_Config(config),  m_NumTolerated(0)
 {
     //ctor
     this->m_TimeHandler = new TimeHandler();
@@ -60,6 +60,7 @@ void TimeKeeper::stop()
         this->m_CurrentState = TimeKeeper::OFF;
         this->m_HereStamp = 0;
         this->m_AwayStamp = 0;
+        this->m_NumTolerated = 0;
     }
 }
 
