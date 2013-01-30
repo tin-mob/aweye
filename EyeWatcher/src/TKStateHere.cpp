@@ -20,9 +20,13 @@ void TKStateHere::updateStatus(TimeKeeper* parent)
     const bool isHere = parent->m_WebcamHandler->isHere();
     if (!isHere)
     {
-        parent->m_AwayStamp = parent->m_TimeHandler->getTime();
-        parent->m_CurrentState = TimeKeeper::AWAY;
+        parent->setStatus(TimeKeeper::AWAY);
     }
+}
+
+void TKStateHere::updateTimeStamps(TimeKeeper* parent)
+{
+    parent->m_HereStamp = parent->m_TimeHandler->getTime();
 }
 
 int TKStateHere::getTimerInterval(const TimeKeeper* parent) const

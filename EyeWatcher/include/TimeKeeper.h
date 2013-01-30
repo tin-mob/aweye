@@ -43,6 +43,7 @@ class TimeKeeper
         friend class TKStateOff;
 
         void initStates();
+        void setStatus(Status status);
 
         std::map<Status,TKState*> m_States;
         Status m_CurrentState;
@@ -51,6 +52,7 @@ class TimeKeeper
         AbstractWebcamHandler* m_WebcamHandler;
         time_t m_HereStamp;
         time_t m_AwayStamp;
+        time_t m_LastAwayStamp;
         Config* m_Config;
         unsigned int m_NumTolerated;
 };

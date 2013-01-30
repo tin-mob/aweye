@@ -78,30 +78,38 @@ struct TimeKeeperFixture
         const std::string m_ConfigPath;
 };
 
-void checkTimeKeeper(TimeKeeper& keeper, TimeKeeper::Status status, int timerInterval, bool late, int interval, int timeLeft, unsigned int hereStamp, unsigned int awayStamp)
-{
-    CHECK_EQUAL(keeper.getStatus(), status);
-    CHECK_EQUAL(keeper.getTimerInterval(), timerInterval);
-    CHECK_EQUAL(keeper.isLate(), late);
-    CHECK_EQUAL(keeper.getInterval(), interval);
-    CHECK_EQUAL(keeper.getTimeLeft(), timeLeft);
-    CHECK_EQUAL(keeper.getHereStamp(), hereStamp);
-    CHECK_EQUAL(keeper.getAwayStamp(), awayStamp);
-}
-
 SUITE(TestWatcherInt)
 {
     TEST_FIXTURE(TimeKeeperFixture, TestOnOff)
     {
         MockupTimeHandler* timeHandler = new MockupTimeHandler();
         TimeKeeper keeper(&m_Config, timeHandler, new MockupWebcamHandler());
-        checkTimeKeeper(keeper, TimeKeeper::OFF, 0, false, 0, m_WorkLength, 0, 0);
+        CHECK_EQUAL(keeper.getStatus(), TimeKeeper::OFF);
+        CHECK_EQUAL(keeper.getTimerInterval(), 0);
+        CHECK_EQUAL(keeper.isLate(), false);
+        CHECK_EQUAL(keeper.getInterval(), 0);
+        CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength);
+        CHECK_EQUAL(keeper.getHereStamp(), 0);
+        CHECK_EQUAL(keeper.getAwayStamp(), 0);
 
         keeper.start();
-        checkTimeKeeper(keeper, TimeKeeper::HERE, m_CheckFreq, false, 0, m_WorkLength, timeHandler->getTime(), 0);
+        CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
+        CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+        CHECK_EQUAL(keeper.isLate(), false);
+        CHECK_EQUAL(keeper.getInterval(), 0);
+        CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength);
+        CHECK_EQUAL(keeper.getHereStamp(), timeHandler->getTime());
+        CHECK_EQUAL(keeper.getAwayStamp(), 0);
+
 
         keeper.stop();
-        checkTimeKeeper(keeper, TimeKeeper::OFF, 0, false, 0, m_WorkLength, 0, 0);
+        CHECK_EQUAL(keeper.getStatus(), TimeKeeper::OFF);
+        CHECK_EQUAL(keeper.getTimerInterval(), 0);
+        CHECK_EQUAL(keeper.isLate(), false);
+        CHECK_EQUAL(keeper.getInterval(), 0);
+        CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength);
+        CHECK_EQUAL(keeper.getHereStamp(), 0);
+        CHECK_EQUAL(keeper.getAwayStamp(), 0);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestSimpleRun)
@@ -117,7 +125,13 @@ SUITE(TestWatcherInt)
 
         {
             keeper.start();
-            checkTimeKeeper(keeper, TimeKeeper::HERE, m_CheckFreq, false, 0, m_WorkLength, startingTime, 0);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), false);
+            CHECK_EQUAL(keeper.getInterval(), 0);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), 0);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
@@ -126,21 +140,39 @@ SUITE(TestWatcherInt)
             webcamHandler->pushResult(true);
             keeper.updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
-            checkTimeKeeper(keeper, TimeKeeper::HERE, m_CheckFreq, false, interval, m_WorkLength - interval, startingTime, 0);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), false);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), 0);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
             webcamHandler->pushResult(true);
             keeper.updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
-            checkTimeKeeper(keeper, TimeKeeper::HERE, 1, false, interval, m_WorkLength - interval, startingTime, 0);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(keeper.getTimerInterval(), 1);
+            CHECK_EQUAL(keeper.isLate(), false);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), 0);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
             webcamHandler->pushResult(true);
             keeper.updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
-            checkTimeKeeper(keeper, TimeKeeper::HERE, m_RemFreq, true, interval, m_WorkLength - interval, startingTime, 0);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_RemFreq);
+            CHECK_EQUAL(keeper.isLate(), true);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), 0);
         }
         {
             m_Config.setCheckFreq(1);
@@ -150,7 +182,13 @@ SUITE(TestWatcherInt)
             webcamHandler->pushResult(true);
             keeper.updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
-            checkTimeKeeper(keeper, TimeKeeper::HERE, m_Config.getCheckFreq(), true, interval, m_WorkLength - interval, startingTime, 0);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_Config.getCheckFreq());
+            CHECK_EQUAL(keeper.isLate(), true);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), 0);
         }
     }
 
@@ -169,7 +207,13 @@ SUITE(TestWatcherInt)
             webcamHandler->pushResult(true);
             keeper.updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
-            checkTimeKeeper(keeper, TimeKeeper::HERE, m_CheckFreq, false, interval, m_WorkLength - interval, startingTime, 0);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), false);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), 0);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
@@ -178,14 +222,26 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            checkTimeKeeper(keeper, TimeKeeper::AWAY, m_CheckFreq, false, interval, m_PauseLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), false);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
             webcamHandler->pushResult(false);
             keeper.updateStatus();
             time_t interval = timeHandler->getTime() - pauseTime;
-            checkTimeKeeper(keeper, TimeKeeper::AWAY, 1, false, interval, m_PauseLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(keeper.getTimerInterval(), 1);
+            CHECK_EQUAL(keeper.isLate(), false);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
@@ -193,7 +249,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            checkTimeKeeper(keeper, TimeKeeper::AWAY, m_CheckFreq, false, interval, m_PauseLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), false);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
@@ -201,7 +263,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            checkTimeKeeper(keeper, TimeKeeper::AWAY, m_CheckFreq, false, interval, m_PauseLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), false);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
@@ -210,7 +278,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
-            checkTimeKeeper(keeper, TimeKeeper::HERE, m_CheckFreq, false, interval, m_WorkLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), false);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
@@ -218,7 +292,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
-            checkTimeKeeper(keeper, TimeKeeper::HERE, m_CheckFreq, false, interval, m_WorkLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), false);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
     }
 
@@ -238,7 +318,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
-            checkTimeKeeper(keeper, TimeKeeper::HERE, m_RemFreq, true, interval, m_WorkLength - interval, startingTime, 0);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_RemFreq);
+            CHECK_EQUAL(keeper.isLate(), true);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), 0);
         }
         {
             pauseTime = timeHandler->getTime();
@@ -246,7 +332,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            checkTimeKeeper(keeper, TimeKeeper::AWAY, m_CheckFreq, true, interval, m_PauseLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), true);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + m_PauseLength);
@@ -254,7 +346,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            checkTimeKeeper(keeper, TimeKeeper::AWAY, m_CheckFreq, true, interval, m_PauseLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), true);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
@@ -263,7 +361,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
-            checkTimeKeeper(keeper, TimeKeeper::HERE, m_CheckFreq, false, interval, m_WorkLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), false);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
     }
 
@@ -283,7 +387,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
-            checkTimeKeeper(keeper, TimeKeeper::HERE, m_RemFreq, true, interval, m_WorkLength - interval, startingTime, 0);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_RemFreq);
+            CHECK_EQUAL(keeper.isLate(), true);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), 0);
         }
         {
             pauseTime = timeHandler->getTime();
@@ -291,7 +401,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            checkTimeKeeper(keeper, TimeKeeper::AWAY, m_CheckFreq, true, interval, m_PauseLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), true);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
@@ -299,7 +415,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            checkTimeKeeper(keeper, TimeKeeper::HERE, m_CheckFreq, true, interval, m_PauseLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), true);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
@@ -307,7 +429,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
-            checkTimeKeeper(keeper, TimeKeeper::HERE, m_CheckFreq, true, interval, m_WorkLength - interval, startingTime, 0);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_RemFreq);
+            CHECK_EQUAL(keeper.isLate(), true);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), 0);
         }
     }
 
@@ -327,7 +455,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
-            checkTimeKeeper(keeper, TimeKeeper::HERE, m_RemFreq, true, interval, m_WorkLength - interval, startingTime, 0);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_RemFreq);
+            CHECK_EQUAL(keeper.isLate(), true);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), 0);
         }
         {
             pauseTime = timeHandler->getTime();
@@ -335,7 +469,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            checkTimeKeeper(keeper, TimeKeeper::AWAY, m_CheckFreq, true, interval, m_PauseLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), true);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
@@ -343,7 +483,13 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            checkTimeKeeper(keeper, TimeKeeper::HERE, m_CheckFreq, true, interval, m_PauseLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), true);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
@@ -351,15 +497,27 @@ SUITE(TestWatcherInt)
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            checkTimeKeeper(keeper, TimeKeeper::AWAY, m_CheckFreq, true, interval, m_PauseLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(keeper.getTimerInterval(), 1);
+            CHECK_EQUAL(keeper.isLate(), true);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + m_PauseLength);
+            timeHandler->setTime(timeHandler->getTime() + 1);
             webcamHandler->pushResult(false);
             keeper.updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            checkTimeKeeper(keeper, TimeKeeper::AWAY, m_CheckFreq, true, interval, m_PauseLength - interval, startingTime, pauseTime);
+            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
+            CHECK_EQUAL(keeper.isLate(), true);
+            CHECK_EQUAL(keeper.getInterval(), interval);
+            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
+            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
+            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
         }
     }
 }

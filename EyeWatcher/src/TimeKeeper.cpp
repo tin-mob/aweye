@@ -6,7 +6,7 @@
 #include "TimeHandler.h"
 #include "Config.h"
 
-TimeKeeper::TimeKeeper(Config* config) : m_HereStamp(0), m_AwayStamp(0), m_Config(config),  m_NumTolerated(0)
+TimeKeeper::TimeKeeper(Config* config) : m_HereStamp(0), m_AwayStamp(0), m_LastAwayStamp(0), m_Config(config),  m_NumTolerated(0)
 {
     //ctor
     this->m_TimeHandler = new TimeHandler();
@@ -14,7 +14,7 @@ TimeKeeper::TimeKeeper(Config* config) : m_HereStamp(0), m_AwayStamp(0), m_Confi
     this->initStates();
 }
 
-TimeKeeper::TimeKeeper(Config* config, AbstractTimeHandler* timeHandler, AbstractWebcamHandler* handler) : m_TimeHandler(timeHandler), m_WebcamHandler(handler), m_HereStamp(0), m_AwayStamp(0), m_Config(config)
+TimeKeeper::TimeKeeper(Config* config, AbstractTimeHandler* timeHandler, AbstractWebcamHandler* handler) : m_TimeHandler(timeHandler), m_WebcamHandler(handler), m_HereStamp(0), m_AwayStamp(0), m_LastAwayStamp(0), m_Config(config),  m_NumTolerated(0)
 {
     this->initStates();
 }
@@ -48,8 +48,7 @@ void TimeKeeper::start()
 {
     if (this->m_CurrentState == TimeKeeper::OFF)
     {
-        this->m_CurrentState = TimeKeeper::HERE;
-        this->m_HereStamp = this->m_TimeHandler->getTime();
+        this->setStatus(TimeKeeper::HERE);
     }
 }
 
@@ -57,10 +56,7 @@ void TimeKeeper::stop()
 {
     if (this->m_CurrentState != TimeKeeper::OFF)
     {
-        this->m_CurrentState = TimeKeeper::OFF;
-        this->m_HereStamp = 0;
-        this->m_AwayStamp = 0;
-        this->m_NumTolerated = 0;
+        this->setStatus(TimeKeeper::OFF);
     }
 }
 
@@ -108,4 +104,12 @@ int TimeKeeper::getHereStamp() const
 int TimeKeeper::getAwayStamp() const
 {
     return this->m_AwayStamp;
+}
+
+void TimeKeeper::setStatus(Status status)
+{
+    this->m_CurrentState = status;
+
+    TKState* state = this->m_States.find(this->m_CurrentState)->second;
+    return state->updateTimeStamps(this);
 }

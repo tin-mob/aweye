@@ -15,6 +15,10 @@ TKStateOff::~TKStateOff()
 
 void TKStateOff::updateStatus(TimeKeeper* parent)
 {
+}
+
+void TKStateOff::updateTimeStamps(TimeKeeper* parent)
+{
     parent->m_HereStamp = 0;
     parent->m_AwayStamp = 0;
 }

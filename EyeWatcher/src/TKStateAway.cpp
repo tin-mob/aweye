@@ -20,21 +20,33 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
     const bool isHere = parent->m_WebcamHandler->isHere();
     std::string msg = "";
 
-    if (parent->m_TimeHandler->getTime() - parent->m_AwayStamp > parent->m_Config->getPauseLength())
+    if (isHere)
     {
-        if (isHere)
+        int timeLeft = this->getTimeLeft(parent);
+        if (timeLeft > 0)
         {
             if (parent->m_NumTolerated < parent->m_Config->getPauseTol())
             {
-                ++parent->m_NumTolerated;
+                parent->m_NumTolerated++;
             }
             else
             {
-                parent->m_HereStamp = parent->m_TimeHandler->getTime();
+                parent->m_AwayStamp = parent->m_LastAwayStamp;
                 parent->m_CurrentState = TimeKeeper::HERE;
             }
         }
+        else if (timeLeft <= 0)
+        {
+            parent->setStatus(TimeKeeper::HERE);
+        }
     }
+}
+
+void TKStateAway::updateTimeStamps(TimeKeeper* parent)
+{
+    parent->m_NumTolerated = 0;
+    parent->m_LastAwayStamp = parent->m_AwayStamp;
+    parent->m_AwayStamp = parent->m_TimeHandler->getTime();
 }
 
 int TKStateAway::getTimerInterval(const TimeKeeper* parent) const

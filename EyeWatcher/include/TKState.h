@@ -11,6 +11,7 @@ class TKState
         virtual ~TKState() {}
 
         virtual void updateStatus(TimeKeeper* parent) = 0;
+        virtual void updateTimeStamps(TimeKeeper* parent) = 0;
         virtual int getTimerInterval(const TimeKeeper* parent) const = 0;
         virtual bool isLate(const TimeKeeper* parent) const = 0;
         virtual int getInterval(const TimeKeeper* parent) const = 0;
