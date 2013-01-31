@@ -8,7 +8,6 @@
 #include "AbstractTimeHandler.h"
 #include "AbstractWebcamHandler.h"
 
-/// @todo: look at google mockup
 class MockupTimeHandler : public AbstractTimeHandler
 {
      public:

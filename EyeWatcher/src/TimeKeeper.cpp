@@ -60,7 +60,6 @@ void TimeKeeper::stop()
     }
 }
 
-/// @todo:coming back to check restarts the pause - determine how to be permissive (config???)
 void TimeKeeper::updateStatus()
 {
     TKState* state = this->m_States.find(this->m_CurrentState)->second;

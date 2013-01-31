@@ -22,18 +22,20 @@ class OptionsDialog: public wxDialog
 
 		//(*Declarations(OptionsDialog)
 		wxStaticText* workingLabel;
-		wxTextCtrl* reminderTextCtrl;
-		wxTextCtrl* checkTextCtrl;
 		wxCheckBox* startupCheckBox;
 		wxCheckBox* soundCheckBox;
-		wxStaticText* pauseLabel;
+		wxTextCtrl* tolTextCtrl;
+		wxTextCtrl* wrkTextCtrl;
+		wxStaticText* tolStaticText;
 		wxCheckBox* popupCheckBox;
+		wxStaticText* zzzLabel;
 		wxTextCtrl* emailTextCtrl;
-		wxTextCtrl* workingTextCtrl;
-		wxStaticText* reminderLabel;
-		wxStaticText* checkStaticText;
-		wxTextCtrl* pauseTextCtrl;
+		wxTextCtrl* zzzTextCtrl;
+		wxTextCtrl* chkTextCtrl;
+		wxStaticText* remLabel;
+		wxStaticText* chkStaticText;
 		wxCheckBox* emailCheckBox;
+		wxTextCtrl* remTextCtrl;
 		//*)
 
 	protected:
@@ -47,6 +49,8 @@ class OptionsDialog: public wxDialog
 		static const long ID_TEXTCTRL4;
 		static const long ID_STATICTEXT4;
 		static const long ID_TEXTCTRL5;
+		static const long ID_STATICTEXT5;
+		static const long ID_TEXTCTRL6;
 		static const long ID_CHECKBOX1;
 		static const long ID_CHECKBOX2;
 		static const long ID_CHECKBOX3;

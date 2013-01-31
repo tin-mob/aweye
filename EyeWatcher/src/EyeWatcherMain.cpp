@@ -77,7 +77,7 @@ EyeWatcherFrame::EyeWatcherFrame(wxWindow* parent,wxWindowID id)
     wxBoxSizer* lastBoxSizer;
     wxGridSizer* timesGrid;
     wxBoxSizer* onBoxSizer;
-
+    
     Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
     mainBoxSizer = new wxBoxSizer(wxVERTICAL);
     buttonsBoxSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -123,7 +123,7 @@ EyeWatcherFrame::EyeWatcherFrame(wxWindow* parent,wxWindowID id)
     eyeWatcherTimer.SetOwner(this, ID_TIMER1);
     mainBoxSizer->Fit(this);
     mainBoxSizer->SetSizeHints(this);
-
+    
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EyeWatcherFrame::OnOptionsButtonClick);
     Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EyeWatcherFrame::OnaboutButtonClick);
     Connect(ID_TIMER1,wxEVT_TIMER,(wxObjectEventFunction)&EyeWatcherFrame::OneyeWatcherTimerTrigger);

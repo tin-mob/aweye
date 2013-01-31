@@ -25,7 +25,7 @@ AboutDialog::AboutDialog(wxWindow* parent,wxWindowID id,const wxPoint& pos,const
 	//(*Initialize(AboutDialog)
 	wxBoxSizer* BoxSizer1;
 	wxStdDialogButtonSizer* StdDialogButtonSizer1;
-
+	
 	Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("EyeWatcher by Robert Morin, 2013\n\n[Grab a GPL license and put it there]"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
