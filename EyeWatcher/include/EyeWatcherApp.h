@@ -11,11 +11,16 @@
 #define EYEWATCHERAPP_H
 
 #include <wx/app.h>
+#include "EWLogic.h"
+#include "WxHandlerFactory.h"
 
 class EyeWatcherApp : public wxApp
 {
     public:
         virtual bool OnInit();
+    private:
+        EWLogic<WxHandlerFactory> m_Logic;
+
 };
 
 #endif // EYEWATCHERAPP_H

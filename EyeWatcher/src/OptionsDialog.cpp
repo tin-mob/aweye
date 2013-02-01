@@ -1,6 +1,6 @@
 #include "wx_pch.h"
 #include "OptionsDialog.h"
-#include "EyeWatcherInt.h"
+#include "EWLogic.h"
 #include "Config.h"
 
 #ifndef WX_PRECOMP
@@ -36,11 +36,8 @@ BEGIN_EVENT_TABLE(OptionsDialog,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-OptionsDialog::OptionsDialog(wxWindow* parent,wxWindowID id)
+OptionsDialog::OptionsDialog(wxWindow* parent, EWLogic<WxHandlerFactory>* logic, wxWindowID id) : m_Logic(logic)
 {
-    Config* config = EyeWatcherInt::Instance()->getConfig();
-    config->checkLoad();
-
 	//(*Initialize(OptionsDialog)
 	wxFlexGridSizer* wrkFlexGridSizer;
 	wxFlexGridSizer* chkFlexGridSizer;
@@ -133,19 +130,19 @@ OptionsDialog::~OptionsDialog()
 /// @todo: validation
 void OptionsDialog::OnOKClick(wxCommandEvent& event)
 {
-    Config* config = EyeWatcherInt::Instance()->getConfig();
-    //config->setWorkLength(wxAtoi(this->workingTextCtrl->GetValue()));
-   // config->setPauseLength(wxAtoi(this->pauseTextCtrl->GetValue()));
-   // config->setRemFreq(wxAtoi(this->reminderTextCtrl->GetValue()));
-    config->setStartup(this->startupCheckBox->GetValue());
-    config->setSoundAlarm(this->soundCheckBox->GetValue());
-    config->setPopupAlarm(this->popupCheckBox->GetValue());
-    config->setEmailAlarm(this->emailCheckBox->GetValue());
-   // config->setCheckFreq(wxAtoi(this->checkTextCtrl->GetValue()));
-    config->setEmailAddr(std::string(this->emailTextCtrl->GetValue().mb_str()));
-
-    config->save();
-
-    Close();
+//    Config* config = EyeWatcherInt::Instance()->getConfig();
+//    //config->setWorkLength(wxAtoi(this->workingTextCtrl->GetValue()));
+//   // config->setPauseLength(wxAtoi(this->pauseTextCtrl->GetValue()));
+//   // config->setRemFreq(wxAtoi(this->reminderTextCtrl->GetValue()));
+//    config->setStartup(this->startupCheckBox->GetValue());
+//    config->setSoundAlarm(this->soundCheckBox->GetValue());
+//    config->setPopupAlarm(this->popupCheckBox->GetValue());
+//    config->setEmailAlarm(this->emailCheckBox->GetValue());
+//   // config->setCheckFreq(wxAtoi(this->checkTextCtrl->GetValue()));
+//    config->setEmailAddr(std::string(this->emailTextCtrl->GetValue().mb_str()));
+//
+//    config->save();
+//
+//    Close();
 }
 

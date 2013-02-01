@@ -13,11 +13,14 @@
 //(*Headers(OptionsDialog)
 //*)
 
+#include "EWLogic.h"
+#include "WxHandlerFactory.h"
+
 class OptionsDialog: public wxDialog
 {
 	public:
 
-		OptionsDialog(wxWindow* parent,wxWindowID id=wxID_ANY);
+		OptionsDialog(wxWindow* parent, EWLogic<WxHandlerFactory>* logic, wxWindowID id=wxID_ANY);
 		virtual ~OptionsDialog();
 
 		//(*Declarations(OptionsDialog)
@@ -63,6 +66,8 @@ class OptionsDialog: public wxDialog
 		//(*Handlers(OptionsDialog)
 		//*)
 		void OnOKClick(wxCommandEvent& event);
+
+		EWLogic<WxHandlerFactory>* m_Logic;
 
 		DECLARE_EVENT_TABLE()
 };

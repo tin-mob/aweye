@@ -9,10 +9,10 @@
 
 #include "wx_pch.h"
 #include "EyeWatcherApp.h"
-#include "Config.h"
+#include "MsgHandler.h"
 
 //(*AppHeaders
-#include "EyeWatcherMain.h"
+#include "EWMainFrame.h"
 #include <wx/image.h>
 //*)
 
@@ -25,7 +25,7 @@ bool EyeWatcherApp::OnInit()
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
-    	EyeWatcherFrame* Frame = new EyeWatcherFrame(0);
+    	EWMainFrame* Frame = new EWMainFrame(0, &m_Logic);
     	Frame->Show();
     	SetTopWindow(Frame);
     }
@@ -33,16 +33,3 @@ bool EyeWatcherApp::OnInit()
     return wxsOK;
 
 }
-
-//    try
-//    {
-//
-//    }
-//    catch (std::string error)
-//    {
-//        wxMessageDialog *errorDialog = new wxMessageDialog(NULL,
-//            wxString(error.c_str(), wxConvUTF8), wxT("Error"), wxOK | wxICON_ERROR);
-//        errorDialog->ShowModal();
-//
-//        Close();
-//    }

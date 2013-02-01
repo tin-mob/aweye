@@ -1,5 +1,5 @@
 /***************************************************************
- * Name:      EyeWatcherMain.cpp
+ * Name:      EWMainFrame.cpp
  * Purpose:   Code for Application Frame
  * Author:    Robert Morin ()
  * Created:   2013-01-06
@@ -8,13 +8,13 @@
  **************************************************************/
 
 #include "wx_pch.h"
-#include "EyeWatcherMain.h"
+#include "EWMainFrame.h"
 #include "OptionsDialog.h"
 #include "AboutDialog.h"
 #include <wx/msgdlg.h>
 #include <stdexcept>
 
-//(*InternalHeaders(EyeWatcherFrame)
+//(*InternalHeaders(EWMainFrame)
 #include <wx/string.h>
 #include <wx/intl.h>
 //*)
@@ -45,31 +45,31 @@ wxString wxbuildinfo(wxbuildinfoformat format)
     return wxbuild;
 }
 
-//(*IdInit(EyeWatcherFrame)
-const long EyeWatcherFrame::ID_BUTTON1 = wxNewId();
-const long EyeWatcherFrame::ID_BUTTON2 = wxNewId();
-const long EyeWatcherFrame::ID_BUTTON3 = wxNewId();
-const long EyeWatcherFrame::ID_BUTTON4 = wxNewId();
-const long EyeWatcherFrame::ID_BUTTON5 = wxNewId();
-const long EyeWatcherFrame::ID_STATICTEXT1 = wxNewId();
-const long EyeWatcherFrame::ID_STATICTEXT2 = wxNewId();
-const long EyeWatcherFrame::ID_STATICTEXT3 = wxNewId();
-const long EyeWatcherFrame::ID_STATICTEXT4 = wxNewId();
-const long EyeWatcherFrame::ID_STATICTEXT5 = wxNewId();
-const long EyeWatcherFrame::ID_STATICTEXT6 = wxNewId();
-const long EyeWatcherFrame::ID_STATICTEXT7 = wxNewId();
-const long EyeWatcherFrame::ID_STATICTEXT8 = wxNewId();
-const long EyeWatcherFrame::ID_TIMER1 = wxNewId();
+//(*IdInit(EWMainFrame)
+const long EWMainFrame::ID_BUTTON1 = wxNewId();
+const long EWMainFrame::ID_BUTTON2 = wxNewId();
+const long EWMainFrame::ID_BUTTON3 = wxNewId();
+const long EWMainFrame::ID_BUTTON4 = wxNewId();
+const long EWMainFrame::ID_BUTTON5 = wxNewId();
+const long EWMainFrame::ID_STATICTEXT1 = wxNewId();
+const long EWMainFrame::ID_STATICTEXT2 = wxNewId();
+const long EWMainFrame::ID_STATICTEXT3 = wxNewId();
+const long EWMainFrame::ID_STATICTEXT4 = wxNewId();
+const long EWMainFrame::ID_STATICTEXT5 = wxNewId();
+const long EWMainFrame::ID_STATICTEXT6 = wxNewId();
+const long EWMainFrame::ID_STATICTEXT7 = wxNewId();
+const long EWMainFrame::ID_STATICTEXT8 = wxNewId();
+const long EWMainFrame::ID_TIMER1 = wxNewId();
 //*)
 
-BEGIN_EVENT_TABLE(EyeWatcherFrame,wxFrame)
-    //(*EventTable(EyeWatcherFrame)
+BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
+    //(*EventTable(EWMainFrame)
     //*)
 END_EVENT_TABLE()
 
-EyeWatcherFrame::EyeWatcherFrame(wxWindow* parent,wxWindowID id)
+EWMainFrame::EWMainFrame(wxWindow* parent, EWLogic<WxHandlerFactory>* logic, wxWindowID id) : m_Logic(logic)
 {
-    //(*Initialize(EyeWatcherFrame)
+    //(*Initialize(EWMainFrame)
     wxBoxSizer* buttonsBoxSizer;
     wxBoxSizer* offBoxSizer;
     wxBoxSizer* mainBoxSizer;
@@ -77,7 +77,7 @@ EyeWatcherFrame::EyeWatcherFrame(wxWindow* parent,wxWindowID id)
     wxBoxSizer* lastBoxSizer;
     wxGridSizer* timesGrid;
     wxBoxSizer* onBoxSizer;
-    
+
     Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
     mainBoxSizer = new wxBoxSizer(wxVERTICAL);
     buttonsBoxSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -123,35 +123,35 @@ EyeWatcherFrame::EyeWatcherFrame(wxWindow* parent,wxWindowID id)
     eyeWatcherTimer.SetOwner(this, ID_TIMER1);
     mainBoxSizer->Fit(this);
     mainBoxSizer->SetSizeHints(this);
-    
-    Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EyeWatcherFrame::OnOptionsButtonClick);
-    Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EyeWatcherFrame::OnaboutButtonClick);
-    Connect(ID_TIMER1,wxEVT_TIMER,(wxObjectEventFunction)&EyeWatcherFrame::OneyeWatcherTimerTrigger);
+
+    Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnOptionsButtonClick);
+    Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnaboutButtonClick);
+    Connect(ID_TIMER1,wxEVT_TIMER,(wxObjectEventFunction)&EWMainFrame::OneyeWatcherTimerTrigger);
     //*)
 }
 
-EyeWatcherFrame::~EyeWatcherFrame()
+EWMainFrame::~EWMainFrame()
 {
-    //(*Destroy(EyeWatcherFrame)
+    //(*Destroy(EWMainFrame)
     //*)
 }
 
-void EyeWatcherFrame::OnQuit(wxCommandEvent& event)
+void EWMainFrame::OnQuit(wxCommandEvent& event)
 {
     Close();
 }
 
-void EyeWatcherFrame::OnAbout(wxCommandEvent& event)
+void EWMainFrame::OnAbout(wxCommandEvent& event)
 {
     wxString msg = wxbuildinfo(long_f);
     wxMessageBox(msg, _("Welcome to..."));
 }
 
-void EyeWatcherFrame::OnOptionsButtonClick(wxCommandEvent& event)
+void EWMainFrame::OnOptionsButtonClick(wxCommandEvent& event)
 {
     try
     {
-        OptionsDialog dialog(this);
+        OptionsDialog dialog(this, m_Logic);
         dialog.ShowModal();
     }
     catch (std::logic_error e)
@@ -162,12 +162,12 @@ void EyeWatcherFrame::OnOptionsButtonClick(wxCommandEvent& event)
     }
 }
 
-void EyeWatcherFrame::OnaboutButtonClick(wxCommandEvent& event)
+void EWMainFrame::OnaboutButtonClick(wxCommandEvent& event)
 {
     AboutDialog dialog(this);
     dialog.ShowModal();
 }
 
-void EyeWatcherFrame::OneyeWatcherTimerTrigger(wxTimerEvent& event)
+void EWMainFrame::OneyeWatcherTimerTrigger(wxTimerEvent& event)
 {
 }

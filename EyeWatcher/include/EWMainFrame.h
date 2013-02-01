@@ -7,10 +7,10 @@
  * License:
  **************************************************************/
 
-#ifndef EYEWATCHERMAIN_H
-#define EYEWATCHERMAIN_H
+#ifndef EWMAINFRAME_H
+#define EWMAINFRAME_H
 
-//(*Headers(EyeWatcherFrame)
+//(*Headers(EWMainFrame)
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/frame.h>
@@ -18,16 +18,19 @@
 #include <wx/timer.h>
 //*)
 
-class EyeWatcherFrame: public wxFrame
+#include "EWLogic.h"
+#include "WxHandlerFactory.h"
+
+class EWMainFrame: public wxFrame
 {
     public:
 
-        EyeWatcherFrame(wxWindow* parent,wxWindowID id = -1);
-        virtual ~EyeWatcherFrame();
+        EWMainFrame(wxWindow* parent, EWLogic<WxHandlerFactory>* logic, wxWindowID id = -1);
+        virtual ~EWMainFrame();
 
     private:
 
-        //(*Handlers(EyeWatcherFrame)
+        //(*Handlers(EWMainFrame)
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
         void OnOptionsButtonClick(wxCommandEvent& event);
@@ -35,7 +38,7 @@ class EyeWatcherFrame: public wxFrame
         void OneyeWatcherTimerTrigger(wxTimerEvent& event);
         //*)
 
-        //(*Identifiers(EyeWatcherFrame)
+        //(*Identifiers(EWMainFrame)
         static const long ID_BUTTON1;
         static const long ID_BUTTON2;
         static const long ID_BUTTON3;
@@ -52,7 +55,7 @@ class EyeWatcherFrame: public wxFrame
         static const long ID_TIMER1;
         //*)
 
-        //(*Declarations(EyeWatcherFrame)
+        //(*Declarations(EWMainFrame)
         wxStaticText* remainingLabel;
         wxStaticText* onLabel;
         wxButton* playButton;
@@ -69,7 +72,9 @@ class EyeWatcherFrame: public wxFrame
         wxStaticText* onTime;
         //*)
 
+        EWLogic<WxHandlerFactory>* m_Logic;
+
         DECLARE_EVENT_TABLE()
 };
 
-#endif // EYEWATCHERMAIN_H
+#endif // EWMAINFRAME_H
