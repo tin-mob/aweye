@@ -3,17 +3,6 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
-const unsigned int Config::default_WorkLength = 50*60;
-const unsigned int Config::default_PauseLength = 10*60;
-const unsigned int Config::default_RemFreq = 2*60;
-const unsigned int Config::default_CheckFreq = 30;
-const unsigned int Config::default_PauseTol = 1;
-const bool Config::default_Startup = false;
-const bool Config::default_SoundAlarm = false;
-const bool Config::default_PopupAlarm = true;
-const bool Config::default_EmailAlarm = false;
-const std::string Config::default_EmailAddr = "";
-
 Config::Config(std::string filename)
 {
     //ctor
@@ -33,6 +22,11 @@ Config::~Config()
     //dtor
 }
 
+const ConfigData& Config::getData() const
+{
+    return this->m_data;
+}
+
 void Config::checkLoad()
 {
     std::ifstream fin(this->m_filename.c_str());
@@ -45,7 +39,7 @@ void Config::checkLoad()
         using boost::property_tree::ptree;
         ptree pt;
         this->generate(pt);
-        this->save();
+        this->write();
     }
 }
 
@@ -69,36 +63,44 @@ void Config::load()
 // Loads Config structure from the specified XML file
 void Config::generate(boost::property_tree::ptree &pt)
 {
-    this->m_WorkLength = pt.get("WorkLength", Config::default_WorkLength);
-    this->m_PauseLength = pt.get("PauseLength", Config::default_PauseLength);
-    this->m_RemFreq = pt.get("RemFreq", Config::default_RemFreq);
-    this->m_CheckFreq = pt.get("CheckFreq", Config::default_CheckFreq);
-    this->m_PauseTol = pt.get("PauseTol", Config::default_PauseTol);
-    this->m_Startup = pt.get("Startup", Config::default_Startup);
-    this->m_SoundAlarm = pt.get("SoundAlarm", Config::default_SoundAlarm);
-    this->m_PopupAlarm = pt.get("PopupAlarm", Config::default_PopupAlarm);
-    this->m_EmailAlarm = pt.get("EmailAlarm", Config::default_EmailAlarm);
-    this->m_EmailAddr = pt.get("EmailAddr", Config::default_EmailAddr);
+    this->m_data.workLength = pt.get("WorkLength", ConfigData::default_WorkLength);
+    this->m_data.pauseLength = pt.get("PauseLength", ConfigData::default_PauseLength);
+    this->m_data.remFreq = pt.get("RemFreq", ConfigData::default_RemFreq);
+    this->m_data.checkFreq = pt.get("CheckFreq", ConfigData::default_CheckFreq);
+    this->m_data.pauseTol = pt.get("PauseTol", ConfigData::default_PauseTol);
+    this->m_data.startup = pt.get("Startup", ConfigData::default_Startup);
+    this->m_data.soundAlarm = pt.get("SoundAlarm", ConfigData::default_SoundAlarm);
+    this->m_data.popupAlarm = pt.get("PopupAlarm", ConfigData::default_PopupAlarm);
+    this->m_data.emailAlarm = pt.get("EmailAlarm", ConfigData::default_EmailAlarm);
+    this->m_data.emailAddr = pt.get("EmailAddr", ConfigData::default_EmailAddr);
 }
 
-void Config::save()
+/// @todo: check if validation could be done
+void Config::save(const ConfigData& data)
 {
-   // Create an empty property tree object
-   using boost::property_tree::ptree;
-   ptree pt;
+    this->m_data = data;
 
-   // Put log filename in property tree
-   pt.put("WorkLength", this->m_WorkLength);
-   pt.put("PauseLength", this->m_PauseLength);
-   pt.put("RemFreq", this->m_RemFreq);
-   pt.put("CheckFreq", this->m_CheckFreq);
-   pt.put("PauseTol", this->m_PauseTol);
-   pt.put("Startup", this->m_Startup);
-   pt.put("SoundAlarm", this->m_SoundAlarm);
-   pt.put("PopupAlarm", this->m_PopupAlarm);
-   pt.put("EmailAlarm", this->m_EmailAlarm);
-   pt.put("EmailAddr", this->m_EmailAddr);
+    this->write();
+}
 
-   // Write the property tree to the XML file.
-   write_json(this->m_filename, pt);
+void Config::write()
+{
+    // Create an empty property tree object
+    using boost::property_tree::ptree;
+    ptree pt;
+
+    // Put log filename in property tree
+    pt.put("WorkLength", this->m_data.workLength);
+    pt.put("PauseLength", this->m_data.pauseLength);
+    pt.put("RemFreq", this->m_data.remFreq);
+    pt.put("CheckFreq", this->m_data.checkFreq);
+    pt.put("PauseTol", this->m_data.pauseTol);
+    pt.put("Startup", this->m_data.startup);
+    pt.put("SoundAlarm", this->m_data.soundAlarm);
+    pt.put("PopupAlarm", this->m_data.popupAlarm);
+    pt.put("EmailAlarm", this->m_data.emailAlarm);
+    pt.put("EmailAddr", this->m_data.emailAddr);
+
+    // Write the property tree to the XML file.
+    write_json(this->m_filename, pt);
 }

@@ -36,7 +36,7 @@ BEGIN_EVENT_TABLE(OptionsDialog,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-OptionsDialog::OptionsDialog(wxWindow* parent, EWLogic<WxHandlerFactory>* logic, wxWindowID id) : m_Logic(logic)
+OptionsDialog::OptionsDialog(wxWindow* parent, EWLogic* logic, wxWindowID id) : m_Logic(logic)
 {
 	//(*Initialize(OptionsDialog)
 	wxFlexGridSizer* wrkFlexGridSizer;

@@ -5,12 +5,13 @@
 
 class Config;
 class TimeKeeper;
+class HandlerFactory;
+class AbstractMsgHandler;
 
-template <class HandlerFactory>
 class EWLogic
 {
     public:
-        EWLogic();
+        EWLogic(HandlerFactory* handlerFactory);
         virtual ~EWLogic();
 
         const Config* getConfig();
@@ -38,6 +39,7 @@ class EWLogic
     private:
         Config* m_Config;
         TimeKeeper* m_TimeKeeper;
+        AbstractMsgHandler* m_MsgHandler;
 };
 
 #endif // EWLOGIC_H

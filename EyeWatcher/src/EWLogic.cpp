@@ -2,62 +2,44 @@
 #include "Config.h"
 #include "TimeKeeper.h"
 #include "HandlerFactory.h"
+#include "AbstractMsgHandler.h"
+
 #include <stdexcept>
 #include <wx/msgdlg.h>
 
-template <class HandlerFactory>
-EWLogic<HandlerFactory>::EWLogic() : m_Config(NULL), m_TimeKeeper(NULL)
+// TimeKeeper can fail when the camera is closed/whatever, must do lazy instance
+EWLogic::EWLogic(HandlerFactory* handlerFactory)
 {
     //ctor
+    this->m_MsgHandler = handlerFactory->getMsgHandler();
+    this->m_Config = new Config();
+    this->m_TimeKeeper = new TimeKeeper(this->m_Config, handlerFactory);
 }
 
-template <class HandlerFactory>
-EWLogic<HandlerFactory>::~EWLogic()
+EWLogic::~EWLogic()
 {
     //dtor
-    if (this->m_Config != NULL)
-    {
-        delete this->m_Config;
-        this->m_Config = NULL;
-    }
+    delete this->m_Config;
+    this->m_Config = NULL;
 
-    if (this->m_TimeKeeper != NULL)
-    {
-        delete this->m_TimeKeeper;
-        this->m_TimeKeeper = NULL;
-    }
+    delete this->m_TimeKeeper;
+    this->m_TimeKeeper = NULL;
+
+    delete this->m_MsgHandler;
+    this->m_MsgHandler = NULL;
 }
 
-template <class HandlerFactory>
-const Config* EWLogic<HandlerFactory>::getConfig()
+const Config* EWLogic::getConfig()
 {
-    if (this->m_Config == NULL)
-    {
-        this->m_Config = new Config();
-    }
-    else
-    {
-        this->m_Config->checkLoad();
-    }
     return this->m_Config;
 }
 
-template <class HandlerFactory>
-const TimeKeeper* EWLogic<HandlerFactory>::getTimeKeeper()
+const TimeKeeper* EWLogic::getTimeKeeper()
 {
-    if (this->m_TimeKeeper == NULL)
-    {
-        if (this->m_Config == NULL)
-        {
-            this->m_Config = new Config();
-        }
-        this->m_TimeKeeper = new TimeKeeper(this->m_Config);
-    }
     return this->m_TimeKeeper;
 }
 
-template <class HandlerFactory>
-void  EWLogic<HandlerFactory>::saveConfig(
+void  EWLogic::saveConfig(
             unsigned int m_WorkLength,
             unsigned int m_PauseLength,
             unsigned int m_RemFreq,
@@ -72,20 +54,17 @@ void  EWLogic<HandlerFactory>::saveConfig(
 
 }
 
-template <class HandlerFactory>
-void  EWLogic<HandlerFactory>::start()
+void  EWLogic::start()
 {
 
 }
 
-template <class HandlerFactory>
-void  EWLogic<HandlerFactory>::stop()
+void  EWLogic::stop()
 {
 
 }
 
-template <class HandlerFactory>
-void  EWLogic<HandlerFactory>::updateStatus()
+void  EWLogic::updateStatus()
 {
 
 }

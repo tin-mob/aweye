@@ -31,27 +31,27 @@ void TKStateHere::updateTimeStamps(TimeKeeper* parent)
 
 int TKStateHere::getTimerInterval(const TimeKeeper* parent) const
 {
-    const Config* config = parent->m_Config;
+    const ConfigData& config = parent->m_Config->getData();
     const time_t now = parent->m_TimeHandler->getTime();
-    int timerInterval = config->getCheckFreq();
+    int timerInterval = config.checkFreq;
 
     unsigned int hereInterval = now - parent->m_HereStamp;
     // work period ended
-    if (hereInterval >= config->getWorkLength())
+    if (hereInterval >= config.workLength)
     {
-        if (config->getCheckFreq() > config->getRemFreq())
+        if (config.checkFreq > config.remFreq)
         {
-            timerInterval = config->getRemFreq();
+            timerInterval = config.remFreq;
         }
         else
         {
-            timerInterval = config->getCheckFreq();
+            timerInterval = config.checkFreq;
         }
     }
     // work period ending soon
-    else if (hereInterval + config->getCheckFreq() > config->getWorkLength())
+    else if (hereInterval + config.checkFreq > config.workLength)
     {
-        timerInterval = config->getWorkLength() - hereInterval;
+        timerInterval = config.workLength - hereInterval;
     }
 
     return timerInterval;
@@ -59,7 +59,7 @@ int TKStateHere::getTimerInterval(const TimeKeeper* parent) const
 
 bool TKStateHere::isLate(const TimeKeeper* parent) const
 {
-    return (parent->m_TimeHandler->getTime() - parent->m_HereStamp) >= parent->m_Config->getWorkLength();
+    return (parent->m_TimeHandler->getTime() - parent->m_HereStamp) >= parent->m_Config->getData().workLength;
 }
 
 int TKStateHere::getInterval(const TimeKeeper* parent) const
@@ -69,6 +69,6 @@ int TKStateHere::getInterval(const TimeKeeper* parent) const
 
 int TKStateHere::getTimeLeft(const TimeKeeper* parent) const
 {
-    const Config* config = parent->m_Config;
-    return parent->m_HereStamp + config->getWorkLength() - parent->m_TimeHandler->getTime();
+    const ConfigData& config = parent->m_Config->getData();
+    return parent->m_HereStamp + config.workLength - parent->m_TimeHandler->getTime();
 }

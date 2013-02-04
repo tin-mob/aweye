@@ -17,9 +17,11 @@
 class EyeWatcherApp : public wxApp
 {
     public:
+        EyeWatcherApp();
+        ~EyeWatcherApp();
         virtual bool OnInit();
     private:
-        EWLogic<WxHandlerFactory> m_Logic;
+        EWLogic* m_Logic;
 
 };
 

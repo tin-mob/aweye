@@ -1,32 +1,22 @@
 #include "TimeKeeper.h"
-#include "WebcamHandler.h"
 #include "TKStateAway.h"
 #include "TKStateHere.h"
 #include "TKStateOff.h"
-#include "TimeHandler.h"
-#include "Config.h"
+#include "AbstractConfig.h"
+#include "AbstractTimeHandler.h"
+#include "AbstractWebcamHandler.h"
 
-TimeKeeper::TimeKeeper(Config* config) : m_HereStamp(0), m_AwayStamp(0), m_LastAwayStamp(0), m_Config(config),  m_NumTolerated(0)
+TimeKeeper::TimeKeeper(AbstractConfig* config, AbstractTimeHandler* timeHandler, AbstractWebcamHandler* webcamHandler) :
+    m_Config(config), m_TimeHandler(timeHandler), m_WebcamHandler(webcamHandler),
+    m_HereStamp(0), m_AwayStamp(0), m_LastAwayStamp(0), m_NumTolerated(0)
 {
     //ctor
-    this->m_TimeHandler = new TimeHandler();
-    this->m_WebcamHandler = new WebcamHandler();
-    this->initStates();
-}
-
-TimeKeeper::TimeKeeper(Config* config, AbstractTimeHandler* timeHandler, AbstractWebcamHandler* handler) : m_TimeHandler(timeHandler), m_WebcamHandler(handler), m_HereStamp(0), m_AwayStamp(0), m_LastAwayStamp(0), m_Config(config),  m_NumTolerated(0)
-{
     this->initStates();
 }
 
 TimeKeeper::~TimeKeeper()
 {
     //dtor
-    delete this->m_TimeHandler;
-    this->m_TimeHandler = NULL;
-    delete this->m_WebcamHandler;
-    this->m_WebcamHandler = NULL;
-
     delete this->m_States[TimeKeeper::OFF];
     this->m_States.erase (TimeKeeper::OFF);
     delete this->m_States[TimeKeeper::AWAY];
@@ -48,6 +38,7 @@ void TimeKeeper::start()
 {
     if (this->m_CurrentState == TimeKeeper::OFF)
     {
+        this->m_WebcamHandler->open();
         this->setStatus(TimeKeeper::HERE);
     }
 }
@@ -56,6 +47,7 @@ void TimeKeeper::stop()
 {
     if (this->m_CurrentState != TimeKeeper::OFF)
     {
+        this->m_WebcamHandler->release();
         this->setStatus(TimeKeeper::OFF);
     }
 }

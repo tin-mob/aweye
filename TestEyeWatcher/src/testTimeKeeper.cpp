@@ -5,518 +5,455 @@
 
 #include "Config.h"
 #include "TimeKeeper.h"
-#include "AbstractTimeHandler.h"
-#include "AbstractWebcamHandler.h"
-
-class MockupTimeHandler : public AbstractTimeHandler
-{
-     public:
-        MockupTimeHandler(time_t time = time(NULL)) : m_time(time) {}
-        virtual ~MockupTimeHandler() {}
-        virtual time_t getTime() const
-        {
-            return this->m_time;
-        }
-        virtual void setTime(time_t time)
-        {
-            this->m_time = time;
-        }
-
-    protected:
-    private:
-        time_t m_time;
-};
-
-class MockupWebcamHandler : public AbstractWebcamHandler
-{
-    public:
-        MockupWebcamHandler() {}
-        virtual ~MockupWebcamHandler() {}
-        virtual bool isHere()
-        {
-            assert (!this->m_results.empty());
-            bool result  = this->m_results.front();
-            this->m_results.pop();
-            return result;
-        }
-        virtual void pushResult(bool result)
-        {
-            this->m_results.push(result);
-        }
-
-    protected:
-    private:
-        std::queue<bool> m_results;
-};
+#include "MockupHandlerFactory.h"
 
 struct TimeKeeperFixture
 {
     public:
-        TimeKeeperFixture() : m_Config("/tmp/test.cfg"), m_CheckFreq(2), m_PauseLength(3), m_RemFreq(1), m_WorkLength(5)
+        TimeKeeperFixture()
         {
-            boost::filesystem::remove(m_ConfigPath);
-            m_Config.setCheckFreq(m_CheckFreq);
-            m_Config.setPauseLength(m_PauseLength);
-            m_Config.setRemFreq(m_RemFreq);
-            m_Config.setWorkLength(m_WorkLength);
-            m_Config.save();
+            this->data = {5, 3, 1, 2, ConfigData::default_PauseTol, ConfigData::default_Startup, ConfigData::default_SoundAlarm,
+                ConfigData::default_PopupAlarm, ConfigData::default_EmailAlarm, ConfigData::default_EmailAddr};
+
+            this->config = new ConfigStub(data);
+            this->timeHandler = new TimeHandlerStub();
+            this->webcamHandler = new WebcamHandlerStub();
+            this->keeper = new TimeKeeper(this->config, this->timeHandler, this->webcamHandler);
         }
         ~TimeKeeperFixture()
         {
-            boost::filesystem::remove(m_ConfigPath);
+            delete this->keeper;
+            delete this->config;
+            delete this->timeHandler;
+            delete this->webcamHandler;
         }
 
-        Config m_Config;
-        const int m_CheckFreq;
-        const int m_PauseLength;
-        const int m_RemFreq;
-        const int m_WorkLength;
+        ConfigData data;
+        ConfigStub* config;
+        TimeHandlerStub* timeHandler;
+        WebcamHandlerStub* webcamHandler;
+        TimeKeeper* keeper;
 
     protected:
     private:
-        const std::string m_ConfigPath;
 };
 
 SUITE(TestWatcherInt)
 {
     TEST_FIXTURE(TimeKeeperFixture, TestOnOff)
     {
-        MockupTimeHandler* timeHandler = new MockupTimeHandler();
-        TimeKeeper keeper(&m_Config, timeHandler, new MockupWebcamHandler());
-        CHECK_EQUAL(keeper.getStatus(), TimeKeeper::OFF);
-        CHECK_EQUAL(keeper.getTimerInterval(), 0);
-        CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), 0);
-        CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength);
-        CHECK_EQUAL(keeper.getHereStamp(), 0);
-        CHECK_EQUAL(keeper.getAwayStamp(), 0);
+        CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::OFF);
+        CHECK_EQUAL(this->keeper->getTimerInterval(), 0);
+        CHECK_EQUAL(this->keeper->isLate(), false);
+        CHECK_EQUAL(this->keeper->getInterval(), 0);
+        CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength);
+        CHECK_EQUAL(this->keeper->getHereStamp(), 0);
+        CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
 
-        keeper.start();
-        CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
-        CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-        CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), 0);
-        CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength);
-        CHECK_EQUAL(keeper.getHereStamp(), timeHandler->getTime());
-        CHECK_EQUAL(keeper.getAwayStamp(), 0);
+        this->keeper->start();
+        CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+        CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+        CHECK_EQUAL(this->keeper->isLate(), false);
+        CHECK_EQUAL(this->keeper->getInterval(), 0);
+        CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength);
+        CHECK_EQUAL(this->keeper->getHereStamp(), timeHandler->getTime());
+        CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
 
 
-        keeper.stop();
-        CHECK_EQUAL(keeper.getStatus(), TimeKeeper::OFF);
-        CHECK_EQUAL(keeper.getTimerInterval(), 0);
-        CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), 0);
-        CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength);
-        CHECK_EQUAL(keeper.getHereStamp(), 0);
-        CHECK_EQUAL(keeper.getAwayStamp(), 0);
+        this->keeper->stop();
+        CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::OFF);
+        CHECK_EQUAL(this->keeper->getTimerInterval(), 0);
+        CHECK_EQUAL(this->keeper->isLate(), false);
+        CHECK_EQUAL(this->keeper->getInterval(), 0);
+        CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength);
+        CHECK_EQUAL(this->keeper->getHereStamp(), 0);
+        CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestSimpleRun)
     {
-        std::queue<bool> results;
-
-        MockupTimeHandler* timeHandler = new MockupTimeHandler();
-        MockupWebcamHandler* webcamHandler = new MockupWebcamHandler();
-        TimeKeeper keeper(&m_Config, timeHandler, webcamHandler);
-        CHECK_EQUAL(keeper.getStatus(), TimeKeeper::OFF);
-
         time_t startingTime = timeHandler->getTime();
 
         {
-            keeper.start();
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), false);
-            CHECK_EQUAL(keeper.getInterval(), 0);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), 0);
+            this->keeper->start();
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), false);
+            CHECK_EQUAL(this->keeper->getInterval(), 0);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
-            CHECK_EQUAL(timeHandler->getTime(), startingTime + m_CheckFreq);
+            timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
+            CHECK_EQUAL(timeHandler->getTime(), startingTime + this->data.checkFreq);
 
             webcamHandler->pushResult(true);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), false);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), false);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
+            timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             webcamHandler->pushResult(true);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
-            CHECK_EQUAL(keeper.getTimerInterval(), 1);
-            CHECK_EQUAL(keeper.isLate(), false);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), 1);
+            CHECK_EQUAL(this->keeper->isLate(), false);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
             webcamHandler->pushResult(true);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_RemFreq);
-            CHECK_EQUAL(keeper.isLate(), true);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.remFreq);
+            CHECK_EQUAL(this->keeper->isLate(), true);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
         }
         {
-            m_Config.setCheckFreq(1);
-            m_Config.setRemFreq(2);
+            this->data.checkFreq = 1;
+            this->data.remFreq = 2;
+            this->config->save(this->data);
 
             timeHandler->setTime(timeHandler->getTime() + 1);
             webcamHandler->pushResult(true);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_Config.getCheckFreq());
-            CHECK_EQUAL(keeper.isLate(), true);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), true);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
         }
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestPauseBefore)
     {
-        MockupTimeHandler* timeHandler = new MockupTimeHandler();
-        MockupWebcamHandler* webcamHandler = new MockupWebcamHandler();
-        TimeKeeper keeper(&m_Config, timeHandler, webcamHandler);
-
         time_t startingTime = timeHandler->getTime();
         time_t pauseTime = 0;
-        keeper.start();
+        this->keeper->start();
 
         {
-            timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
+            timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             webcamHandler->pushResult(true);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), false);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), false);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
+            timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             pauseTime = timeHandler->getTime();
             webcamHandler->pushResult(false);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), false);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), false);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
+            timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             webcamHandler->pushResult(false);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
             time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
-            CHECK_EQUAL(keeper.getTimerInterval(), 1);
-            CHECK_EQUAL(keeper.isLate(), false);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), 1);
+            CHECK_EQUAL(this->keeper->isLate(), false);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
             webcamHandler->pushResult(false);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), false);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), false);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
+            timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             webcamHandler->pushResult(false);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), false);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), false);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
+            timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             startingTime = timeHandler->getTime();
             webcamHandler->pushResult(true);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), false);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), false);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
+            timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             webcamHandler->pushResult(true);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), false);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), false);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestPauseAfter)
     {
-        MockupTimeHandler* timeHandler = new MockupTimeHandler();
-        MockupWebcamHandler* webcamHandler = new MockupWebcamHandler();
-        TimeKeeper keeper(&m_Config, timeHandler, webcamHandler);
-
         time_t startingTime = timeHandler->getTime();
         time_t pauseTime = 0;
-        keeper.start();
+        this->keeper->start();
 
         {
             timeHandler->setTime(timeHandler->getTime() + 6);
             webcamHandler->pushResult(true);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_RemFreq);
-            CHECK_EQUAL(keeper.isLate(), true);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.remFreq);
+            CHECK_EQUAL(this->keeper->isLate(), true);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
         }
         {
             pauseTime = timeHandler->getTime();
             webcamHandler->pushResult(false);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), true);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), true);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + m_PauseLength);
+            timeHandler->setTime(timeHandler->getTime() + this->data.pauseLength);
             webcamHandler->pushResult(false);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), true);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), true);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + m_CheckFreq);
+            timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             startingTime = timeHandler->getTime();
             webcamHandler->pushResult(true);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), false);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), false);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestCancelledPause)
     {
-        MockupTimeHandler* timeHandler = new MockupTimeHandler();
-        MockupWebcamHandler* webcamHandler = new MockupWebcamHandler();
-        TimeKeeper keeper(&m_Config, timeHandler, webcamHandler);
-
         time_t startingTime = timeHandler->getTime();
         time_t pauseTime = 0;
-        keeper.start();
+        this->keeper->start();
 
         {
             timeHandler->setTime(timeHandler->getTime() + 6);
             webcamHandler->pushResult(true);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_RemFreq);
-            CHECK_EQUAL(keeper.isLate(), true);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.remFreq);
+            CHECK_EQUAL(this->keeper->isLate(), true);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
         }
         {
             pauseTime = timeHandler->getTime();
             webcamHandler->pushResult(false);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), true);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), true);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
             webcamHandler->pushResult(true);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), true);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), true);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
             webcamHandler->pushResult(true);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_RemFreq);
-            CHECK_EQUAL(keeper.isLate(), true);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.remFreq);
+            CHECK_EQUAL(this->keeper->isLate(), true);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
         }
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestInterruptedPause)
     {
-        MockupTimeHandler* timeHandler = new MockupTimeHandler();
-        MockupWebcamHandler* webcamHandler = new MockupWebcamHandler();
-        TimeKeeper keeper(&m_Config, timeHandler, webcamHandler);
-
         time_t startingTime = timeHandler->getTime();
         time_t pauseTime = 0;
-        keeper.start();
+        this->keeper->start();
 
         {
             timeHandler->setTime(timeHandler->getTime() + 6);
             webcamHandler->pushResult(true);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::HERE);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_RemFreq);
-            CHECK_EQUAL(keeper.isLate(), true);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_WorkLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.remFreq);
+            CHECK_EQUAL(this->keeper->isLate(), true);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
         }
         {
             pauseTime = timeHandler->getTime();
             webcamHandler->pushResult(false);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), true);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), true);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
             webcamHandler->pushResult(true);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), true);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), true);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
             webcamHandler->pushResult(false);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
-            CHECK_EQUAL(keeper.getTimerInterval(), 1);
-            CHECK_EQUAL(keeper.isLate(), true);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), 1);
+            CHECK_EQUAL(this->keeper->isLate(), true);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
             webcamHandler->pushResult(false);
-            keeper.updateStatus();
+            this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(keeper.getStatus(), TimeKeeper::AWAY);
-            CHECK_EQUAL(keeper.getTimerInterval(), m_CheckFreq);
-            CHECK_EQUAL(keeper.isLate(), true);
-            CHECK_EQUAL(keeper.getInterval(), interval);
-            CHECK_EQUAL(keeper.getTimeLeft(), m_PauseLength - interval);
-            CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-            CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
+            CHECK_EQUAL(this->keeper->isLate(), true);
+            CHECK_EQUAL(this->keeper->getInterval(), interval);
+            CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
+            CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
     }
 }

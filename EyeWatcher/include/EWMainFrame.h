@@ -25,7 +25,7 @@ class EWMainFrame: public wxFrame
 {
     public:
 
-        EWMainFrame(wxWindow* parent, EWLogic<WxHandlerFactory>* logic, wxWindowID id = -1);
+        EWMainFrame(wxWindow* parent, EWLogic* logic, wxWindowID id = -1);
         virtual ~EWMainFrame();
 
     private:
@@ -72,7 +72,7 @@ class EWMainFrame: public wxFrame
         wxStaticText* onTime;
         //*)
 
-        EWLogic<WxHandlerFactory>* m_Logic;
+        EWLogic* m_Logic;
 
         DECLARE_EVENT_TABLE()
 };

@@ -1,8 +1,6 @@
 #ifndef ABSTRACTTIMEHANDLER_H
 #define ABSTRACTTIMEHANDLER_H
 
-#include <time.h>
-
 class AbstractTimeHandler
 {
     public:

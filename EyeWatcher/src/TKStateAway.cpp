@@ -25,7 +25,7 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
         int timeLeft = this->getTimeLeft(parent);
         if (timeLeft > 0)
         {
-            if (parent->m_NumTolerated < parent->m_Config->getPauseTol())
+            if (parent->m_NumTolerated < parent->m_Config->getData().pauseTol)
             {
                 parent->m_NumTolerated++;
             }
@@ -51,20 +51,20 @@ void TKStateAway::updateTimeStamps(TimeKeeper* parent)
 
 int TKStateAway::getTimerInterval(const TimeKeeper* parent) const
 {
-    const Config* config = parent->m_Config;
+    const ConfigData& config = parent->m_Config->getData();
     const time_t now = parent->m_TimeHandler->getTime();
-    int timerInterval = config->getCheckFreq();
+    int timerInterval = config.checkFreq;
 
     unsigned int pauseInterval = now - parent->m_AwayStamp;
     // work period ended
-    if (pauseInterval >= config->getPauseLength())
+    if (pauseInterval >= config.pauseLength)
     {
-        timerInterval = config->getCheckFreq();
+        timerInterval = config.checkFreq;
     }
     // pause period ending soon
-    else if (pauseInterval + config->getCheckFreq() > config->getPauseLength())
+    else if (pauseInterval + config.checkFreq > config.pauseLength)
     {
-        timerInterval = config->getPauseLength() - pauseInterval;
+        timerInterval = config.pauseLength - pauseInterval;
     }
 
     return timerInterval;
@@ -72,7 +72,8 @@ int TKStateAway::getTimerInterval(const TimeKeeper* parent) const
 
 bool TKStateAway::isLate(const TimeKeeper* parent) const
 {
-    return (parent->m_AwayStamp - parent->m_HereStamp) >= parent->m_Config->getWorkLength();
+    const ConfigData& config = parent->m_Config->getData();
+    return (parent->m_AwayStamp - parent->m_HereStamp) >= config.workLength;
 }
 
 int TKStateAway::getInterval(const TimeKeeper* parent) const
@@ -82,6 +83,6 @@ int TKStateAway::getInterval(const TimeKeeper* parent) const
 
 int TKStateAway::getTimeLeft(const TimeKeeper* parent) const
 {
-    const Config* config = parent->m_Config;
-    return parent->m_AwayStamp + config->getPauseLength() - parent->m_TimeHandler->getTime();
+    const ConfigData& config = parent->m_Config->getData();
+    return parent->m_AwayStamp + config.pauseLength - parent->m_TimeHandler->getTime();
 }

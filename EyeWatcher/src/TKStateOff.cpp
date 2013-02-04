@@ -40,6 +40,6 @@ int TKStateOff::getInterval(const TimeKeeper*) const
 
 int TKStateOff::getTimeLeft(const TimeKeeper* parent) const
 {
-    const Config* config = parent->m_Config;
-    return config->getWorkLength();
+    const ConfigData& config = parent->m_Config->getData();
+    return config.workLength;
 }

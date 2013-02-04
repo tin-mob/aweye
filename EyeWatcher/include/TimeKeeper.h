@@ -5,20 +5,20 @@
 #include <map>
 #include "TKState.h"
 
-class AbstractWebcamHandler;
 class TKStateHere;
 class TKStateAway;
 class TKStateOff;
-class Config;
+class AbstractConfig;
+class AbstractWebcamHandler;
 class AbstractTimeHandler;
+class HandlerFactory;
 
 class TimeKeeper
 {
     public:
         enum Status { OFF, HERE, AWAY };
 
-        TimeKeeper(Config* config);
-        TimeKeeper(Config* config, AbstractTimeHandler* timeHandler, AbstractWebcamHandler* webcamHandler);
+        TimeKeeper(AbstractConfig* config, AbstractTimeHandler* timeHandler, AbstractWebcamHandler* webcamHandler);
         virtual ~TimeKeeper();
 
         void start();
@@ -48,12 +48,13 @@ class TimeKeeper
         std::map<Status,TKState*> m_States;
         Status m_CurrentState;
 
+        AbstractConfig* m_Config;
         AbstractTimeHandler* m_TimeHandler;
         AbstractWebcamHandler* m_WebcamHandler;
+
         time_t m_HereStamp;
         time_t m_AwayStamp;
         time_t m_LastAwayStamp;
-        Config* m_Config;
         unsigned int m_NumTolerated;
 };
 

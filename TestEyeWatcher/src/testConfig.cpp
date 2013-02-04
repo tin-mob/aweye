@@ -3,12 +3,11 @@
 #include "Config.h"
 
 #include <boost/filesystem.hpp>
-using namespace boost::filesystem;
 
 struct ConfigFixture
 {
-    ConfigFixture() : configPath("/tmp/test.cfg") {remove(configPath);}
-    ~ConfigFixture() {remove(configPath);}
+    ConfigFixture() : configPath("/tmp/test.cfg") {boost::filesystem::remove(configPath);}
+    ~ConfigFixture() {boost::filesystem::remove(configPath);}
 
     const std::string configPath;
 };
@@ -17,81 +16,74 @@ SUITE(TestConfig)
 {
     TEST_FIXTURE(ConfigFixture, TestAll)
     {
-        CHECK(!exists(configPath));
+        CHECK(!boost::filesystem::exists(configPath));
 
         Config config(configPath);
 
-        CHECK(exists(configPath));
+        CHECK(boost::filesystem::exists(configPath));
 
-        CHECK_EQUAL(Config::default_WorkLength, config.getWorkLength());
-        CHECK_EQUAL(Config::default_PauseLength, config.getPauseLength());
-        CHECK_EQUAL(Config::default_RemFreq, config.getRemFreq());
-        CHECK_EQUAL(Config::default_CheckFreq, config.getCheckFreq());
-        CHECK_EQUAL(Config::default_PauseTol, config.getPauseTol());
-        CHECK_EQUAL(Config::default_Startup, config.getStartup());
-        CHECK_EQUAL(Config::default_SoundAlarm, config.getSoundAlarm());
-        CHECK_EQUAL(Config::default_PopupAlarm, config.getPopupAlarm());
-        CHECK_EQUAL(Config::default_EmailAlarm, config.getEmailAlarm());
-        CHECK_EQUAL(Config::default_EmailAddr, config.getEmailAddr());
+        ConfigData data = config.getData();
 
-        const unsigned int test_WorkLength = Config::default_WorkLength + 1;
-        const unsigned int test_PauseLength = Config::default_PauseLength + 1;
-        const unsigned int test_RemFreq = Config::default_RemFreq + 1;
-        const unsigned int test_CheckFreq = Config::default_CheckFreq + 1;
-        const unsigned int test_PauseTol = Config::default_PauseTol + 1;
-        const bool test_Startup = !Config::default_Startup;
-        const bool test_SoundAlarm = !Config::default_SoundAlarm;
-        const bool test_PopupAlarm = !Config::default_PopupAlarm;
-        const bool test_EmailAlarm = !Config::default_EmailAlarm;
+        CHECK_EQUAL(ConfigData::default_WorkLength, data.workLength);
+        CHECK_EQUAL(ConfigData::default_PauseLength, data.pauseLength);
+        CHECK_EQUAL(ConfigData::default_RemFreq, data.remFreq);
+        CHECK_EQUAL(ConfigData::default_CheckFreq, data.checkFreq);
+        CHECK_EQUAL(ConfigData::default_PauseTol, data.pauseTol);
+        CHECK_EQUAL(ConfigData::default_Startup, data.startup);
+        CHECK_EQUAL(ConfigData::default_SoundAlarm, data.soundAlarm);
+        CHECK_EQUAL(ConfigData::default_PopupAlarm, data.popupAlarm);
+        CHECK_EQUAL(ConfigData::default_EmailAlarm, data.emailAlarm);
+        CHECK_EQUAL(ConfigData::default_EmailAddr, data.emailAddr);
+
+        const unsigned int test_WorkLength = ConfigData::default_WorkLength + 1;
+        const unsigned int test_PauseLength = ConfigData::default_PauseLength + 1;
+        const unsigned int test_RemFreq = ConfigData::default_RemFreq + 1;
+        const unsigned int test_CheckFreq = ConfigData::default_CheckFreq + 1;
+        const unsigned int test_PauseTol = ConfigData::default_PauseTol + 1;
+        const bool test_Startup = !ConfigData::default_Startup;
+        const bool test_SoundAlarm = !ConfigData::default_SoundAlarm;
+        const bool test_PopupAlarm = !ConfigData::default_PopupAlarm;
+        const bool test_EmailAlarm = !ConfigData::default_EmailAlarm;
         const std::string test_EmailAddr = "test@test.test";
 
-        config.setWorkLength(test_WorkLength);
-        config.setPauseLength(test_PauseLength);
-        config.setRemFreq(test_RemFreq);
-        config.setCheckFreq(test_CheckFreq);
-        config.setPauseTol(test_PauseTol);
-        config.setStartup(test_Startup);
-        config.setSoundAlarm(test_SoundAlarm);
-        config.setPopupAlarm(test_PopupAlarm);
-        config.setEmailAlarm(test_EmailAlarm);
-        config.setEmailAddr(test_EmailAddr);
+        data.workLength = test_WorkLength;
+        data.pauseLength = test_PauseLength;
+        data.remFreq = test_RemFreq;
+        data.checkFreq = test_CheckFreq;
+        data.pauseTol = test_PauseTol;
+        data.startup = test_Startup;
+        data.soundAlarm = test_SoundAlarm;
+        data.popupAlarm = test_PopupAlarm;
+        data.emailAlarm = test_EmailAlarm;
+        data.emailAddr = test_EmailAddr;
 
-        CHECK_EQUAL(test_WorkLength, config.getWorkLength());
-        CHECK_EQUAL(test_PauseLength, config.getPauseLength());
-        CHECK_EQUAL(test_RemFreq, config.getRemFreq());
-        CHECK_EQUAL(test_CheckFreq, config.getCheckFreq());
-        CHECK_EQUAL(test_PauseTol, config.getPauseTol());
-        CHECK_EQUAL(test_Startup, config.getStartup());
-        CHECK_EQUAL(test_SoundAlarm, config.getSoundAlarm());
-        CHECK_EQUAL(test_PopupAlarm, config.getPopupAlarm());
-        CHECK_EQUAL(test_EmailAlarm, config.getEmailAlarm());
-        CHECK_EQUAL(test_EmailAddr, config.getEmailAddr());
-
-        config.save();
+        config.save(data);
         config.checkLoad();
+        data = config.getData();
 
-        CHECK_EQUAL(test_WorkLength, config.getWorkLength());
-        CHECK_EQUAL(test_PauseLength, config.getPauseLength());
-        CHECK_EQUAL(test_RemFreq, config.getRemFreq());
-        CHECK_EQUAL(test_CheckFreq, config.getCheckFreq());
-        CHECK_EQUAL(test_PauseTol, config.getPauseTol());
-        CHECK_EQUAL(test_Startup, config.getStartup());
-        CHECK_EQUAL(test_SoundAlarm, config.getSoundAlarm());
-        CHECK_EQUAL(test_PopupAlarm, config.getPopupAlarm());
-        CHECK_EQUAL(test_EmailAlarm, config.getEmailAlarm());
-        CHECK_EQUAL(test_EmailAddr, config.getEmailAddr());
+        CHECK_EQUAL(test_WorkLength, data.workLength);
+        CHECK_EQUAL(test_PauseLength, data.pauseLength);
+        CHECK_EQUAL(test_RemFreq, data.remFreq);
+        CHECK_EQUAL(test_CheckFreq, data.checkFreq);
+        CHECK_EQUAL(test_PauseTol, data.pauseTol);
+        CHECK_EQUAL(test_Startup, data.startup);
+        CHECK_EQUAL(test_SoundAlarm, data.soundAlarm);
+        CHECK_EQUAL(test_PopupAlarm, data.popupAlarm);
+        CHECK_EQUAL(test_EmailAlarm, data.emailAlarm);
+        CHECK_EQUAL(test_EmailAddr, data.emailAddr);
 
         Config config2(configPath);
+        data = config2.getData();
 
-        CHECK_EQUAL(test_WorkLength, config2.getWorkLength());
-        CHECK_EQUAL(test_PauseLength, config2.getPauseLength());
-        CHECK_EQUAL(test_RemFreq, config2.getRemFreq());
-        CHECK_EQUAL(test_CheckFreq, config2.getCheckFreq());
-        CHECK_EQUAL(test_PauseTol, config2.getPauseTol());
-        CHECK_EQUAL(test_Startup, config2.getStartup());
-        CHECK_EQUAL(test_SoundAlarm, config2.getSoundAlarm());
-        CHECK_EQUAL(test_PopupAlarm, config2.getPopupAlarm());
-        CHECK_EQUAL(test_EmailAlarm, config2.getEmailAlarm());
-        CHECK_EQUAL(test_EmailAddr, config2.getEmailAddr());
+        CHECK_EQUAL(test_WorkLength, data.workLength);
+        CHECK_EQUAL(test_PauseLength, data.pauseLength);
+        CHECK_EQUAL(test_RemFreq, data.remFreq);
+        CHECK_EQUAL(test_CheckFreq, data.checkFreq);
+        CHECK_EQUAL(test_PauseTol, data.pauseTol);
+        CHECK_EQUAL(test_Startup, data.startup);
+        CHECK_EQUAL(test_SoundAlarm, data.soundAlarm);
+        CHECK_EQUAL(test_PopupAlarm, data.popupAlarm);
+        CHECK_EQUAL(test_EmailAlarm, data.emailAlarm);
+        CHECK_EQUAL(test_EmailAddr, data.emailAddr);
     }
 }

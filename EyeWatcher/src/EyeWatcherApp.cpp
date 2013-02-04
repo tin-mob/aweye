@@ -9,7 +9,8 @@
 
 #include "wx_pch.h"
 #include "EyeWatcherApp.h"
-#include "MsgHandler.h"
+#include "EWLogic.h"
+#include "WxHandlerFactory.h"
 
 //(*AppHeaders
 #include "EWMainFrame.h"
@@ -18,6 +19,18 @@
 
 IMPLEMENT_APP(EyeWatcherApp);
 
+EyeWatcherApp::EyeWatcherApp()
+{
+    WxHandlerFactory factory;
+    this->m_Logic = new EWLogic(&factory);
+}
+
+EyeWatcherApp::~EyeWatcherApp()
+{
+    delete this->m_Logic;
+    this->m_Logic = NULL;
+}
+
 bool EyeWatcherApp::OnInit()
 {
     //(*AppInitialize
@@ -25,7 +38,7 @@ bool EyeWatcherApp::OnInit()
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
-    	EWMainFrame* Frame = new EWMainFrame(0, &m_Logic);
+    	EWMainFrame* Frame = new EWMainFrame(0, m_Logic);
     	Frame->Show();
     	SetTopWindow(Frame);
     }
