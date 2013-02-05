@@ -2,12 +2,13 @@
 #define MOCKUPHANDLERFACTORY_H
 
 #include "AbstractTimeHandler.h"
-#include "AbstractWebcamHandler.h"
+#include "AbstractPresenceHandler.h"
 #include "AbstractMsgHandler.h"
 #include "AbstractConfig.h"
 #include "ConfigData.h"
 
 #include <vector>
+#include <stdexcept>
 
 ///@todo: proper files...
 
@@ -30,11 +31,11 @@ class TimeHandlerStub : public AbstractTimeHandler
         time_t m_time;
 };
 
-class WebcamHandlerStub : public AbstractWebcamHandler
+class PresenceHandlerStub : public AbstractPresenceHandler
 {
     public:
-        WebcamHandlerStub() : m_opened(false) {}
-        virtual ~WebcamHandlerStub() {}
+        PresenceHandlerStub() : m_opened(false) {}
+        virtual ~PresenceHandlerStub() {}
 
         virtual void open()
         {
@@ -50,7 +51,7 @@ class WebcamHandlerStub : public AbstractWebcamHandler
         {
             if (!m_opened)
             {
-                throw InvalidCameraException();
+                throw std::logic_error("Not Opened");
             }
             assert (!this->m_results.empty());
             bool result  = this->m_results.front();

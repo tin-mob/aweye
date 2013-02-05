@@ -9,7 +9,7 @@ class TKStateHere;
 class TKStateAway;
 class TKStateOff;
 class AbstractConfig;
-class AbstractWebcamHandler;
+class AbstractPresenceHandler;
 class AbstractTimeHandler;
 class HandlerFactory;
 
@@ -18,7 +18,7 @@ class TimeKeeper
     public:
         enum Status { OFF, HERE, AWAY };
 
-        TimeKeeper(AbstractConfig* config, AbstractTimeHandler* timeHandler, AbstractWebcamHandler* webcamHandler);
+        TimeKeeper(AbstractConfig* config, AbstractTimeHandler* timeHandler, AbstractPresenceHandler* presenceHandler);
         virtual ~TimeKeeper();
 
         void start();
@@ -50,7 +50,7 @@ class TimeKeeper
 
         AbstractConfig* m_Config;
         AbstractTimeHandler* m_TimeHandler;
-        AbstractWebcamHandler* m_WebcamHandler;
+        AbstractPresenceHandler* m_PresenceHandler;
 
         time_t m_HereStamp;
         time_t m_AwayStamp;

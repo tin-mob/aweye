@@ -4,10 +4,10 @@
 #include "TKStateOff.h"
 #include "AbstractConfig.h"
 #include "AbstractTimeHandler.h"
-#include "AbstractWebcamHandler.h"
+#include "AbstractPresenceHandler.h"
 
-TimeKeeper::TimeKeeper(AbstractConfig* config, AbstractTimeHandler* timeHandler, AbstractWebcamHandler* webcamHandler) :
-    m_Config(config), m_TimeHandler(timeHandler), m_WebcamHandler(webcamHandler),
+TimeKeeper::TimeKeeper(AbstractConfig* config, AbstractTimeHandler* timeHandler, AbstractPresenceHandler* presenceHandler) :
+    m_Config(config), m_TimeHandler(timeHandler), m_PresenceHandler(presenceHandler),
     m_HereStamp(0), m_AwayStamp(0), m_LastAwayStamp(0), m_NumTolerated(0)
 {
     //ctor
@@ -38,7 +38,7 @@ void TimeKeeper::start()
 {
     if (this->m_CurrentState == TimeKeeper::OFF)
     {
-        this->m_WebcamHandler->open();
+        this->m_PresenceHandler->open();
         this->setStatus(TimeKeeper::HERE);
     }
 }
@@ -47,7 +47,7 @@ void TimeKeeper::stop()
 {
     if (this->m_CurrentState != TimeKeeper::OFF)
     {
-        this->m_WebcamHandler->release();
+        this->m_PresenceHandler->release();
         this->setStatus(TimeKeeper::OFF);
     }
 }

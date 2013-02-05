@@ -17,7 +17,7 @@ TKStateAway::~TKStateAway()
 
 void TKStateAway::updateStatus(TimeKeeper* parent)
 {
-    const bool isHere = parent->m_WebcamHandler->isHere();
+    const bool isHere = parent->m_PresenceHandler->isHere();
     std::string msg = "";
 
     if (isHere)

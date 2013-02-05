@@ -17,21 +17,21 @@ struct TimeKeeperFixture
 
             this->config = new ConfigStub(data);
             this->timeHandler = new TimeHandlerStub();
-            this->webcamHandler = new WebcamHandlerStub();
-            this->keeper = new TimeKeeper(this->config, this->timeHandler, this->webcamHandler);
+            this->presenceHandler = new PresenceHandlerStub();
+            this->keeper = new TimeKeeper(this->config, this->timeHandler, this->presenceHandler);
         }
         ~TimeKeeperFixture()
         {
             delete this->keeper;
             delete this->config;
             delete this->timeHandler;
-            delete this->webcamHandler;
+            delete this->presenceHandler;
         }
 
         ConfigData data;
         ConfigStub* config;
         TimeHandlerStub* timeHandler;
-        WebcamHandlerStub* webcamHandler;
+        PresenceHandlerStub* presenceHandler;
         TimeKeeper* keeper;
 
     protected:
@@ -88,7 +88,7 @@ SUITE(TestWatcherInt)
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             CHECK_EQUAL(timeHandler->getTime(), startingTime + this->data.checkFreq);
 
-            webcamHandler->pushResult(true);
+            presenceHandler->pushResult(true);
             this->keeper->updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
             CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
@@ -101,7 +101,7 @@ SUITE(TestWatcherInt)
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
-            webcamHandler->pushResult(true);
+            presenceHandler->pushResult(true);
             this->keeper->updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
             CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
@@ -114,7 +114,7 @@ SUITE(TestWatcherInt)
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
-            webcamHandler->pushResult(true);
+            presenceHandler->pushResult(true);
             this->keeper->updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
             CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
@@ -131,7 +131,7 @@ SUITE(TestWatcherInt)
             this->config->save(this->data);
 
             timeHandler->setTime(timeHandler->getTime() + 1);
-            webcamHandler->pushResult(true);
+            presenceHandler->pushResult(true);
             this->keeper->updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
             CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
@@ -152,7 +152,7 @@ SUITE(TestWatcherInt)
 
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
-            webcamHandler->pushResult(true);
+            presenceHandler->pushResult(true);
             this->keeper->updateStatus();
             time_t interval = timeHandler->getTime() - startingTime;
             CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
@@ -166,7 +166,7 @@ SUITE(TestWatcherInt)
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             pauseTime = timeHandler->getTime();
-            webcamHandler->pushResult(false);
+            presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
@@ -180,7 +180,7 @@ SUITE(TestWatcherInt)
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
-            webcamHandler->pushResult(false);
+            presenceHandler->pushResult(false);
             this->keeper->updateStatus();
             time_t interval = timeHandler->getTime() - pauseTime;
             CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
@@ -193,7 +193,7 @@ SUITE(TestWatcherInt)
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
-            webcamHandler->pushResult(false);
+            presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
@@ -207,7 +207,7 @@ SUITE(TestWatcherInt)
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
-            webcamHandler->pushResult(false);
+            presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
@@ -222,7 +222,7 @@ SUITE(TestWatcherInt)
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             startingTime = timeHandler->getTime();
-            webcamHandler->pushResult(true);
+            presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
@@ -236,7 +236,7 @@ SUITE(TestWatcherInt)
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
-            webcamHandler->pushResult(true);
+            presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
@@ -258,7 +258,7 @@ SUITE(TestWatcherInt)
 
         {
             timeHandler->setTime(timeHandler->getTime() + 6);
-            webcamHandler->pushResult(true);
+            presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
@@ -272,7 +272,7 @@ SUITE(TestWatcherInt)
         }
         {
             pauseTime = timeHandler->getTime();
-            webcamHandler->pushResult(false);
+            presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
@@ -286,7 +286,7 @@ SUITE(TestWatcherInt)
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.pauseLength);
-            webcamHandler->pushResult(false);
+            presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
@@ -301,7 +301,7 @@ SUITE(TestWatcherInt)
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             startingTime = timeHandler->getTime();
-            webcamHandler->pushResult(true);
+            presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
@@ -323,7 +323,7 @@ SUITE(TestWatcherInt)
 
         {
             timeHandler->setTime(timeHandler->getTime() + 6);
-            webcamHandler->pushResult(true);
+            presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
@@ -337,7 +337,7 @@ SUITE(TestWatcherInt)
         }
         {
             pauseTime = timeHandler->getTime();
-            webcamHandler->pushResult(false);
+            presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
@@ -351,7 +351,7 @@ SUITE(TestWatcherInt)
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
-            webcamHandler->pushResult(true);
+            presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
@@ -365,7 +365,7 @@ SUITE(TestWatcherInt)
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
-            webcamHandler->pushResult(true);
+            presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
@@ -387,7 +387,7 @@ SUITE(TestWatcherInt)
 
         {
             timeHandler->setTime(timeHandler->getTime() + 6);
-            webcamHandler->pushResult(true);
+            presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - startingTime;
@@ -401,7 +401,7 @@ SUITE(TestWatcherInt)
         }
         {
             pauseTime = timeHandler->getTime();
-            webcamHandler->pushResult(false);
+            presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
@@ -415,7 +415,7 @@ SUITE(TestWatcherInt)
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
-            webcamHandler->pushResult(true);
+            presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
@@ -429,7 +429,7 @@ SUITE(TestWatcherInt)
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
-            webcamHandler->pushResult(false);
+            presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;
@@ -443,7 +443,7 @@ SUITE(TestWatcherInt)
         }
         {
             timeHandler->setTime(timeHandler->getTime() + 1);
-            webcamHandler->pushResult(false);
+            presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
             time_t interval = timeHandler->getTime() - pauseTime;

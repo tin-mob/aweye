@@ -16,7 +16,7 @@
 class EWLogic;
 class AbstractConfig;
 class AbstractTimeHandler;
-class AbstractWebcamHandler;
+class AbstractPresenceHandler;
 class AbstractMsgHandler;
 class TimeKeeper;
 
@@ -30,7 +30,7 @@ class EyeWatcherApp : public wxApp
         EWLogic* m_Logic;
         AbstractConfig* m_Config;
         AbstractTimeHandler* m_TimeHandler;
-        AbstractWebcamHandler* m_WebcamHandler;
+        AbstractPresenceHandler* m_PresenceHandler;
         AbstractMsgHandler* m_MsgHandler;
         TimeKeeper* m_TimeKeeper;
 

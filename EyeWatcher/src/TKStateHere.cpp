@@ -17,7 +17,7 @@ TKStateHere::~TKStateHere()
 
 void TKStateHere::updateStatus(TimeKeeper* parent)
 {
-    const bool isHere = parent->m_WebcamHandler->isHere();
+    const bool isHere = parent->m_PresenceHandler->isHere();
     if (!isHere)
     {
         parent->setStatus(TimeKeeper::AWAY);

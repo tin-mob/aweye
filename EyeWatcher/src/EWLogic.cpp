@@ -14,15 +14,6 @@ EWLogic::EWLogic(AbstractMsgHandler* msgHandler, AbstractConfig* config, TimeKee
 
 EWLogic::~EWLogic()
 {
-    //dtor
-    delete this->m_Config;
-    this->m_Config = NULL;
-
-    delete this->m_TimeKeeper;
-    this->m_TimeKeeper = NULL;
-
-    delete this->m_MsgHandler;
-    this->m_MsgHandler = NULL;
 }
 
 const AbstractConfig* EWLogic::getConfig()
