@@ -6,9 +6,10 @@
 #include "AbstractMsgHandler.h"
 #include "AbstractConfig.h"
 #include "ConfigData.h"
+#include "BaseException.h"
 
 #include <vector>
-#include <stdexcept>
+
 
 ///@todo: proper files...
 
@@ -51,7 +52,7 @@ class PresenceHandlerStub : public AbstractPresenceHandler
         {
             if (!m_opened)
             {
-                throw std::logic_error("Not Opened");
+                throw BaseException("Not Opened");
             }
             assert (!this->m_results.empty());
             bool result  = this->m_results.front();

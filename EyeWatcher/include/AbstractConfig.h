@@ -1,15 +1,6 @@
 #ifndef ABSTRACTCONFIG_H
 #define ABSTRACTCONFIG_H
 
-
-#include <stdexcept>
-
-class InvalidConfigFileException : public std::logic_error
-{
-    public:
-          InvalidConfigFileException() :  std::logic_error("invalid config file.") { }
-};
-
 struct ConfigData;
 
 class AbstractConfig

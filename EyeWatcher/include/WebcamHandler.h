@@ -4,18 +4,18 @@
 #include "AbstractPresenceHandler.h"
 #include "opencv2/opencv.hpp"
 
-#include <stdexcept>
+#include "BaseException.h"
 
-class MissingCascadeFileException : public std::logic_error
+class MissingCascadeFileException : public BaseException
 {
     public:
-          MissingCascadeFileException() :  std::logic_error("Missing cascade file.") { }
+          MissingCascadeFileException() :  BaseException("Missing cascade file.") { }
 };
 
-class InvalidCameraException : public std::logic_error
+class InvalidCameraException : public BaseException
 {
     public:
-          InvalidCameraException() :  std::logic_error("Camera is not working.") { }
+          InvalidCameraException() :  BaseException("Camera is not working.") { }
 };
 
 class WebcamHandler : public AbstractPresenceHandler

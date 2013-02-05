@@ -2,10 +2,16 @@
 #define CONFIG_H
 
 #include <boost/property_tree/ptree_fwd.hpp>
-#include <stdexcept>
+#include "BaseException.h"
 
 #include "ConfigData.h"
 #include "AbstractConfig.h"
+
+class InvalidConfigFileException : public BaseException
+{
+    public:
+          InvalidConfigFileException() :  BaseException("invalid config file.") { }
+};
 
 class Config : public AbstractConfig
 {

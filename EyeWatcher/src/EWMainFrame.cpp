@@ -12,7 +12,7 @@
 #include "OptionsDialog.h"
 #include "AboutDialog.h"
 #include <wx/msgdlg.h>
-#include <stdexcept>
+#include "BaseException.h"
 
 //(*InternalHeaders(EWMainFrame)
 #include <wx/string.h>
@@ -154,7 +154,7 @@ void EWMainFrame::OnOptionsButtonClick(wxCommandEvent& event)
         OptionsDialog dialog(this, m_Logic);
         dialog.ShowModal();
     }
-    catch (std::logic_error e)
+    catch (BaseException e)
     {
         wxMessageDialog *dial = new wxMessageDialog(NULL,
             wxString(e.what(), wxConvUTF8), wxT("Error"), wxOK | wxICON_ERROR);
