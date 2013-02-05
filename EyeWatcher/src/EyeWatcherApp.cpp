@@ -9,8 +9,12 @@
 
 #include "wx_pch.h"
 #include "EyeWatcherApp.h"
+#include "Config.h"
+#include "MsgHandler.h"
+#include "WebcamHandler.h"
+#include "TimeHandler.h"
+#include "TimeKeeper.h"
 #include "EWLogic.h"
-#include "WxHandlerFactory.h"
 
 //(*AppHeaders
 #include "EWMainFrame.h"
@@ -21,14 +25,22 @@ IMPLEMENT_APP(EyeWatcherApp);
 
 EyeWatcherApp::EyeWatcherApp()
 {
-    WxHandlerFactory factory;
-    this->m_Logic = new EWLogic(&factory);
+    this->m_Config = new Config();
+    this->m_MsgHandler = new MsgHandler();
+    this->m_WebcamHandler = new WebcamHandler();
+    this->m_TimeHandler = new TimeHandler();
+    this->m_TimeKeeper = new TimeKeeper(this->m_Config, this->m_TimeHandler, this->m_WebcamHandler);
+    this->m_Logic = new EWLogic(this->m_MsgHandler, this->m_Config, this->m_TimeKeeper);
 }
 
 EyeWatcherApp::~EyeWatcherApp()
 {
+    delete this->m_Config;
+    delete this->m_MsgHandler;
+    delete this->m_WebcamHandler;
+    delete this->m_TimeHandler;
+    delete this->m_TimeKeeper;
     delete this->m_Logic;
-    this->m_Logic = NULL;
 }
 
 bool EyeWatcherApp::OnInit()

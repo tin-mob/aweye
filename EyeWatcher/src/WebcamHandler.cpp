@@ -2,8 +2,8 @@
 #include <boost/filesystem.hpp>
 
 /// @todo: find a way to manage paths (Win/Linux)
-WebcamHandler::WebcamHandler(std::string faceCascadeName) :
-m_VideoCapture()
+WebcamHandler::WebcamHandler(int index, std::string faceCascadeName) :
+    m_index(index), m_VideoCapture()
 {
     //ctor
     namespace fs = boost::filesystem;
@@ -20,9 +20,9 @@ WebcamHandler::~WebcamHandler()
     //dtor
 }
 
-void WebcamHandler::open(int index)
+void WebcamHandler::open()
 {
-    this->m_VideoCapture.open(index);
+    this->m_VideoCapture.open(this->m_index);
 }
 
 void WebcamHandler::release()
@@ -30,7 +30,7 @@ void WebcamHandler::release()
     this->m_VideoCapture.release();
 }
 
-/// @todo: face size (minSize last param), manage malfunctionning webcam
+/// @todo: face size (minSize last param)
 bool WebcamHandler::isHere()
 {
 

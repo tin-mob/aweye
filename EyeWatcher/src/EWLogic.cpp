@@ -7,13 +7,9 @@
 #include <stdexcept>
 #include <wx/msgdlg.h>
 
-// TimeKeeper can fail when the camera is closed/whatever, must do lazy instance
-EWLogic::EWLogic(HandlerFactory* handlerFactory)
+EWLogic::EWLogic(AbstractMsgHandler* msgHandler, AbstractConfig* config, TimeKeeper* keeper)
+    : m_Config(config), m_TimeKeeper(keeper), m_MsgHandler(msgHandler)
 {
-    //ctor
-    this->m_MsgHandler = handlerFactory->getMsgHandler();
-    this->m_Config = new Config();
-    this->m_TimeKeeper = new TimeKeeper(this->m_Config, handlerFactory);
 }
 
 EWLogic::~EWLogic()
@@ -29,7 +25,7 @@ EWLogic::~EWLogic()
     this->m_MsgHandler = NULL;
 }
 
-const Config* EWLogic::getConfig()
+const AbstractConfig* EWLogic::getConfig()
 {
     return this->m_Config;
 }

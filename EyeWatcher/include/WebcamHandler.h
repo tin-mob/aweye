@@ -7,13 +7,14 @@
 class WebcamHandler : public AbstractWebcamHandler
 {
     public:
-        WebcamHandler(std::string faceCascadeName = "haarcascade_frontalface_alt.xml");
+        WebcamHandler(int index = 0, std::string faceCascadeName = "haarcascade_frontalface_alt.xml");
         ~WebcamHandler();
-        void open(int index = 0);
+        void open();
         void release();
         bool isHere();
     protected:
     private:
+        int m_index;
         cv::CascadeClassifier m_FaceCascade;
         cv::VideoCapture m_VideoCapture;
 };

@@ -3,7 +3,7 @@
 
 #include <string>
 
-class Config;
+class AbstractConfig;
 class TimeKeeper;
 class HandlerFactory;
 class AbstractMsgHandler;
@@ -11,10 +11,10 @@ class AbstractMsgHandler;
 class EWLogic
 {
     public:
-        EWLogic(HandlerFactory* handlerFactory);
+        EWLogic(AbstractMsgHandler* msgHandler, AbstractConfig* config, TimeKeeper* keeper);
         virtual ~EWLogic();
 
-        const Config* getConfig();
+        const AbstractConfig* getConfig();
         const TimeKeeper* getTimeKeeper();
 
         void saveConfig(
@@ -37,7 +37,7 @@ class EWLogic
 
     protected:
     private:
-        Config* m_Config;
+        AbstractConfig* m_Config;
         TimeKeeper* m_TimeKeeper;
         AbstractMsgHandler* m_MsgHandler;
 };

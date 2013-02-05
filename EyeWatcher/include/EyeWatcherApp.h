@@ -11,8 +11,14 @@
 #define EYEWATCHERAPP_H
 
 #include <wx/app.h>
-#include "EWLogic.h"
 #include "WxHandlerFactory.h"
+
+class EWLogic;
+class AbstractConfig;
+class AbstractTimeHandler;
+class AbstractWebcamHandler;
+class AbstractMsgHandler;
+class TimeKeeper;
 
 class EyeWatcherApp : public wxApp
 {
@@ -22,6 +28,11 @@ class EyeWatcherApp : public wxApp
         virtual bool OnInit();
     private:
         EWLogic* m_Logic;
+        AbstractConfig* m_Config;
+        AbstractTimeHandler* m_TimeHandler;
+        AbstractWebcamHandler* m_WebcamHandler;
+        AbstractMsgHandler* m_MsgHandler;
+        TimeKeeper* m_TimeKeeper;
 
 };
 
