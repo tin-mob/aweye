@@ -30,7 +30,7 @@ class EWLogic
         AbstractTimeKeeper::Status getStatus() const;
         std::string getTimeOn() const;
         std::string getTimeOff() const;
-        std::string getLastPause() const;
+        std::string getTimeRunning() const;
         std::string getTimeLeft() const;
 
     protected:

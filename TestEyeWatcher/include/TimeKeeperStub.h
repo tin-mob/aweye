@@ -15,7 +15,8 @@ class TimeKeeperStub : public AbstractTimeKeeper
     public:
         TimeKeeperStub() : fail(false), status(AbstractTimeKeeper::OFF),
             hereStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(10,59,00))),
-            awayStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(11,31,01))){}
+            awayStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(11,31,01))),
+            interval(boost::posix_time::seconds(2)), left(boost::posix_time::minutes(3)){}
         virtual ~TimeKeeperStub() {}
 
         virtual void start()
@@ -34,8 +35,8 @@ class TimeKeeperStub : public AbstractTimeKeeper
         virtual bool isLate() const {return false;}
 
         virtual AbstractTimeKeeper::Status getStatus() const {return status;}
-        virtual boost::posix_time::time_duration getInterval() const {return boost::posix_time::seconds(2);}
-        virtual boost::posix_time::time_duration getTimeLeft() const {return boost::posix_time::seconds(3);}
+        virtual boost::posix_time::time_duration getInterval() const {return interval;}
+        virtual boost::posix_time::time_duration getTimeLeft() const {return left;}
         virtual boost::posix_time::ptime getHereStamp() const {return hereStamp;}
         virtual boost::posix_time::ptime getAwayStamp() const {return awayStamp;}
 
@@ -43,6 +44,8 @@ class TimeKeeperStub : public AbstractTimeKeeper
         AbstractTimeKeeper::Status status;
         boost::posix_time::ptime hereStamp;
         boost::posix_time::ptime awayStamp;
+        boost::posix_time::time_duration interval;
+        boost::posix_time::time_duration left;
     protected:
     private:
 };

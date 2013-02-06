@@ -100,9 +100,20 @@ SUITE(TestEWLogic)
         CHECK_EQUAL(logic->getNextStatusTimer(), boost::posix_time::seconds(1));
     }
 
-    TEST_FIXTURE(EWLogicFixture, TestTimeStamps)
+    TEST_FIXTURE(EWLogicFixture, TestTimes)
     {
         CHECK_EQUAL(logic->getTimeOn(), "10:59:00");
         CHECK_EQUAL(logic->getTimeOff(), "11:31:01");
+        CHECK_EQUAL(logic->getTimeRunning(), "00:00:02");
+        CHECK_EQUAL(logic->getTimeLeft(), "00:03:00");
+
+        keeper->hereStamp = boost::posix_time::not_a_date_time;
+        keeper->awayStamp = boost::posix_time::not_a_date_time;
+        keeper->interval = boost::posix_time::not_a_date_time;
+        keeper->left = boost::posix_time::not_a_date_time;
+        CHECK_EQUAL(logic->getTimeOn(), "00:00:00");
+        CHECK_EQUAL(logic->getTimeOff(), "00:00:00");
+        CHECK_EQUAL(logic->getTimeRunning(), "00:00:00");
+        CHECK_EQUAL(logic->getTimeLeft(), "00:00:00");
     }
 }

@@ -74,6 +74,10 @@ AbstractTimeKeeper::Status EWLogic::getStatus() const
 
 std::string EWLogic::durationToString(boost::posix_time::time_duration duration)
 {
+    if (duration.is_special())
+    {
+        return "00:00:00";
+    }
     std::stringstream out;
     out << std::setw(2) << std::setfill('0') << duration.hours() << ":" << std::setw(2)
     << std::setfill('0') << duration.minutes() << ":" << std::setw(2)
@@ -84,29 +88,23 @@ std::string EWLogic::durationToString(boost::posix_time::time_duration duration)
 std::string EWLogic::getTimeOn() const
 {
     const boost::posix_time::time_duration stamp = this->m_TimeKeeper->getHereStamp().time_of_day();
-    if (stamp.is_special())
-    {
-        return "00:00:00";
-    }
     return EWLogic::durationToString(stamp);
 }
 
 std::string EWLogic::getTimeOff() const
 {
     const boost::posix_time::time_duration stamp = this->m_TimeKeeper->getAwayStamp().time_of_day();
-    if (stamp.is_special())
-    {
-        return "00:00:00";
-    }
     return EWLogic::durationToString(stamp);
 }
 
-std::string EWLogic::getLastPause() const
+std::string EWLogic::getTimeRunning() const
 {
-    return "";
+    const boost::posix_time::time_duration stamp = this->m_TimeKeeper->getInterval();
+    return EWLogic::durationToString(stamp);
 }
 
 std::string EWLogic::getTimeLeft() const
 {
-    return "";
+    const boost::posix_time::time_duration stamp = this->m_TimeKeeper->getTimeLeft();
+    return EWLogic::durationToString(stamp);
 }
