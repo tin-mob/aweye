@@ -54,8 +54,16 @@
 			</object>
 			<object class="sizeritem">
 				<object class="wxGridSizer" variable="timesGrid" member="no">
-					<cols>4</cols>
+					<cols>3</cols>
 					<rows>2</rows>
+					<object class="sizeritem">
+						<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText1" member="yes">
+							<label>Label</label>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
 					<object class="sizeritem">
 						<object class="wxBoxSizer" variable="onBoxSizer" member="no">
 							<orient>wxVERTICAL</orient>

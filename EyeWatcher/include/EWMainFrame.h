@@ -45,6 +45,7 @@ class EWMainFrame: public wxFrame
         static const long ID_BUTTON3;
         static const long ID_BUTTON4;
         static const long ID_BUTTON5;
+        static const long ID_STATICTEXT9;
         static const long ID_STATICTEXT1;
         static const long ID_STATICTEXT2;
         static const long ID_STATICTEXT3;
@@ -62,6 +63,7 @@ class EWMainFrame: public wxFrame
         wxTimer presenceTimer;
         wxStaticText* onLabel;
         wxButton* playButton;
+        wxStaticText* StaticText1;
         wxStaticText* offTime;
         wxButton* pauseButton;
         wxTimer timesTimer;
