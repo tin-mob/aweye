@@ -1,6 +1,9 @@
 #include <unittest++/UnitTest++.h>
 #include "TimeKeeper.h"
-#include "MockupHandlerFactory.h"
+#include "ConfigStub.h"
+#include "TimeHandlerStub.h"
+#include "PresenceHandlerStub.h"
+#include "ConfigData.h"
 
 struct TimeKeeperFixture
 {

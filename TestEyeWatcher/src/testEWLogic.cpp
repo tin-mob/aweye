@@ -1,6 +1,8 @@
 #include <unittest++/UnitTest++.h>
 #include "EWLogic.h"
-#include "MockupHandlerFactory.h"
+#include "ConfigStub.h"
+#include "MsgHandlerStub.h"
+#include "TimeKeeperStub.h"
 
 struct EWLogicFixture
 {
