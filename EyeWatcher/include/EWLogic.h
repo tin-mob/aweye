@@ -35,6 +35,8 @@ class EWLogic
 
     protected:
     private:
+        static std::string durationToString(boost::posix_time::time_duration duration);
+
         bool m_Warn;
         AbstractConfig* m_Config;
         AbstractTimeKeeper* m_TimeKeeper;

@@ -27,9 +27,9 @@ struct EWLogicFixture
         }
 
         ConfigData data;
-        AbstractConfig* config;
-        AbstractMsgHandler* msgHandler;
-        AbstractTimeKeeper* keeper;
+        ConfigStub* config;
+        MsgHandlerStub* msgHandler;
+        TimeKeeperStub* keeper;
         EWLogic* logic;
 
     protected:
@@ -69,11 +69,40 @@ SUITE(TestEWLogic)
         CHECK_EQUAL(test_EmailAddr, returnedData.emailAddr);
     }
 
-    TEST_FIXTURE(EWLogicFixture, TestStartPauseStop)
+    TEST_FIXTURE(EWLogicFixture, TestStartStop)
     {
+        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::OFF);
+        logic->start();
+        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::HERE);
+        logic->stop();
+        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::OFF);
+
+        keeper->fail = true;
+        CHECK_EQUAL(msgHandler->lastError, "");
+        logic->start();
+        CHECK_EQUAL(msgHandler->lastError, "Testing!");
     }
 
-    TEST_FIXTURE(EWLogicFixture, TestFailedStart)
+    TEST_FIXTURE(EWLogicFixture, TestUpdate)
     {
+        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::OFF);
+        logic->updateStatus();
+        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::AWAY);
+
+        keeper->fail = true;
+        CHECK_EQUAL(msgHandler->lastError, "");
+        logic->updateStatus();
+        CHECK_EQUAL(msgHandler->lastError, "Testing!");
+    }
+
+    TEST_FIXTURE(EWLogicFixture, TestGetNextStatusTimer)
+    {
+        CHECK_EQUAL(logic->getNextStatusTimer(), boost::posix_time::seconds(1));
+    }
+
+    TEST_FIXTURE(EWLogicFixture, TestTimeStamps)
+    {
+        CHECK_EQUAL(logic->getTimeOn(), "10:59:00");
+        CHECK_EQUAL(logic->getTimeOff(), "11:31:01");
     }
 }

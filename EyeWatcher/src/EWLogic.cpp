@@ -3,8 +3,10 @@
 #include "HandlerFactory.h"
 #include "AbstractMsgHandler.h"
 #include "AbstractTimeKeeper.h"
-
 #include "BaseException.h"
+
+#include <sstream>
+#include <iomanip>
 
 EWLogic::EWLogic(AbstractMsgHandler* msgHandler, AbstractConfig* config, AbstractTimeKeeper* keeper)
     : m_Warn(true), m_Config(config), m_TimeKeeper(keeper), m_MsgHandler(msgHandler)
@@ -70,14 +72,33 @@ AbstractTimeKeeper::Status EWLogic::getStatus() const
     return this->m_TimeKeeper->getStatus();
 }
 
+std::string EWLogic::durationToString(boost::posix_time::time_duration duration)
+{
+    std::stringstream out;
+    out << std::setw(2) << std::setfill('0') << duration.hours() << ":" << std::setw(2)
+    << std::setfill('0') << duration.minutes() << ":" << std::setw(2)
+    << std::setfill('0') << duration.seconds();
+    return out.str();
+}
+
 std::string EWLogic::getTimeOn() const
 {
-    return "";
+    const boost::posix_time::time_duration stamp = this->m_TimeKeeper->getHereStamp().time_of_day();
+    if (stamp.is_special())
+    {
+        return "00:00:00";
+    }
+    return EWLogic::durationToString(stamp);
 }
 
 std::string EWLogic::getTimeOff() const
 {
-    return "";
+    const boost::posix_time::time_duration stamp = this->m_TimeKeeper->getAwayStamp().time_of_day();
+    if (stamp.is_special())
+    {
+        return "00:00:00";
+    }
+    return EWLogic::durationToString(stamp);
 }
 
 std::string EWLogic::getLastPause() const
