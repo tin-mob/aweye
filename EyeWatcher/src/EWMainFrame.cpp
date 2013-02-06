@@ -60,6 +60,7 @@ const long EWMainFrame::ID_STATICTEXT6 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT7 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT8 = wxNewId();
 const long EWMainFrame::ID_TIMER1 = wxNewId();
+const long EWMainFrame::ID_TIMER2 = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
@@ -120,13 +121,15 @@ EWMainFrame::EWMainFrame(wxWindow* parent, EWLogic* logic, wxWindowID id) : m_Lo
     timesGrid->Add(remainingBoxSizer, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
     mainBoxSizer->Add(timesGrid, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     SetSizer(mainBoxSizer);
-    eyeWatcherTimer.SetOwner(this, ID_TIMER1);
+    presenceTimer.SetOwner(this, ID_TIMER1);
+    timesTimer.SetOwner(this, ID_TIMER2);
     mainBoxSizer->Fit(this);
     mainBoxSizer->SetSizeHints(this);
 
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnOptionsButtonClick);
     Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnaboutButtonClick);
     Connect(ID_TIMER1,wxEVT_TIMER,(wxObjectEventFunction)&EWMainFrame::OneyeWatcherTimerTrigger);
+    Connect(ID_TIMER2,wxEVT_TIMER,(wxObjectEventFunction)&EWMainFrame::OnTimesTimerTrigger);
     //*)
 }
 
@@ -170,4 +173,9 @@ void EWMainFrame::OnaboutButtonClick(wxCommandEvent& event)
 
 void EWMainFrame::OneyeWatcherTimerTrigger(wxTimerEvent& event)
 {
+}
+
+void EWMainFrame::OnTimesTimerTrigger(wxTimerEvent& event)
+{
+
 }

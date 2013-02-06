@@ -1,14 +1,13 @@
 #include "EWLogic.h"
-#include "Config.h"
-#include "TimeKeeper.h"
+#include "AbstractConfig.h"
 #include "HandlerFactory.h"
 #include "AbstractMsgHandler.h"
+#include "AbstractTimeKeeper.h"
 
-#include <stdexcept>
-#include <wx/msgdlg.h>
+#include "BaseException.h"
 
-EWLogic::EWLogic(AbstractMsgHandler* msgHandler, AbstractConfig* config, TimeKeeper* keeper)
-    : m_Config(config), m_TimeKeeper(keeper), m_MsgHandler(msgHandler)
+EWLogic::EWLogic(AbstractMsgHandler* msgHandler, AbstractConfig* config, AbstractTimeKeeper* keeper)
+    : m_Warn(true), m_Config(config), m_TimeKeeper(keeper), m_MsgHandler(msgHandler)
 {
 }
 
@@ -16,42 +15,77 @@ EWLogic::~EWLogic()
 {
 }
 
-const AbstractConfig* EWLogic::getConfig()
+const ConfigData& EWLogic::getConfigData() const
 {
-    return this->m_Config;
+    return this->m_Config->getData();
 }
 
-const TimeKeeper* EWLogic::getTimeKeeper()
+void EWLogic::saveConfig(const ConfigData& data)
 {
-    return this->m_TimeKeeper;
+    this->m_Config->save(data);
 }
 
-void  EWLogic::saveConfig(
-            unsigned int m_WorkLength,
-            unsigned int m_PauseLength,
-            unsigned int m_RemFreq,
-            unsigned int m_CheckFreq,
-            unsigned int m_PauseTol,
-            bool m_Startup,
-            bool m_SoundAlarm,
-            bool m_PopupAlarm,
-            bool m_EmailAlarm,
-            std::string m_EmailAddr)
+void EWLogic::start()
 {
-
+    try
+    {
+        this->m_TimeKeeper->start();
+    }
+    catch (BaseException e)
+    {
+        this->m_MsgHandler->displayError(e.what());
+    }
 }
 
-void  EWLogic::start()
+void EWLogic::stop()
 {
-
+    this->m_TimeKeeper->stop();
 }
 
-void  EWLogic::stop()
+void EWLogic::pause()
 {
-
+    m_Warn = !m_Warn;
 }
 
-void  EWLogic::updateStatus()
+void EWLogic::updateStatus()
 {
+    try
+    {
+        this->m_TimeKeeper->updateStatus();
+    }
+    catch (BaseException e)
+    {
+        this->m_MsgHandler->displayError(e.what());
+        this->m_TimeKeeper->stop();
+    }
+}
 
+boost::posix_time::time_duration EWLogic::getNextStatusTimer() const
+{
+    return this->m_TimeKeeper->getTimerInterval();
+}
+
+AbstractTimeKeeper::Status EWLogic::getStatus() const
+{
+    return this->m_TimeKeeper->getStatus();
+}
+
+std::string EWLogic::getTimeOn() const
+{
+    return "";
+}
+
+std::string EWLogic::getTimeOff() const
+{
+    return "";
+}
+
+std::string EWLogic::getLastPause() const
+{
+    return "";
+}
+
+std::string EWLogic::getTimeLeft() const
+{
+    return "";
 }

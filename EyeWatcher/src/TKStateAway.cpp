@@ -4,6 +4,7 @@
 #include "WebcamHandler.h"
 #include "TKStateHere.h"
 #include "AbstractTimeHandler.h"
+#include "boost/date_time/posix_time/posix_time.hpp"
 
 TKStateAway::TKStateAway()
 {
@@ -22,8 +23,8 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
 
     if (isHere)
     {
-        int timeLeft = this->getTimeLeft(parent);
-        if (timeLeft > 0)
+        boost::posix_time::time_duration timeLeft = this->getTimeLeft(parent);
+        if (timeLeft > boost::posix_time::time_duration(0,0,0,0))
         {
             if (parent->m_NumTolerated < parent->m_Config->getData().pauseTol)
             {
@@ -32,12 +33,12 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
             else
             {
                 parent->m_AwayStamp = parent->m_LastAwayStamp;
-                parent->m_CurrentState = TimeKeeper::HERE;
+                parent->m_CurrentState = AbstractTimeKeeper::HERE;
             }
         }
-        else if (timeLeft <= 0)
+        else if (timeLeft <= boost::posix_time::time_duration(0,0,0,0))
         {
-            parent->setStatus(TimeKeeper::HERE);
+            parent->setStatus(AbstractTimeKeeper::HERE);
         }
     }
 }
@@ -49,13 +50,13 @@ void TKStateAway::updateTimeStamps(TimeKeeper* parent)
     parent->m_AwayStamp = parent->m_TimeHandler->getTime();
 }
 
-int TKStateAway::getTimerInterval(const TimeKeeper* parent) const
+boost::posix_time::time_duration TKStateAway::getTimerInterval(const TimeKeeper* parent) const
 {
     const ConfigData& config = parent->m_Config->getData();
-    const time_t now = parent->m_TimeHandler->getTime();
-    int timerInterval = config.checkFreq;
+    const boost::posix_time::ptime now = parent->m_TimeHandler->getTime();
+    boost::posix_time::time_duration timerInterval = config.checkFreq;
 
-    unsigned int pauseInterval = now - parent->m_AwayStamp;
+    boost::posix_time::time_duration pauseInterval = now - parent->m_AwayStamp;
     // work period ended
     if (pauseInterval >= config.pauseLength)
     {
@@ -76,12 +77,12 @@ bool TKStateAway::isLate(const TimeKeeper* parent) const
     return (parent->m_AwayStamp - parent->m_HereStamp) >= config.workLength;
 }
 
-int TKStateAway::getInterval(const TimeKeeper* parent) const
+boost::posix_time::time_duration TKStateAway::getInterval(const TimeKeeper* parent) const
 {
     return parent->m_TimeHandler->getTime() - parent->m_AwayStamp;
 }
 
-int TKStateAway::getTimeLeft(const TimeKeeper* parent) const
+boost::posix_time::time_duration TKStateAway::getTimeLeft(const TimeKeeper* parent) const
 {
     const ConfigData& config = parent->m_Config->getData();
     return parent->m_AwayStamp + config.pauseLength - parent->m_TimeHandler->getTime();

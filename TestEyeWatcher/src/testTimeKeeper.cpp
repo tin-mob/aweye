@@ -1,9 +1,4 @@
 #include <unittest++/UnitTest++.h>
-#include <queue>
-#include <assert.h>
-#include <boost/filesystem.hpp>
-
-#include "Config.h"
 #include "TimeKeeper.h"
 #include "MockupHandlerFactory.h"
 
@@ -12,11 +7,12 @@ struct TimeKeeperFixture
     public:
         TimeKeeperFixture()
         {
-            this->data = {5, 3, 1, 2, ConfigData::default_PauseTol, ConfigData::default_Startup, ConfigData::default_SoundAlarm,
+            this->data = {boost::posix_time::seconds(5), boost::posix_time::seconds(3), boost::posix_time::seconds(1),
+                boost::posix_time::seconds(2), ConfigData::default_PauseTol, ConfigData::default_Startup, ConfigData::default_SoundAlarm,
                 ConfigData::default_PopupAlarm, ConfigData::default_EmailAlarm, ConfigData::default_EmailAddr};
 
             this->config = new ConfigStub(data);
-            this->timeHandler = new TimeHandlerStub();
+            this->timeHandler = new TimeHandlerStub(boost::posix_time::second_clock::local_time());
             this->presenceHandler = new PresenceHandlerStub();
             this->keeper = new TimeKeeper(this->config, this->timeHandler, this->presenceHandler);
         }
@@ -38,51 +34,51 @@ struct TimeKeeperFixture
     private:
 };
 
-SUITE(TestWatcherInt)
+SUITE(TestTimeKeeper)
 {
     TEST_FIXTURE(TimeKeeperFixture, TestOnOff)
     {
-        CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::OFF);
-        CHECK_EQUAL(this->keeper->getTimerInterval(), 0);
+        CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::OFF);
+        CHECK_EQUAL(this->keeper->getTimerInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(this->keeper->isLate(), false);
-        CHECK_EQUAL(this->keeper->getInterval(), 0);
+        CHECK_EQUAL(this->keeper->getInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength);
-        CHECK_EQUAL(this->keeper->getHereStamp(), 0);
-        CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
+        CHECK_EQUAL(this->keeper->getHereStamp(), boost::posix_time::not_a_date_time);
+        CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
 
         this->keeper->start();
-        CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+        CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::HERE);
         CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
         CHECK_EQUAL(this->keeper->isLate(), false);
-        CHECK_EQUAL(this->keeper->getInterval(), 0);
+        CHECK_EQUAL(this->keeper->getInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength);
         CHECK_EQUAL(this->keeper->getHereStamp(), timeHandler->getTime());
-        CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
+        CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
 
 
         this->keeper->stop();
-        CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::OFF);
-        CHECK_EQUAL(this->keeper->getTimerInterval(), 0);
+        CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::OFF);
+        CHECK_EQUAL(this->keeper->getTimerInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(this->keeper->isLate(), false);
-        CHECK_EQUAL(this->keeper->getInterval(), 0);
+        CHECK_EQUAL(this->keeper->getInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength);
-        CHECK_EQUAL(this->keeper->getHereStamp(), 0);
-        CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
+        CHECK_EQUAL(this->keeper->getHereStamp(), boost::posix_time::not_a_date_time);
+        CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestSimpleRun)
     {
-        time_t startingTime = timeHandler->getTime();
+        boost::posix_time::ptime startingTime = timeHandler->getTime();
 
         {
             this->keeper->start();
             CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), false);
-            CHECK_EQUAL(this->keeper->getInterval(), 0);
+            CHECK_EQUAL(this->keeper->getInterval(), boost::posix_time::seconds(0));
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
-            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
@@ -90,78 +86,78 @@ SUITE(TestWatcherInt)
 
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
-            time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - startingTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::HERE);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), false);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
-            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
-            time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
-            CHECK_EQUAL(this->keeper->getTimerInterval(), 1);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - startingTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::HERE);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), boost::posix_time::seconds(1));
             CHECK_EQUAL(this->keeper->isLate(), false);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
-            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + 1);
+            timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
-            time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - startingTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::HERE);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.remFreq);
             CHECK_EQUAL(this->keeper->isLate(), true);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
-            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
         }
         {
-            this->data.checkFreq = 1;
-            this->data.remFreq = 2;
+            this->data.checkFreq = boost::posix_time::seconds(1);
+            this->data.remFreq = boost::posix_time::seconds(2);
             this->config->save(this->data);
 
-            timeHandler->setTime(timeHandler->getTime() + 1);
+            timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
-            time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - startingTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::HERE);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), true);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
-            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
         }
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestPauseBefore)
     {
-        time_t startingTime = timeHandler->getTime();
-        time_t pauseTime = 0;
+        boost::posix_time::ptime startingTime = timeHandler->getTime();
+        boost::posix_time::ptime pauseTime = boost::posix_time::not_a_date_time;
         this->keeper->start();
 
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
-            time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - startingTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::HERE);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), false);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
-            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
@@ -169,8 +165,8 @@ SUITE(TestWatcherInt)
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), false);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
@@ -182,9 +178,9 @@ SUITE(TestWatcherInt)
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
-            time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
-            CHECK_EQUAL(this->keeper->getTimerInterval(), 1);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), boost::posix_time::seconds(1));
             CHECK_EQUAL(this->keeper->isLate(), false);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
@@ -192,12 +188,12 @@ SUITE(TestWatcherInt)
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + 1);
+            timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), false);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
@@ -210,8 +206,8 @@ SUITE(TestWatcherInt)
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), false);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
@@ -225,8 +221,8 @@ SUITE(TestWatcherInt)
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - startingTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::HERE);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), false);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
@@ -239,8 +235,8 @@ SUITE(TestWatcherInt)
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - startingTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::HERE);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), false);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
@@ -252,31 +248,31 @@ SUITE(TestWatcherInt)
 
     TEST_FIXTURE(TimeKeeperFixture, TestPauseAfter)
     {
-        time_t startingTime = timeHandler->getTime();
-        time_t pauseTime = 0;
+        boost::posix_time::ptime startingTime = timeHandler->getTime();
+        boost::posix_time::ptime pauseTime = boost::posix_time::not_a_date_time;
         this->keeper->start();
 
         {
-            timeHandler->setTime(timeHandler->getTime() + 6);
+            timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(6));
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - startingTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::HERE);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.remFreq);
             CHECK_EQUAL(this->keeper->isLate(), true);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
-            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
         }
         {
             pauseTime = timeHandler->getTime();
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), true);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
@@ -289,8 +285,8 @@ SUITE(TestWatcherInt)
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), true);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
@@ -304,8 +300,8 @@ SUITE(TestWatcherInt)
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - startingTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::HERE);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), false);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
@@ -317,31 +313,31 @@ SUITE(TestWatcherInt)
 
     TEST_FIXTURE(TimeKeeperFixture, TestCancelledPause)
     {
-        time_t startingTime = timeHandler->getTime();
-        time_t pauseTime = 0;
+        boost::posix_time::ptime startingTime = timeHandler->getTime();
+        boost::posix_time::ptime pauseTime = boost::posix_time::not_a_date_time;
         this->keeper->start();
 
         {
-            timeHandler->setTime(timeHandler->getTime() + 6);
+            timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(6));
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - startingTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::HERE);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.remFreq);
             CHECK_EQUAL(this->keeper->isLate(), true);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
-            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
             pauseTime = timeHandler->getTime();
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), true);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
@@ -350,12 +346,12 @@ SUITE(TestWatcherInt)
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + 1);
+            timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), true);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
@@ -364,48 +360,48 @@ SUITE(TestWatcherInt)
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + 1);
+            timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - startingTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::HERE);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.remFreq);
             CHECK_EQUAL(this->keeper->isLate(), true);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
-            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
         }
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestInterruptedPause)
     {
-        time_t startingTime = timeHandler->getTime();
-        time_t pauseTime = 0;
+        boost::posix_time::ptime startingTime = timeHandler->getTime();
+        boost::posix_time::ptime pauseTime = boost::posix_time::not_a_date_time;
         this->keeper->start();
 
         {
-            timeHandler->setTime(timeHandler->getTime() + 6);
+            timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(6));
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - startingTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::HERE);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - startingTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::HERE);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.remFreq);
             CHECK_EQUAL(this->keeper->isLate(), true);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
-            CHECK_EQUAL(this->keeper->getAwayStamp(), 0);
+            CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
         }
         {
             pauseTime = timeHandler->getTime();
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), true);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
@@ -414,12 +410,12 @@ SUITE(TestWatcherInt)
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + 1);
+            timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), true);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
@@ -428,13 +424,13 @@ SUITE(TestWatcherInt)
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + 1);
+            timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
-            CHECK_EQUAL(this->keeper->getTimerInterval(), 1);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
+            CHECK_EQUAL(this->keeper->getTimerInterval(), boost::posix_time::seconds(1));
             CHECK_EQUAL(this->keeper->isLate(), true);
             CHECK_EQUAL(this->keeper->getInterval(), interval);
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
@@ -442,12 +438,12 @@ SUITE(TestWatcherInt)
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
         }
         {
-            timeHandler->setTime(timeHandler->getTime() + 1);
+            timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
-            time_t interval = timeHandler->getTime() - pauseTime;
-            CHECK_EQUAL(this->keeper->getStatus(), TimeKeeper::AWAY);
+            boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
+            CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
             CHECK_EQUAL(this->keeper->isLate(), true);
             CHECK_EQUAL(this->keeper->getInterval(), interval);

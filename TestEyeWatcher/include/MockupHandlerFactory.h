@@ -7,29 +7,32 @@
 #include "AbstractConfig.h"
 #include "ConfigData.h"
 #include "BaseException.h"
+#include "AbstractTimeKeeper.h"
 
 #include <vector>
-
+#include <queue>
+#include <assert.h>
+#include "boost/date_time/posix_time/posix_time.hpp"
 
 ///@todo: proper files...
 
 class TimeHandlerStub : public AbstractTimeHandler
 {
      public:
-        TimeHandlerStub(time_t time = time(NULL)) : m_time(time) {}
+        TimeHandlerStub(boost::posix_time::ptime time) : m_time(time) {}
         virtual ~TimeHandlerStub() {}
-        virtual time_t getTime() const
+        virtual boost::posix_time::ptime getTime() const
         {
             return this->m_time;
         }
-        virtual void setTime(time_t time)
+        virtual void setTime(boost::posix_time::ptime time)
         {
             this->m_time = time;
         }
 
     protected:
     private:
-        time_t m_time;
+        boost::posix_time::ptime m_time;
 };
 
 class PresenceHandlerStub : public AbstractPresenceHandler
@@ -75,9 +78,10 @@ class PresenceHandlerStub : public AbstractPresenceHandler
 class MsgHandlerStub : public AbstractMsgHandler
 {
     public:
-        MsgHandlerStub() {}
+        MsgHandlerStub() : lastError("") {}
         virtual ~MsgHandlerStub() {}
-        virtual void displayError(std::string msg) {}
+        virtual void displayError(std::string msg) {lastError = msg;}
+        std::string lastError;
     protected:
     private:
 };
@@ -99,6 +103,29 @@ class ConfigStub : public AbstractConfig
     protected:
     private:
         ConfigData m_data;
+};
+
+/// note to self : add stuff only as needed
+class TimeKeeperStub : public AbstractTimeKeeper
+{
+    public:
+        TimeKeeperStub() {}
+        virtual ~TimeKeeperStub() {}
+
+        virtual void start() {}
+        virtual void stop() {}
+
+        virtual void updateStatus() {}
+        virtual boost::posix_time::time_duration getTimerInterval() const {return boost::posix_time::seconds(0);}
+        virtual bool isLate() const {return false;}
+
+        virtual AbstractTimeKeeper::Status getStatus() const {return AbstractTimeKeeper::OFF;}
+        virtual boost::posix_time::time_duration getInterval() const {return boost::posix_time::seconds(0);}
+        virtual boost::posix_time::time_duration getTimeLeft() const {return boost::posix_time::seconds(0);}
+        virtual boost::posix_time::ptime getHereStamp() const {return boost::posix_time::second_clock::local_time();}
+        virtual boost::posix_time::ptime getAwayStamp() const {return boost::posix_time::second_clock::local_time();}
+    protected:
+    private:
 };
 
 #endif // MOCKUPHANDLERFACTORY_H

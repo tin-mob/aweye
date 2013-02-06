@@ -6,9 +6,13 @@
 #include "AbstractTimeHandler.h"
 #include "AbstractPresenceHandler.h"
 
+#include "boost/date_time/posix_time/posix_time.hpp"
+
 TimeKeeper::TimeKeeper(AbstractConfig* config, AbstractTimeHandler* timeHandler, AbstractPresenceHandler* presenceHandler) :
     m_Config(config), m_TimeHandler(timeHandler), m_PresenceHandler(presenceHandler),
-    m_HereStamp(0), m_AwayStamp(0), m_LastAwayStamp(0), m_NumTolerated(0)
+    m_HereStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
+    m_AwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
+    m_LastAwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)), m_NumTolerated(0)
 {
     //ctor
     this->initStates();
@@ -17,19 +21,16 @@ TimeKeeper::TimeKeeper(AbstractConfig* config, AbstractTimeHandler* timeHandler,
 TimeKeeper::~TimeKeeper()
 {
     //dtor
-    delete this->m_States[TimeKeeper::OFF];
-    this->m_States.erase (TimeKeeper::OFF);
-    delete this->m_States[TimeKeeper::AWAY];
-    this->m_States.erase (TimeKeeper::AWAY);
-    delete this->m_States[TimeKeeper::HERE];
-    this->m_States.erase (TimeKeeper::HERE);
+    delete this->m_States[AbstractTimeKeeper::OFF];
+    delete this->m_States[AbstractTimeKeeper::AWAY];
+    delete this->m_States[AbstractTimeKeeper::HERE];
 }
 
 void TimeKeeper::initStates()
 {
-    this->m_States[TimeKeeper::OFF] = new TKStateOff();
-    this->m_States[TimeKeeper::AWAY] = new TKStateAway();
-    this->m_States[TimeKeeper::HERE] = new TKStateHere();
+    this->m_States[AbstractTimeKeeper::OFF] = new TKStateOff();
+    this->m_States[AbstractTimeKeeper::AWAY] = new TKStateAway();
+    this->m_States[AbstractTimeKeeper::HERE] = new TKStateHere();
 
     this->m_CurrentState = TimeKeeper::OFF;
 }
@@ -39,7 +40,7 @@ void TimeKeeper::start()
     if (this->m_CurrentState == TimeKeeper::OFF)
     {
         this->m_PresenceHandler->open();
-        this->setStatus(TimeKeeper::HERE);
+        this->setStatus(AbstractTimeKeeper::HERE);
     }
 }
 
@@ -48,7 +49,7 @@ void TimeKeeper::stop()
     if (this->m_CurrentState != TimeKeeper::OFF)
     {
         this->m_PresenceHandler->release();
-        this->setStatus(TimeKeeper::OFF);
+        this->setStatus(AbstractTimeKeeper::OFF);
     }
 }
 
@@ -58,7 +59,7 @@ void TimeKeeper::updateStatus()
     state->updateStatus(this);
 }
 
-int TimeKeeper::getTimerInterval() const
+boost::posix_time::time_duration TimeKeeper::getTimerInterval() const
 {
     const TKState* state = this->m_States.find(this->m_CurrentState)->second;
     return state->getTimerInterval(this);
@@ -75,24 +76,24 @@ TimeKeeper::Status TimeKeeper::getStatus() const
     return this->m_CurrentState;
 }
 
-int TimeKeeper::getInterval() const
+boost::posix_time::time_duration TimeKeeper::getInterval() const
 {
     const TKState* state = this->m_States.find(this->m_CurrentState)->second;
     return state->getInterval(this);
 }
 
-int TimeKeeper::getTimeLeft() const
+boost::posix_time::time_duration TimeKeeper::getTimeLeft() const
 {
     const TKState* state = this->m_States.find(this->m_CurrentState)->second;
     return state->getTimeLeft(this);
 }
 
-int TimeKeeper::getHereStamp() const
+boost::posix_time::ptime TimeKeeper::getHereStamp() const
 {
     return this->m_HereStamp;
 }
 
-int TimeKeeper::getAwayStamp() const
+boost::posix_time::ptime TimeKeeper::getAwayStamp() const
 {
     return this->m_AwayStamp;
 }

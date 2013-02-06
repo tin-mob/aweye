@@ -3,6 +3,7 @@
 #include "Config.h"
 
 #include <boost/filesystem.hpp>
+#include "boost/date_time/posix_time/posix_time.hpp"
 
 struct ConfigFixture
 {
@@ -35,10 +36,10 @@ SUITE(TestConfig)
         CHECK_EQUAL(ConfigData::default_EmailAlarm, data.emailAlarm);
         CHECK_EQUAL(ConfigData::default_EmailAddr, data.emailAddr);
 
-        const unsigned int test_WorkLength = ConfigData::default_WorkLength + 1;
-        const unsigned int test_PauseLength = ConfigData::default_PauseLength + 1;
-        const unsigned int test_RemFreq = ConfigData::default_RemFreq + 1;
-        const unsigned int test_CheckFreq = ConfigData::default_CheckFreq + 1;
+        const boost::posix_time::time_duration test_WorkLength = ConfigData::default_WorkLength + boost::posix_time::seconds(1);
+        const boost::posix_time::time_duration test_PauseLength = ConfigData::default_PauseLength + boost::posix_time::seconds(1);
+        const boost::posix_time::time_duration test_RemFreq = ConfigData::default_RemFreq + boost::posix_time::seconds(1);
+        const boost::posix_time::time_duration test_CheckFreq = ConfigData::default_CheckFreq + boost::posix_time::seconds(1);
         const unsigned int test_PauseTol = ConfigData::default_PauseTol + 1;
         const bool test_Startup = !ConfigData::default_Startup;
         const bool test_SoundAlarm = !ConfigData::default_SoundAlarm;

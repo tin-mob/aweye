@@ -3,7 +3,9 @@
 
 #include <string>
 #include <map>
+#include "boost/date_time/posix_time/posix_time_types.hpp"
 #include "TKState.h"
+#include "AbstractTimeKeeper.h"
 
 class TKStateHere;
 class TKStateAway;
@@ -13,26 +15,24 @@ class AbstractPresenceHandler;
 class AbstractTimeHandler;
 class HandlerFactory;
 
-class TimeKeeper
+class TimeKeeper : public AbstractTimeKeeper
 {
     public:
-        enum Status { OFF, HERE, AWAY };
-
         TimeKeeper(AbstractConfig* config, AbstractTimeHandler* timeHandler, AbstractPresenceHandler* presenceHandler);
         virtual ~TimeKeeper();
 
-        void start();
-        void stop();
+        virtual void start();
+        virtual void stop();
 
-        void updateStatus();
-        int getTimerInterval() const;
-        bool isLate() const;
+        virtual void updateStatus();
+        virtual boost::posix_time::time_duration getTimerInterval() const;
+        virtual bool isLate() const;
 
-        TimeKeeper::Status getStatus() const;
-        int getInterval() const;
-        int getTimeLeft() const;
-        int getHereStamp() const;
-        int getAwayStamp() const;
+        virtual AbstractTimeKeeper::Status getStatus() const;
+        virtual boost::posix_time::time_duration getInterval() const;
+        virtual boost::posix_time::time_duration getTimeLeft() const;
+        virtual boost::posix_time::ptime getHereStamp() const;
+        virtual boost::posix_time::ptime getAwayStamp() const;
 
     protected:
     private:
@@ -52,9 +52,9 @@ class TimeKeeper
         AbstractTimeHandler* m_TimeHandler;
         AbstractPresenceHandler* m_PresenceHandler;
 
-        time_t m_HereStamp;
-        time_t m_AwayStamp;
-        time_t m_LastAwayStamp;
+        boost::posix_time::ptime m_HereStamp;
+        boost::posix_time::ptime m_AwayStamp;
+        boost::posix_time::ptime m_LastAwayStamp;
         unsigned int m_NumTolerated;
 };
 

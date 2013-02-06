@@ -2,13 +2,14 @@
 #define CONFIGDATA_H
 
 #include <string>
+#include "boost/date_time/posix_time/posix_time_types.hpp"
 
 struct ConfigData
 {
-    unsigned int workLength;
-    unsigned int pauseLength;
-    unsigned int remFreq;
-    unsigned int checkFreq;
+    boost::posix_time::time_duration workLength;
+    boost::posix_time::time_duration pauseLength;
+    boost::posix_time::time_duration remFreq;
+    boost::posix_time::time_duration checkFreq;
     unsigned int pauseTol;
     bool startup;
     bool soundAlarm;
@@ -16,10 +17,10 @@ struct ConfigData
     bool emailAlarm;
     std::string emailAddr;
 
-    static const unsigned int default_WorkLength;
-    static const unsigned int default_PauseLength;
-    static const unsigned int default_RemFreq;
-    static const unsigned int default_CheckFreq;
+    static const boost::posix_time::time_duration default_WorkLength;
+    static const boost::posix_time::time_duration default_PauseLength;
+    static const boost::posix_time::time_duration default_RemFreq;
+    static const boost::posix_time::time_duration default_CheckFreq;
     static const unsigned int default_PauseTol;
     static const bool default_Startup;
     static const bool default_SoundAlarm;

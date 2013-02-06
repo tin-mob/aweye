@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <wxsmith>
-	<object class="wxFrame" name="EyeWatcherFrame">
+	<object class="wxFrame" name="EWMainFrame">
 		<id_arg>0</id_arg>
 		<object class="wxBoxSizer" variable="mainBoxSizer" member="no">
 			<orient>wxVERTICAL</orient>
@@ -154,8 +154,11 @@
 				<option>1</option>
 			</object>
 		</object>
-		<object class="wxTimer" name="ID_TIMER1" variable="eyeWatcherTimer" member="yes">
+		<object class="wxTimer" name="ID_TIMER1" variable="presenceTimer" member="yes">
 			<handler function="OneyeWatcherTimerTrigger" entry="EVT_TIMER" />
+		</object>
+		<object class="wxTimer" name="ID_TIMER2" variable="timesTimer" member="yes">
+			<handler function="OnTimesTimerTrigger" entry="EVT_TIMER" />
 		</object>
 	</object>
 </wxsmith>

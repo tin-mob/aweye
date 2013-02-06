@@ -36,6 +36,7 @@ class EWMainFrame: public wxFrame
         void OnOptionsButtonClick(wxCommandEvent& event);
         void OnaboutButtonClick(wxCommandEvent& event);
         void OneyeWatcherTimerTrigger(wxTimerEvent& event);
+        void OnTimesTimerTrigger(wxTimerEvent& event);
         //*)
 
         //(*Identifiers(EWMainFrame)
@@ -53,15 +54,17 @@ class EWMainFrame: public wxFrame
         static const long ID_STATICTEXT7;
         static const long ID_STATICTEXT8;
         static const long ID_TIMER1;
+        static const long ID_TIMER2;
         //*)
 
         //(*Declarations(EWMainFrame)
         wxStaticText* remainingLabel;
+        wxTimer presenceTimer;
         wxStaticText* onLabel;
         wxButton* playButton;
         wxStaticText* offTime;
         wxButton* pauseButton;
-        wxTimer eyeWatcherTimer;
+        wxTimer timesTimer;
         wxStaticText* offLabel;
         wxStaticText* lastTime;
         wxButton* optionsButton;

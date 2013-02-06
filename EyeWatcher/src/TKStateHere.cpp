@@ -4,6 +4,7 @@
 #include "WebcamHandler.h"
 #include "TKStateAway.h"
 #include "AbstractTimeHandler.h"
+#include "boost/date_time/posix_time/posix_time.hpp"
 
 TKStateHere::TKStateHere()
 {
@@ -20,7 +21,7 @@ void TKStateHere::updateStatus(TimeKeeper* parent)
     const bool isHere = parent->m_PresenceHandler->isHere();
     if (!isHere)
     {
-        parent->setStatus(TimeKeeper::AWAY);
+        parent->setStatus(AbstractTimeKeeper::AWAY);
     }
 }
 
@@ -29,13 +30,13 @@ void TKStateHere::updateTimeStamps(TimeKeeper* parent)
     parent->m_HereStamp = parent->m_TimeHandler->getTime();
 }
 
-int TKStateHere::getTimerInterval(const TimeKeeper* parent) const
+boost::posix_time::time_duration TKStateHere::getTimerInterval(const TimeKeeper* parent) const
 {
     const ConfigData& config = parent->m_Config->getData();
-    const time_t now = parent->m_TimeHandler->getTime();
-    int timerInterval = config.checkFreq;
+    const boost::posix_time::ptime now = parent->m_TimeHandler->getTime();
+    boost::posix_time::time_duration timerInterval = config.checkFreq;
 
-    unsigned int hereInterval = now - parent->m_HereStamp;
+    boost::posix_time::time_duration hereInterval = now - parent->m_HereStamp;
     // work period ended
     if (hereInterval >= config.workLength)
     {
@@ -62,12 +63,12 @@ bool TKStateHere::isLate(const TimeKeeper* parent) const
     return (parent->m_TimeHandler->getTime() - parent->m_HereStamp) >= parent->m_Config->getData().workLength;
 }
 
-int TKStateHere::getInterval(const TimeKeeper* parent) const
+boost::posix_time::time_duration TKStateHere::getInterval(const TimeKeeper* parent) const
 {
     return parent->m_TimeHandler->getTime() - parent->m_HereStamp;
 }
 
-int TKStateHere::getTimeLeft(const TimeKeeper* parent) const
+boost::posix_time::time_duration TKStateHere::getTimeLeft(const TimeKeeper* parent) const
 {
     const ConfigData& config = parent->m_Config->getData();
     return parent->m_HereStamp + config.workLength - parent->m_TimeHandler->getTime();

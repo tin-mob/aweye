@@ -2,43 +2,42 @@
 #define EWLOGIC_H
 
 #include <string>
+#include "AbstractTimeKeeper.h"
 
 class AbstractConfig;
-class TimeKeeper;
 class HandlerFactory;
 class AbstractMsgHandler;
+class ConfigData;
 
+/// @todo: really necessary ? ... If so, find a better name...
+/// break into MainPresenter/AboutPresenter?
 class EWLogic
 {
     public:
-        EWLogic(AbstractMsgHandler* msgHandler, AbstractConfig* config, TimeKeeper* keeper);
+        EWLogic(AbstractMsgHandler* msgHandler, AbstractConfig* config, AbstractTimeKeeper* keeper);
         virtual ~EWLogic();
 
-        const AbstractConfig* getConfig();
-        const TimeKeeper* getTimeKeeper();
-
-        void saveConfig(
-            unsigned int m_WorkLength,
-            unsigned int m_PauseLength,
-            unsigned int m_RemFreq,
-            unsigned int m_CheckFreq,
-            unsigned int m_PauseTol,
-            bool m_Startup,
-            bool m_SoundAlarm,
-            bool m_PopupAlarm,
-            bool m_EmailAlarm,
-            std::string m_EmailAddr
-        );
+        const ConfigData& getConfigData() const;
+        void saveConfig(const ConfigData& data);
 
         void start();
         void stop();
+        void pause();
         void updateStatus();
 
+        boost::posix_time::time_duration getNextStatusTimer() const;
+
+        AbstractTimeKeeper::Status getStatus() const;
+        std::string getTimeOn() const;
+        std::string getTimeOff() const;
+        std::string getLastPause() const;
+        std::string getTimeLeft() const;
 
     protected:
     private:
+        bool m_Warn;
         AbstractConfig* m_Config;
-        TimeKeeper* m_TimeKeeper;
+        AbstractTimeKeeper* m_TimeKeeper;
         AbstractMsgHandler* m_MsgHandler;
 };
 

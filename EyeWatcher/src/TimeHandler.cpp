@@ -1,4 +1,5 @@
 #include "TimeHandler.h"
+#include "boost/date_time/posix_time/posix_time.hpp"
 
 TimeHandler::TimeHandler()
 {
@@ -10,7 +11,7 @@ TimeHandler::~TimeHandler()
     //dtor
 }
 
-time_t TimeHandler::getTime() const
+boost::posix_time::ptime TimeHandler::getTime() const
 {
-    return time(NULL);
+    return boost::posix_time::second_clock::local_time();
 }

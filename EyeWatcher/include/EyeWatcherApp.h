@@ -18,7 +18,7 @@ class AbstractConfig;
 class AbstractTimeHandler;
 class AbstractPresenceHandler;
 class AbstractMsgHandler;
-class TimeKeeper;
+class AbstractTimeKeeper;
 
 class EyeWatcherApp : public wxApp
 {
@@ -32,7 +32,7 @@ class EyeWatcherApp : public wxApp
         AbstractTimeHandler* m_TimeHandler;
         AbstractPresenceHandler* m_PresenceHandler;
         AbstractMsgHandler* m_MsgHandler;
-        TimeKeeper* m_TimeKeeper;
+        AbstractTimeKeeper* m_TimeKeeper;
 
 };
 

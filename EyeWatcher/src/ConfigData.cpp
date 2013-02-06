@@ -1,9 +1,9 @@
 #include "ConfigData.h"
 
-const unsigned int ConfigData::default_WorkLength = 50*60;
-const unsigned int ConfigData::default_PauseLength = 10*60;
-const unsigned int ConfigData::default_RemFreq = 2*60;
-const unsigned int ConfigData::default_CheckFreq = 30;
+const boost::posix_time::time_duration ConfigData::default_WorkLength(0,50,0,0);
+const boost::posix_time::time_duration ConfigData::default_PauseLength(0,10,0,0);
+const boost::posix_time::time_duration ConfigData::default_RemFreq(0,2,0,0);
+const boost::posix_time::time_duration ConfigData::default_CheckFreq(0,0,30,0);
 const unsigned int ConfigData::default_PauseTol = 1;
 const bool ConfigData::default_Startup = false;
 const bool ConfigData::default_SoundAlarm = false;

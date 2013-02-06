@@ -2,13 +2,14 @@
 #define TIMEHANDLER_H
 
 #include "AbstractTimeHandler.h"
+#include "boost/date_time/posix_time/posix_time_types.hpp"
 
 class TimeHandler : public AbstractTimeHandler
 {
     public:
         TimeHandler();
         virtual ~TimeHandler();
-        virtual time_t getTime() const;
+        virtual boost::posix_time::ptime getTime() const;
     protected:
     private:
 };
