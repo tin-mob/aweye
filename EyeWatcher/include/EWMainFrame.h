@@ -15,7 +15,6 @@
 #include <wx/button.h>
 #include <wx/frame.h>
 #include <wx/stattext.h>
-#include <wx/timer.h>
 //*)
 
 #include "EWLogic.h"
@@ -54,27 +53,23 @@ class EWMainFrame: public wxFrame
         static const long ID_STATICTEXT6;
         static const long ID_STATICTEXT7;
         static const long ID_STATICTEXT8;
-        static const long ID_TIMER1;
-        static const long ID_TIMER2;
         //*)
 
         //(*Declarations(EWMainFrame)
-        wxStaticText* remainingLabel;
-        wxTimer presenceTimer;
+        wxStaticText* runningClock;
+        wxStaticText* onClock;
         wxStaticText* onLabel;
+        wxStaticText* runningLabel;
         wxButton* playButton;
-        wxStaticText* StaticText1;
-        wxStaticText* offTime;
+        wxStaticText* leftClock;
         wxButton* pauseButton;
-        wxTimer timesTimer;
+        wxStaticText* offClock;
+        wxStaticText* StatusLabel;
         wxStaticText* offLabel;
-        wxStaticText* lastTime;
+        wxStaticText* leftLabel;
         wxButton* optionsButton;
-        wxStaticText* remainingTime;
         wxButton* stopButton;
         wxButton* aboutButton;
-        wxStaticText* lastLabel;
-        wxStaticText* onTime;
         //*)
 
         EWLogic* m_Logic;

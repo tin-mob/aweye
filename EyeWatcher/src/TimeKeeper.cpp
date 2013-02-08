@@ -21,9 +21,8 @@ TimeKeeper::TimeKeeper(AbstractConfig* config, AbstractTimeHandler* timeHandler,
 TimeKeeper::~TimeKeeper()
 {
     //dtor
-    delete this->m_States[AbstractTimeKeeper::OFF];
-    delete this->m_States[AbstractTimeKeeper::AWAY];
-    delete this->m_States[AbstractTimeKeeper::HERE];
+    for (std::map<Status,TKState*>::iterator it = this->m_States.begin() ; it != this->m_States.end(); ++it)
+        delete it->second;
 }
 
 void TimeKeeper::initStates()

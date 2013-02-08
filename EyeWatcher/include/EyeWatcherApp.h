@@ -11,7 +11,6 @@
 #define EYEWATCHERAPP_H
 
 #include <wx/app.h>
-#include "WxHandlerFactory.h"
 
 class EWLogic;
 class AbstractConfig;
@@ -24,7 +23,7 @@ class EyeWatcherApp : public wxApp
 {
     public:
         EyeWatcherApp();
-        ~EyeWatcherApp();
+       ~EyeWatcherApp();
         virtual bool OnInit();
     private:
         EWLogic* m_Logic;

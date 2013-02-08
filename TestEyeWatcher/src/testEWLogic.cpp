@@ -7,7 +7,7 @@
 struct EWLogicFixture
 {
     public:
-        EWLogicFixture()
+        EWLogicFixture() : config(NULL), msgHandler(NULL), keeper(NULL), logic(NULL)
         {
             this->data = {boost::posix_time::seconds(5), boost::posix_time::seconds(3), boost::posix_time::seconds(1),
                 boost::posix_time::seconds(2), ConfigData::default_PauseTol, ConfigData::default_Startup, ConfigData::default_SoundAlarm,
@@ -20,10 +20,10 @@ struct EWLogicFixture
         }
         ~EWLogicFixture()
         {
-            delete this->config;
-            delete this->msgHandler;
-            delete this->keeper;
-            delete this->logic;
+            if (this->config != NULL) {delete this->config;}
+            if (this->msgHandler != NULL) {delete this->msgHandler;}
+            if (this->keeper != NULL) {delete this->keeper;}
+            if (this->logic != NULL) {delete this->logic;}
         }
 
         ConfigData data;

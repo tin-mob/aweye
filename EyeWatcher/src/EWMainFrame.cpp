@@ -12,6 +12,7 @@
 #include "OptionsDialog.h"
 #include "AboutDialog.h"
 #include <wx/msgdlg.h>
+#include <wx/valgen.h>
 #include "BaseException.h"
 
 //(*InternalHeaders(EWMainFrame)
@@ -60,8 +61,6 @@ const long EWMainFrame::ID_STATICTEXT5 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT6 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT7 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT8 = wxNewId();
-const long EWMainFrame::ID_TIMER1 = wxNewId();
-const long EWMainFrame::ID_TIMER2 = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
@@ -75,10 +74,10 @@ EWMainFrame::EWMainFrame(wxWindow* parent, EWLogic* logic, wxWindowID id) : m_Lo
     wxBoxSizer* buttonsBoxSizer;
     wxBoxSizer* offBoxSizer;
     wxBoxSizer* mainBoxSizer;
-    wxBoxSizer* remainingBoxSizer;
-    wxBoxSizer* lastBoxSizer;
     wxGridSizer* timesGrid;
+    wxBoxSizer* runningBoxSizer;
     wxBoxSizer* onBoxSizer;
+    wxBoxSizer* leftBoxSizer;
 
     Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
     mainBoxSizer = new wxBoxSizer(wxVERTICAL);
@@ -96,44 +95,42 @@ EWMainFrame::EWMainFrame(wxWindow* parent, EWLogic* logic, wxWindowID id) : m_Lo
     buttonsBoxSizer->Add(aboutButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     mainBoxSizer->Add(buttonsBoxSizer, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
     timesGrid = new wxGridSizer(2, 5, 0, 0);
-    StaticText1 = new wxStaticText(this, ID_STATICTEXT9, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
-    timesGrid->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StatusLabel = new wxStaticText(this, ID_STATICTEXT9, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
+    timesGrid->Add(StatusLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     onBoxSizer = new wxBoxSizer(wxVERTICAL);
-    onLabel = new wxStaticText(this, ID_STATICTEXT1, _("Time on PC"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
+    onLabel = new wxStaticText(this, ID_STATICTEXT1, _("Last Session"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
     onBoxSizer->Add(onLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    onTime = new wxStaticText(this, ID_STATICTEXT2, _("99:99"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
-    onBoxSizer->Add(onTime, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    onClock = new wxStaticText(this, ID_STATICTEXT2, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
+    onBoxSizer->Add(onClock, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     timesGrid->Add(onBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
-    lastBoxSizer = new wxBoxSizer(wxVERTICAL);
-    lastLabel = new wxStaticText(this, ID_STATICTEXT3, _("Last Pause"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
-    lastBoxSizer->Add(lastLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    lastTime = new wxStaticText(this, ID_STATICTEXT4, _("99:99"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
-    lastBoxSizer->Add(lastTime, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    timesGrid->Add(lastBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
     offBoxSizer = new wxBoxSizer(wxVERTICAL);
-    offLabel = new wxStaticText(this, ID_STATICTEXT5, _("Time in Pause"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
+    offLabel = new wxStaticText(this, ID_STATICTEXT3, _("Last Pause"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
     offBoxSizer->Add(offLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    offTime = new wxStaticText(this, ID_STATICTEXT6, _("99:99"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
-    offBoxSizer->Add(offTime, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    offClock = new wxStaticText(this, ID_STATICTEXT4, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
+    offBoxSizer->Add(offClock, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     timesGrid->Add(offBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
-    remainingBoxSizer = new wxBoxSizer(wxVERTICAL);
-    remainingLabel = new wxStaticText(this, ID_STATICTEXT7, _("Time Left"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
-    remainingBoxSizer->Add(remainingLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    remainingTime = new wxStaticText(this, ID_STATICTEXT8, _("99:99"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
-    remainingBoxSizer->Add(remainingTime, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    timesGrid->Add(remainingBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+    runningBoxSizer = new wxBoxSizer(wxVERTICAL);
+    runningLabel = new wxStaticText(this, ID_STATICTEXT5, _("Running"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
+    runningBoxSizer->Add(runningLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    runningClock = new wxStaticText(this, ID_STATICTEXT6, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
+    runningBoxSizer->Add(runningClock, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    timesGrid->Add(runningBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+    leftBoxSizer = new wxBoxSizer(wxVERTICAL);
+    leftLabel = new wxStaticText(this, ID_STATICTEXT7, _("Time Left"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
+    leftBoxSizer->Add(leftLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    leftClock = new wxStaticText(this, ID_STATICTEXT8, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
+    leftBoxSizer->Add(leftClock, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    timesGrid->Add(leftBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
     mainBoxSizer->Add(timesGrid, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     SetSizer(mainBoxSizer);
-    presenceTimer.SetOwner(this, ID_TIMER1);
-    timesTimer.SetOwner(this, ID_TIMER2);
     mainBoxSizer->Fit(this);
     mainBoxSizer->SetSizeHints(this);
 
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnOptionsButtonClick);
     Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnaboutButtonClick);
-    Connect(ID_TIMER1,wxEVT_TIMER,(wxObjectEventFunction)&EWMainFrame::OneyeWatcherTimerTrigger);
-    Connect(ID_TIMER2,wxEVT_TIMER,(wxObjectEventFunction)&EWMainFrame::OnTimesTimerTrigger);
     //*)
+
+
 }
 
 EWMainFrame::~EWMainFrame()

@@ -23,7 +23,7 @@
 
 IMPLEMENT_APP(EyeWatcherApp);
 
-EyeWatcherApp::EyeWatcherApp()
+EyeWatcherApp::EyeWatcherApp() : m_Logic(NULL), m_Config(NULL), m_TimeHandler(NULL), m_PresenceHandler(NULL), m_MsgHandler(NULL), m_TimeKeeper(NULL)
 {
     this->m_Config = new Config();
     this->m_MsgHandler = new MsgHandler();
@@ -35,12 +35,12 @@ EyeWatcherApp::EyeWatcherApp()
 
 EyeWatcherApp::~EyeWatcherApp()
 {
-    delete this->m_Config;
-    delete this->m_MsgHandler;
-    delete this->m_PresenceHandler;
-    delete this->m_TimeHandler;
-    delete this->m_TimeKeeper;
-    delete this->m_Logic;
+    if (this->m_Config != NULL) {delete this->m_Config;}
+    if (this->m_MsgHandler != NULL) {delete this->m_MsgHandler;}
+    if (this->m_PresenceHandler != NULL) {delete this->m_PresenceHandler;}
+    if (this->m_TimeHandler != NULL) {delete this->m_TimeHandler;}
+    if (this->m_TimeKeeper != NULL) {delete this->m_TimeKeeper;}
+    if (this->m_Logic != NULL) {delete this->m_Logic;}
 }
 
 bool EyeWatcherApp::OnInit()

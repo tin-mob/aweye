@@ -8,7 +8,7 @@
 struct TimeKeeperFixture
 {
     public:
-        TimeKeeperFixture()
+        TimeKeeperFixture() : keeper(NULL), config(NULL), timeHandler(NULL), presenceHandler(NULL)
         {
             this->data = {boost::posix_time::seconds(5), boost::posix_time::seconds(3), boost::posix_time::seconds(1),
                 boost::posix_time::seconds(2), ConfigData::default_PauseTol, ConfigData::default_Startup, ConfigData::default_SoundAlarm,
@@ -21,10 +21,10 @@ struct TimeKeeperFixture
         }
         ~TimeKeeperFixture()
         {
-            delete this->keeper;
-            delete this->config;
-            delete this->timeHandler;
-            delete this->presenceHandler;
+            if (this->keeper != NULL) {delete this->keeper;}
+            if (this->config != NULL) {delete this->config;}
+            if (this->timeHandler != NULL) {delete this->timeHandler;}
+            if (this->presenceHandler != NULL) {delete this->presenceHandler;}
         }
 
         ConfigData data;
