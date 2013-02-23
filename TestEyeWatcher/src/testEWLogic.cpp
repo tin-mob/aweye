@@ -71,11 +71,11 @@ SUITE(TestEWLogic)
 
     TEST_FIXTURE(EWLogicFixture, TestStartStop)
     {
-        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::OFF);
+        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
         logic->start();
-        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::HERE);
+        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::HERE));
         logic->stop();
-        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::OFF);
+        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
 
         keeper->fail = true;
         CHECK_EQUAL(msgHandler->lastError, "");
@@ -85,9 +85,9 @@ SUITE(TestEWLogic)
 
     TEST_FIXTURE(EWLogicFixture, TestUpdate)
     {
-        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::OFF);
+        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
         logic->updateStatus();
-        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::AWAY);
+        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::AWAY));
 
         keeper->fail = true;
         CHECK_EQUAL(msgHandler->lastError, "");

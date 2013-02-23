@@ -23,6 +23,10 @@ WebcamHandler::~WebcamHandler()
 void WebcamHandler::open()
 {
     this->m_VideoCapture.open(this->m_index);
+
+    if(!this->m_VideoCapture.isOpened()) { // check if we have a camera
+		throw InvalidCameraException();
+	}
 }
 
 void WebcamHandler::release()
@@ -33,7 +37,6 @@ void WebcamHandler::release()
 /// @todo: face size (minSize last param)
 bool WebcamHandler::isHere()
 {
-
     if(!this->m_VideoCapture.isOpened()) { // check if we have a camera
 		throw InvalidCameraException();
 	}

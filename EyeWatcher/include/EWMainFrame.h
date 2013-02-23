@@ -15,17 +15,22 @@
 #include <wx/button.h>
 #include <wx/frame.h>
 #include <wx/stattext.h>
+#include <wx/timer.h>
 //*)
+#include <wx/valgen.h>
 
 #include "EWLogic.h"
 #include "WxHandlerFactory.h"
+#include "TimesObserver.h"
 
-class EWMainFrame: public wxFrame
+class EWMainFrame: public wxFrame, public TimesObserver
 {
     public:
 
         EWMainFrame(wxWindow* parent, EWLogic* logic, wxWindowID id = -1);
         virtual ~EWMainFrame();
+
+        virtual void updateTimes();
 
     private:
 
@@ -34,8 +39,11 @@ class EWMainFrame: public wxFrame
         void OnAbout(wxCommandEvent& event);
         void OnOptionsButtonClick(wxCommandEvent& event);
         void OnaboutButtonClick(wxCommandEvent& event);
-        void OneyeWatcherTimerTrigger(wxTimerEvent& event);
-        void OnTimesTimerTrigger(wxTimerEvent& event);
+        void OnPlayButtonClick(wxCommandEvent& event);
+        void OnStopButtonClick(wxCommandEvent& event);
+        void OnClockTimerTrigger(wxTimerEvent& event);
+        void OnCheckTimerTrigger(wxTimerEvent& event);
+        void OnClose(wxCloseEvent& event);
         //*)
 
         //(*Identifiers(EWMainFrame)
@@ -53,6 +61,8 @@ class EWMainFrame: public wxFrame
         static const long ID_STATICTEXT6;
         static const long ID_STATICTEXT7;
         static const long ID_STATICTEXT8;
+        static const long ID_TIMER1;
+        static const long ID_TIMER2;
         //*)
 
         //(*Declarations(EWMainFrame)
@@ -64,9 +74,11 @@ class EWMainFrame: public wxFrame
         wxStaticText* leftClock;
         wxButton* pauseButton;
         wxStaticText* offClock;
+        wxTimer clockTimer;
         wxStaticText* StatusLabel;
         wxStaticText* offLabel;
         wxStaticText* leftLabel;
+        wxTimer checkTimer;
         wxButton* optionsButton;
         wxButton* stopButton;
         wxButton* aboutButton;

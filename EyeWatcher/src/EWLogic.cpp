@@ -67,9 +67,9 @@ boost::posix_time::time_duration EWLogic::getNextStatusTimer() const
     return this->m_TimeKeeper->getTimerInterval();
 }
 
-AbstractTimeKeeper::Status EWLogic::getStatus() const
+std::string EWLogic::getStatus() const
 {
-    return this->m_TimeKeeper->getStatus();
+    return this->m_TimeKeeper->getStatusStr();
 }
 
 std::string EWLogic::durationToString(boost::posix_time::time_duration duration)

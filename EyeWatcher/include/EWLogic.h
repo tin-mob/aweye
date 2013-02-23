@@ -9,7 +9,7 @@ class HandlerFactory;
 class AbstractMsgHandler;
 class ConfigData;
 
-/// @todo: really necessary ? ... If so, find a better name...
+/// @todo: find a better name...
 /// break into MainPresenter/AboutPresenter?
 class EWLogic
 {
@@ -27,7 +27,7 @@ class EWLogic
 
         boost::posix_time::time_duration getNextStatusTimer() const;
 
-        AbstractTimeKeeper::Status getStatus() const;
+        std::string getStatus() const;
         std::string getTimeOn() const;
         std::string getTimeOff() const;
         std::string getTimeRunning() const;

@@ -45,7 +45,7 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper->getTimerInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(this->keeper->isLate(), false);
         CHECK_EQUAL(this->keeper->getInterval(), boost::posix_time::seconds(0));
-        CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength);
+        CHECK_EQUAL(this->keeper->getTimeLeft(), boost::posix_time::seconds(0));
         CHECK_EQUAL(this->keeper->getHereStamp(), boost::posix_time::not_a_date_time);
         CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
 
@@ -64,7 +64,7 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper->getTimerInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(this->keeper->isLate(), false);
         CHECK_EQUAL(this->keeper->getInterval(), boost::posix_time::seconds(0));
-        CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength);
+        CHECK_EQUAL(this->keeper->getTimeLeft(), boost::posix_time::seconds(0));
         CHECK_EQUAL(this->keeper->getHereStamp(), boost::posix_time::not_a_date_time);
         CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
     }

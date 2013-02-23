@@ -15,23 +15,30 @@ TimeKeeper::TimeKeeper(AbstractConfig* config, AbstractTimeHandler* timeHandler,
     m_LastAwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)), m_NumTolerated(0)
 {
     //ctor
-    this->initStates();
+    try
+    {
+        this->m_States[AbstractTimeKeeper::OFF] = new TKStateOff();
+        this->m_States[AbstractTimeKeeper::AWAY] = new TKStateAway();
+        this->m_States[AbstractTimeKeeper::HERE] = new TKStateHere();
+    }
+    catch (...)
+    {
+       this->deleteStates();
+       throw; //rethrow. no memory leak
+    }
+    this->m_CurrentState = TimeKeeper::OFF;
 }
 
 TimeKeeper::~TimeKeeper()
 {
     //dtor
-    for (std::map<Status,TKState*>::iterator it = this->m_States.begin() ; it != this->m_States.end(); ++it)
-        delete it->second;
+    this->deleteStates();
 }
 
-void TimeKeeper::initStates()
+void TimeKeeper::deleteStates()
 {
-    this->m_States[AbstractTimeKeeper::OFF] = new TKStateOff();
-    this->m_States[AbstractTimeKeeper::AWAY] = new TKStateAway();
-    this->m_States[AbstractTimeKeeper::HERE] = new TKStateHere();
-
-    this->m_CurrentState = TimeKeeper::OFF;
+    for (std::map<Status,TKState*>::iterator it = this->m_States.begin() ; it != this->m_States.end(); ++it)
+        delete it->second;
 }
 
 void TimeKeeper::start()

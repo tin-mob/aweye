@@ -4,10 +4,26 @@
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 
+#include <string>
+
 class AbstractTimeKeeper
 {
     public:
         enum Status { OFF, HERE, AWAY };
+        static std::string getStatusStr(const Status s)
+        {
+            switch (s)
+            {
+                case AbstractTimeKeeper::OFF: return "Off";
+                case AbstractTimeKeeper::HERE: return "Here";
+                case AbstractTimeKeeper::AWAY: return "Away";
+                default: assert(0);
+            }
+        }
+        std::string getStatusStr() const
+        {
+            return AbstractTimeKeeper::getStatusStr(this->getStatus());
+        }
 
         virtual void start() = 0;
         virtual void stop() = 0;

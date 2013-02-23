@@ -12,12 +12,12 @@
 
 #include <wx/app.h>
 
-class EWLogic;
-class AbstractConfig;
-class AbstractTimeHandler;
-class AbstractPresenceHandler;
-class AbstractMsgHandler;
-class AbstractTimeKeeper;
+#include "Config.h"
+#include "MsgHandler.h"
+#include "WebcamHandler.h"
+#include "TimeHandler.h"
+#include "TimeKeeper.h"
+#include "EWLogic.h"
 
 class EyeWatcherApp : public wxApp
 {
@@ -26,13 +26,12 @@ class EyeWatcherApp : public wxApp
        ~EyeWatcherApp();
         virtual bool OnInit();
     private:
-        EWLogic* m_Logic;
-        AbstractConfig* m_Config;
-        AbstractTimeHandler* m_TimeHandler;
-        AbstractPresenceHandler* m_PresenceHandler;
-        AbstractMsgHandler* m_MsgHandler;
-        AbstractTimeKeeper* m_TimeKeeper;
-
+        Config m_Config;
+        TimeHandler m_TimeHandler;
+        WebcamHandler m_PresenceHandler;
+        MsgHandler m_MsgHandler;
+        TimeKeeper m_TimeKeeper;
+        EWLogic m_Logic;
 };
 
 #endif // EYEWATCHERAPP_H

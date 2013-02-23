@@ -42,7 +42,7 @@ class TimeKeeper : public AbstractTimeKeeper
         friend class TKStateAway;
         friend class TKStateOff;
 
-        void initStates();
+        void deleteStates();
         void setStatus(Status status);
 
         std::map<Status,TKState*> m_States;

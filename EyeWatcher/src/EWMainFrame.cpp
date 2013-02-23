@@ -61,6 +61,8 @@ const long EWMainFrame::ID_STATICTEXT5 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT6 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT7 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT8 = wxNewId();
+const long EWMainFrame::ID_TIMER1 = wxNewId();
+const long EWMainFrame::ID_TIMER2 = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
@@ -123,14 +125,30 @@ EWMainFrame::EWMainFrame(wxWindow* parent, EWLogic* logic, wxWindowID id) : m_Lo
     timesGrid->Add(leftBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
     mainBoxSizer->Add(timesGrid, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     SetSizer(mainBoxSizer);
+    clockTimer.SetOwner(this, ID_TIMER1);
+    clockTimer.Start(1000, false);
+    checkTimer.SetOwner(this, ID_TIMER2);
     mainBoxSizer->Fit(this);
     mainBoxSizer->SetSizeHints(this);
 
+    Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnStopButtonClick);
+    Connect(ID_BUTTON3,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnPlayButtonClick);
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnOptionsButtonClick);
     Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnaboutButtonClick);
+    Connect(ID_TIMER1,wxEVT_TIMER,(wxObjectEventFunction)&EWMainFrame::OnClockTimerTrigger);
+    Connect(ID_TIMER2,wxEVT_TIMER,(wxObjectEventFunction)&EWMainFrame::OnCheckTimerTrigger);
     //*)
 
+    this->updateTimes();
+}
 
+void EWMainFrame::updateTimes()
+{
+    this->StatusLabel->SetLabel(wxString(this->m_Logic->getStatus().c_str(), wxConvUTF8));
+    this->onClock->SetLabel(wxString(this->m_Logic->getTimeOn().c_str(), wxConvUTF8));
+    this->offClock->SetLabel(wxString(this->m_Logic->getTimeOff().c_str(), wxConvUTF8));
+    this->runningClock->SetLabel(wxString(this->m_Logic->getTimeRunning().c_str(), wxConvUTF8));
+    this->leftClock->SetLabel(wxString(this->m_Logic->getTimeLeft().c_str(), wxConvUTF8));
 }
 
 EWMainFrame::~EWMainFrame()
@@ -171,11 +189,29 @@ void EWMainFrame::OnaboutButtonClick(wxCommandEvent& event)
     dialog.ShowModal();
 }
 
-void EWMainFrame::OneyeWatcherTimerTrigger(wxTimerEvent& event)
+void EWMainFrame::OnPlayButtonClick(wxCommandEvent& event)
 {
+    this->m_Logic->start();
+    this->checkTimer.Start(this->m_Logic->getNextStatusTimer().total_milliseconds(), true);
 }
 
-void EWMainFrame::OnTimesTimerTrigger(wxTimerEvent& event)
+void EWMainFrame::OnStopButtonClick(wxCommandEvent& event)
 {
+    this->m_Logic->stop();
+    this->checkTimer.Stop();
+}
 
+void EWMainFrame::OnClockTimerTrigger(wxTimerEvent& event)
+{
+    this->updateTimes();
+}
+
+void EWMainFrame::OnCheckTimerTrigger(wxTimerEvent& event)
+{
+    this->m_Logic->updateStatus();
+    this->checkTimer.Start(this->m_Logic->getNextStatusTimer().total_milliseconds(), true);
+}
+
+void EWMainFrame::OnClose(wxCloseEvent& event)
+{
 }

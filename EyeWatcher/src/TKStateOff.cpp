@@ -41,6 +41,5 @@ boost::posix_time::time_duration TKStateOff::getInterval(const TimeKeeper*) cons
 
 boost::posix_time::time_duration TKStateOff::getTimeLeft(const TimeKeeper* parent) const
 {
-    const ConfigData& config = parent->m_Config->getData();
-    return config.workLength;
+    return boost::posix_time::time_duration(0,0,0,0);
 }

@@ -18,6 +18,7 @@ class InvalidCameraException : public BaseException
           InvalidCameraException() :  BaseException("Camera is not working.") { }
 };
 
+/// @todo: check webcam light stay on until release...
 class WebcamHandler : public AbstractPresenceHandler
 {
     public:
