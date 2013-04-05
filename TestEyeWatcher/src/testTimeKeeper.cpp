@@ -28,10 +28,10 @@ struct TimeKeeperFixture
         }
 
         ConfigData data;
+        TimeKeeper* keeper;
         ConfigStub* config;
         TimeHandlerStub* timeHandler;
         PresenceHandlerStub* presenceHandler;
-        TimeKeeper* keeper;
 
     protected:
     private:

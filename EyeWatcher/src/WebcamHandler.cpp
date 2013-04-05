@@ -3,7 +3,7 @@
 
 /// @todo: find a way to manage paths (Win/Linux)
 WebcamHandler::WebcamHandler(int index, std::string faceCascadeName) :
-    m_index(index), m_VideoCapture()
+    m_index(index)
 {
     //ctor
     namespace fs = boost::filesystem;
@@ -20,28 +20,16 @@ WebcamHandler::~WebcamHandler()
     //dtor
 }
 
-void WebcamHandler::open()
-{
-    this->m_VideoCapture.open(this->m_index);
-
-    if(!this->m_VideoCapture.isOpened()) { // check if we have a camera
-		throw InvalidCameraException();
-	}
-}
-
-void WebcamHandler::release()
-{
-    this->m_VideoCapture.release();
-}
-
 /// @todo: face size (minSize last param)
 bool WebcamHandler::isHere()
 {
-    if(!this->m_VideoCapture.isOpened()) { // check if we have a camera
+    cv::VideoCapture videoCapture(this->m_index);
+
+    if(!videoCapture.isOpened()) { // check if we have a camera
 		throw InvalidCameraException();
 	}
     cv::Mat frame;
-    this->m_VideoCapture >> frame; // get a new frame from camera
+    videoCapture >> frame; // get a new frame from camera
 
 	std::vector<cv::Rect> faces;
 	cv::Mat frame_gray;

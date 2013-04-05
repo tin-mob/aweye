@@ -10,25 +10,11 @@
 class PresenceHandlerStub : public AbstractPresenceHandler
 {
     public:
-        PresenceHandlerStub() : m_opened(false) {}
+        PresenceHandlerStub() {}
         virtual ~PresenceHandlerStub() {}
-
-        virtual void open()
-        {
-            m_opened = true;
-        }
-
-        virtual void release()
-        {
-            m_opened = false;
-        }
 
         virtual bool isHere()
         {
-            if (!m_opened)
-            {
-                throw BaseException("Not Opened");
-            }
             assert (!this->m_results.empty());
             bool result  = this->m_results.front();
             this->m_results.pop();
@@ -39,8 +25,6 @@ class PresenceHandlerStub : public AbstractPresenceHandler
         {
             this->m_results.push(result);
         }
-
-        bool m_opened;
 
     protected:
     private:

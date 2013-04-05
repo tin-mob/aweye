@@ -45,7 +45,6 @@ void TimeKeeper::start()
 {
     if (this->m_CurrentState == TimeKeeper::OFF)
     {
-        this->m_PresenceHandler->open();
         this->setStatus(AbstractTimeKeeper::HERE);
     }
 }
@@ -54,7 +53,6 @@ void TimeKeeper::stop()
 {
     if (this->m_CurrentState != TimeKeeper::OFF)
     {
-        this->m_PresenceHandler->release();
         this->setStatus(AbstractTimeKeeper::OFF);
     }
 }

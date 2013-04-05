@@ -5,8 +5,6 @@ class AbstractPresenceHandler
 {
     public:
         virtual ~AbstractPresenceHandler() {}
-        virtual void open() = 0;
-        virtual void release() = 0;
         virtual bool isHere() = 0;
     protected:
     private:

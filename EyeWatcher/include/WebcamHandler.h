@@ -24,14 +24,11 @@ class WebcamHandler : public AbstractPresenceHandler
     public:
         WebcamHandler(int index = 0, std::string faceCascadeName = "haarcascade_frontalface_alt.xml");
         ~WebcamHandler();
-        void open();
-        void release();
         bool isHere();
     protected:
     private:
         int m_index;
         cv::CascadeClassifier m_FaceCascade;
-        cv::VideoCapture m_VideoCapture;
 };
 
 #endif // WEBCAMHANDLER_H
