@@ -14,6 +14,7 @@
 #include <wx/msgdlg.h>
 #include <wx/valgen.h>
 #include "BaseException.h"
+#include "wxTimerHandler.h"
 
 //(*InternalHeaders(EWMainFrame)
 #include <wx/string.h>
@@ -191,14 +192,14 @@ void EWMainFrame::OnaboutButtonClick(wxCommandEvent& event)
 
 void EWMainFrame::OnPlayButtonClick(wxCommandEvent& event)
 {
-    this->m_Logic->start();
-    this->checkTimer.Start(this->m_Logic->getNextStatusTimer().total_milliseconds(), true);
+    wxTimerHandler handler(&this->checkTimer);
+    this->m_Logic->start(handler);
 }
 
 void EWMainFrame::OnStopButtonClick(wxCommandEvent& event)
 {
-    this->m_Logic->stop();
-    this->checkTimer.Stop();
+    wxTimerHandler handler(&this->checkTimer);
+    this->m_Logic->stop(handler);
 }
 
 void EWMainFrame::OnClockTimerTrigger(wxTimerEvent& event)
@@ -208,8 +209,8 @@ void EWMainFrame::OnClockTimerTrigger(wxTimerEvent& event)
 
 void EWMainFrame::OnCheckTimerTrigger(wxTimerEvent& event)
 {
-    this->m_Logic->updateStatus();
-    this->checkTimer.Start(this->m_Logic->getNextStatusTimer().total_milliseconds(), true);
+    wxTimerHandler handler(&this->checkTimer);
+    this->m_Logic->updateStatus(handler);
 }
 
 void EWMainFrame::OnClose(wxCloseEvent& event)

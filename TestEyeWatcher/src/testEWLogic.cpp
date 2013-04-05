@@ -3,6 +3,7 @@
 #include "ConfigStub.h"
 #include "MsgHandlerStub.h"
 #include "TimeKeeperStub.h"
+#include "TimerHandlerStub.h"
 
 struct EWLogicFixture
 {
@@ -71,27 +72,33 @@ SUITE(TestEWLogic)
 
     TEST_FIXTURE(EWLogicFixture, TestStartStop)
     {
+        TimerHandlerStub timerHandler;
+        CHECK_EQUAL(timerHandler.running, false);
         CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
-        logic->start();
+        logic->start(timerHandler);
+        CHECK_EQUAL(timerHandler.running, true);
         CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::HERE));
-        logic->stop();
+        logic->stop(timerHandler);
+        CHECK_EQUAL(timerHandler.running, false);
         CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
 
         keeper->fail = true;
         CHECK_EQUAL(msgHandler->lastError, "");
-        logic->start();
+        logic->start(timerHandler);
         CHECK_EQUAL(msgHandler->lastError, "Testing!");
     }
 
     TEST_FIXTURE(EWLogicFixture, TestUpdate)
     {
+        TimerHandlerStub timerHandler;
         CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
-        logic->updateStatus();
+        logic->updateStatus(timerHandler);
+        CHECK_EQUAL(timerHandler.running, true);
         CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::AWAY));
 
         keeper->fail = true;
         CHECK_EQUAL(msgHandler->lastError, "");
-        logic->updateStatus();
+        logic->updateStatus(timerHandler);
         CHECK_EQUAL(msgHandler->lastError, "Testing!");
     }
 

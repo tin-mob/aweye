@@ -21,9 +21,8 @@
 
 #include "EWLogic.h"
 #include "WxHandlerFactory.h"
-#include "TimesObserver.h"
 
-class EWMainFrame: public wxFrame, public TimesObserver
+class EWMainFrame: public wxFrame
 {
     public:
 

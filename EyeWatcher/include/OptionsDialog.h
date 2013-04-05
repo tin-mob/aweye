@@ -63,6 +63,8 @@ class OptionsDialog: public wxDialog
 
 	private:
 
+        void setFields();
+
 		//(*Handlers(OptionsDialog)
 		//*)
 		void OnOKClick(wxCommandEvent& event);

@@ -2,6 +2,7 @@
 #include "AbstractConfig.h"
 #include "HandlerFactory.h"
 #include "AbstractMsgHandler.h"
+#include "AbstractTimerHandler.h"
 #include "AbstractTimeKeeper.h"
 #include "BaseException.h"
 
@@ -27,11 +28,12 @@ void EWLogic::saveConfig(const ConfigData& data)
     this->m_Config->save(data);
 }
 
-void EWLogic::start()
+void EWLogic::start(AbstractTimerHandler& timerHandler)
 {
     try
     {
         this->m_TimeKeeper->start();
+        timerHandler.Start(this->getNextStatusTimer().total_milliseconds(), true);
     }
     catch (BaseException e)
     {
@@ -39,9 +41,10 @@ void EWLogic::start()
     }
 }
 
-void EWLogic::stop()
+void EWLogic::stop(AbstractTimerHandler& timerHandler)
 {
     this->m_TimeKeeper->stop();
+    timerHandler.Stop();
 }
 
 void EWLogic::pause()
@@ -49,11 +52,12 @@ void EWLogic::pause()
     m_Warn = !m_Warn;
 }
 
-void EWLogic::updateStatus()
+void EWLogic::updateStatus(AbstractTimerHandler& timerHandler)
 {
     try
     {
         this->m_TimeKeeper->updateStatus();
+        timerHandler.Start(this->getNextStatusTimer().total_milliseconds(), true);
     }
     catch (BaseException e)
     {

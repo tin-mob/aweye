@@ -57,7 +57,6 @@ OptionsDialog::OptionsDialog(wxWindow* parent, EWLogic* logic, wxWindowID id) : 
 	wrkFlexGridSizer->Add(workingLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	wrkFlexGridSizer->Add(22,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	wrkTextCtrl = new wxTextCtrl(this, ID_TEXTCTRL2, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL2"));
-	wrkTextCtrl->SetMaxLength(2);
 	wrkFlexGridSizer->Add(wrkTextCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	timeStaticBoxSizer->Add(wrkFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	zzzFlexGridSizer = new wxFlexGridSizer(0, 5, 0, 0);
@@ -65,14 +64,12 @@ OptionsDialog::OptionsDialog(wxWindow* parent, EWLogic* logic, wxWindowID id) : 
 	zzzFlexGridSizer->Add(zzzLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	zzzFlexGridSizer->Add(40,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	zzzTextCtrl = new wxTextCtrl(this, ID_TEXTCTRL3, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL3"));
-	zzzTextCtrl->SetMaxLength(2);
 	zzzFlexGridSizer->Add(zzzTextCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	timeStaticBoxSizer->Add(zzzFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	remFlexGridSizer = new wxFlexGridSizer(0, 5, 0, 0);
 	remLabel = new wxStaticText(this, ID_STATICTEXT3, _("Reminder Frequency"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	remFlexGridSizer->Add(remLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	remTextCtrl = new wxTextCtrl(this, ID_TEXTCTRL4, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL4"));
-	remTextCtrl->SetMaxLength(2);
 	remFlexGridSizer->Add(remTextCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	timeStaticBoxSizer->Add(remFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	chkFlexGridSizer = new wxFlexGridSizer(0, 5, 0, 0);
@@ -80,7 +77,6 @@ OptionsDialog::OptionsDialog(wxWindow* parent, EWLogic* logic, wxWindowID id) : 
 	chkFlexGridSizer->Add(chkStaticText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	chkFlexGridSizer->Add(29,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	chkTextCtrl = new wxTextCtrl(this, ID_TEXTCTRL5, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL5"));
-	chkTextCtrl->SetMaxLength(2);
 	chkFlexGridSizer->Add(chkTextCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	timeStaticBoxSizer->Add(chkFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	optionsFlexGridSizer->Add(timeStaticBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -117,6 +113,8 @@ OptionsDialog::OptionsDialog(wxWindow* parent, EWLogic* logic, wxWindowID id) : 
 	optionsFlexGridSizer->SetSizeHints(this);
 	//*)
 
+	this->setFields();
+
 
 	Connect(wxID_OK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&OptionsDialog::OnOKClick);
 }
@@ -127,22 +125,41 @@ OptionsDialog::~OptionsDialog()
 	//*)
 }
 
+void OptionsDialog::setFields()
+{
+    const ConfigData& config = this->m_Logic->getConfigData();
+    this->startupCheckBox->SetValue(config.startup);
+	this->soundCheckBox->SetValue(config.soundAlarm);
+    this->tolTextCtrl->SetValue(wxString::Format(wxT("%i"), config.pauseTol));
+    this->wrkTextCtrl->SetValue(wxString::Format(wxT("%li"), config.workLength.total_seconds()));
+    this->popupCheckBox->SetValue(config.popupAlarm);
+    this->emailTextCtrl->SetValue(wxString(config.emailAddr.c_str(), wxConvUTF8));
+    this->zzzTextCtrl->SetValue(wxString::Format(wxT("%li"), config.pauseLength.total_seconds()));
+    this->chkTextCtrl->SetValue(wxString::Format(wxT("%li"), config.checkFreq.total_seconds()));
+    this->emailCheckBox->SetValue(config.emailAlarm);
+    this->remTextCtrl->SetValue(wxString::Format(wxT("%li"), config.remFreq.total_seconds()));
+}
+
+
 /// @todo: validation
 void OptionsDialog::OnOKClick(wxCommandEvent& event)
 {
-//    Config* config = EyeWatcherInt::Instance()->getConfig();
-//    //config->setWorkLength(wxAtoi(this->workingTextCtrl->GetValue()));
-//   // config->setPauseLength(wxAtoi(this->pauseTextCtrl->GetValue()));
-//   // config->setRemFreq(wxAtoi(this->reminderTextCtrl->GetValue()));
-//    config->setStartup(this->startupCheckBox->GetValue());
-//    config->setSoundAlarm(this->soundCheckBox->GetValue());
-//    config->setPopupAlarm(this->popupCheckBox->GetValue());
-//    config->setEmailAlarm(this->emailCheckBox->GetValue());
-//   // config->setCheckFreq(wxAtoi(this->checkTextCtrl->GetValue()));
-//    config->setEmailAddr(std::string(this->emailTextCtrl->GetValue().mb_str()));
-//
-//    config->save();
-//
-//    Close();
+
+    ConfigData data ={
+        boost::posix_time::seconds(wxAtoi(this->wrkTextCtrl->GetValue())),
+        boost::posix_time::seconds(wxAtoi(this->zzzTextCtrl->GetValue())),
+        boost::posix_time::seconds(wxAtoi(this->remTextCtrl->GetValue())),
+        boost::posix_time::seconds(wxAtoi(this->chkTextCtrl->GetValue())),
+        wxAtoi(this->tolTextCtrl->GetValue()),
+        this->startupCheckBox->GetValue(),
+        this->soundCheckBox->GetValue(),
+        this->popupCheckBox->GetValue(),
+        this->emailCheckBox->GetValue(),
+        std::string(this->emailTextCtrl->GetValue().mb_str())
+    };
+
+    this->m_Logic->saveConfig(data);
+
+    Close();
 }
 

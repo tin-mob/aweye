@@ -7,6 +7,7 @@
 class AbstractConfig;
 class HandlerFactory;
 class AbstractMsgHandler;
+class AbstractTimerHandler;
 class ConfigData;
 
 /// @todo: find a better name...
@@ -20,10 +21,10 @@ class EWLogic
         const ConfigData& getConfigData() const;
         void saveConfig(const ConfigData& data);
 
-        void start();
-        void stop();
+        void start(AbstractTimerHandler& timerHandler);
+        void stop(AbstractTimerHandler& timerHandler);
         void pause();
-        void updateStatus();
+        void updateStatus(AbstractTimerHandler& timerHandler);
 
         boost::posix_time::time_duration getNextStatusTimer() const;
 
