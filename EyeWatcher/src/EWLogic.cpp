@@ -5,12 +5,14 @@
 #include "AbstractTimerHandler.h"
 #include "AbstractTimeKeeper.h"
 #include "BaseException.h"
+#include "ConfigData.h"
 
 #include <sstream>
 #include <iomanip>
+#include <stdlib.h>
 
 EWLogic::EWLogic(AbstractMsgHandler* msgHandler, AbstractConfig* config, AbstractTimeKeeper* keeper)
-    : m_Warn(true), m_Config(config), m_TimeKeeper(keeper), m_MsgHandler(msgHandler)
+    :  m_LateMsg("Time for a pause!"), m_Warn(true), m_Config(config), m_TimeKeeper(keeper), m_MsgHandler(msgHandler)
 {
 }
 
@@ -58,6 +60,11 @@ void EWLogic::updateStatus(AbstractTimerHandler& timerHandler)
     {
         this->m_TimeKeeper->updateStatus();
         timerHandler.Start(this->getNextStatusTimer().total_milliseconds(), true);
+
+        if (this->m_TimeKeeper->isLate() && this->m_TimeKeeper->getStatus() == AbstractTimeKeeper::HERE)
+        {
+            this->alert();
+        }
     }
     catch (BaseException e)
     {
@@ -83,9 +90,14 @@ std::string EWLogic::durationToString(boost::posix_time::time_duration duration)
         return "00:00:00";
     }
     std::stringstream out;
+    if (duration.seconds() < 0)
+    {
+        out << "-";
+    }
+
     out << std::setw(2) << std::setfill('0') << duration.hours() << ":" << std::setw(2)
     << std::setfill('0') << duration.minutes() << ":" << std::setw(2)
-    << std::setfill('0') << duration.seconds();
+    << std::setfill('0') << abs(duration.seconds());
     return out.str();
 }
 
@@ -111,4 +123,23 @@ std::string EWLogic::getTimeLeft() const
 {
     const boost::posix_time::time_duration stamp = this->m_TimeKeeper->getTimeLeft();
     return EWLogic::durationToString(stamp);
+}
+
+void EWLogic::alert()
+{
+    const ConfigData& config = this->m_Config->getData();
+    if (config.popupAlarm)
+    {
+        this->m_MsgHandler->displayAlert(m_LateMsg);
+    }
+
+    if (config.soundAlarm)
+    {
+        ///@todo
+    }
+
+    if (config.emailAlarm)
+    {
+        ///@todo
+    }
 }

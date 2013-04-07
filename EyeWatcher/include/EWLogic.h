@@ -34,9 +34,13 @@ class EWLogic
         std::string getTimeRunning() const;
         std::string getTimeLeft() const;
 
+        const std::string m_LateMsg;
+
     protected:
     private:
         static std::string durationToString(boost::posix_time::time_duration duration);
+
+        void alert();
 
         bool m_Warn;
         AbstractConfig* m_Config;

@@ -75,9 +75,11 @@ SUITE(TestEWLogic)
         TimerHandlerStub timerHandler;
         CHECK_EQUAL(timerHandler.running, false);
         CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
+
         logic->start(timerHandler);
         CHECK_EQUAL(timerHandler.running, true);
         CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::HERE));
+
         logic->stop(timerHandler);
         CHECK_EQUAL(timerHandler.running, false);
         CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
@@ -94,7 +96,12 @@ SUITE(TestEWLogic)
         CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
         logic->updateStatus(timerHandler);
         CHECK_EQUAL(timerHandler.running, true);
-        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::AWAY));
+        CHECK_EQUAL(logic->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::HERE));
+        CHECK_EQUAL(msgHandler->lastAlert, "");
+
+        keeper->late = true;
+        logic->updateStatus(timerHandler);
+        CHECK_EQUAL(msgHandler->lastAlert, logic->m_LateMsg);
 
         keeper->fail = true;
         CHECK_EQUAL(msgHandler->lastError, "");

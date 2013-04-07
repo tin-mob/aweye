@@ -9,6 +9,7 @@ class MsgHandler : public AbstractMsgHandler
         MsgHandler();
         virtual ~MsgHandler();
         virtual void displayError(std::string msg);
+        virtual void displayAlert(std::string msg);
     protected:
     private:
 };
