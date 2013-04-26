@@ -14,17 +14,22 @@ struct EWLogicFixture
                 boost::posix_time::seconds(2), ConfigData::default_PauseTol, ConfigData::default_Startup, ConfigData::default_SoundAlarm,
                 ConfigData::default_PopupAlarm, ConfigData::default_EmailAlarm, ConfigData::default_EmailAddr};
 
-            this->config = new ConfigStub(data);
-            this->msgHandler = new MsgHandlerStub();
-            this->keeper = new TimeKeeperStub();
-            this->logic = new EWLogic(this->msgHandler, this->config, this->keeper);
+            try
+            {
+                this->config = new ConfigStub(data);
+                this->msgHandler = new MsgHandlerStub();
+                this->keeper = new TimeKeeperStub();
+                this->logic = new EWLogic(this->msgHandler, this->config, this->keeper);
+            }
+            catch (...)
+            {
+                this->deleteFixture();
+                throw;
+            }
         }
         ~EWLogicFixture()
         {
-            if (this->config != NULL) {delete this->config;}
-            if (this->msgHandler != NULL) {delete this->msgHandler;}
-            if (this->keeper != NULL) {delete this->keeper;}
-            if (this->logic != NULL) {delete this->logic;}
+            this->deleteFixture();
         }
 
         ConfigData data;
@@ -35,6 +40,13 @@ struct EWLogicFixture
 
     protected:
     private:
+        void deleteFixture()
+        {
+            if (this->config != NULL) {delete this->config;}
+            if (this->msgHandler != NULL) {delete this->msgHandler;}
+            if (this->keeper != NULL) {delete this->keeper;}
+            if (this->logic != NULL) {delete this->logic;}
+        }
 };
 
 SUITE(TestEWLogic)

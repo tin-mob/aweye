@@ -14,17 +14,22 @@ struct TimeKeeperFixture
                 boost::posix_time::seconds(2), ConfigData::default_PauseTol, ConfigData::default_Startup, ConfigData::default_SoundAlarm,
                 ConfigData::default_PopupAlarm, ConfigData::default_EmailAlarm, ConfigData::default_EmailAddr};
 
-            this->config = new ConfigStub(data);
-            this->timeHandler = new TimeHandlerStub(boost::posix_time::second_clock::local_time());
-            this->presenceHandler = new PresenceHandlerStub();
-            this->keeper = new TimeKeeper(this->config, this->timeHandler, this->presenceHandler);
+            try
+            {
+                this->config = new ConfigStub(data);
+                this->timeHandler = new TimeHandlerStub(boost::posix_time::second_clock::local_time());
+                this->presenceHandler = new PresenceHandlerStub();
+                this->keeper = new TimeKeeper(this->config, this->timeHandler, this->presenceHandler);
+            }
+            catch (...)
+            {
+                this->deleteFixture();
+                throw;
+            }
         }
         ~TimeKeeperFixture()
         {
-            if (this->keeper != NULL) {delete this->keeper;}
-            if (this->config != NULL) {delete this->config;}
-            if (this->timeHandler != NULL) {delete this->timeHandler;}
-            if (this->presenceHandler != NULL) {delete this->presenceHandler;}
+            deleteFixture();
         }
 
         ConfigData data;
@@ -35,6 +40,15 @@ struct TimeKeeperFixture
 
     protected:
     private:
+
+        void deleteFixture()
+        {
+            if (this->keeper != NULL) {delete this->keeper;}
+            if (this->config != NULL) {delete this->config;}
+            if (this->timeHandler != NULL) {delete this->timeHandler;}
+            if (this->presenceHandler != NULL) {delete this->presenceHandler;}
+        }
+
 };
 
 SUITE(TestTimeKeeper)
