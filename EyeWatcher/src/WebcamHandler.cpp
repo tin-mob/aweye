@@ -1,4 +1,5 @@
 #include "WebcamHandler.h"
+#include "AbstractMsgHandler.h"
 #include <boost/filesystem.hpp>
 
 /// @todo: find a way to manage paths (Win/Linux)

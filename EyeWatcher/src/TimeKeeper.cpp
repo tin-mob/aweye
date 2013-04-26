@@ -107,5 +107,8 @@ void TimeKeeper::setStatus(Status status)
     this->m_CurrentState = status;
 
     TKState* state = this->m_States.find(this->m_CurrentState)->second;
+
+    // Note: the timestamp is the first recorded time when the status is changed,
+    // not the time of the last occurance of the last state.
     return state->updateTimeStamps(this);
 }

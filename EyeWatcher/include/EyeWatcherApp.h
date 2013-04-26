@@ -10,14 +10,9 @@
 #ifndef EYEWATCHERAPP_H
 #define EYEWATCHERAPP_H
 
-#include <wx/app.h>
+#include "EWBuilder.h"
 
-#include "Config.h"
-#include "MsgHandler.h"
-#include "WebcamHandler.h"
-#include "TimeHandler.h"
-#include "TimeKeeper.h"
-#include "EWLogic.h"
+#include <wx/app.h>
 
 class EyeWatcherApp : public wxApp
 {
@@ -26,12 +21,7 @@ class EyeWatcherApp : public wxApp
        ~EyeWatcherApp();
         virtual bool OnInit();
     private:
-        Config m_Config;
-        TimeHandler m_TimeHandler;
-        WebcamHandler m_PresenceHandler;
-        MsgHandler m_MsgHandler;
-        TimeKeeper m_TimeKeeper;
-        EWLogic m_Logic;
+        EWBuilder* m_Builder;
 };
 
 #endif // EYEWATCHERAPP_H

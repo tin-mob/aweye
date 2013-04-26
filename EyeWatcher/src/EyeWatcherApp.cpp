@@ -17,15 +17,13 @@
 
 IMPLEMENT_APP(EyeWatcherApp);
 
-EyeWatcherApp::EyeWatcherApp() : m_Config(), m_TimeHandler(), m_PresenceHandler(), m_MsgHandler(),
-    m_TimeKeeper(&m_Config, &m_TimeHandler, &m_PresenceHandler),
-    m_Logic(&m_MsgHandler, &m_Config, &m_TimeKeeper)
+EyeWatcherApp::EyeWatcherApp() : m_Builder(NULL)
 {
 }
 
 EyeWatcherApp::~EyeWatcherApp()
 {
-
+    if (this->m_Builder != NULL) delete this->m_Builder;
 }
 
 bool EyeWatcherApp::OnInit()
@@ -35,9 +33,10 @@ bool EyeWatcherApp::OnInit()
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
-    	EWMainFrame* Frame = new EWMainFrame(0, &m_Logic);
-    	Frame->Show();
-    	SetTopWindow(Frame);
+        if (this->m_Builder == NULL) this->m_Builder = new EWBuilder();
+        EWMainFrame* Frame = new EWMainFrame(0, this->m_Builder->m_Logic);
+        Frame->Show();
+        SetTopWindow(Frame);
     }
     //*)
     return wxsOK;
