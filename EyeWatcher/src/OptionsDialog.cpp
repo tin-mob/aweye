@@ -1,6 +1,6 @@
 #include "wx_pch.h"
 #include "OptionsDialog.h"
-#include "EWLogic.h"
+#include "EWPresenter.h"
 #include "Config.h"
 
 #ifndef WX_PRECOMP
@@ -36,7 +36,7 @@ BEGIN_EVENT_TABLE(OptionsDialog,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-OptionsDialog::OptionsDialog(wxWindow* parent, EWLogic* logic, wxWindowID id) : m_Logic(logic)
+OptionsDialog::OptionsDialog(wxWindow* parent, EWPresenter* presenter, wxWindowID id) : m_Presenter(presenter)
 {
 	//(*Initialize(OptionsDialog)
 	wxFlexGridSizer* wrkFlexGridSizer;
@@ -127,7 +127,7 @@ OptionsDialog::~OptionsDialog()
 
 void OptionsDialog::setFields()
 {
-    const ConfigData& config = this->m_Logic->getConfigData();
+    const ConfigData& config = this->m_Presenter->getConfigData();
     this->startupCheckBox->SetValue(config.startup);
 	this->soundCheckBox->SetValue(config.soundAlarm);
     this->tolTextCtrl->SetValue(wxString::Format(wxT("%i"), config.pauseTol));
@@ -158,7 +158,7 @@ void OptionsDialog::OnOKClick(wxCommandEvent& event)
         std::string(this->emailTextCtrl->GetValue().mb_str())
     };
 
-    this->m_Logic->saveConfig(data);
+    this->m_Presenter->saveConfig(data);
 
     Close();
 }

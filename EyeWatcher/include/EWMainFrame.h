@@ -19,14 +19,14 @@
 //*)
 #include <wx/valgen.h>
 
-#include "EWLogic.h"
+#include "EWPresenter.h"
 #include "WxHandlerFactory.h"
 
 class EWMainFrame: public wxFrame
 {
     public:
 
-        EWMainFrame(wxWindow* parent, EWLogic* logic, wxWindowID id = -1);
+        EWMainFrame(wxWindow* parent, EWPresenter* presenter, wxWindowID id = -1);
         virtual ~EWMainFrame();
 
         virtual void updateTimes();
@@ -83,7 +83,7 @@ class EWMainFrame: public wxFrame
         wxButton* aboutButton;
         //*)
 
-        EWLogic* m_Logic;
+        EWPresenter* m_Presenter;
 
         DECLARE_EVENT_TABLE()
 };

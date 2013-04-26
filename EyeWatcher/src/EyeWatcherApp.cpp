@@ -34,7 +34,7 @@ bool EyeWatcherApp::OnInit()
     if ( wxsOK )
     {
         if (this->m_Builder == NULL) this->m_Builder = new EWBuilder();
-        EWMainFrame* Frame = new EWMainFrame(0, this->m_Builder->m_Logic);
+        EWMainFrame* Frame = new EWMainFrame(0, this->m_Builder->m_Presenter);
         Frame->Show();
         SetTopWindow(Frame);
     }

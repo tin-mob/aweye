@@ -1,5 +1,5 @@
-#ifndef EWLOGIC_H
-#define EWLOGIC_H
+#ifndef EWPRESENTER_H
+#define EWPRESENTER_H
 
 #include <string>
 #include "AbstractTimeKeeper.h"
@@ -12,11 +12,11 @@ class ConfigData;
 
 /// @todo: find a better name...
 /// break into MainPresenter/AboutPresenter?
-class EWLogic
+class EWPresenter
 {
     public:
-        EWLogic(AbstractMsgHandler* msgHandler, AbstractConfig* config, AbstractTimeKeeper* keeper);
-        virtual ~EWLogic();
+        EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config, AbstractTimeKeeper* keeper);
+        virtual ~EWPresenter();
 
         const ConfigData& getConfigData() const;
         void saveConfig(const ConfigData& data);
@@ -48,4 +48,4 @@ class EWLogic
         AbstractMsgHandler* m_MsgHandler;
 };
 
-#endif // EWLOGIC_H
+#endif // EWPRESENTER_H

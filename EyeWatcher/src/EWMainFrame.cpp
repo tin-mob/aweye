@@ -71,7 +71,7 @@ BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
     //*)
 END_EVENT_TABLE()
 
-EWMainFrame::EWMainFrame(wxWindow* parent, EWLogic* logic, wxWindowID id) : m_Logic(logic)
+EWMainFrame::EWMainFrame(wxWindow* parent, EWPresenter* presenter, wxWindowID id) : m_Presenter(presenter)
 {
     //(*Initialize(EWMainFrame)
     wxBoxSizer* buttonsBoxSizer;
@@ -145,11 +145,11 @@ EWMainFrame::EWMainFrame(wxWindow* parent, EWLogic* logic, wxWindowID id) : m_Lo
 
 void EWMainFrame::updateTimes()
 {
-    this->StatusLabel->SetLabel(wxString(this->m_Logic->getStatus().c_str(), wxConvUTF8));
-    this->onClock->SetLabel(wxString(this->m_Logic->getTimeOn().c_str(), wxConvUTF8));
-    this->offClock->SetLabel(wxString(this->m_Logic->getTimeOff().c_str(), wxConvUTF8));
-    this->runningClock->SetLabel(wxString(this->m_Logic->getTimeRunning().c_str(), wxConvUTF8));
-    this->leftClock->SetLabel(wxString(this->m_Logic->getTimeLeft().c_str(), wxConvUTF8));
+    this->StatusLabel->SetLabel(wxString(this->m_Presenter->getStatus().c_str(), wxConvUTF8));
+    this->onClock->SetLabel(wxString(this->m_Presenter->getTimeOn().c_str(), wxConvUTF8));
+    this->offClock->SetLabel(wxString(this->m_Presenter->getTimeOff().c_str(), wxConvUTF8));
+    this->runningClock->SetLabel(wxString(this->m_Presenter->getTimeRunning().c_str(), wxConvUTF8));
+    this->leftClock->SetLabel(wxString(this->m_Presenter->getTimeLeft().c_str(), wxConvUTF8));
 }
 
 EWMainFrame::~EWMainFrame()
@@ -173,7 +173,7 @@ void EWMainFrame::OnOptionsButtonClick(wxCommandEvent& event)
 {
     try
     {
-        OptionsDialog dialog(this, m_Logic);
+        OptionsDialog dialog(this, m_Presenter);
         dialog.ShowModal();
     }
     catch (BaseException e)
@@ -193,13 +193,13 @@ void EWMainFrame::OnaboutButtonClick(wxCommandEvent& event)
 void EWMainFrame::OnPlayButtonClick(wxCommandEvent& event)
 {
     wxTimerHandler handler(&this->checkTimer);
-    this->m_Logic->start(handler);
+    this->m_Presenter->start(handler);
 }
 
 void EWMainFrame::OnStopButtonClick(wxCommandEvent& event)
 {
     wxTimerHandler handler(&this->checkTimer);
-    this->m_Logic->stop(handler);
+    this->m_Presenter->stop(handler);
 }
 
 void EWMainFrame::OnClockTimerTrigger(wxTimerEvent& event)
@@ -210,7 +210,7 @@ void EWMainFrame::OnClockTimerTrigger(wxTimerEvent& event)
 void EWMainFrame::OnCheckTimerTrigger(wxTimerEvent& event)
 {
     wxTimerHandler handler(&this->checkTimer);
-    this->m_Logic->updateStatus(handler);
+    this->m_Presenter->updateStatus(handler);
 }
 
 void EWMainFrame::OnClose(wxCloseEvent& event)
