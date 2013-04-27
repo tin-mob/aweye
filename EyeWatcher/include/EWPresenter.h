@@ -8,18 +8,18 @@ class AbstractConfig;
 class HandlerFactory;
 class AbstractMsgHandler;
 class AbstractTimerHandler;
+class AbstractOptionsDialog;
 class ConfigData;
 
-/// @todo: find a better name...
-/// break into MainPresenter/AboutPresenter?
+/// @todo: break into MainPresenter/ConfigPresenter?
 class EWPresenter
 {
     public:
         EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config, AbstractTimeKeeper* keeper);
         virtual ~EWPresenter();
 
-        const ConfigData& getConfigData() const;
-        void saveConfig(const ConfigData& data);
+        void saveConfig(const AbstractOptionsDialog* dialog);
+        void loadConfig(AbstractOptionsDialog* dialog);
 
         void start(AbstractTimerHandler& timerHandler);
         void stop(AbstractTimerHandler& timerHandler);

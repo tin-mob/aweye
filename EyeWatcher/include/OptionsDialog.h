@@ -15,13 +15,17 @@
 
 #include "EWPresenter.h"
 #include "WxHandlerFactory.h"
+#include "AbstractOptionsDialog.h"
 
-class OptionsDialog: public wxDialog
+class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 {
 	public:
 
 		OptionsDialog(wxWindow* parent, EWPresenter* presenter, wxWindowID id=wxID_ANY);
 		virtual ~OptionsDialog();
+
+        virtual ConfigData getData() const;
+        virtual void setData(const ConfigData& data);
 
 		//(*Declarations(OptionsDialog)
 		wxStaticText* workingLabel;
@@ -62,8 +66,6 @@ class OptionsDialog: public wxDialog
 		//*)
 
 	private:
-
-        void setFields();
 
 		//(*Handlers(OptionsDialog)
 		//*)

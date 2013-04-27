@@ -22,6 +22,7 @@ WebcamHandler::~WebcamHandler()
 }
 
 /// @todo: face size (minSize last param)
+/// @todo: test away state (seems to me there are false positives...)
 bool WebcamHandler::isHere()
 {
     cv::VideoCapture videoCapture(this->m_index);

@@ -1,6 +1,7 @@
 #include "wx_pch.h"
 #include "OptionsDialog.h"
 #include "EWPresenter.h"
+#include "AbstractOptionsDialog.h"
 #include "Config.h"
 
 #ifndef WX_PRECOMP
@@ -113,8 +114,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, EWPresenter* presenter, wxWindowI
 	optionsFlexGridSizer->SetSizeHints(this);
 	//*)
 
-	this->setFields();
-
+	this->m_Presenter->loadConfig(this);
 
 	Connect(wxID_OK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&OptionsDialog::OnOKClick);
 }
@@ -125,27 +125,9 @@ OptionsDialog::~OptionsDialog()
 	//*)
 }
 
-void OptionsDialog::setFields()
+ConfigData OptionsDialog::getData() const
 {
-    const ConfigData& config = this->m_Presenter->getConfigData();
-    this->startupCheckBox->SetValue(config.startup);
-	this->soundCheckBox->SetValue(config.soundAlarm);
-    this->tolTextCtrl->SetValue(wxString::Format(wxT("%i"), config.pauseTol));
-    this->wrkTextCtrl->SetValue(wxString::Format(wxT("%li"), config.workLength.total_seconds()));
-    this->popupCheckBox->SetValue(config.popupAlarm);
-    this->emailTextCtrl->SetValue(wxString(config.emailAddr.c_str(), wxConvUTF8));
-    this->zzzTextCtrl->SetValue(wxString::Format(wxT("%li"), config.pauseLength.total_seconds()));
-    this->chkTextCtrl->SetValue(wxString::Format(wxT("%li"), config.checkFreq.total_seconds()));
-    this->emailCheckBox->SetValue(config.emailAlarm);
-    this->remTextCtrl->SetValue(wxString::Format(wxT("%li"), config.remFreq.total_seconds()));
-}
-
-
-/// @todo: validation
-void OptionsDialog::OnOKClick(wxCommandEvent& event)
-{
-
-    ConfigData data ={
+    return {
         boost::posix_time::seconds(wxAtoi(this->wrkTextCtrl->GetValue())),
         boost::posix_time::seconds(wxAtoi(this->zzzTextCtrl->GetValue())),
         boost::posix_time::seconds(wxAtoi(this->remTextCtrl->GetValue())),
@@ -157,9 +139,26 @@ void OptionsDialog::OnOKClick(wxCommandEvent& event)
         this->emailCheckBox->GetValue(),
         std::string(this->emailTextCtrl->GetValue().mb_str())
     };
+}
 
-    this->m_Presenter->saveConfig(data);
+void OptionsDialog::setData(const ConfigData& data)
+{
+    this->startupCheckBox->SetValue(data.startup);
+	this->soundCheckBox->SetValue(data.soundAlarm);
+    this->tolTextCtrl->SetValue(wxString::Format(wxT("%i"), data.pauseTol));
+    this->wrkTextCtrl->SetValue(wxString::Format(wxT("%li"), data.workLength.total_seconds()));
+    this->popupCheckBox->SetValue(data.popupAlarm);
+    this->emailTextCtrl->SetValue(wxString(data.emailAddr.c_str(), wxConvUTF8));
+    this->zzzTextCtrl->SetValue(wxString::Format(wxT("%li"), data.pauseLength.total_seconds()));
+    this->chkTextCtrl->SetValue(wxString::Format(wxT("%li"), data.checkFreq.total_seconds()));
+    this->emailCheckBox->SetValue(data.emailAlarm);
+    this->remTextCtrl->SetValue(wxString::Format(wxT("%li"), data.remFreq.total_seconds()));
+}
 
+/// @todo: validation
+void OptionsDialog::OnOKClick(wxCommandEvent& event)
+{
+    this->m_Presenter->saveConfig(this);
     Close();
 }
 

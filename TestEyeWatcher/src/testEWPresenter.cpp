@@ -1,6 +1,7 @@
 #include <unittest++/UnitTest++.h>
 #include "EWPresenter.h"
 #include "ConfigStub.h"
+#include "ConfigDialogStub.h"
 #include "MsgHandlerStub.h"
 #include "TimeKeeperStub.h"
 #include "TimerHandlerStub.h"
@@ -19,6 +20,7 @@ struct EWPresenterFixture
                 this->config = new ConfigStub(data);
                 this->msgHandler = new MsgHandlerStub();
                 this->keeper = new TimeKeeperStub();
+                this->dialog = new OptionsDialogStub();
                 this->presenter = new EWPresenter(this->msgHandler, this->config, this->keeper);
             }
             catch (...)
@@ -36,6 +38,7 @@ struct EWPresenterFixture
         ConfigStub* config;
         MsgHandlerStub* msgHandler;
         TimeKeeperStub* keeper;
+        OptionsDialogStub* dialog;
         EWPresenter* presenter;
 
     protected:
@@ -45,6 +48,7 @@ struct EWPresenterFixture
             if (this->config != NULL) {delete this->config;}
             if (this->msgHandler != NULL) {delete this->msgHandler;}
             if (this->keeper != NULL) {delete this->keeper;}
+            if (this->dialog != NULL) {delete this->dialog;}
             if (this->presenter != NULL) {delete this->presenter;}
         }
 };
@@ -53,33 +57,20 @@ SUITE(TestEWPresenter)
 {
     TEST_FIXTURE(EWPresenterFixture, TestConfig)
     {
-        const boost::posix_time::time_duration test_WorkLength = ConfigData::default_WorkLength + boost::posix_time::seconds(1);
-        const boost::posix_time::time_duration test_PauseLength = ConfigData::default_PauseLength + boost::posix_time::seconds(1);
-        const boost::posix_time::time_duration test_RemFreq = ConfigData::default_RemFreq + boost::posix_time::seconds(1);
-        const boost::posix_time::time_duration test_CheckFreq = ConfigData::default_CheckFreq + boost::posix_time::seconds(1);
-        const unsigned int test_PauseTol = ConfigData::default_PauseTol + 1;
-        const bool test_Startup = !ConfigData::default_Startup;
-        const bool test_SoundAlarm = !ConfigData::default_SoundAlarm;
-        const bool test_PopupAlarm = !ConfigData::default_PopupAlarm;
-        const bool test_EmailAlarm = !ConfigData::default_EmailAlarm;
-        const std::string test_EmailAddr = "test@test.test";
+        presenter->loadConfig(dialog);
+        presenter->saveConfig(dialog);
 
-        ConfigData newData = {test_WorkLength, test_PauseLength, test_RemFreq, test_CheckFreq, test_PauseTol,
-            test_Startup, test_SoundAlarm, test_PopupAlarm, test_EmailAlarm, test_EmailAddr};
-
-        presenter->saveConfig(newData);
-        ConfigData returnedData = presenter->getConfigData();
-
-        CHECK_EQUAL(test_WorkLength, returnedData.workLength);
-        CHECK_EQUAL(test_PauseLength, returnedData.pauseLength);
-        CHECK_EQUAL(test_RemFreq, returnedData.remFreq);
-        CHECK_EQUAL(test_CheckFreq, returnedData.checkFreq);
-        CHECK_EQUAL(test_PauseTol, returnedData.pauseTol);
-        CHECK_EQUAL(test_Startup, returnedData.startup);
-        CHECK_EQUAL(test_SoundAlarm, returnedData.soundAlarm);
-        CHECK_EQUAL(test_PopupAlarm, returnedData.popupAlarm);
-        CHECK_EQUAL(test_EmailAlarm, returnedData.emailAlarm);
-        CHECK_EQUAL(test_EmailAddr, returnedData.emailAddr);
+        ConfigData returnedData = dialog->getData();
+        CHECK_EQUAL(data.workLength, returnedData.workLength);
+        CHECK_EQUAL(data.pauseLength, returnedData.pauseLength);
+        CHECK_EQUAL(data.remFreq, returnedData.remFreq);
+        CHECK_EQUAL(data.checkFreq, returnedData.checkFreq);
+        CHECK_EQUAL(data.pauseTol, returnedData.pauseTol);
+        CHECK_EQUAL(data.startup, returnedData.startup);
+        CHECK_EQUAL(data.soundAlarm, returnedData.soundAlarm);
+        CHECK_EQUAL(data.popupAlarm, returnedData.popupAlarm);
+        CHECK_EQUAL(data.emailAlarm, returnedData.emailAlarm);
+        CHECK_EQUAL(data.emailAddr, returnedData.emailAddr);
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestStartStop)

@@ -4,6 +4,7 @@
 #include "AbstractMsgHandler.h"
 #include "AbstractTimerHandler.h"
 #include "AbstractTimeKeeper.h"
+#include "AbstractOptionsDialog.h"
 #include "BaseException.h"
 #include "ConfigData.h"
 
@@ -20,14 +21,14 @@ EWPresenter::~EWPresenter()
 {
 }
 
-const ConfigData& EWPresenter::getConfigData() const
+void EWPresenter::saveConfig(const AbstractOptionsDialog* dialog)
 {
-    return this->m_Config->getData();
+    this->m_Config->save(dialog->getData());
 }
 
-void EWPresenter::saveConfig(const ConfigData& data)
+void EWPresenter::loadConfig(AbstractOptionsDialog* dialog)
 {
-    this->m_Config->save(data);
+    dialog->setData(this->m_Config->getData());
 }
 
 void EWPresenter::start(AbstractTimerHandler& timerHandler)
