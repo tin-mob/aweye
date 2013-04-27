@@ -1,10 +1,10 @@
 #include <unittest++/UnitTest++.h>
 #include "EWPresenter.h"
 #include "ConfigStub.h"
+#include "EWMainFrameStub.h"
 #include "ConfigDialogStub.h"
 #include "MsgHandlerStub.h"
 #include "TimeKeeperStub.h"
-#include "TimerHandlerStub.h"
 
 struct EWPresenterFixture
 {
@@ -20,6 +20,7 @@ struct EWPresenterFixture
                 this->config = new ConfigStub(data);
                 this->msgHandler = new MsgHandlerStub();
                 this->keeper = new TimeKeeperStub();
+                this->frame = new EWMainFrameStub();
                 this->dialog = new OptionsDialogStub();
                 this->presenter = new EWPresenter(this->msgHandler, this->config, this->keeper);
             }
@@ -38,6 +39,7 @@ struct EWPresenterFixture
         ConfigStub* config;
         MsgHandlerStub* msgHandler;
         TimeKeeperStub* keeper;
+        EWMainFrameStub* frame;
         OptionsDialogStub* dialog;
         EWPresenter* presenter;
 
@@ -58,6 +60,9 @@ SUITE(TestEWPresenter)
     TEST_FIXTURE(EWPresenterFixture, TestConfig)
     {
         presenter->loadConfig(dialog);
+
+        /// @todo : different values
+
         presenter->saveConfig(dialog);
 
         ConfigData returnedData = dialog->getData();
@@ -75,62 +80,61 @@ SUITE(TestEWPresenter)
 
     TEST_FIXTURE(EWPresenterFixture, TestStartStop)
     {
-        TimerHandlerStub timerHandler;
-        CHECK_EQUAL(timerHandler.running, false);
-        CHECK_EQUAL(presenter->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
+        CHECK_EQUAL(frame->running, false);
+        presenter->updateTimes(frame);
+        CHECK_EQUAL(frame->status, AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
 
-        presenter->start(timerHandler);
-        CHECK_EQUAL(timerHandler.running, true);
-        CHECK_EQUAL(presenter->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::HERE));
+        presenter->start(frame);
+        presenter->updateTimes(frame);
+        CHECK_EQUAL(frame->running, true);
+        CHECK_EQUAL(frame->status, AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::HERE));
 
-        presenter->stop(timerHandler);
-        CHECK_EQUAL(timerHandler.running, false);
-        CHECK_EQUAL(presenter->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
+        presenter->stop(frame);
+        presenter->updateTimes(frame);
+        CHECK_EQUAL(frame->running, false);
+        CHECK_EQUAL(frame->status, AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
 
         keeper->fail = true;
         CHECK_EQUAL(msgHandler->lastError, "");
-        presenter->start(timerHandler);
+        presenter->start(frame);
+        presenter->updateTimes(frame);
         CHECK_EQUAL(msgHandler->lastError, "Testing!");
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestUpdate)
     {
-        TimerHandlerStub timerHandler;
-        CHECK_EQUAL(presenter->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
-        presenter->updateStatus(timerHandler);
-        CHECK_EQUAL(timerHandler.running, true);
-        CHECK_EQUAL(presenter->getStatus(), AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::HERE));
+        presenter->updateTimes(frame);
+        CHECK_EQUAL(frame->status, AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::OFF));
+        presenter->updateStatus(frame);
+        presenter->updateTimes(frame);
+        CHECK_EQUAL(frame->running, true);
+        CHECK_EQUAL(frame->lastTotal, 1000);
+        CHECK_EQUAL(frame->status, AbstractTimeKeeper::getStatusStr(AbstractTimeKeeper::HERE));
+        CHECK_EQUAL(frame->onClock, "10:59:00");
+        CHECK_EQUAL(frame->offClock, "11:31:01");
+        CHECK_EQUAL(frame->runningClock, "00:00:02");
+        CHECK_EQUAL(frame->leftClock, "00:03:00");
         CHECK_EQUAL(msgHandler->lastAlert, "");
-
-        keeper->late = true;
-        presenter->updateStatus(timerHandler);
-        CHECK_EQUAL(msgHandler->lastAlert, presenter->m_LateMsg);
-
-        keeper->fail = true;
-        CHECK_EQUAL(msgHandler->lastError, "");
-        presenter->updateStatus(timerHandler);
-        CHECK_EQUAL(msgHandler->lastError, "Testing!");
-    }
-
-    TEST_FIXTURE(EWPresenterFixture, TestGetNextStatusTimer)
-    {
-        CHECK_EQUAL(presenter->getNextStatusTimer(), boost::posix_time::seconds(1));
-    }
-
-    TEST_FIXTURE(EWPresenterFixture, TestTimes)
-    {
-        CHECK_EQUAL(presenter->getTimeOn(), "10:59:00");
-        CHECK_EQUAL(presenter->getTimeOff(), "11:31:01");
-        CHECK_EQUAL(presenter->getTimeRunning(), "00:00:02");
-        CHECK_EQUAL(presenter->getTimeLeft(), "00:03:00");
 
         keeper->hereStamp = boost::posix_time::not_a_date_time;
         keeper->awayStamp = boost::posix_time::not_a_date_time;
         keeper->interval = boost::posix_time::not_a_date_time;
         keeper->left = boost::posix_time::not_a_date_time;
-        CHECK_EQUAL(presenter->getTimeOn(), "00:00:00");
-        CHECK_EQUAL(presenter->getTimeOff(), "00:00:00");
-        CHECK_EQUAL(presenter->getTimeRunning(), "00:00:00");
-        CHECK_EQUAL(presenter->getTimeLeft(), "00:00:00");
+
+        presenter->updateStatus(frame);
+        presenter->updateTimes(frame);
+        CHECK_EQUAL(frame->onClock, "00:00:00");
+        CHECK_EQUAL(frame->offClock, "00:00:00");
+        CHECK_EQUAL(frame->runningClock, "00:00:00");
+        CHECK_EQUAL(frame->leftClock, "00:00:00");
+
+        keeper->late = true;
+        presenter->updateStatus(frame);
+        CHECK_EQUAL(msgHandler->lastAlert, presenter->m_LateMsg);
+
+        keeper->fail = true;
+        CHECK_EQUAL(msgHandler->lastError, "");
+        presenter->updateStatus(frame);
+        CHECK_EQUAL(msgHandler->lastError, "Testing!");
     }
 }

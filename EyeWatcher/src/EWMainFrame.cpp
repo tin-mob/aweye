@@ -14,7 +14,6 @@
 #include <wx/msgdlg.h>
 #include <wx/valgen.h>
 #include "BaseException.h"
-#include "wxTimerHandler.h"
 
 //(*InternalHeaders(EWMainFrame)
 #include <wx/string.h>
@@ -140,16 +139,28 @@ EWMainFrame::EWMainFrame(wxWindow* parent, EWPresenter* presenter, wxWindowID id
     Connect(ID_TIMER2,wxEVT_TIMER,(wxObjectEventFunction)&EWMainFrame::OnCheckTimerTrigger);
     //*)
 
-    this->updateTimes();
+    this->m_Presenter->updateTimes(this);
 }
 
-void EWMainFrame::updateTimes()
+void EWMainFrame::setValues( std::string status, std::string onClock,
+                            std::string offClock, std::string runningClock,
+                            std::string leftClock)
 {
-    this->StatusLabel->SetLabel(wxString(this->m_Presenter->getStatus().c_str(), wxConvUTF8));
-    this->onClock->SetLabel(wxString(this->m_Presenter->getTimeOn().c_str(), wxConvUTF8));
-    this->offClock->SetLabel(wxString(this->m_Presenter->getTimeOff().c_str(), wxConvUTF8));
-    this->runningClock->SetLabel(wxString(this->m_Presenter->getTimeRunning().c_str(), wxConvUTF8));
-    this->leftClock->SetLabel(wxString(this->m_Presenter->getTimeLeft().c_str(), wxConvUTF8));
+    this->StatusLabel->SetLabel(wxString(status.c_str(), wxConvUTF8));
+    this->onClock->SetLabel(wxString(onClock.c_str(), wxConvUTF8));
+    this->offClock->SetLabel(wxString(offClock.c_str(), wxConvUTF8));
+    this->runningClock->SetLabel(wxString(runningClock.c_str(), wxConvUTF8));
+    this->leftClock->SetLabel(wxString(leftClock.c_str(), wxConvUTF8));
+}
+
+void EWMainFrame::startTimer(long total_milliseconds)
+{
+    this->checkTimer.Start(total_milliseconds, true);
+}
+
+void EWMainFrame::stopTimer()
+{
+    this->checkTimer.Stop();
 }
 
 EWMainFrame::~EWMainFrame()
@@ -176,6 +187,7 @@ void EWMainFrame::OnOptionsButtonClick(wxCommandEvent& event)
         OptionsDialog dialog(this, m_Presenter);
         dialog.ShowModal();
     }
+    /// @todo: move this away from view?
     catch (BaseException e)
     {
         wxMessageDialog *dial = new wxMessageDialog(NULL,
@@ -192,25 +204,22 @@ void EWMainFrame::OnaboutButtonClick(wxCommandEvent& event)
 
 void EWMainFrame::OnPlayButtonClick(wxCommandEvent& event)
 {
-    wxTimerHandler handler(&this->checkTimer);
-    this->m_Presenter->start(handler);
+    this->m_Presenter->start(this);
 }
 
 void EWMainFrame::OnStopButtonClick(wxCommandEvent& event)
 {
-    wxTimerHandler handler(&this->checkTimer);
-    this->m_Presenter->stop(handler);
+    this->m_Presenter->stop(this);
 }
 
 void EWMainFrame::OnClockTimerTrigger(wxTimerEvent& event)
 {
-    this->updateTimes();
+    this->m_Presenter->updateTimes(this);
 }
 
 void EWMainFrame::OnCheckTimerTrigger(wxTimerEvent& event)
 {
-    wxTimerHandler handler(&this->checkTimer);
-    this->m_Presenter->updateStatus(handler);
+    this->m_Presenter->updateStatus(this);
 }
 
 void EWMainFrame::OnClose(wxCloseEvent& event)

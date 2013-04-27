@@ -8,6 +8,7 @@ class AbstractConfig;
 class HandlerFactory;
 class AbstractMsgHandler;
 class AbstractTimerHandler;
+class AbstractEWMainFrame;
 class AbstractOptionsDialog;
 class ConfigData;
 
@@ -21,18 +22,11 @@ class EWPresenter
         void saveConfig(const AbstractOptionsDialog* dialog);
         void loadConfig(AbstractOptionsDialog* dialog);
 
-        void start(AbstractTimerHandler& timerHandler);
-        void stop(AbstractTimerHandler& timerHandler);
+        void start(AbstractEWMainFrame* frame);
+        void stop(AbstractEWMainFrame* frame);
         void pause();
-        void updateStatus(AbstractTimerHandler& timerHandler);
-
-        boost::posix_time::time_duration getNextStatusTimer() const;
-
-        std::string getStatus() const;
-        std::string getTimeOn() const;
-        std::string getTimeOff() const;
-        std::string getTimeRunning() const;
-        std::string getTimeLeft() const;
+        void updateStatus(AbstractEWMainFrame* frame);
+        void updateTimes(AbstractEWMainFrame* frame);
 
         const std::string m_LateMsg;
 
@@ -41,6 +35,14 @@ class EWPresenter
         static std::string durationToString(boost::posix_time::time_duration duration);
 
         void alert();
+
+        boost::posix_time::time_duration getNextStatusTimer() const;
+
+        std::string getStatus() const;
+        std::string getTimeOn() const;
+        std::string getTimeOff() const;
+        std::string getTimeRunning() const;
+        std::string getTimeLeft() const;
 
         bool m_Warn;
         AbstractConfig* m_Config;

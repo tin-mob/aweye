@@ -18,18 +18,25 @@
 #include <wx/timer.h>
 //*)
 #include <wx/valgen.h>
+#include <string>
 
 #include "EWPresenter.h"
 #include "WxHandlerFactory.h"
+#include "AbstractEWMainFrame.h"
 
-class EWMainFrame: public wxFrame
+class EWMainFrame: public wxFrame, public AbstractEWMainFrame
 {
     public:
 
         EWMainFrame(wxWindow* parent, EWPresenter* presenter, wxWindowID id = -1);
         virtual ~EWMainFrame();
 
-        virtual void updateTimes();
+        virtual void setValues( std::string status, std::string onClock,
+                       std::string offClock, std::string runningClock,
+                       std::string leftClock);
+
+        virtual void startTimer(long total_milliseconds);
+        virtual void stopTimer();
 
     private:
 

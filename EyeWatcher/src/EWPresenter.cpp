@@ -2,8 +2,8 @@
 #include "AbstractConfig.h"
 #include "HandlerFactory.h"
 #include "AbstractMsgHandler.h"
-#include "AbstractTimerHandler.h"
 #include "AbstractTimeKeeper.h"
+#include "AbstractEWMainFrame.h"
 #include "AbstractOptionsDialog.h"
 #include "BaseException.h"
 #include "ConfigData.h"
@@ -31,12 +31,12 @@ void EWPresenter::loadConfig(AbstractOptionsDialog* dialog)
     dialog->setData(this->m_Config->getData());
 }
 
-void EWPresenter::start(AbstractTimerHandler& timerHandler)
+void EWPresenter::start(AbstractEWMainFrame* frame)
 {
     try
     {
         this->m_TimeKeeper->start();
-        timerHandler.Start(this->getNextStatusTimer().total_milliseconds(), true);
+        frame->startTimer(this->getNextStatusTimer().total_milliseconds());
     }
     catch (BaseException e)
     {
@@ -44,10 +44,10 @@ void EWPresenter::start(AbstractTimerHandler& timerHandler)
     }
 }
 
-void EWPresenter::stop(AbstractTimerHandler& timerHandler)
+void EWPresenter::stop(AbstractEWMainFrame* frame)
 {
     this->m_TimeKeeper->stop();
-    timerHandler.Stop();
+    frame->stopTimer();
 }
 
 void EWPresenter::pause()
@@ -55,12 +55,12 @@ void EWPresenter::pause()
     m_Warn = !m_Warn;
 }
 
-void EWPresenter::updateStatus(AbstractTimerHandler& timerHandler)
+void EWPresenter::updateStatus(AbstractEWMainFrame* frame)
 {
     try
     {
         this->m_TimeKeeper->updateStatus();
-        timerHandler.Start(this->getNextStatusTimer().total_milliseconds(), true);
+        frame->startTimer(this->getNextStatusTimer().total_milliseconds());
 
         if (this->m_TimeKeeper->isLate() && this->m_TimeKeeper->getStatus() == AbstractTimeKeeper::HERE)
         {
@@ -72,6 +72,12 @@ void EWPresenter::updateStatus(AbstractTimerHandler& timerHandler)
         this->m_MsgHandler->displayError(e.what());
         this->m_TimeKeeper->stop();
     }
+}
+
+void EWPresenter::updateTimes(AbstractEWMainFrame* frame)
+{
+    frame->setValues(this->getStatus(), this->getTimeOn(), this->getTimeOff(),
+                     this->getTimeRunning(), this->getTimeLeft());
 }
 
 boost::posix_time::time_duration EWPresenter::getNextStatusTimer() const
