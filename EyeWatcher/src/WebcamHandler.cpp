@@ -2,6 +2,10 @@
 #include "AbstractMsgHandler.h"
 #include <boost/filesystem.hpp>
 
+/// @todo: opencv 2.3.1 leaks in ishere (videocapture and mat not deleted)
+/// options are either installing 2.4 from source, installing a new version
+/// of os or put this in a separate process...
+
 /// @todo: find a way to manage paths (Win/Linux)
 WebcamHandler::WebcamHandler(int index, std::string faceCascadeName) :
     m_index(index)
