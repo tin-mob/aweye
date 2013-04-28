@@ -6,7 +6,7 @@
 			<cols>1</cols>
 			<object class="sizeritem">
 				<object class="wxStaticBoxSizer" variable="timeStaticBoxSizer" member="no">
-					<label>Time (Seconds)</label>
+					<label>Time (Minutes / Seconds)</label>
 					<orient>wxVERTICAL</orient>
 					<object class="sizeritem">
 						<object class="wxFlexGridSizer" variable="wrkFlexGridSizer" member="no">
@@ -26,7 +26,19 @@
 								<size>22,0</size>
 							</object>
 							<object class="sizeritem">
-								<object class="wxTextCtrl" name="ID_TEXTCTRL2" variable="wrkTextCtrl" member="yes" />
+								<object class="wxSpinCtrl" name="ID_SPINCTRL2" variable="wrkMinSpinCtrl" member="yes">
+									<value>0</value>
+									<max>1000</max>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxSpinCtrl" name="ID_SPINCTRL3" variable="wrkSecSpinCtrl" member="yes">
+									<value>0</value>
+									<max>59</max>
+								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
@@ -53,7 +65,19 @@
 								<size>40,0</size>
 							</object>
 							<object class="sizeritem">
-								<object class="wxTextCtrl" name="ID_TEXTCTRL3" variable="zzzTextCtrl" member="yes" />
+								<object class="wxSpinCtrl" name="ID_SPINCTRL5" variable="zzzMinSpinCtrl" member="yes">
+									<value>0</value>
+									<max>1000</max>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxSpinCtrl" name="ID_SPINCTRL6" variable="zzzSecSpinCtrl" member="yes">
+									<value>0</value>
+									<max>59</max>
+								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
@@ -74,7 +98,19 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
-								<object class="wxTextCtrl" name="ID_TEXTCTRL4" variable="remTextCtrl" member="yes" />
+								<object class="wxSpinCtrl" name="ID_SPINCTRL8" variable="remMinSpinCtrl" member="yes">
+									<value>0</value>
+									<max>1000</max>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxSpinCtrl" name="ID_SPINCTRL9" variable="remSecSpinCtrl" member="yes">
+									<value>0</value>
+									<max>59</max>
+								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
@@ -101,7 +137,19 @@
 								<size>29,0</size>
 							</object>
 							<object class="sizeritem">
-								<object class="wxTextCtrl" name="ID_TEXTCTRL5" variable="chkTextCtrl" member="yes" />
+								<object class="wxSpinCtrl" name="ID_SPINCTRL11" variable="chkMinSpinCtrl" member="yes">
+									<value>0</value>
+									<max>1000</max>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxSpinCtrl" name="ID_SPINCTRL12" variable="chkSecSpinCtrl" member="yes">
+									<value>0</value>
+									<max>59</max>
+								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
@@ -127,7 +175,10 @@
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxTextCtrl" name="ID_TEXTCTRL6" variable="tolTextCtrl" member="yes" />
+						<object class="wxSpinCtrl" name="ID_SPINCTRL1" variable="tolSpinCtrl" member="yes">
+							<value>0</value>
+							<max>10000</max>
+						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>

@@ -56,7 +56,7 @@ void Config::load()
         read_json(this->m_filename, pt);
     }
     catch (boost::property_tree::json_parser_error) {
-        /// @todo: manage invalid file
+        throw InvalidConfigFileException();
     }
     this->generate(pt);
 }
@@ -64,24 +64,41 @@ void Config::load()
 // Loads Config structure from the specified XML file
 void Config::generate(boost::property_tree::ptree &pt)
 {
-    this->m_data.workLength = pt.get("WorkLength", ConfigData::default_WorkLength);
-    this->m_data.pauseLength = pt.get("PauseLength", ConfigData::default_PauseLength);
-    this->m_data.remFreq = pt.get("RemFreq", ConfigData::default_RemFreq);
-    this->m_data.checkFreq = pt.get("CheckFreq", ConfigData::default_CheckFreq);
-    this->m_data.pauseTol = pt.get("PauseTol", ConfigData::default_PauseTol);
-    this->m_data.startup = pt.get("Startup", ConfigData::default_Startup);
-    this->m_data.soundAlarm = pt.get("SoundAlarm", ConfigData::default_SoundAlarm);
-    this->m_data.popupAlarm = pt.get("PopupAlarm", ConfigData::default_PopupAlarm);
-    this->m_data.emailAlarm = pt.get("EmailAlarm", ConfigData::default_EmailAlarm);
-    this->m_data.emailAddr = pt.get("EmailAddr", ConfigData::default_EmailAddr);
+    ConfigData tempData =
+    {
+        pt.get("WorkLength", ConfigData::default_WorkLength),
+        pt.get("PauseLength", ConfigData::default_PauseLength),
+        pt.get("RemFreq", ConfigData::default_RemFreq),
+        pt.get("CheckFreq", ConfigData::default_CheckFreq),
+        pt.get("PauseTol", ConfigData::default_PauseTol),
+        pt.get("Startup", ConfigData::default_Startup),
+        pt.get("SoundAlarm", ConfigData::default_SoundAlarm),
+        pt.get("PopupAlarm", ConfigData::default_PopupAlarm),
+        pt.get("EmailAlarm", ConfigData::default_EmailAlarm),
+        pt.get("EmailAddr", ConfigData::default_EmailAddr)
+    };
+
+    if (Config::validateData(tempData))
+    {
+        this->m_data = tempData;
+    }
+    else
+    {
+        throw InvalidConfigFileException();
+    }
 }
 
-/// @todo: check if validation could be done
 void Config::save(const ConfigData& data)
 {
-    this->m_data = data;
-
-    this->write();
+    if (Config::validateData(data))
+    {
+        this->m_data = data;
+        this->write();
+    }
+    else
+    {
+        throw InvalidConfigDataException();
+    }
 }
 
 void Config::write()
@@ -104,4 +121,22 @@ void Config::write()
 
     // Write the property tree to the XML file.
     write_json(this->m_filename, pt);
+}
+
+/// @todo: more specific errors?
+bool Config::validateData(const ConfigData& data)
+{
+    if (data.workLength.is_special() ||
+        data.pauseLength.is_special() ||
+        data.remFreq.is_special() ||
+        data.checkFreq.is_special() ||
+        data.workLength.total_seconds() <= 0 ||
+        data.pauseLength.total_seconds() <= 0 ||
+        data.remFreq.total_seconds() <= 0 ||
+        data.checkFreq.total_seconds() <= 0 ||
+        data.pauseTol < 0)
+    {
+        return false;
+    }
+    return true;
 }

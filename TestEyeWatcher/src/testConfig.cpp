@@ -15,7 +15,53 @@ struct ConfigFixture
 
 SUITE(TestConfig)
 {
-    TEST_FIXTURE(ConfigFixture, TestAll)
+    TEST_FIXTURE(ConfigFixture, TestValidation)
+    {
+        ConfigData data = {ConfigData::default_WorkLength,
+            ConfigData::default_PauseLength, ConfigData::default_RemFreq,
+            ConfigData::default_CheckFreq, ConfigData::default_PauseTol,
+            ConfigData::default_Startup, ConfigData::default_SoundAlarm,
+            ConfigData::default_PopupAlarm, ConfigData::default_EmailAlarm,
+            ConfigData::default_EmailAddr};
+
+        CHECK_EQUAL(true, Config::validateData(data));
+
+        data.workLength = boost::posix_time::seconds(0);
+        CHECK_EQUAL(false, Config::validateData(data));
+        data.workLength = ConfigData::default_WorkLength;
+
+        data.pauseLength = boost::posix_time::seconds(0);
+        CHECK_EQUAL(false, Config::validateData(data));
+        data.pauseLength = ConfigData::default_PauseLength;
+
+        data.remFreq = boost::posix_time::seconds(0);
+        CHECK_EQUAL(false, Config::validateData(data));
+        data.remFreq = ConfigData::default_RemFreq;
+
+        data.checkFreq = boost::posix_time::seconds(0);
+        CHECK_EQUAL(false, Config::validateData(data));
+        data.checkFreq = ConfigData::default_CheckFreq;
+
+        data.workLength = boost::posix_time::not_a_date_time;
+        CHECK_EQUAL(false, Config::validateData(data));
+        data.workLength = ConfigData::default_WorkLength;
+
+        data.pauseLength = boost::posix_time::not_a_date_time;
+        CHECK_EQUAL(false, Config::validateData(data));
+        data.pauseLength = ConfigData::default_PauseLength;
+
+        data.remFreq = boost::posix_time::not_a_date_time;
+        CHECK_EQUAL(false, Config::validateData(data));
+        data.remFreq = ConfigData::default_RemFreq;
+
+        data.checkFreq = boost::posix_time::not_a_date_time;
+        CHECK_EQUAL(false, Config::validateData(data));
+        data.checkFreq = ConfigData::default_CheckFreq;
+
+
+    }
+
+    TEST_FIXTURE(ConfigFixture, TestSaveLoad)
     {
         CHECK(!boost::filesystem::exists(configPath));
 

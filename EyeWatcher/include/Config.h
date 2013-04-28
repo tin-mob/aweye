@@ -13,6 +13,12 @@ class InvalidConfigFileException : public BaseException
           InvalidConfigFileException() :  BaseException("invalid config file.") { }
 };
 
+class InvalidConfigDataException : public BaseException
+{
+    public:
+          InvalidConfigDataException() :  BaseException("invalid configuration data.") { }
+};
+
 class Config : public AbstractConfig
 {
     public:
@@ -24,6 +30,8 @@ class Config : public AbstractConfig
 
         void checkLoad();
         void save(const ConfigData& data);
+
+        static bool validateData(const ConfigData& data);
 
     protected:
     private:

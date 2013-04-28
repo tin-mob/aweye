@@ -11,6 +11,7 @@
 	//*)
 #endif
 //(*Headers(OptionsDialog)
+#include <wx/spinctrl.h>
 //*)
 
 #include "EWPresenter.h"
@@ -29,35 +30,43 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 
 		//(*Declarations(OptionsDialog)
 		wxStaticText* workingLabel;
+		wxSpinCtrl* chkMinSpinCtrl;
 		wxCheckBox* startupCheckBox;
 		wxCheckBox* soundCheckBox;
-		wxTextCtrl* tolTextCtrl;
-		wxTextCtrl* wrkTextCtrl;
 		wxStaticText* tolStaticText;
 		wxCheckBox* popupCheckBox;
 		wxStaticText* zzzLabel;
+		wxSpinCtrl* chkSecSpinCtrl;
 		wxTextCtrl* emailTextCtrl;
-		wxTextCtrl* zzzTextCtrl;
-		wxTextCtrl* chkTextCtrl;
+		wxSpinCtrl* wrkSecSpinCtrl;
+		wxSpinCtrl* tolSpinCtrl;
+		wxSpinCtrl* zzzSecSpinCtrl;
+		wxSpinCtrl* remSecSpinCtrl;
+		wxSpinCtrl* wrkMinSpinCtrl;
+		wxSpinCtrl* zzzMinSpinCtrl;
 		wxStaticText* remLabel;
 		wxStaticText* chkStaticText;
 		wxCheckBox* emailCheckBox;
-		wxTextCtrl* remTextCtrl;
+		wxSpinCtrl* remMinSpinCtrl;
 		//*)
 
 	protected:
 
 		//(*Identifiers(OptionsDialog)
 		static const long ID_STATICTEXT1;
-		static const long ID_TEXTCTRL2;
+		static const long ID_SPINCTRL2;
+		static const long ID_SPINCTRL3;
 		static const long ID_STATICTEXT2;
-		static const long ID_TEXTCTRL3;
+		static const long ID_SPINCTRL5;
+		static const long ID_SPINCTRL6;
 		static const long ID_STATICTEXT3;
-		static const long ID_TEXTCTRL4;
+		static const long ID_SPINCTRL8;
+		static const long ID_SPINCTRL9;
 		static const long ID_STATICTEXT4;
-		static const long ID_TEXTCTRL5;
+		static const long ID_SPINCTRL11;
+		static const long ID_SPINCTRL12;
 		static const long ID_STATICTEXT5;
-		static const long ID_TEXTCTRL6;
+		static const long ID_SPINCTRL1;
 		static const long ID_CHECKBOX1;
 		static const long ID_CHECKBOX2;
 		static const long ID_CHECKBOX3;

@@ -21,9 +21,18 @@ EWPresenter::~EWPresenter()
 {
 }
 
-void EWPresenter::saveConfig(const AbstractOptionsDialog* dialog)
+bool EWPresenter::saveConfig(const AbstractOptionsDialog* dialog)
 {
-    this->m_Config->save(dialog->getData());
+    try
+    {
+        this->m_Config->save(dialog->getData());
+    }
+    catch (BaseException e)
+    {
+        this->m_MsgHandler->displayError(e.what());
+        return false;
+    }
+    return true;
 }
 
 void EWPresenter::loadConfig(AbstractOptionsDialog* dialog)

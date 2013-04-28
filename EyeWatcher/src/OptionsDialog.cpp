@@ -16,15 +16,19 @@
 
 //(*IdInit(OptionsDialog)
 const long OptionsDialog::ID_STATICTEXT1 = wxNewId();
-const long OptionsDialog::ID_TEXTCTRL2 = wxNewId();
+const long OptionsDialog::ID_SPINCTRL2 = wxNewId();
+const long OptionsDialog::ID_SPINCTRL3 = wxNewId();
 const long OptionsDialog::ID_STATICTEXT2 = wxNewId();
-const long OptionsDialog::ID_TEXTCTRL3 = wxNewId();
+const long OptionsDialog::ID_SPINCTRL5 = wxNewId();
+const long OptionsDialog::ID_SPINCTRL6 = wxNewId();
 const long OptionsDialog::ID_STATICTEXT3 = wxNewId();
-const long OptionsDialog::ID_TEXTCTRL4 = wxNewId();
+const long OptionsDialog::ID_SPINCTRL8 = wxNewId();
+const long OptionsDialog::ID_SPINCTRL9 = wxNewId();
 const long OptionsDialog::ID_STATICTEXT4 = wxNewId();
-const long OptionsDialog::ID_TEXTCTRL5 = wxNewId();
+const long OptionsDialog::ID_SPINCTRL11 = wxNewId();
+const long OptionsDialog::ID_SPINCTRL12 = wxNewId();
 const long OptionsDialog::ID_STATICTEXT5 = wxNewId();
-const long OptionsDialog::ID_TEXTCTRL6 = wxNewId();
+const long OptionsDialog::ID_SPINCTRL1 = wxNewId();
 const long OptionsDialog::ID_CHECKBOX1 = wxNewId();
 const long OptionsDialog::ID_CHECKBOX2 = wxNewId();
 const long OptionsDialog::ID_CHECKBOX3 = wxNewId();
@@ -52,41 +56,58 @@ OptionsDialog::OptionsDialog(wxWindow* parent, EWPresenter* presenter, wxWindowI
 
 	Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	optionsFlexGridSizer = new wxFlexGridSizer(0, 1, 0, 0);
-	timeStaticBoxSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Time (Seconds)"));
+	timeStaticBoxSizer = new wxStaticBoxSizer(wxVERTICAL, this, _("Time (Minutes / Seconds)"));
 	wrkFlexGridSizer = new wxFlexGridSizer(0, 5, 0, 0);
 	workingLabel = new wxStaticText(this, ID_STATICTEXT1, _("Working Length"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
 	wrkFlexGridSizer->Add(workingLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	wrkFlexGridSizer->Add(22,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	wrkTextCtrl = new wxTextCtrl(this, ID_TEXTCTRL2, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL2"));
-	wrkFlexGridSizer->Add(wrkTextCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	wrkMinSpinCtrl = new wxSpinCtrl(this, ID_SPINCTRL2, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 1000, 0, _T("ID_SPINCTRL2"));
+	wrkMinSpinCtrl->SetValue(_T("0"));
+	wrkFlexGridSizer->Add(wrkMinSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	wrkSecSpinCtrl = new wxSpinCtrl(this, ID_SPINCTRL3, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 59, 0, _T("ID_SPINCTRL3"));
+	wrkSecSpinCtrl->SetValue(_T("0"));
+	wrkFlexGridSizer->Add(wrkSecSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	timeStaticBoxSizer->Add(wrkFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	zzzFlexGridSizer = new wxFlexGridSizer(0, 5, 0, 0);
 	zzzLabel = new wxStaticText(this, ID_STATICTEXT2, _("Pause Period"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
 	zzzFlexGridSizer->Add(zzzLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	zzzFlexGridSizer->Add(40,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	zzzTextCtrl = new wxTextCtrl(this, ID_TEXTCTRL3, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL3"));
-	zzzFlexGridSizer->Add(zzzTextCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	zzzMinSpinCtrl = new wxSpinCtrl(this, ID_SPINCTRL5, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 1000, 0, _T("ID_SPINCTRL5"));
+	zzzMinSpinCtrl->SetValue(_T("0"));
+	zzzFlexGridSizer->Add(zzzMinSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	zzzSecSpinCtrl = new wxSpinCtrl(this, ID_SPINCTRL6, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 59, 0, _T("ID_SPINCTRL6"));
+	zzzSecSpinCtrl->SetValue(_T("0"));
+	zzzFlexGridSizer->Add(zzzSecSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	timeStaticBoxSizer->Add(zzzFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	remFlexGridSizer = new wxFlexGridSizer(0, 5, 0, 0);
 	remLabel = new wxStaticText(this, ID_STATICTEXT3, _("Reminder Frequency"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	remFlexGridSizer->Add(remLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	remTextCtrl = new wxTextCtrl(this, ID_TEXTCTRL4, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL4"));
-	remFlexGridSizer->Add(remTextCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	remMinSpinCtrl = new wxSpinCtrl(this, ID_SPINCTRL8, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 1000, 0, _T("ID_SPINCTRL8"));
+	remMinSpinCtrl->SetValue(_T("0"));
+	remFlexGridSizer->Add(remMinSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	remSecSpinCtrl = new wxSpinCtrl(this, ID_SPINCTRL9, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 59, 0, _T("ID_SPINCTRL9"));
+	remSecSpinCtrl->SetValue(_T("0"));
+	remFlexGridSizer->Add(remSecSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	timeStaticBoxSizer->Add(remFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	chkFlexGridSizer = new wxFlexGridSizer(0, 5, 0, 0);
 	chkStaticText = new wxStaticText(this, ID_STATICTEXT4, _("Check Interval"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
 	chkFlexGridSizer->Add(chkStaticText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	chkFlexGridSizer->Add(29,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	chkTextCtrl = new wxTextCtrl(this, ID_TEXTCTRL5, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL5"));
-	chkFlexGridSizer->Add(chkTextCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	chkMinSpinCtrl = new wxSpinCtrl(this, ID_SPINCTRL11, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 1000, 0, _T("ID_SPINCTRL11"));
+	chkMinSpinCtrl->SetValue(_T("0"));
+	chkFlexGridSizer->Add(chkMinSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	chkSecSpinCtrl = new wxSpinCtrl(this, ID_SPINCTRL12, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 59, 0, _T("ID_SPINCTRL12"));
+	chkSecSpinCtrl->SetValue(_T("0"));
+	chkFlexGridSizer->Add(chkSecSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	timeStaticBoxSizer->Add(chkFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	optionsFlexGridSizer->Add(timeStaticBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
 	tolStaticText = new wxStaticText(this, ID_STATICTEXT5, _("Pause Tolerance"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
 	tolStaticText->SetToolTip(_("Test"));
 	BoxSizer1->Add(tolStaticText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tolTextCtrl = new wxTextCtrl(this, ID_TEXTCTRL6, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL6"));
-	BoxSizer1->Add(tolTextCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tolSpinCtrl = new wxSpinCtrl(this, ID_SPINCTRL1, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 10000, 0, _T("ID_SPINCTRL1"));
+	tolSpinCtrl->SetValue(_T("0"));
+	BoxSizer1->Add(tolSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	optionsFlexGridSizer->Add(BoxSizer1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	startupCheckBox = new wxCheckBox(this, ID_CHECKBOX1, _("Start at PC Startup"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX1"));
 	startupCheckBox->SetValue(false);
@@ -128,11 +149,15 @@ OptionsDialog::~OptionsDialog()
 ConfigData OptionsDialog::getData() const
 {
     return {
-        boost::posix_time::seconds(wxAtoi(this->wrkTextCtrl->GetValue())),
-        boost::posix_time::seconds(wxAtoi(this->zzzTextCtrl->GetValue())),
-        boost::posix_time::seconds(wxAtoi(this->remTextCtrl->GetValue())),
-        boost::posix_time::seconds(wxAtoi(this->chkTextCtrl->GetValue())),
-        wxAtoi(this->tolTextCtrl->GetValue()),
+        boost::posix_time::seconds(
+            this->wrkMinSpinCtrl->GetValue() * 60 + this->wrkSecSpinCtrl->GetValue()),
+        boost::posix_time::seconds(
+            this->zzzMinSpinCtrl->GetValue() * 60 + this->zzzSecSpinCtrl->GetValue()),
+        boost::posix_time::seconds(
+            this->remMinSpinCtrl->GetValue() * 60 + this->remSecSpinCtrl->GetValue()),
+        boost::posix_time::seconds(
+            this->chkMinSpinCtrl->GetValue() * 60 + this->chkSecSpinCtrl->GetValue()),
+        this->tolSpinCtrl->GetValue(),
         this->startupCheckBox->GetValue(),
         this->soundCheckBox->GetValue(),
         this->popupCheckBox->GetValue(),
@@ -145,20 +170,25 @@ void OptionsDialog::setData(const ConfigData& data)
 {
     this->startupCheckBox->SetValue(data.startup);
 	this->soundCheckBox->SetValue(data.soundAlarm);
-    this->tolTextCtrl->SetValue(wxString::Format(wxT("%i"), data.pauseTol));
-    this->wrkTextCtrl->SetValue(wxString::Format(wxT("%li"), data.workLength.total_seconds()));
+    this->tolSpinCtrl->SetValue(data.pauseTol);
+    this->wrkMinSpinCtrl->SetValue(data.workLength.total_seconds() / 60);
+    this->wrkSecSpinCtrl->SetValue(data.workLength.seconds());
     this->popupCheckBox->SetValue(data.popupAlarm);
     this->emailTextCtrl->SetValue(wxString(data.emailAddr.c_str(), wxConvUTF8));
-    this->zzzTextCtrl->SetValue(wxString::Format(wxT("%li"), data.pauseLength.total_seconds()));
-    this->chkTextCtrl->SetValue(wxString::Format(wxT("%li"), data.checkFreq.total_seconds()));
+    this->zzzMinSpinCtrl->SetValue(data.pauseLength.total_seconds() / 60);
+    this->zzzSecSpinCtrl->SetValue(data.pauseLength.seconds());
+    this->chkMinSpinCtrl->SetValue(data.checkFreq.total_seconds() / 60);
+    this->chkSecSpinCtrl->SetValue(data.checkFreq.seconds());
     this->emailCheckBox->SetValue(data.emailAlarm);
-    this->remTextCtrl->SetValue(wxString::Format(wxT("%li"), data.remFreq.total_seconds()));
+    this->remMinSpinCtrl->SetValue(data.remFreq.total_seconds() / 60);
+    this->remSecSpinCtrl->SetValue(data.remFreq.seconds());
 }
 
-/// @todo: validation
 void OptionsDialog::OnOKClick(wxCommandEvent& event)
 {
-    this->m_Presenter->saveConfig(this);
-    Close();
+    if (this->m_Presenter->saveConfig(this))
+    {
+        Close();
+    }
 }
 

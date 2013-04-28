@@ -12,14 +12,13 @@ class AbstractEWMainFrame;
 class AbstractOptionsDialog;
 class ConfigData;
 
-/// @todo: break into MainPresenter/ConfigPresenter?
 class EWPresenter
 {
     public:
         EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config, AbstractTimeKeeper* keeper);
         virtual ~EWPresenter();
 
-        void saveConfig(const AbstractOptionsDialog* dialog);
+        bool saveConfig(const AbstractOptionsDialog* dialog);
         void loadConfig(AbstractOptionsDialog* dialog);
 
         void start(AbstractEWMainFrame* frame);
