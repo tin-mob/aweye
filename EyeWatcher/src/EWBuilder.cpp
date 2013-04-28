@@ -1,6 +1,5 @@
 #include "EWBuilder.h"
 
-/// @TODO: I'm not certin this is the best way. To Investigate.
 EWBuilder::EWBuilder() :
     m_MsgHandler(NULL), m_Config(NULL), m_TimeHandler(NULL),
     m_PresenceHandler(NULL), m_TimeKeeper(NULL), m_Presenter(NULL)

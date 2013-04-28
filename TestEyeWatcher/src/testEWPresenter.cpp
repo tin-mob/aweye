@@ -57,13 +57,10 @@ struct EWPresenterFixture
 
 SUITE(TestEWPresenter)
 {
-    TEST_FIXTURE(EWPresenterFixture, TestConfig)
+    TEST_FIXTURE(EWPresenterFixture, TestValidConfig)
     {
         presenter->loadConfig(dialog);
-
-        /// @todo : different values
-
-        presenter->saveConfig(dialog);
+        CHECK_EQUAL(true, presenter->saveConfig(dialog));
 
         ConfigData returnedData = dialog->getData();
         CHECK_EQUAL(data.workLength, returnedData.workLength);
@@ -76,6 +73,13 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(data.popupAlarm, returnedData.popupAlarm);
         CHECK_EQUAL(data.emailAlarm, returnedData.emailAlarm);
         CHECK_EQUAL(data.emailAddr, returnedData.emailAddr);
+    }
+
+    TEST_FIXTURE(EWPresenterFixture, TestInvalidConfig)
+    {
+            config->fail = true;
+            CHECK_EQUAL(false, presenter->saveConfig(dialog));
+            CHECK_EQUAL("Testing!", msgHandler->lastError);
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestStartStop)
