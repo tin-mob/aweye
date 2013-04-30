@@ -47,11 +47,13 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		wxNotebook* optionsNotebook;
 		wxSpinCtrl* tolSpinCtrl;
 		wxStaticText* StaticText1;
+		wxSpinCtrl* indexSpinCtrl;
 		wxSpinCtrl* zzzSecSpinCtrl;
 		wxPanel* GeneralPanel;
 		wxSpinCtrl* remSecSpinCtrl;
 		wxPanel* AdvancedPanel;
 		wxSpinCtrl* wrkMinSpinCtrl;
+		wxStaticText* indexStaticText;
 		wxSpinCtrl* zzzMinSpinCtrl;
 		wxFilePickerCtrl* cascadeFilePickerCtrl;
 		wxButton* testEmailButton;
@@ -92,6 +94,8 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		static const long ID_SPINCTRL1;
 		static const long ID_STATICTEXT7;
 		static const long ID_CUSTOM1;
+		static const long ID_STATICTEXT8;
+		static const long ID_SPINCTRL10;
 		static const long ID_PANEL2;
 		static const long ID_NOTEBOOK1;
 		//*)

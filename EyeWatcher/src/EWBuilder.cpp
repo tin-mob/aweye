@@ -14,7 +14,7 @@ EWBuilder::EWBuilder() :
             this->m_TimeHandler = new TimeHandler();
             this->m_PresenceHandler = new WebcamHandler();
             this->m_TimeKeeper = new TimeKeeper(m_Config, m_TimeHandler, m_PresenceHandler);
-            this->m_Presenter = new EWPresenter(m_MsgHandler, m_Config, m_TimeKeeper);
+            this->m_Presenter = new EWPresenter(m_MsgHandler, m_Config, m_TimeKeeper, m_PresenceHandler);
         }
         catch (BaseException e)
         {

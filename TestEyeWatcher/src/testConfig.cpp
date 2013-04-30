@@ -17,12 +17,7 @@ SUITE(TestConfig)
 {
     TEST_FIXTURE(ConfigFixture, TestValidation)
     {
-        ConfigData data = {ConfigData::default_WorkLength,
-            ConfigData::default_PauseLength, ConfigData::default_RemFreq,
-            ConfigData::default_CheckFreq, ConfigData::default_PauseTol,
-            ConfigData::default_Startup, ConfigData::default_SoundAlarm,
-            ConfigData::default_PopupAlarm, ConfigData::default_EmailAlarm,
-            ConfigData::default_EmailAddr};
+        ConfigData data;
 
         CHECK_EQUAL(true, Config::validateData(data));
 
@@ -76,6 +71,10 @@ SUITE(TestConfig)
         CHECK_EQUAL(ConfigData::default_PopupAlarm, data.popupAlarm);
         CHECK_EQUAL(ConfigData::default_EmailAlarm, data.emailAlarm);
         CHECK_EQUAL(ConfigData::default_EmailAddr, data.emailAddr);
+        CHECK_EQUAL(ConfigData::default_WebcamIndex, data.webcamIndex);
+        CHECK_EQUAL(ConfigData::default_FaceSizeX, data.faceSizeX);
+        CHECK_EQUAL(ConfigData::default_FaceSizeY, data.faceSizeY);
+        CHECK_EQUAL(ConfigData::default_CascadePath, data.cascadePath);
     }
 
     TEST_FIXTURE(ConfigFixture, TestEmptyNameConstruction)
@@ -112,7 +111,11 @@ SUITE(TestConfig)
             !ConfigData::default_SoundAlarm,
             !ConfigData::default_PopupAlarm,
             !ConfigData::default_EmailAlarm,
-            "test@test.test"
+            "test@test.test",
+            ConfigData::default_WebcamIndex + 1,
+            ConfigData::default_FaceSizeX + 1,
+            ConfigData::default_FaceSizeY + 1,
+            "test.cfg"
         };
 
         Config config(configPath);
@@ -132,6 +135,10 @@ SUITE(TestConfig)
         CHECK_EQUAL(srcData.popupAlarm, data.popupAlarm);
         CHECK_EQUAL(srcData.emailAlarm, data.emailAlarm);
         CHECK_EQUAL(srcData.emailAddr, data.emailAddr);
+        CHECK_EQUAL(srcData.webcamIndex, data.webcamIndex);
+        CHECK_EQUAL(srcData.faceSizeX, data.faceSizeX);
+        CHECK_EQUAL(srcData.faceSizeY, data.faceSizeY);
+        CHECK_EQUAL(srcData.cascadePath, data.cascadePath);
 
         Config config3(configPath);
         config3.checkLoad();
@@ -147,6 +154,9 @@ SUITE(TestConfig)
         CHECK_EQUAL(srcData.popupAlarm, data.popupAlarm);
         CHECK_EQUAL(srcData.emailAlarm, data.emailAlarm);
         CHECK_EQUAL(srcData.emailAddr, data.emailAddr);
-
+        CHECK_EQUAL(srcData.webcamIndex, data.webcamIndex);
+        CHECK_EQUAL(srcData.faceSizeX, data.faceSizeX);
+        CHECK_EQUAL(srcData.faceSizeY, data.faceSizeY);
+        CHECK_EQUAL(srcData.cascadePath, data.cascadePath);
     }
 }

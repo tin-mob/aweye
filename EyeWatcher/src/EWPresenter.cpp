@@ -3,6 +3,7 @@
 #include "HandlerFactory.h"
 #include "AbstractMsgHandler.h"
 #include "AbstractTimeKeeper.h"
+#include "AbstractPresenceHandler.h"
 #include "AbstractEWMainFrame.h"
 #include "AbstractOptionsDialog.h"
 #include "BaseException.h"
@@ -12,8 +13,10 @@
 #include <iomanip>
 #include <stdlib.h>
 
-EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config, AbstractTimeKeeper* keeper)
-    :  m_LateMsg("Time for a pause!"), m_Warn(true), m_Config(config), m_TimeKeeper(keeper), m_MsgHandler(msgHandler)
+EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config,
+                         AbstractTimeKeeper* keeper, AbstractPresenceHandler* presenceHandler)
+    :  m_LateMsg("Time for a pause!"), m_Warn(true), m_Config(config),
+    m_TimeKeeper(keeper), m_MsgHandler(msgHandler), m_PresenceHandler(presenceHandler)
 {
 }
 
@@ -25,7 +28,12 @@ bool EWPresenter::saveConfig(const AbstractOptionsDialog* dialog)
 {
     try
     {
-        this->m_Config->save(dialog->getData());
+        ConfigData data = dialog->getData();
+        this->m_Config->save(data);
+
+        this->m_PresenceHandler->setCascade(data.cascadePath);
+        this->m_PresenceHandler->setFaceSize(data.faceSizeX, data.faceSizeY);
+        this->m_PresenceHandler->setIndex(data.webcamIndex);
     }
     catch (BaseException e)
     {

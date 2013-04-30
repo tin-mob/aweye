@@ -75,7 +75,11 @@ void Config::generate(boost::property_tree::ptree &pt)
         pt.get("SoundAlarm", ConfigData::default_SoundAlarm),
         pt.get("PopupAlarm", ConfigData::default_PopupAlarm),
         pt.get("EmailAlarm", ConfigData::default_EmailAlarm),
-        pt.get("EmailAddr", ConfigData::default_EmailAddr)
+        pt.get("EmailAddr", ConfigData::default_EmailAddr),
+        pt.get("WebcamIndex", ConfigData::default_WebcamIndex),
+        pt.get("FaceSizeX", ConfigData::default_FaceSizeX),
+        pt.get("FaceSizeY", ConfigData::default_FaceSizeY),
+        pt.get("CascadePath", ConfigData::default_CascadePath)
     };
 
     if (Config::validateData(tempData))
@@ -118,12 +122,16 @@ void Config::write()
     pt.put("PopupAlarm", this->m_data.popupAlarm);
     pt.put("EmailAlarm", this->m_data.emailAlarm);
     pt.put("EmailAddr", this->m_data.emailAddr);
+    pt.put("WebcamIndex", this->m_data.webcamIndex);
+    pt.put("FaceSizeX", this->m_data.faceSizeX);
+    pt.put("FaceSizeY", this->m_data.faceSizeY);
+    pt.put("CascadePath", this->m_data.cascadePath);
 
     // Write the property tree to the XML file.
     write_json(this->m_filename, pt);
 }
 
-/// @todo: more specific errors?
+/// @todo: more specific errors?, correct cascadePath?
 bool Config::validateData(const ConfigData& data)
 {
     if (data.workLength.is_special() ||

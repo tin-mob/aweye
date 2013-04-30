@@ -1,5 +1,7 @@
 #include "WebcamHandler.h"
 #include "AbstractMsgHandler.h"
+#include "AbstractConfig.h"
+#include "ConfigData.h"
 #include <boost/filesystem.hpp>
 
 /// @todo: opencv 2.3.1 leaks in ishere (videocapture and mat not deleted)
@@ -7,22 +9,38 @@
 /// of os or put this in a separate process...
 
 /// @todo: find a way to manage paths (Win/Linux)
-WebcamHandler::WebcamHandler(int index, std::string faceCascadeName) :
-    m_index(index)
+WebcamHandler::WebcamHandler(int index, std::string faceCascadeName,
+                             int faceSizeX, int facesizeY) :
+    m_index(index), m_FaceCascadeName(faceCascadeName),
+    m_FaceSizeX(faceSizeX), m_FacesizeY(facesizeY)
 {
-    //ctor
-    namespace fs = boost::filesystem;
-    fs::path p;
-    p = fs::current_path();
-
-    if( !this->m_FaceCascade.load( faceCascadeName ) ){
-		throw MissingCascadeFileException();
-	}
+    this->setCascade(faceCascadeName);
 }
 
 WebcamHandler::~WebcamHandler()
 {
-    //dtor
+}
+
+void WebcamHandler::setCascade(std::string name)
+{
+    if (name != this->m_FaceCascadeName)
+    {
+        if( !this->m_FaceCascade.load(name) ){
+            throw MissingCascadeFileException();
+        }
+        this->m_FaceCascadeName = name;
+    }
+}
+
+void WebcamHandler::setIndex(int index)
+{
+    this->m_index = index;
+}
+
+void WebcamHandler::setFaceSize(unsigned int x, unsigned int y)
+{
+    this->m_FaceSizeX = x;
+    this->m_FacesizeY = y;
 }
 
 /// @todo: face size (minSize last param)
@@ -44,7 +62,8 @@ bool WebcamHandler::isHere()
 	cv::equalizeHist( frame_gray, frame_gray );
 
 	//-- Detect faces
-	this->m_FaceCascade.detectMultiScale( frame_gray, faces, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, cv::Size(30, 30) );
+	this->m_FaceCascade.detectMultiScale( frame_gray, faces,
+        1.1, 2, 0|CV_HAAR_SCALE_IMAGE, cv::Size(this->m_FaceSizeX, this->m_FacesizeY) );
 
     return !faces.empty();
 }

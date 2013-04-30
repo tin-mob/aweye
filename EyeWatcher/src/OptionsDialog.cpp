@@ -40,6 +40,8 @@ const long OptionsDialog::ID_STATICTEXT5 = wxNewId();
 const long OptionsDialog::ID_SPINCTRL1 = wxNewId();
 const long OptionsDialog::ID_STATICTEXT7 = wxNewId();
 const long OptionsDialog::ID_CUSTOM1 = wxNewId();
+const long OptionsDialog::ID_STATICTEXT8 = wxNewId();
+const long OptionsDialog::ID_SPINCTRL10 = wxNewId();
 const long OptionsDialog::ID_PANEL2 = wxNewId();
 const long OptionsDialog::ID_NOTEBOOK1 = wxNewId();
 //*)
@@ -59,6 +61,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, EWPresenter* presenter, wxWindowI
 	wxFlexGridSizer* chkFlexGridSizer;
 	wxFlexGridSizer* cascadeFlexGridSizer;
 	wxFlexGridSizer* optionsFlexGridSizer;
+	wxFlexGridSizer* indexFlexGridSizer;
 	wxStaticBoxSizer* timeStaticBoxSizer;
 	wxFlexGridSizer* FlexGridSizer3;
 	wxFlexGridSizer* zzzFlexGridSizer;
@@ -73,6 +76,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, EWPresenter* presenter, wxWindowI
 	optionsNotebook = new wxNotebook(this, ID_NOTEBOOK1, wxDefaultPosition, wxDefaultSize, 0, _T("ID_NOTEBOOK1"));
 	GeneralPanel = new wxPanel(optionsNotebook, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
 	generalFlexGridSizer = new wxFlexGridSizer(0, 1, 0, 0);
+	generalFlexGridSizer->AddGrowableCol(1);
 	timeStaticBoxSizer = new wxStaticBoxSizer(wxVERTICAL, GeneralPanel, _("Time (Minutes / Seconds)"));
 	wrkFlexGridSizer = new wxFlexGridSizer(0, 5, 0, 0);
 	workingLabel = new wxStaticText(GeneralPanel, ID_STATICTEXT1, _("Working Length"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
@@ -161,7 +165,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, EWPresenter* presenter, wxWindowI
 	tolStaticText = new wxStaticText(AdvancedPanel, ID_STATICTEXT5, _("Pause Tolerance"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
 	tolStaticText->SetToolTip(_("Test"));
 	tolFlexGridSizer->Add(tolStaticText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tolFlexGridSizer->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tolFlexGridSizer->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tolSpinCtrl = new wxSpinCtrl(AdvancedPanel, ID_SPINCTRL1, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 10000, 0, _T("ID_SPINCTRL1"));
 	tolSpinCtrl->SetValue(_T("0"));
 	tolFlexGridSizer->Add(tolSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -173,6 +177,15 @@ OptionsDialog::OptionsDialog(wxWindow* parent, EWPresenter* presenter, wxWindowI
 	cascadeFilePickerCtrl = new wxFilePickerCtrl(AdvancedPanel,ID_CUSTOM1,wxEmptyString,wxEmptyString,wxT("*"),wxDefaultPosition,wxDefaultSize,wxFLP_USE_TEXTCTRL|wxFLP_OPEN|wxFLP_FILE_MUST_EXIST,wxDefaultValidator,_T("ID_CUSTOM1"));
 	cascadeFlexGridSizer->Add(cascadeFilePickerCtrl, 1, wxALL|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	advancedFlexGridSizer->Add(cascadeFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+	indexFlexGridSizer = new wxFlexGridSizer(0, 3, 0, 0);
+	indexFlexGridSizer->AddGrowableCol(1);
+	indexStaticText = new wxStaticText(AdvancedPanel, ID_STATICTEXT8, _("Webcam Index"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
+	indexFlexGridSizer->Add(indexStaticText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	indexFlexGridSizer->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	indexSpinCtrl = new wxSpinCtrl(AdvancedPanel, ID_SPINCTRL10, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 100, 0, _T("ID_SPINCTRL10"));
+	indexSpinCtrl->SetValue(_T("0"));
+	indexFlexGridSizer->Add(indexSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	advancedFlexGridSizer->Add(indexFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 	AdvancedPanel->SetSizer(advancedFlexGridSizer);
 	advancedFlexGridSizer->Fit(AdvancedPanel);
 	advancedFlexGridSizer->SetSizeHints(AdvancedPanel);
@@ -216,9 +229,18 @@ ConfigData OptionsDialog::getData() const
         this->soundCheckBox->GetValue(),
         this->popupCheckBox->GetValue(),
         this->emailCheckBox->GetValue(),
-        std::string(this->emailTextCtrl->GetValue().mb_str())
+        std::string(this->emailTextCtrl->GetValue().mb_str()),
+        this->indexSpinCtrl->GetValue(),
+        this->FaceSizeXSpinCtrl->GetValue(),
+        this->FaceSizeYSpinCtrl->GetValue(),
+        std::string(this->cascadeFilePickerCtrl->GetPath().mb_str())
     };
 }
+
+const int default_WebcamIndex = 0;
+const unsigned int default_FaceSizeX = 30;
+const unsigned int default_FaceSizeY = 30;
+const std::string default_CascadePath = "haarcascade_frontalface_alt.xml";
 
 void OptionsDialog::setData(const ConfigData& data)
 {
@@ -236,6 +258,10 @@ void OptionsDialog::setData(const ConfigData& data)
     this->emailCheckBox->SetValue(data.emailAlarm);
     this->remMinSpinCtrl->SetValue(data.remFreq.total_seconds() / 60);
     this->remSecSpinCtrl->SetValue(data.remFreq.seconds());
+    this->indexSpinCtrl->SetValue(data.webcamIndex);
+    this->FaceSizeXSpinCtrl->SetValue(data.faceSizeX);
+    this->FaceSizeYSpinCtrl->SetValue(data.faceSizeY);
+    this->cascadeFilePickerCtrl->SetPath(wxString(data.cascadePath.c_str(), wxConvUTF8));
 }
 
 void OptionsDialog::OnOKClick(wxCommandEvent& event)

@@ -5,15 +5,15 @@
 #include "ConfigDialogStub.h"
 #include "MsgHandlerStub.h"
 #include "TimeKeeperStub.h"
+#include "PresenceHandlerStub.h"
 
 struct EWPresenterFixture
 {
     public:
         EWPresenterFixture() : config(NULL), msgHandler(NULL), keeper(NULL), presenter(NULL)
         {
-            this->data = {boost::posix_time::seconds(5), boost::posix_time::seconds(3), boost::posix_time::seconds(1),
-                boost::posix_time::seconds(2), ConfigData::default_PauseTol, ConfigData::default_Startup, ConfigData::default_SoundAlarm,
-                ConfigData::default_PopupAlarm, ConfigData::default_EmailAlarm, ConfigData::default_EmailAddr};
+            this->data = {boost::posix_time::seconds(5), boost::posix_time::seconds(3),
+                boost::posix_time::seconds(1), boost::posix_time::seconds(2)};
 
             try
             {
@@ -22,7 +22,9 @@ struct EWPresenterFixture
                 this->keeper = new TimeKeeperStub();
                 this->frame = new EWMainFrameStub();
                 this->dialog = new OptionsDialogStub();
-                this->presenter = new EWPresenter(this->msgHandler, this->config, this->keeper);
+                this->presHandler = new PresenceHandlerStub();
+                this->presenter = new EWPresenter(this->msgHandler,
+                    this->config, this->keeper, this->presHandler);
             }
             catch (...)
             {
@@ -41,6 +43,7 @@ struct EWPresenterFixture
         TimeKeeperStub* keeper;
         EWMainFrameStub* frame;
         OptionsDialogStub* dialog;
+        PresenceHandlerStub* presHandler;
         EWPresenter* presenter;
 
     protected:
@@ -51,6 +54,7 @@ struct EWPresenterFixture
             if (this->msgHandler != NULL) {delete this->msgHandler;}
             if (this->keeper != NULL) {delete this->keeper;}
             if (this->dialog != NULL) {delete this->dialog;}
+            if (this->presHandler != NULL) {delete this->presHandler;}
             if (this->presenter != NULL) {delete this->presenter;}
         }
 };

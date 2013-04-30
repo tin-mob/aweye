@@ -1,7 +1,7 @@
 #ifndef ABSTRACTOPTIONSDIALOG_H
 #define ABSTRACTOPTIONSDIALOG_H
 
-class ConfigData;
+struct ConfigData;
 class AbstractOptionsDialog
 {
     public:

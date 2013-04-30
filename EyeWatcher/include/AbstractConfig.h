@@ -2,7 +2,6 @@
 #define ABSTRACTCONFIG_H
 
 struct ConfigData;
-
 class AbstractConfig
 {
     public:

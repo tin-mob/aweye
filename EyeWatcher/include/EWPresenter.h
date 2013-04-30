@@ -8,14 +8,16 @@ class AbstractConfig;
 class HandlerFactory;
 class AbstractMsgHandler;
 class AbstractTimerHandler;
+class AbstractPresenceHandler;
 class AbstractEWMainFrame;
 class AbstractOptionsDialog;
-class ConfigData;
+struct ConfigData;
 
 class EWPresenter
 {
     public:
-        EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config, AbstractTimeKeeper* keeper);
+        EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config,
+                    AbstractTimeKeeper* keeper, AbstractPresenceHandler* presenceHandler);
         virtual ~EWPresenter();
 
         bool saveConfig(const AbstractOptionsDialog* dialog);
@@ -47,6 +49,7 @@ class EWPresenter
         AbstractConfig* m_Config;
         AbstractTimeKeeper* m_TimeKeeper;
         AbstractMsgHandler* m_MsgHandler;
+        AbstractPresenceHandler* m_PresenceHandler;
 };
 
 #endif // EWPRESENTER_H

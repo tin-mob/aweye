@@ -26,6 +26,10 @@ class PresenceHandlerStub : public AbstractPresenceHandler
             this->m_results.push(result);
         }
 
+        virtual void setCascade(std::string name) {}
+        virtual void setIndex(int index) {}
+        virtual void setFaceSize(unsigned int x, unsigned int y) {}
+
     protected:
     private:
         std::queue<bool> m_results;

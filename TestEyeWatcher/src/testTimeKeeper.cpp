@@ -10,9 +10,8 @@ struct TimeKeeperFixture
     public:
         TimeKeeperFixture() : keeper(NULL), config(NULL), timeHandler(NULL), presenceHandler(NULL)
         {
-            this->data = {boost::posix_time::seconds(5), boost::posix_time::seconds(3), boost::posix_time::seconds(1),
-                boost::posix_time::seconds(2), ConfigData::default_PauseTol, ConfigData::default_Startup, ConfigData::default_SoundAlarm,
-                ConfigData::default_PopupAlarm, ConfigData::default_EmailAlarm, ConfigData::default_EmailAddr};
+            this->data = {boost::posix_time::seconds(5), boost::posix_time::seconds(3),
+                boost::posix_time::seconds(1), boost::posix_time::seconds(2)};
 
             try
             {
