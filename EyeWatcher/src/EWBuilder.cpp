@@ -11,9 +11,14 @@ EWBuilder::EWBuilder() :
         try
         {
             this->m_Config = new Config();
+            ConfigData data = this->m_Config->getData();
+
             this->m_TimeHandler = new TimeHandler();
-            this->m_PresenceHandler = new WebcamHandler();
-            this->m_TimeKeeper = new TimeKeeper(m_Config, m_TimeHandler, m_PresenceHandler);
+            this->m_PresenceHandler = new WebcamHandler(data.webcamIndex, data.cascadePath,
+                data.faceSizeX, data.faceSizeY);
+            this->m_TimeKeeper = new TimeKeeper(m_TimeHandler,
+                m_PresenceHandler, data.workLength, data.pauseLength, data.remFreq,
+                data.checkFreq, data.pauseTol);
             this->m_Presenter = new EWPresenter(m_MsgHandler, m_Config, m_TimeKeeper, m_PresenceHandler);
         }
         catch (BaseException e)

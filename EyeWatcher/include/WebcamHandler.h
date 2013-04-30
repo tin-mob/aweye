@@ -24,8 +24,8 @@ class WebcamHandler : public AbstractPresenceHandler
 {
     public:
         /// @todo: find best minimum size
-        WebcamHandler(int index = 0, std::string faceCascadeName = "haarcascade_frontalface_alt.xml",
-                      int faceSizeX = 30, int facesizeY = 30);
+        WebcamHandler(int index, std::string faceCascadeName,
+                      int faceSizeX, int facesizeY);
         ~WebcamHandler();
 
         bool isHere();

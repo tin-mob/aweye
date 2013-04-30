@@ -26,7 +26,9 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
         boost::posix_time::time_duration timeLeft = this->getTimeLeft(parent);
         if (timeLeft > boost::posix_time::time_duration(0,0,0,0))
         {
-            if (parent->m_NumTolerated < parent->m_Config->getData().pauseTol)
+            unsigned int num = parent->m_NumTolerated;
+            unsigned int tol = parent->m_PauseTol;
+            if (parent->m_NumTolerated < parent->m_PauseTol)
             {
                 parent->m_NumTolerated++;
             }
@@ -52,20 +54,19 @@ void TKStateAway::updateTimeStamps(TimeKeeper* parent)
 
 boost::posix_time::time_duration TKStateAway::getTimerInterval(const TimeKeeper* parent) const
 {
-    const ConfigData& config = parent->m_Config->getData();
     const boost::posix_time::ptime now = parent->m_TimeHandler->getTime();
-    boost::posix_time::time_duration timerInterval = config.checkFreq;
+    boost::posix_time::time_duration timerInterval = parent->m_CheckFreq;
 
     boost::posix_time::time_duration pauseInterval = now - parent->m_AwayStamp;
     // work period ended
-    if (pauseInterval >= config.pauseLength)
+    if (pauseInterval >= parent->m_PauseLength)
     {
-        timerInterval = config.checkFreq;
+        timerInterval = parent->m_CheckFreq;
     }
     // pause period ending soon
-    else if (pauseInterval + config.checkFreq > config.pauseLength)
+    else if (pauseInterval + parent->m_CheckFreq > parent->m_PauseLength)
     {
-        timerInterval = config.pauseLength - pauseInterval;
+        timerInterval = parent->m_PauseLength - pauseInterval;
     }
 
     return timerInterval;
@@ -73,8 +74,7 @@ boost::posix_time::time_duration TKStateAway::getTimerInterval(const TimeKeeper*
 
 bool TKStateAway::isLate(const TimeKeeper* parent) const
 {
-    const ConfigData& config = parent->m_Config->getData();
-    return (parent->m_AwayStamp - parent->m_HereStamp) >= config.workLength;
+    return (parent->m_AwayStamp - parent->m_HereStamp) >= parent->m_WorkLength;
 }
 
 boost::posix_time::time_duration TKStateAway::getInterval(const TimeKeeper* parent) const
@@ -84,6 +84,5 @@ boost::posix_time::time_duration TKStateAway::getInterval(const TimeKeeper* pare
 
 boost::posix_time::time_duration TKStateAway::getTimeLeft(const TimeKeeper* parent) const
 {
-    const ConfigData& config = parent->m_Config->getData();
-    return parent->m_AwayStamp + config.pauseLength - parent->m_TimeHandler->getTime();
+    return parent->m_AwayStamp + parent->m_PauseLength - parent->m_TimeHandler->getTime();
 }

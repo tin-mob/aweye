@@ -10,7 +10,8 @@
 class PresenceHandlerStub : public AbstractPresenceHandler
 {
     public:
-        PresenceHandlerStub() {}
+        PresenceHandlerStub() : cascadePath(""), webcamIndex(1001),
+            faceSizeX(1010), faceSizeY(1011){}
         virtual ~PresenceHandlerStub() {}
 
         virtual bool isHere()
@@ -26,9 +27,14 @@ class PresenceHandlerStub : public AbstractPresenceHandler
             this->m_results.push(result);
         }
 
-        virtual void setCascade(std::string name) {}
-        virtual void setIndex(int index) {}
-        virtual void setFaceSize(unsigned int x, unsigned int y) {}
+        virtual void setCascade(std::string name) {cascadePath = name;}
+        virtual void setIndex(int index) {webcamIndex = index;}
+        virtual void setFaceSize(unsigned int x, unsigned int y) {faceSizeX = x; faceSizeY = y;}
+
+        std::string cascadePath;
+        int webcamIndex;
+        unsigned int faceSizeX;
+        unsigned int faceSizeY;
 
     protected:
     private:

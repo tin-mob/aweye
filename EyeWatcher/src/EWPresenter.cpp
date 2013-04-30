@@ -34,6 +34,12 @@ bool EWPresenter::saveConfig(const AbstractOptionsDialog* dialog)
         this->m_PresenceHandler->setCascade(data.cascadePath);
         this->m_PresenceHandler->setFaceSize(data.faceSizeX, data.faceSizeY);
         this->m_PresenceHandler->setIndex(data.webcamIndex);
+
+        this->m_TimeKeeper->setCheckFreq(data.checkFreq);
+        this->m_TimeKeeper->setPauseLength(data.pauseLength);
+        this->m_TimeKeeper->setPauseTol(data.pauseTol);
+        this->m_TimeKeeper->setRemFreq(data.remFreq);
+        this->m_TimeKeeper->setWorkLength(data.workLength);
     }
     catch (BaseException e)
     {

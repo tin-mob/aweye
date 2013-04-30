@@ -8,17 +8,17 @@
 struct TimeKeeperFixture
 {
     public:
-        TimeKeeperFixture() : keeper(NULL), config(NULL), timeHandler(NULL), presenceHandler(NULL)
+        TimeKeeperFixture() : keeper(NULL), timeHandler(NULL), presenceHandler(NULL)
         {
             this->data = {boost::posix_time::seconds(5), boost::posix_time::seconds(3),
                 boost::posix_time::seconds(1), boost::posix_time::seconds(2)};
 
             try
             {
-                this->config = new ConfigStub(data);
                 this->timeHandler = new TimeHandlerStub(boost::posix_time::second_clock::local_time());
                 this->presenceHandler = new PresenceHandlerStub();
-                this->keeper = new TimeKeeper(this->config, this->timeHandler, this->presenceHandler);
+                this->keeper = new TimeKeeper(this->timeHandler, this->presenceHandler,
+                    data.workLength, data.pauseLength, data.remFreq, data.checkFreq, data.pauseTol);
             }
             catch (...)
             {
@@ -33,7 +33,6 @@ struct TimeKeeperFixture
 
         ConfigData data;
         TimeKeeper* keeper;
-        ConfigStub* config;
         TimeHandlerStub* timeHandler;
         PresenceHandlerStub* presenceHandler;
 
@@ -43,7 +42,6 @@ struct TimeKeeperFixture
         void deleteFixture()
         {
             if (this->keeper != NULL) {delete this->keeper;}
-            if (this->config != NULL) {delete this->config;}
             if (this->timeHandler != NULL) {delete this->timeHandler;}
             if (this->presenceHandler != NULL) {delete this->presenceHandler;}
         }
@@ -97,6 +95,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
         }
         {
+            // simulate next check period
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             CHECK_EQUAL(timeHandler->getTime(), startingTime + this->data.checkFreq);
 
@@ -112,6 +111,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
         }
         {
+            // simulate next check period
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
@@ -125,6 +125,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
         }
         {
+            // simulate end of work period
             timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
@@ -138,9 +139,11 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
         }
         {
+            // change values to verify that no reminder is issued
             this->data.checkFreq = boost::posix_time::seconds(1);
             this->data.remFreq = boost::posix_time::seconds(2);
-            this->config->save(this->data);
+            this->keeper->setCheckFreq(this->data.checkFreq);
+            this->keeper->setRemFreq(this->data.remFreq);
 
             timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(true);

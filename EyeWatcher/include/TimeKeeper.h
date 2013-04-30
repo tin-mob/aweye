@@ -18,7 +18,13 @@ class HandlerFactory;
 class TimeKeeper : public AbstractTimeKeeper
 {
     public:
-        TimeKeeper(AbstractConfig* config, AbstractTimeHandler* timeHandler, AbstractPresenceHandler* presenceHandler);
+        TimeKeeper(AbstractTimeHandler* timeHandler,
+                   AbstractPresenceHandler* presenceHandler,
+                   boost::posix_time::time_duration workLength,
+                   boost::posix_time::time_duration pauseLength,
+                   boost::posix_time::time_duration remFreq,
+                   boost::posix_time::time_duration checkFreq,
+                   unsigned int pauseTol);
         virtual ~TimeKeeper();
 
         virtual void start();
@@ -34,6 +40,12 @@ class TimeKeeper : public AbstractTimeKeeper
         virtual boost::posix_time::ptime getHereStamp() const;
         virtual boost::posix_time::ptime getAwayStamp() const;
 
+        virtual void setWorkLength(boost::posix_time::time_duration workLength);
+        virtual void setPauseLength(boost::posix_time::time_duration pauseLength);
+        virtual void setRemFreq(boost::posix_time::time_duration remFreq);
+        virtual void setCheckFreq(boost::posix_time::time_duration checkFreq);
+        virtual void setPauseTol(unsigned int pauseTol);
+
     protected:
     private:
 
@@ -48,7 +60,6 @@ class TimeKeeper : public AbstractTimeKeeper
         std::map<Status,TKState*> m_States;
         Status m_CurrentState;
 
-        AbstractConfig* m_Config;
         AbstractTimeHandler* m_TimeHandler;
         AbstractPresenceHandler* m_PresenceHandler;
 
@@ -56,6 +67,12 @@ class TimeKeeper : public AbstractTimeKeeper
         boost::posix_time::ptime m_AwayStamp;
         boost::posix_time::ptime m_LastAwayStamp;
         unsigned int m_NumTolerated;
+
+        boost::posix_time::time_duration m_WorkLength;
+        boost::posix_time::time_duration m_PauseLength;
+        boost::posix_time::time_duration m_RemFreq;
+        boost::posix_time::time_duration m_CheckFreq;
+        unsigned int m_PauseTol;
 };
 
 #endif // TIMEKEEPER_H

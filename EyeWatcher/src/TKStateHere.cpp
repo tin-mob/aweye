@@ -32,27 +32,26 @@ void TKStateHere::updateTimeStamps(TimeKeeper* parent)
 
 boost::posix_time::time_duration TKStateHere::getTimerInterval(const TimeKeeper* parent) const
 {
-    const ConfigData& config = parent->m_Config->getData();
     const boost::posix_time::ptime now = parent->m_TimeHandler->getTime();
-    boost::posix_time::time_duration timerInterval = config.checkFreq;
+    boost::posix_time::time_duration timerInterval = parent->m_CheckFreq;
 
     boost::posix_time::time_duration hereInterval = now - parent->m_HereStamp;
     // work period ended
-    if (hereInterval >= config.workLength)
+    if (hereInterval >= parent->m_WorkLength)
     {
-        if (config.checkFreq > config.remFreq)
+        if (parent->m_CheckFreq > parent->m_RemFreq)
         {
-            timerInterval = config.remFreq;
+            timerInterval = parent->m_RemFreq;
         }
         else
         {
-            timerInterval = config.checkFreq;
+            timerInterval = parent->m_CheckFreq;
         }
     }
     // work period ending soon
-    else if (hereInterval + config.checkFreq > config.workLength)
+    else if (hereInterval + parent->m_CheckFreq > parent->m_WorkLength)
     {
-        timerInterval = config.workLength - hereInterval;
+        timerInterval = parent->m_WorkLength - hereInterval;
     }
 
     return timerInterval;
@@ -60,7 +59,7 @@ boost::posix_time::time_duration TKStateHere::getTimerInterval(const TimeKeeper*
 
 bool TKStateHere::isLate(const TimeKeeper* parent) const
 {
-    return (parent->m_TimeHandler->getTime() - parent->m_HereStamp) >= parent->m_Config->getData().workLength;
+    return (parent->m_TimeHandler->getTime() - parent->m_HereStamp) >= parent->m_WorkLength;
 }
 
 boost::posix_time::time_duration TKStateHere::getInterval(const TimeKeeper* parent) const
@@ -70,6 +69,5 @@ boost::posix_time::time_duration TKStateHere::getInterval(const TimeKeeper* pare
 
 boost::posix_time::time_duration TKStateHere::getTimeLeft(const TimeKeeper* parent) const
 {
-    const ConfigData& config = parent->m_Config->getData();
-    return parent->m_HereStamp + config.workLength - parent->m_TimeHandler->getTime();
+    return parent->m_HereStamp + parent->m_WorkLength - parent->m_TimeHandler->getTime();
 }

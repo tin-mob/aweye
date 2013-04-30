@@ -63,8 +63,27 @@ SUITE(TestEWPresenter)
 {
     TEST_FIXTURE(EWPresenterFixture, TestValidConfig)
     {
-        presenter->loadConfig(dialog);
+        ConfigData data =
+        {
+            ConfigData::default_WorkLength + boost::posix_time::seconds(1),
+            ConfigData::default_PauseLength + boost::posix_time::seconds(1),
+            ConfigData::default_RemFreq + boost::posix_time::seconds(1),
+            ConfigData::default_CheckFreq + boost::posix_time::seconds(1),
+            ConfigData::default_PauseTol + 1,
+            !ConfigData::default_Startup,
+            !ConfigData::default_SoundAlarm,
+            !ConfigData::default_PopupAlarm,
+            !ConfigData::default_EmailAlarm,
+            "test@test.test",
+            ConfigData::default_WebcamIndex + 1,
+            ConfigData::default_FaceSizeX + 1,
+            ConfigData::default_FaceSizeY + 1,
+            "test.cfg"
+        };
+        this->dialog->setData(data);
         CHECK_EQUAL(true, presenter->saveConfig(dialog));
+        this->dialog->setData(ConfigData());
+        presenter->loadConfig(dialog);
 
         ConfigData returnedData = dialog->getData();
         CHECK_EQUAL(data.workLength, returnedData.workLength);
@@ -77,6 +96,21 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(data.popupAlarm, returnedData.popupAlarm);
         CHECK_EQUAL(data.emailAlarm, returnedData.emailAlarm);
         CHECK_EQUAL(data.emailAddr, returnedData.emailAddr);
+        CHECK_EQUAL(data.webcamIndex, returnedData.webcamIndex);
+        CHECK_EQUAL(data.faceSizeX, returnedData.faceSizeX);
+        CHECK_EQUAL(data.faceSizeY, returnedData.faceSizeY);
+        CHECK_EQUAL(data.cascadePath, returnedData.cascadePath);
+
+        CHECK_EQUAL(data.cascadePath, this->presHandler->cascadePath);
+        CHECK_EQUAL(data.webcamIndex, this->presHandler->webcamIndex);
+        CHECK_EQUAL(data.faceSizeX, this->presHandler->faceSizeX);
+        CHECK_EQUAL(data.faceSizeY, this->presHandler->faceSizeY);
+
+        CHECK_EQUAL(data.checkFreq, this->keeper->checkFreq);
+        CHECK_EQUAL(data.pauseLength, this->keeper->pauseLength);
+        CHECK_EQUAL(data.pauseTol, this->keeper->pauseTol);
+        CHECK_EQUAL(data.remFreq, this->keeper->remFreq);
+        CHECK_EQUAL(data.workLength, this->keeper->workLength);
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestInvalidConfig)

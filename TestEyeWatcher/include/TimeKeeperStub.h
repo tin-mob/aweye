@@ -16,7 +16,13 @@ class TimeKeeperStub : public AbstractTimeKeeper
         TimeKeeperStub() : fail(false), late(false), status(AbstractTimeKeeper::OFF),
             hereStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(10,59,00))),
             awayStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(11,31,01))),
-            interval(boost::posix_time::seconds(2)), left(boost::posix_time::minutes(3)){}
+            interval(boost::posix_time::seconds(2)), left(boost::posix_time::minutes(3)),
+            workLength(boost::posix_time::time_duration(00,00,00)),
+            pauseLength(boost::posix_time::time_duration(00,00,01)),
+            remFreq(boost::posix_time::time_duration(00,00,10)),
+            checkFreq(boost::posix_time::time_duration(00,00,11)),
+            pauseTol(1000)
+            {}
         virtual ~TimeKeeperStub() {}
 
         virtual void start()
@@ -40,6 +46,12 @@ class TimeKeeperStub : public AbstractTimeKeeper
         virtual boost::posix_time::ptime getHereStamp() const {return hereStamp;}
         virtual boost::posix_time::ptime getAwayStamp() const {return awayStamp;}
 
+        virtual void setWorkLength(boost::posix_time::time_duration wl) {workLength = wl;}
+        virtual void setPauseLength(boost::posix_time::time_duration pl) {pauseLength = pl;}
+        virtual void setRemFreq(boost::posix_time::time_duration rf) {remFreq = rf;}
+        virtual void setCheckFreq(boost::posix_time::time_duration cf) {checkFreq = cf;}
+        virtual void setPauseTol(unsigned int pt) {pauseTol = pt;}
+
         bool fail;
         bool late;
         AbstractTimeKeeper::Status status;
@@ -47,6 +59,12 @@ class TimeKeeperStub : public AbstractTimeKeeper
         boost::posix_time::ptime awayStamp;
         boost::posix_time::time_duration interval;
         boost::posix_time::time_duration left;
+
+        boost::posix_time::time_duration workLength;
+        boost::posix_time::time_duration pauseLength;
+        boost::posix_time::time_duration remFreq;
+        boost::posix_time::time_duration checkFreq;
+        unsigned int pauseTol;
 
     protected:
     private:
