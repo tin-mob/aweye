@@ -1,8 +1,6 @@
 #include "TKStateAway.h"
-#include "Config.h"
 #include "TimeKeeper.h"
-#include "WebcamHandler.h"
-#include "TKStateHere.h"
+#include "AbstractPresenceHandler.h"
 #include "AbstractTimeHandler.h"
 #include "boost/date_time/posix_time/posix_time.hpp"
 
@@ -26,8 +24,6 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
         boost::posix_time::time_duration timeLeft = this->getTimeLeft(parent);
         if (timeLeft > boost::posix_time::time_duration(0,0,0,0))
         {
-            unsigned int num = parent->m_NumTolerated;
-            unsigned int tol = parent->m_PauseTol;
             if (parent->m_NumTolerated < parent->m_PauseTol)
             {
                 parent->m_NumTolerated++;

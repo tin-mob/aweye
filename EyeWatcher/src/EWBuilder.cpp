@@ -1,8 +1,21 @@
 #include "EWBuilder.h"
 
-EWBuilder::EWBuilder() :
+#include "Config.h"
+#include "MsgHandler.h"
+#include "WebcamHandler.h"
+#include "TimeHandler.h"
+#include "TimeKeeper.h"
+#include "EWPresenter.h"
+#include "EWMainFramePres.h"
+#include "EWMainFrame.h"
+#include "MyWxTimer.h"
+#include "EyeWatcherApp.h"
+#include "ExitCommand.h"
+
+EWBuilder::EWBuilder(EyeWatcherApp* app) :
     m_MsgHandler(NULL), m_Config(NULL), m_TimeHandler(NULL),
-    m_PresenceHandler(NULL), m_TimeKeeper(NULL), m_Presenter(NULL)
+    m_PresenceHandler(NULL), m_TimeKeeper(NULL), m_ClockTimer(NULL),
+    m_Presenter(NULL), m_MainFramePres(NULL), m_MainFrame(NULL), m_ExitCmd(NULL)
 {
     //ctor
     try
@@ -19,7 +32,13 @@ EWBuilder::EWBuilder() :
             this->m_TimeKeeper = new TimeKeeper(m_TimeHandler,
                 m_PresenceHandler, data.workLength, data.pauseLength, data.remFreq,
                 data.checkFreq, data.pauseTol);
-            this->m_Presenter = new EWPresenter(m_MsgHandler, m_Config, m_TimeKeeper, m_PresenceHandler);
+            this->m_CheckTimer = new MyWxTimer();
+            this->m_ClockTimer = new MyWxTimer();
+            this->m_ExitCmd = new ExitCommand(app);
+            this->m_Presenter = new EWPresenter(m_MsgHandler, m_Config, m_TimeKeeper,
+                m_PresenceHandler, m_CheckTimer, m_ClockTimer, m_ExitCmd);
+            this->m_MainFramePres = new EWMainFramePres(m_Presenter, m_MsgHandler);
+            this->m_MainFrame = new EWMainFrame(NULL, m_MainFramePres);
         }
         catch (BaseException e)
         {
@@ -48,4 +67,7 @@ void EWBuilder::deleteFields()
     if (this->m_PresenceHandler != NULL) delete this->m_PresenceHandler;
     if (this->m_TimeKeeper != NULL) delete this->m_TimeKeeper;
     if (this->m_Presenter != NULL) delete this->m_Presenter;
+    if (this->m_MainFramePres != NULL) delete this->m_MainFramePres;
+    // since m_MainFrame inherits from wxFrame, it is deleted by wx, not by us
+    if (this->m_ExitCmd != NULL) delete this->m_ExitCmd;
 }

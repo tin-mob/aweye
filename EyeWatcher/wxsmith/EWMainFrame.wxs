@@ -10,15 +10,7 @@
 						<object class="wxButton" name="ID_BUTTON1" variable="pauseButton" member="yes">
 							<label>Pause</label>
 							<minsize>-1,-1</minsize>
-						</object>
-						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-						<border>5</border>
-						<option>1</option>
-					</object>
-					<object class="sizeritem">
-						<object class="wxButton" name="ID_BUTTON2" variable="stopButton" member="yes">
-							<label>Stop</label>
-							<handler function="OnStopButtonClick" entry="EVT_BUTTON" />
+							<handler function="OnPauseButtonClick" entry="EVT_BUTTON" />
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
@@ -45,7 +37,16 @@
 					<object class="sizeritem">
 						<object class="wxButton" name="ID_BUTTON5" variable="aboutButton" member="yes">
 							<label>About</label>
-							<handler function="OnaboutButtonClick" entry="EVT_BUTTON" />
+							<handler function="OnAbout" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON6" variable="quitButton" member="yes">
+							<label>Quit</label>
+							<handler function="OnQuit" entry="EVT_BUTTON" />
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
@@ -163,14 +164,6 @@
 				<border>5</border>
 				<option>1</option>
 			</object>
-		</object>
-		<object class="wxTimer" name="ID_TIMER1" variable="clockTimer" member="yes">
-			<interval>1000</interval>
-			<handler function="OnClockTimerTrigger" entry="EVT_TIMER" />
-		</object>
-		<object class="wxTimer" name="ID_TIMER2" variable="checkTimer" member="yes">
-			<oneshoot>1</oneshoot>
-			<handler function="OnCheckTimerTrigger" entry="EVT_TIMER" />
 		</object>
 	</object>
 </wxsmith>

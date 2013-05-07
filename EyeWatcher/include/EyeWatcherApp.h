@@ -10,10 +10,9 @@
 #ifndef EYEWATCHERAPP_H
 #define EYEWATCHERAPP_H
 
-#include "EWBuilder.h"
-
 #include <wx/app.h>
 
+class EWBuilder;
 class EyeWatcherApp : public wxApp
 {
     public:

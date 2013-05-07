@@ -15,28 +15,29 @@
 #include <wx/button.h>
 #include <wx/frame.h>
 #include <wx/stattext.h>
-#include <wx/timer.h>
 //*)
 #include <wx/valgen.h>
 #include <string>
 
-#include "EWPresenter.h"
-#include "WxHandlerFactory.h"
 #include "AbstractEWMainFrame.h"
 
+class EWMainFramePres;
+class EWPresenter;
 class EWMainFrame: public wxFrame, public AbstractEWMainFrame
 {
     public:
 
-        EWMainFrame(wxWindow* parent, EWPresenter* presenter, wxWindowID id = -1);
+        EWMainFrame(wxWindow* parent, EWMainFramePres* presenter, wxWindowID id = -1);
         virtual ~EWMainFrame();
 
         virtual void setValues( std::string status, std::string onClock,
                        std::string offClock, std::string runningClock,
                        std::string leftClock);
-
-        virtual void startTimer(long total_milliseconds);
-        virtual void stopTimer();
+        virtual void notifyMessage(std::string message, bool warning = false);
+        virtual void displayOptionsDialog(EWPresenter* presenter);
+        virtual void show();
+        virtual void setPauseButtonLabel(std::string label);
+        virtual void setStartButtonLabel(std::string label);
 
     private:
 
@@ -44,20 +45,17 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
         void OnOptionsButtonClick(wxCommandEvent& event);
-        void OnaboutButtonClick(wxCommandEvent& event);
         void OnPlayButtonClick(wxCommandEvent& event);
-        void OnStopButtonClick(wxCommandEvent& event);
-        void OnClockTimerTrigger(wxTimerEvent& event);
-        void OnCheckTimerTrigger(wxTimerEvent& event);
         void OnClose(wxCloseEvent& event);
+        void OnPauseButtonClick(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(EWMainFrame)
         static const long ID_BUTTON1;
-        static const long ID_BUTTON2;
         static const long ID_BUTTON3;
         static const long ID_BUTTON4;
         static const long ID_BUTTON5;
+        static const long ID_BUTTON6;
         static const long ID_STATICTEXT9;
         static const long ID_STATICTEXT1;
         static const long ID_STATICTEXT2;
@@ -67,11 +65,10 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
         static const long ID_STATICTEXT6;
         static const long ID_STATICTEXT7;
         static const long ID_STATICTEXT8;
-        static const long ID_TIMER1;
-        static const long ID_TIMER2;
         //*)
 
         //(*Declarations(EWMainFrame)
+        wxButton* quitButton;
         wxStaticText* runningClock;
         wxStaticText* onClock;
         wxStaticText* onLabel;
@@ -80,17 +77,14 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
         wxStaticText* leftClock;
         wxButton* pauseButton;
         wxStaticText* offClock;
-        wxTimer clockTimer;
         wxStaticText* StatusLabel;
         wxStaticText* offLabel;
         wxStaticText* leftLabel;
-        wxTimer checkTimer;
         wxButton* optionsButton;
-        wxButton* stopButton;
         wxButton* aboutButton;
         //*)
 
-        EWPresenter* m_Presenter;
+        EWMainFramePres* m_Presenter;
 
         DECLARE_EVENT_TABLE()
 };

@@ -315,6 +315,35 @@
 									<option>1</option>
 								</object>
 								<object class="sizeritem">
+									<object class="wxFlexGridSizer" variable="indexFlexGridSizer" member="no">
+										<cols>3</cols>
+										<growablecols>1</growablecols>
+										<object class="sizeritem">
+											<object class="wxStaticText" name="ID_STATICTEXT8" variable="indexStaticText" member="yes">
+												<label>Webcam Index</label>
+											</object>
+											<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="spacer">
+											<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxSpinCtrl" name="ID_SPINCTRL10" variable="indexSpinCtrl" member="yes">
+												<value>0</value>
+											</object>
+											<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+									</object>
+									<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+									<option>1</option>
+								</object>
+								<object class="sizeritem">
 									<object class="wxFlexGridSizer" variable="cascadeFlexGridSizer" member="no">
 										<cols>3</cols>
 										<growablecols>1</growablecols>
@@ -340,27 +369,24 @@
 									<option>1</option>
 								</object>
 								<object class="sizeritem">
-									<object class="wxFlexGridSizer" variable="indexFlexGridSizer" member="no">
+									<object class="wxFlexGridSizer" variable="soundLocFlexGridSizer" member="no">
 										<cols>3</cols>
 										<growablecols>1</growablecols>
 										<object class="sizeritem">
-											<object class="wxStaticText" name="ID_STATICTEXT8" variable="indexStaticText" member="yes">
-												<label>Webcam Index</label>
+											<object class="wxStaticText" name="ID_STATICTEXT9" variable="soundLocStaticText" member="yes">
+												<label>Sound File Location</label>
 											</object>
-											<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-											<border>5</border>
-											<option>1</option>
-										</object>
-										<object class="spacer">
 											<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
 										<object class="sizeritem">
-											<object class="wxSpinCtrl" name="ID_SPINCTRL10" variable="indexSpinCtrl" member="yes">
-												<value>0</value>
+											<object class="Custom" name="ID_CUSTOM2" subclass="wxFilePickerCtrl" variable="soundLocFilePickerCtrl" member="yes">
+												<creating_code>$(THIS) = new $(CLASS)($(PARENT),$(ID),wxEmptyString,wxEmptyString,wxT(&quot;*&quot;),$(POS),$(SIZE),$(STYLE),wxDefaultValidator,$(NAME));</creating_code>
+												<include_file>wx/filepicker.h</include_file>
+												<style>wxFLP__USE__TEXTCTRL|wxFLP__OPEN|wxFLP__FILE__MUST__EXIST</style>
 											</object>
-											<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>

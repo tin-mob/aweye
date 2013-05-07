@@ -19,7 +19,8 @@ struct ConfigData
         int wi = default_WebcamIndex,
         unsigned int fx = default_FaceSizeX,
         unsigned int fy = default_FaceSizeY,
-        std::string cp = default_CascadePath);
+        std::string cp = default_CascadePath,
+        std::string sp = default_SoundPath);
 
     boost::posix_time::time_duration workLength;
     boost::posix_time::time_duration pauseLength;
@@ -35,6 +36,7 @@ struct ConfigData
     unsigned int faceSizeX;
     unsigned int faceSizeY;
     std::string cascadePath;
+    std::string soundPath;
 
     static const boost::posix_time::time_duration default_WorkLength;
     static const boost::posix_time::time_duration default_PauseLength;
@@ -50,6 +52,7 @@ struct ConfigData
     static const unsigned int default_FaceSizeX;
     static const unsigned int default_FaceSizeY;
     static const std::string default_CascadePath;
+    static const std::string default_SoundPath;
 }
 ;
 

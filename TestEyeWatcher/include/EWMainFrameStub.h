@@ -32,6 +32,13 @@ class EWMainFrameStub : public AbstractEWMainFrame
             running = false;
         }
 
+        virtual void notifyMessage(std::string message, bool warning = false)
+        {
+            lastMessage = message;
+        }
+
+        virtual void show() {}
+
         bool running;
         long lastTotal;
         std::string status;
@@ -39,6 +46,7 @@ class EWMainFrameStub : public AbstractEWMainFrame
         std::string offClock;
         std::string runningClock;
         std::string leftClock;
+        std::string lastMessage;
 
     protected:
     private:

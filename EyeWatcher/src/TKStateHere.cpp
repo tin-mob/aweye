@@ -1,8 +1,6 @@
 #include "TKStateHere.h"
-#include "Config.h"
 #include "TimeKeeper.h"
-#include "WebcamHandler.h"
-#include "TKStateAway.h"
+#include "AbstractPresenceHandler.h"
 #include "AbstractTimeHandler.h"
 #include "boost/date_time/posix_time/posix_time.hpp"
 

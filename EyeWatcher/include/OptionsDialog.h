@@ -18,10 +18,9 @@
 #include <wx/filepicker.h>
 //*)
 
-#include "EWPresenter.h"
-#include "WxHandlerFactory.h"
 #include "AbstractOptionsDialog.h"
 
+class EWPresenter;
 class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 {
 	public:
@@ -38,10 +37,12 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		wxCheckBox* startupCheckBox;
 		wxCheckBox* soundCheckBox;
 		wxSpinCtrl* FaceSizeYSpinCtrl;
+		wxFilePickerCtrl* soundLocFilePickerCtrl;
 		wxStaticText* tolStaticText;
 		wxCheckBox* popupCheckBox;
 		wxStaticText* zzzLabel;
 		wxSpinCtrl* chkSecSpinCtrl;
+		wxStaticText* soundLocStaticText;
 		wxTextCtrl* emailTextCtrl;
 		wxSpinCtrl* wrkSecSpinCtrl;
 		wxNotebook* optionsNotebook;
@@ -92,10 +93,12 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		static const long ID_SPINCTRL7;
 		static const long ID_STATICTEXT5;
 		static const long ID_SPINCTRL1;
-		static const long ID_STATICTEXT7;
-		static const long ID_CUSTOM1;
 		static const long ID_STATICTEXT8;
 		static const long ID_SPINCTRL10;
+		static const long ID_STATICTEXT7;
+		static const long ID_CUSTOM1;
+		static const long ID_STATICTEXT9;
+		static const long ID_CUSTOM2;
 		static const long ID_PANEL2;
 		static const long ID_NOTEBOOK1;
 		//*)

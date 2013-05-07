@@ -2,54 +2,67 @@
 #define EWPRESENTER_H
 
 #include <string>
-#include "AbstractTimeKeeper.h"
+#include "boost/date_time/posix_time/posix_time_types.hpp"
+#include "Observer.h"
 
 class AbstractConfig;
-class HandlerFactory;
 class AbstractMsgHandler;
-class AbstractTimerHandler;
+class AbstractTimeKeeper;
 class AbstractPresenceHandler;
-class AbstractEWMainFrame;
 class AbstractOptionsDialog;
-struct ConfigData;
+class AbstractTimer;
+class Command;
 
-class EWPresenter
+/// @todo: split into smallers presenters...
+class EWPresenter : public Observer, public Observable
 {
     public:
         EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config,
-                    AbstractTimeKeeper* keeper, AbstractPresenceHandler* presenceHandler);
+                    AbstractTimeKeeper* keeper, AbstractPresenceHandler* presenceHandler,
+                    AbstractTimer* checkTimer, AbstractTimer* clockTimer, Command* exitCmd);
         virtual ~EWPresenter();
 
         bool saveConfig(const AbstractOptionsDialog* dialog);
         void loadConfig(AbstractOptionsDialog* dialog);
 
-        void start(AbstractEWMainFrame* frame);
-        void stop(AbstractEWMainFrame* frame);
-        void pause();
-        void updateStatus(AbstractEWMainFrame* frame);
-        void updateTimes(AbstractEWMainFrame* frame);
+        void togglePause();
+        void toggleStart();
+        void quit();
 
-        const std::string m_LateMsg;
+        void update(Observable* source);
+        void updateStatus();
+        void updateTimes();
 
-    protected:
-    private:
-        static std::string durationToString(boost::posix_time::time_duration duration);
-
-        void alert();
-
-        boost::posix_time::time_duration getNextStatusTimer() const;
-
+        std::string getPauseButtonLabel() const;
+        std::string getStartButtonLabel() const;
         std::string getStatus() const;
         std::string getTimeOn() const;
         std::string getTimeOff() const;
         std::string getTimeRunning() const;
         std::string getTimeLeft() const;
 
+        const std::string m_LateMsg;
+        const std::string m_PauseBtnLabel;
+        const std::string m_ResumeBtnLabel;
+        const std::string m_StartBtnLabel;
+        const std::string m_StopBtnLabel;
+
+    protected:
+    private:
+        static std::string durationToString(boost::posix_time::time_duration duration);
+
+        void alert();
+        void start();
+        void stop();
+
         bool m_Warn;
         AbstractConfig* m_Config;
         AbstractTimeKeeper* m_TimeKeeper;
         AbstractMsgHandler* m_MsgHandler;
         AbstractPresenceHandler* m_PresenceHandler;
+        AbstractTimer* m_CheckTimer;
+        AbstractTimer* m_ClockTimer;
+        Command* m_ExitCmd;
 };
 
 #endif // EWPRESENTER_H

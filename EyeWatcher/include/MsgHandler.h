@@ -2,6 +2,7 @@
 #define MSGHANDLER_H
 
 #include "AbstractMsgHandler.h"
+#include <string>
 
 class MsgHandler : public AbstractMsgHandler
 {
@@ -10,6 +11,7 @@ class MsgHandler : public AbstractMsgHandler
         virtual ~MsgHandler();
         virtual void displayError(std::string msg);
         virtual void displayAlert(std::string msg);
+        virtual void playSound(std::string filename);
     protected:
     private:
 };

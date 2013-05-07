@@ -2,7 +2,6 @@
 #include "TKStateAway.h"
 #include "TKStateHere.h"
 #include "TKStateOff.h"
-#include "AbstractConfig.h"
 #include "AbstractTimeHandler.h"
 #include "AbstractPresenceHandler.h"
 

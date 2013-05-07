@@ -25,7 +25,7 @@ class WebcamHandler : public AbstractPresenceHandler
     public:
         /// @todo: find best minimum size
         WebcamHandler(int index, std::string faceCascadeName,
-                      int faceSizeX, int facesizeY);
+                      int faceSizeX, int faceSizeY);
         ~WebcamHandler();
 
         bool isHere();
@@ -37,7 +37,7 @@ class WebcamHandler : public AbstractPresenceHandler
         int m_index;
         std::string m_FaceCascadeName;
         int m_FaceSizeX;
-        int m_FacesizeY;
+        int m_FaceSizeY;
         cv::CascadeClassifier m_FaceCascade;
 };
 

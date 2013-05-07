@@ -1,23 +1,31 @@
 #include "EWPresenter.h"
+
 #include "AbstractConfig.h"
-#include "HandlerFactory.h"
 #include "AbstractMsgHandler.h"
 #include "AbstractTimeKeeper.h"
+#include "AbstractTimer.h"
 #include "AbstractPresenceHandler.h"
-#include "AbstractEWMainFrame.h"
 #include "AbstractOptionsDialog.h"
 #include "BaseException.h"
 #include "ConfigData.h"
+#include "Command.h"
+
+#include "boost/date_time/posix_time/posix_time.hpp"
 
 #include <sstream>
 #include <iomanip>
 #include <stdlib.h>
 
 EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config,
-                         AbstractTimeKeeper* keeper, AbstractPresenceHandler* presenceHandler)
-    :  m_LateMsg("Time for a pause!"), m_Warn(true), m_Config(config),
-    m_TimeKeeper(keeper), m_MsgHandler(msgHandler), m_PresenceHandler(presenceHandler)
+                         AbstractTimeKeeper* keeper, AbstractPresenceHandler* presenceHandler,
+                         AbstractTimer* checkTimer, AbstractTimer* clockTimer, Command* exitCmd)
+    :  m_LateMsg("Time for a pause!"), m_PauseBtnLabel("Pause"), m_ResumeBtnLabel("Resume"),
+    m_StartBtnLabel("Start"), m_StopBtnLabel("Stop"), m_Warn(true), m_Config(config),
+    m_TimeKeeper(keeper), m_MsgHandler(msgHandler), m_PresenceHandler(presenceHandler),
+    m_CheckTimer(checkTimer), m_ClockTimer(clockTimer), m_ExitCmd(exitCmd)
 {
+    this->m_CheckTimer->attach(this);
+    this->m_ClockTimer->attach(this);
 }
 
 EWPresenter::~EWPresenter()
@@ -54,12 +62,13 @@ void EWPresenter::loadConfig(AbstractOptionsDialog* dialog)
     dialog->setData(this->m_Config->getData());
 }
 
-void EWPresenter::start(AbstractEWMainFrame* frame)
+void EWPresenter::start()
 {
     try
     {
         this->m_TimeKeeper->start();
-        frame->startTimer(this->getNextStatusTimer().total_milliseconds());
+        this->updateStatus();
+        this->m_ClockTimer->startTimer(1000, false);
     }
     catch (BaseException e)
     {
@@ -67,23 +76,26 @@ void EWPresenter::start(AbstractEWMainFrame* frame)
     }
 }
 
-void EWPresenter::stop(AbstractEWMainFrame* frame)
+void EWPresenter::stop()
 {
     this->m_TimeKeeper->stop();
-    frame->stopTimer();
+    this->m_CheckTimer->stopTimer();
+    this->m_ClockTimer->stopTimer();
+    this->notify();
 }
 
-void EWPresenter::pause()
+void EWPresenter::quit()
 {
-    m_Warn = !m_Warn;
+    this->m_ExitCmd->execute();
 }
 
-void EWPresenter::updateStatus(AbstractEWMainFrame* frame)
+void EWPresenter::updateStatus()
 {
     try
     {
         this->m_TimeKeeper->updateStatus();
-        frame->startTimer(this->getNextStatusTimer().total_milliseconds());
+        this->m_CheckTimer->startTimer(this->m_TimeKeeper->getTimerInterval().total_milliseconds(), true);
+        this->notify();
 
         if (this->m_TimeKeeper->isLate() && this->m_TimeKeeper->getStatus() == AbstractTimeKeeper::HERE)
         {
@@ -97,16 +109,69 @@ void EWPresenter::updateStatus(AbstractEWMainFrame* frame)
     }
 }
 
-void EWPresenter::updateTimes(AbstractEWMainFrame* frame)
+void EWPresenter::updateTimes()
 {
-    frame->setValues(this->getStatus(), this->getTimeOn(), this->getTimeOff(),
-                     this->getTimeRunning(), this->getTimeLeft());
+    this->notify();
 }
 
-boost::posix_time::time_duration EWPresenter::getNextStatusTimer() const
+void EWPresenter::update(Observable* source)
 {
-    return this->m_TimeKeeper->getTimerInterval();
+    if (source == this->m_ClockTimer)
+    {
+        this->updateTimes();
+    }
+    else if (source == this->m_CheckTimer)
+    {
+        this->updateStatus();
+    }
+    else
+    {
+        assert(0);
+    }
 }
+
+void EWPresenter::togglePause()
+{
+    m_Warn = !m_Warn;
+    this->notify();
+}
+
+void EWPresenter::toggleStart()
+{
+    if(this->m_TimeKeeper->getStatus() != AbstractTimeKeeper::OFF)
+    {
+        this->stop();
+    }
+    else
+    {
+        this->start();
+    }
+}
+
+std::string EWPresenter::getPauseButtonLabel() const
+{
+    if (this->m_Warn)
+    {
+        return this->m_PauseBtnLabel;
+    }
+    else
+    {
+        return this->m_ResumeBtnLabel;
+    }
+}
+
+std::string EWPresenter::getStartButtonLabel() const
+{
+    if (this->m_TimeKeeper->getStatus() != AbstractTimeKeeper::OFF)
+    {
+        return this->m_StopBtnLabel;
+    }
+    else
+    {
+        return this->m_StartBtnLabel;
+    }
+}
+
 
 std::string EWPresenter::getStatus() const
 {
@@ -157,15 +222,24 @@ std::string EWPresenter::getTimeLeft() const
 
 void EWPresenter::alert()
 {
+    if (!this->m_Warn)
+    {
+        return;
+    }
+
     const ConfigData& config = this->m_Config->getData();
     if (config.popupAlarm)
     {
+        //sadly, only available in wxwidgets 2.9
+        //frame->notifyMessage(m_LateMsg);
+
+        // remove when notify is working...
         this->m_MsgHandler->displayAlert(m_LateMsg);
     }
 
     if (config.soundAlarm)
     {
-        ///@todo
+        this->m_MsgHandler->playSound(config.soundPath);
     }
 
     if (config.emailAlarm)

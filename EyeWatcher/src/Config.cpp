@@ -79,7 +79,8 @@ void Config::generate(boost::property_tree::ptree &pt)
         pt.get("WebcamIndex", ConfigData::default_WebcamIndex),
         pt.get("FaceSizeX", ConfigData::default_FaceSizeX),
         pt.get("FaceSizeY", ConfigData::default_FaceSizeY),
-        pt.get("CascadePath", ConfigData::default_CascadePath)
+        pt.get("CascadePath", ConfigData::default_CascadePath),
+        pt.get("SoundPath", ConfigData::default_SoundPath)
     };
 
     if (Config::validateData(tempData))
@@ -126,6 +127,7 @@ void Config::write()
     pt.put("FaceSizeX", this->m_data.faceSizeX);
     pt.put("FaceSizeY", this->m_data.faceSizeY);
     pt.put("CascadePath", this->m_data.cascadePath);
+    pt.put("SoundPath", this->m_data.soundPath);
 
     // Write the property tree to the XML file.
     write_json(this->m_filename, pt);

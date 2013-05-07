@@ -1,8 +1,7 @@
 #include "WebcamHandler.h"
-#include "AbstractMsgHandler.h"
-#include "AbstractConfig.h"
-#include "ConfigData.h"
 #include <boost/filesystem.hpp>
+
+#include <fstream>
 
 /// @todo: opencv 2.3.1 leaks in ishere (videocapture and mat not deleted)
 /// options are either installing 2.4 from source, installing a new version
@@ -10,11 +9,13 @@
 
 /// @todo: find a way to manage paths (Win/Linux)
 WebcamHandler::WebcamHandler(int index, std::string faceCascadeName,
-                             int faceSizeX, int facesizeY) :
+                             int faceSizeX, int faceSizeY) :
     m_index(index), m_FaceCascadeName(faceCascadeName),
-    m_FaceSizeX(faceSizeX), m_FacesizeY(facesizeY)
+    m_FaceSizeX(faceSizeX), m_FaceSizeY(faceSizeY)
 {
-    this->setCascade(faceCascadeName);
+    if( !this->m_FaceCascade.load(m_FaceCascadeName) ){
+        throw MissingCascadeFileException();
+    }
 }
 
 WebcamHandler::~WebcamHandler()
@@ -40,11 +41,9 @@ void WebcamHandler::setIndex(int index)
 void WebcamHandler::setFaceSize(unsigned int x, unsigned int y)
 {
     this->m_FaceSizeX = x;
-    this->m_FacesizeY = y;
+    this->m_FaceSizeY = y;
 }
 
-/// @todo: face size (minSize last param)
-/// @todo: test away state (seems to me there are false positives...)
 bool WebcamHandler::isHere()
 {
     cv::VideoCapture videoCapture(this->m_index);
@@ -63,7 +62,16 @@ bool WebcamHandler::isHere()
 
 	//-- Detect faces
 	this->m_FaceCascade.detectMultiScale( frame_gray, faces,
-        1.1, 2, 0|CV_HAAR_SCALE_IMAGE, cv::Size(this->m_FaceSizeX, this->m_FacesizeY) );
+        1.1, 2, 0|CV_HAAR_SCALE_IMAGE, cv::Size(this->m_FaceSizeX, this->m_FaceSizeY) );
+
+    // kept for debugging purposes
+    /*
+    std::ofstream myfile;
+    myfile.open ("log.txt", std::ios::app);
+    for( unsigned int i = 0; i < faces.size(); i++ ) {
+        myfile << faces[0].width << "; " << faces[0].height << "\n";
+    }
+    myfile.close();*/
 
     return !faces.empty();
 }

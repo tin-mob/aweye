@@ -2,7 +2,7 @@
 #include "OptionsDialog.h"
 #include "EWPresenter.h"
 #include "AbstractOptionsDialog.h"
-#include "Config.h"
+#include "ConfigData.h"
 
 #ifndef WX_PRECOMP
 	//(*InternalHeadersPCH(OptionsDialog)
@@ -38,10 +38,12 @@ const long OptionsDialog::ID_SPINCTRL4 = wxNewId();
 const long OptionsDialog::ID_SPINCTRL7 = wxNewId();
 const long OptionsDialog::ID_STATICTEXT5 = wxNewId();
 const long OptionsDialog::ID_SPINCTRL1 = wxNewId();
-const long OptionsDialog::ID_STATICTEXT7 = wxNewId();
-const long OptionsDialog::ID_CUSTOM1 = wxNewId();
 const long OptionsDialog::ID_STATICTEXT8 = wxNewId();
 const long OptionsDialog::ID_SPINCTRL10 = wxNewId();
+const long OptionsDialog::ID_STATICTEXT7 = wxNewId();
+const long OptionsDialog::ID_CUSTOM1 = wxNewId();
+const long OptionsDialog::ID_STATICTEXT9 = wxNewId();
+const long OptionsDialog::ID_CUSTOM2 = wxNewId();
 const long OptionsDialog::ID_PANEL2 = wxNewId();
 const long OptionsDialog::ID_NOTEBOOK1 = wxNewId();
 //*)
@@ -60,6 +62,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, EWPresenter* presenter, wxWindowI
 	wxFlexGridSizer* tolFlexGridSizer;
 	wxFlexGridSizer* chkFlexGridSizer;
 	wxFlexGridSizer* cascadeFlexGridSizer;
+	wxFlexGridSizer* soundLocFlexGridSizer;
 	wxFlexGridSizer* optionsFlexGridSizer;
 	wxFlexGridSizer* indexFlexGridSizer;
 	wxStaticBoxSizer* timeStaticBoxSizer;
@@ -170,6 +173,15 @@ OptionsDialog::OptionsDialog(wxWindow* parent, EWPresenter* presenter, wxWindowI
 	tolSpinCtrl->SetValue(_T("0"));
 	tolFlexGridSizer->Add(tolSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	advancedFlexGridSizer->Add(tolFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+	indexFlexGridSizer = new wxFlexGridSizer(0, 3, 0, 0);
+	indexFlexGridSizer->AddGrowableCol(1);
+	indexStaticText = new wxStaticText(AdvancedPanel, ID_STATICTEXT8, _("Webcam Index"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
+	indexFlexGridSizer->Add(indexStaticText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	indexFlexGridSizer->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	indexSpinCtrl = new wxSpinCtrl(AdvancedPanel, ID_SPINCTRL10, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 100, 0, _T("ID_SPINCTRL10"));
+	indexSpinCtrl->SetValue(_T("0"));
+	indexFlexGridSizer->Add(indexSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	advancedFlexGridSizer->Add(indexFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 	cascadeFlexGridSizer = new wxFlexGridSizer(0, 3, 0, 0);
 	cascadeFlexGridSizer->AddGrowableCol(1);
 	StaticText1 = new wxStaticText(AdvancedPanel, ID_STATICTEXT7, _("Cascade File Location"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
@@ -177,15 +189,13 @@ OptionsDialog::OptionsDialog(wxWindow* parent, EWPresenter* presenter, wxWindowI
 	cascadeFilePickerCtrl = new wxFilePickerCtrl(AdvancedPanel,ID_CUSTOM1,wxEmptyString,wxEmptyString,wxT("*"),wxDefaultPosition,wxDefaultSize,wxFLP_USE_TEXTCTRL|wxFLP_OPEN|wxFLP_FILE_MUST_EXIST,wxDefaultValidator,_T("ID_CUSTOM1"));
 	cascadeFlexGridSizer->Add(cascadeFilePickerCtrl, 1, wxALL|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	advancedFlexGridSizer->Add(cascadeFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
-	indexFlexGridSizer = new wxFlexGridSizer(0, 3, 0, 0);
-	indexFlexGridSizer->AddGrowableCol(1);
-	indexStaticText = new wxStaticText(AdvancedPanel, ID_STATICTEXT8, _("Webcam Index"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
-	indexFlexGridSizer->Add(indexStaticText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	indexFlexGridSizer->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	indexSpinCtrl = new wxSpinCtrl(AdvancedPanel, ID_SPINCTRL10, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 100, 0, _T("ID_SPINCTRL10"));
-	indexSpinCtrl->SetValue(_T("0"));
-	indexFlexGridSizer->Add(indexSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	advancedFlexGridSizer->Add(indexFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+	soundLocFlexGridSizer = new wxFlexGridSizer(0, 3, 0, 0);
+	soundLocFlexGridSizer->AddGrowableCol(1);
+	soundLocStaticText = new wxStaticText(AdvancedPanel, ID_STATICTEXT9, _("Sound File Location"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
+	soundLocFlexGridSizer->Add(soundLocStaticText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	soundLocFilePickerCtrl = new wxFilePickerCtrl(AdvancedPanel,ID_CUSTOM2,wxEmptyString,wxEmptyString,wxT("*"),wxDefaultPosition,wxDefaultSize,wxFLP_USE_TEXTCTRL|wxFLP_OPEN|wxFLP_FILE_MUST_EXIST,wxDefaultValidator,_T("ID_CUSTOM2"));
+	soundLocFlexGridSizer->Add(soundLocFilePickerCtrl, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	advancedFlexGridSizer->Add(soundLocFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 	AdvancedPanel->SetSizer(advancedFlexGridSizer);
 	advancedFlexGridSizer->Fit(AdvancedPanel);
 	advancedFlexGridSizer->SetSizeHints(AdvancedPanel);
@@ -233,7 +243,8 @@ ConfigData OptionsDialog::getData() const
         this->indexSpinCtrl->GetValue(),
         this->FaceSizeXSpinCtrl->GetValue(),
         this->FaceSizeYSpinCtrl->GetValue(),
-        std::string(this->cascadeFilePickerCtrl->GetPath().mb_str())
+        std::string(this->cascadeFilePickerCtrl->GetPath().mb_str()),
+        std::string(this->soundLocFilePickerCtrl->GetPath().mb_str())
     };
 }
 
@@ -262,6 +273,7 @@ void OptionsDialog::setData(const ConfigData& data)
     this->FaceSizeXSpinCtrl->SetValue(data.faceSizeX);
     this->FaceSizeYSpinCtrl->SetValue(data.faceSizeY);
     this->cascadeFilePickerCtrl->SetPath(wxString(data.cascadePath.c_str(), wxConvUTF8));
+    this->soundLocFilePickerCtrl->SetPath(wxString(data.soundPath.c_str(), wxConvUTF8));
 }
 
 void OptionsDialog::OnOKClick(wxCommandEvent& event)

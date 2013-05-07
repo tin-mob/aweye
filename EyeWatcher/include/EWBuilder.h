@@ -1,17 +1,21 @@
 #ifndef EWBUILDER_H
 #define EWBUILDER_H
 
-#include "Config.h"
-#include "MsgHandler.h"
-#include "WebcamHandler.h"
-#include "TimeHandler.h"
-#include "TimeKeeper.h"
-#include "EWPresenter.h"
-
+class MsgHandler;
+class Config;
+class TimeHandler;
+class WebcamHandler;
+class TimeKeeper;
+class EWPresenter;
+class EWMainFramePres;
+class EWMainFrame;
+class MyWxTimer;
+class ExitCommand;
+class EyeWatcherApp;
 class EWBuilder
 {
     public:
-        EWBuilder();
+        EWBuilder(EyeWatcherApp* app);
         virtual ~EWBuilder();
 
         MsgHandler* m_MsgHandler;
@@ -19,7 +23,13 @@ class EWBuilder
         TimeHandler* m_TimeHandler;
         WebcamHandler* m_PresenceHandler;
         TimeKeeper* m_TimeKeeper;
+        MyWxTimer* m_CheckTimer;
+        MyWxTimer* m_ClockTimer;
         EWPresenter* m_Presenter;
+        EWMainFramePres* m_MainFramePres;
+        EWMainFrame* m_MainFrame;
+        //EWTaskBar* m_TaskBar;
+        ExitCommand* m_ExitCmd;
 
     protected:
     private:

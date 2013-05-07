@@ -13,7 +13,11 @@
 #include "AboutDialog.h"
 #include <wx/msgdlg.h>
 #include <wx/valgen.h>
+#include <wx/utils.h>
+//#include <wx/notifmsg.h>
 #include "BaseException.h"
+#include "EWMainFramePres.h"
+#include "EWPresenter.h"
 
 //(*InternalHeaders(EWMainFrame)
 #include <wx/string.h>
@@ -48,10 +52,10 @@ wxString wxbuildinfo(wxbuildinfoformat format)
 
 //(*IdInit(EWMainFrame)
 const long EWMainFrame::ID_BUTTON1 = wxNewId();
-const long EWMainFrame::ID_BUTTON2 = wxNewId();
 const long EWMainFrame::ID_BUTTON3 = wxNewId();
 const long EWMainFrame::ID_BUTTON4 = wxNewId();
 const long EWMainFrame::ID_BUTTON5 = wxNewId();
+const long EWMainFrame::ID_BUTTON6 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT9 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT1 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT2 = wxNewId();
@@ -61,8 +65,6 @@ const long EWMainFrame::ID_STATICTEXT5 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT6 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT7 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT8 = wxNewId();
-const long EWMainFrame::ID_TIMER1 = wxNewId();
-const long EWMainFrame::ID_TIMER2 = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
@@ -70,7 +72,7 @@ BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
     //*)
 END_EVENT_TABLE()
 
-EWMainFrame::EWMainFrame(wxWindow* parent, EWPresenter* presenter, wxWindowID id) : m_Presenter(presenter)
+EWMainFrame::EWMainFrame(wxWindow* parent, EWMainFramePres* presenter, wxWindowID id) : m_Presenter(presenter)
 {
     //(*Initialize(EWMainFrame)
     wxBoxSizer* buttonsBoxSizer;
@@ -87,14 +89,14 @@ EWMainFrame::EWMainFrame(wxWindow* parent, EWPresenter* presenter, wxWindowID id
     pauseButton = new wxButton(this, ID_BUTTON1, _("Pause"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
     pauseButton->SetMinSize(wxSize(-1,-1));
     buttonsBoxSizer->Add(pauseButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    stopButton = new wxButton(this, ID_BUTTON2, _("Stop"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
-    buttonsBoxSizer->Add(stopButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     playButton = new wxButton(this, ID_BUTTON3, _("Start"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON3"));
     buttonsBoxSizer->Add(playButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     optionsButton = new wxButton(this, ID_BUTTON4, _("Options"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON4"));
     buttonsBoxSizer->Add(optionsButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     aboutButton = new wxButton(this, ID_BUTTON5, _("About"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON5"));
     buttonsBoxSizer->Add(aboutButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    quitButton = new wxButton(this, ID_BUTTON6, _("Quit"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON6"));
+    buttonsBoxSizer->Add(quitButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     mainBoxSizer->Add(buttonsBoxSizer, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
     timesGrid = new wxGridSizer(2, 5, 0, 0);
     StatusLabel = new wxStaticText(this, ID_STATICTEXT9, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
@@ -125,21 +127,23 @@ EWMainFrame::EWMainFrame(wxWindow* parent, EWPresenter* presenter, wxWindowID id
     timesGrid->Add(leftBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
     mainBoxSizer->Add(timesGrid, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     SetSizer(mainBoxSizer);
-    clockTimer.SetOwner(this, ID_TIMER1);
-    clockTimer.Start(1000, false);
-    checkTimer.SetOwner(this, ID_TIMER2);
     mainBoxSizer->Fit(this);
     mainBoxSizer->SetSizeHints(this);
 
-    Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnStopButtonClick);
+    Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnPauseButtonClick);
     Connect(ID_BUTTON3,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnPlayButtonClick);
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnOptionsButtonClick);
-    Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnaboutButtonClick);
-    Connect(ID_TIMER1,wxEVT_TIMER,(wxObjectEventFunction)&EWMainFrame::OnClockTimerTrigger);
-    Connect(ID_TIMER2,wxEVT_TIMER,(wxObjectEventFunction)&EWMainFrame::OnCheckTimerTrigger);
+    Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnAbout);
+    Connect(ID_BUTTON6,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnQuit);
     //*)
 
-    this->m_Presenter->updateTimes(this);
+    this->m_Presenter->attachFrame(this);
+}
+
+EWMainFrame::~EWMainFrame()
+{
+    //(*Destroy(EWMainFrame)
+    //*)
 }
 
 void EWMainFrame::setValues( std::string status, std::string onClock,
@@ -153,75 +157,63 @@ void EWMainFrame::setValues( std::string status, std::string onClock,
     this->leftClock->SetLabel(wxString(leftClock.c_str(), wxConvUTF8));
 }
 
-void EWMainFrame::startTimer(long total_milliseconds)
+/// @note: only available in wxwidgets 2.9 :(
+void EWMainFrame::notifyMessage(std::string message, bool warning)
 {
-    this->checkTimer.Start(total_milliseconds, true);
+    //wxNotificationMessage *notification = new wxNotificationMessage(
+    //    wxT("EyeWatcher"), wxString(message.c_str(), wxConvUTF8), this, warning ? wxICON_WARNING : wxICON_INFORMATION);
+    //norification->show();
 }
 
-void EWMainFrame::stopTimer()
+void EWMainFrame::show()
 {
-    this->checkTimer.Stop();
+    Show();
 }
 
-EWMainFrame::~EWMainFrame()
+void EWMainFrame::setPauseButtonLabel(std::string label)
 {
-    //(*Destroy(EWMainFrame)
-    //*)
+    this->pauseButton->SetLabel(wxString(label.c_str(), wxConvUTF8));
+}
+
+void EWMainFrame::setStartButtonLabel(std::string label)
+{
+    this->playButton->SetLabel(wxString(label.c_str(), wxConvUTF8));
 }
 
 void EWMainFrame::OnQuit(wxCommandEvent& event)
 {
-    Close();
+    this->m_Presenter->OnQuit();
 }
 
 void EWMainFrame::OnAbout(wxCommandEvent& event)
-{
-    wxString msg = wxbuildinfo(long_f);
-    wxMessageBox(msg, _("Welcome to..."));
-}
-
-void EWMainFrame::OnOptionsButtonClick(wxCommandEvent& event)
-{
-    try
-    {
-        OptionsDialog dialog(this, m_Presenter);
-        dialog.ShowModal();
-    }
-    /// @todo: move this away from view?
-    catch (BaseException e)
-    {
-        wxMessageDialog *dial = new wxMessageDialog(NULL,
-            wxString(e.what(), wxConvUTF8), wxT("Error"), wxOK | wxICON_ERROR);
-        dial->ShowModal();
-    }
-}
-
-void EWMainFrame::OnaboutButtonClick(wxCommandEvent& event)
 {
     AboutDialog dialog(this);
     dialog.ShowModal();
 }
 
+void EWMainFrame::OnOptionsButtonClick(wxCommandEvent& event)
+{
+        this->m_Presenter->OnOptionsButtonClick();
+}
+
+void EWMainFrame::displayOptionsDialog(EWPresenter* presenter)
+{
+    OptionsDialog dialog(this, presenter);
+    dialog.ShowModal();
+}
+
 void EWMainFrame::OnPlayButtonClick(wxCommandEvent& event)
 {
-    this->m_Presenter->start(this);
-}
-
-void EWMainFrame::OnStopButtonClick(wxCommandEvent& event)
-{
-    this->m_Presenter->stop(this);
-}
-
-void EWMainFrame::OnClockTimerTrigger(wxTimerEvent& event)
-{
-    this->m_Presenter->updateTimes(this);
-}
-
-void EWMainFrame::OnCheckTimerTrigger(wxTimerEvent& event)
-{
-    this->m_Presenter->updateStatus(this);
+    this->m_Presenter->OnPlayButtonClick();
 }
 
 void EWMainFrame::OnClose(wxCloseEvent& event)
 {
+    /// @todo: maybe will have to be changed ater taskbar (hide)...
+    Destroy();
+}
+
+void EWMainFrame::OnPauseButtonClick(wxCommandEvent& event)
+{
+    this->m_Presenter->OnPauseButtonClick();
 }

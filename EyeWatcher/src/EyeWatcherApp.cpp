@@ -9,9 +9,8 @@
 
 #include "wx_pch.h"
 #include "EyeWatcherApp.h"
-
+#include "EWBuilder.h"
 //(*AppHeaders
-#include "EWMainFrame.h"
 #include <wx/image.h>
 //*)
 
@@ -33,10 +32,7 @@ bool EyeWatcherApp::OnInit()
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
-        if (this->m_Builder == NULL) this->m_Builder = new EWBuilder();
-    	EWMainFrame* Frame = new EWMainFrame(0, this->m_Builder->m_Presenter);
-    	Frame->Show();
-    	SetTopWindow(Frame);
+        if (this->m_Builder == NULL) this->m_Builder = new EWBuilder(this);
     }
     //*)
     return wxsOK;

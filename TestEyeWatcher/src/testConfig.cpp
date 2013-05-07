@@ -75,6 +75,7 @@ SUITE(TestConfig)
         CHECK_EQUAL(ConfigData::default_FaceSizeX, data.faceSizeX);
         CHECK_EQUAL(ConfigData::default_FaceSizeY, data.faceSizeY);
         CHECK_EQUAL(ConfigData::default_CascadePath, data.cascadePath);
+        CHECK_EQUAL(ConfigData::default_SoundPath, data.soundPath);
     }
 
     TEST_FIXTURE(ConfigFixture, TestEmptyNameConstruction)
@@ -115,7 +116,8 @@ SUITE(TestConfig)
             ConfigData::default_WebcamIndex + 1,
             ConfigData::default_FaceSizeX + 1,
             ConfigData::default_FaceSizeY + 1,
-            "test.cfg"
+            "test.cfg",
+            "test.wav"
         };
 
         Config config(configPath);
@@ -139,6 +141,7 @@ SUITE(TestConfig)
         CHECK_EQUAL(srcData.faceSizeX, data.faceSizeX);
         CHECK_EQUAL(srcData.faceSizeY, data.faceSizeY);
         CHECK_EQUAL(srcData.cascadePath, data.cascadePath);
+        CHECK_EQUAL(srcData.soundPath, data.soundPath);
 
         Config config3(configPath);
         config3.checkLoad();
@@ -158,5 +161,6 @@ SUITE(TestConfig)
         CHECK_EQUAL(srcData.faceSizeX, data.faceSizeX);
         CHECK_EQUAL(srcData.faceSizeY, data.faceSizeY);
         CHECK_EQUAL(srcData.cascadePath, data.cascadePath);
+        CHECK_EQUAL(srcData.soundPath, data.soundPath);
     }
 }

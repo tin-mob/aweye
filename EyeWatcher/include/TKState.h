@@ -1,11 +1,9 @@
 #ifndef TKSTATE_H
 #define TKSTATE_H
 
-#include <string>
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 
 class TimeKeeper;
-
 class TKState
 {
     public:

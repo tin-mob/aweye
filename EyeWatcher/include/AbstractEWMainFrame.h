@@ -1,7 +1,9 @@
 #ifndef ABSTRACTEWMAINFRAME_H
 #define ABSTRACTEWMAINFRAME_H
 
+#include <string>
 
+class EWPresenter;
 class AbstractEWMainFrame
 {
     public:
@@ -9,9 +11,11 @@ class AbstractEWMainFrame
         virtual void setValues( std::string status, std::string onClock,
                                std::string offClock, std::string runningClock,
                                std::string leftClock) = 0;
-
-        virtual void startTimer(long total_milliseconds) = 0;
-        virtual void stopTimer() = 0;
+        virtual void notifyMessage(std::string message, bool warning = false) = 0;
+        virtual void displayOptionsDialog(EWPresenter* presenter) = 0;
+        virtual void show() = 0;
+        virtual void setPauseButtonLabel(std::string label) = 0;
+        virtual void setStartButtonLabel(std::string label) = 0;
     protected:
     private:
 };

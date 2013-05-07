@@ -1,7 +1,6 @@
 #ifndef TIMEKEEPER_H
 #define TIMEKEEPER_H
 
-#include <string>
 #include <map>
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 #include "TKState.h"
@@ -10,10 +9,8 @@
 class TKStateHere;
 class TKStateAway;
 class TKStateOff;
-class AbstractConfig;
 class AbstractPresenceHandler;
 class AbstractTimeHandler;
-class HandlerFactory;
 
 class TimeKeeper : public AbstractTimeKeeper
 {
