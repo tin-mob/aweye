@@ -1,7 +1,9 @@
 #include "OptionsDialogPres.h"
+#include "EWPresenter.h"
+#include "ConfigData.h"
 
-OptionsDialogPres::OptionsDialogPres(/*WPresenter* presenter*/)
-{//EWPresenter* pres, EWMainFrameCreator* creator
+OptionsDialogPres::OptionsDialogPres(EWPresenter* presenter) :m_Presenter(presenter)
+{
     //ctor
 }
 
@@ -9,13 +11,13 @@ OptionsDialogPres::~OptionsDialogPres()
 {
     //dtor
 }
-/*
-bool OptionsDialogPres::saveConfig(const AbstractOptionsDialog* dialog)
+
+const ConfigData& OptionsDialogPres::getData() const
 {
+    return this->m_Presenter->getConfigData();
 }
 
-void OptionsDialogPres::loadConfig(AbstractOptionsDialog* dialog)
+bool OptionsDialogPres::saveData(const ConfigData& data)
 {
-    dialog->setData(this->m_Config->getData());
+    return this->m_Presenter->saveConfig(data);
 }
-*/

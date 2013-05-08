@@ -34,7 +34,7 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
                        std::string offClock, std::string runningClock,
                        std::string leftClock);
         virtual void notifyMessage(std::string message, bool warning = false);
-        virtual void displayOptionsDialog(EWPresenter* presenter);
+        virtual void displayOptionsDialog(OptionsDialogPres* presenter);
         virtual void show();
         virtual void setPauseButtonLabel(std::string label);
         virtual void setStartButtonLabel(std::string label);

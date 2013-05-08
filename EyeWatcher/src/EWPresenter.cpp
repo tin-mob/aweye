@@ -5,7 +5,6 @@
 #include "AbstractTimeKeeper.h"
 #include "AbstractTimer.h"
 #include "AbstractPresenceHandler.h"
-#include "AbstractOptionsDialog.h"
 #include "BaseException.h"
 #include "ConfigData.h"
 #include "Command.h"
@@ -32,11 +31,10 @@ EWPresenter::~EWPresenter()
 {
 }
 
-bool EWPresenter::saveConfig(const AbstractOptionsDialog* dialog)
+bool EWPresenter::saveConfig(const ConfigData& data)
 {
     try
     {
-        ConfigData data = dialog->getData();
         this->m_Config->save(data);
 
         this->m_PresenceHandler->setCascade(data.cascadePath);
@@ -57,9 +55,9 @@ bool EWPresenter::saveConfig(const AbstractOptionsDialog* dialog)
     return true;
 }
 
-void EWPresenter::loadConfig(AbstractOptionsDialog* dialog)
+const ConfigData& EWPresenter::getConfigData() const
 {
-    dialog->setData(this->m_Config->getData());
+    return this->m_Config->getData();
 }
 
 void EWPresenter::start()

@@ -6,10 +6,11 @@
 class EWPresenter;
 class AbstractEWMainFrame;
 class AbstractMsgHandler;
+class OptionsDialogPres;
 class EWMainFramePres : public Observer
 {
     public:
-        EWMainFramePres(EWPresenter* pres, AbstractMsgHandler* msgHandler);
+        EWMainFramePres(EWPresenter* pres, AbstractMsgHandler* msgHandler, OptionsDialogPres* optPres);
         virtual ~EWMainFramePres();
 
         virtual void attachFrame(AbstractEWMainFrame* frame);
@@ -26,6 +27,7 @@ class EWMainFramePres : public Observer
         EWPresenter* m_Presenter;
         AbstractEWMainFrame* m_Frame;
         AbstractMsgHandler* m_MsgHandler;
+        OptionsDialogPres* m_OptionsPres;
 };
 
 #endif // EWMAINFRAMEPRES_H

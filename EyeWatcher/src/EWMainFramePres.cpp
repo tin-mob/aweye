@@ -4,10 +4,11 @@
 #include "EWPresenter.h"
 #include "BaseException.h"
 #include "AbstractMsgHandler.h"
+#include "OptionsDialogPres.h"
 
 ///@todo: test this
-EWMainFramePres::EWMainFramePres(EWPresenter* pres, AbstractMsgHandler* msgHandler) :
-    m_Presenter(pres), m_Frame(NULL), m_MsgHandler(msgHandler)
+EWMainFramePres::EWMainFramePres(EWPresenter* pres, AbstractMsgHandler* msgHandler, OptionsDialogPres* optPres) :
+    m_Presenter(pres), m_Frame(NULL), m_MsgHandler(msgHandler), m_OptionsPres(optPres)
 {
     //ctor
     this->m_Presenter->attach(this);
@@ -52,7 +53,7 @@ void EWMainFramePres::OnOptionsButtonClick()
     assert(this->m_Frame != NULL);
     try
     {
-        this->m_Frame->displayOptionsDialog(this->m_Presenter);
+        this->m_Frame->displayOptionsDialog(this->m_OptionsPres);
     }
     catch (BaseException e)
     {

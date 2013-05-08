@@ -9,9 +9,9 @@ class AbstractConfig;
 class AbstractMsgHandler;
 class AbstractTimeKeeper;
 class AbstractPresenceHandler;
-class AbstractOptionsDialog;
 class AbstractTimer;
 class Command;
+class ConfigData;
 
 /// @todo: split into smallers presenters...
 class EWPresenter : public Observer, public Observable
@@ -22,8 +22,7 @@ class EWPresenter : public Observer, public Observable
                     AbstractTimer* checkTimer, AbstractTimer* clockTimer, Command* exitCmd);
         virtual ~EWPresenter();
 
-        bool saveConfig(const AbstractOptionsDialog* dialog);
-        void loadConfig(AbstractOptionsDialog* dialog);
+        bool saveConfig(const ConfigData& data);
 
         void togglePause();
         void toggleStart();
@@ -40,6 +39,7 @@ class EWPresenter : public Observer, public Observable
         std::string getTimeOff() const;
         std::string getTimeRunning() const;
         std::string getTimeLeft() const;
+        const ConfigData& getConfigData() const;
 
         const std::string m_LateMsg;
         const std::string m_PauseBtnLabel;

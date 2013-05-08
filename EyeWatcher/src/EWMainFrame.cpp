@@ -196,7 +196,7 @@ void EWMainFrame::OnOptionsButtonClick(wxCommandEvent& event)
         this->m_Presenter->OnOptionsButtonClick();
 }
 
-void EWMainFrame::displayOptionsDialog(EWPresenter* presenter)
+void EWMainFrame::displayOptionsDialog(OptionsDialogPres* presenter)
 {
     OptionsDialog dialog(this, presenter);
     dialog.ShowModal();

@@ -20,12 +20,13 @@
 
 #include "AbstractOptionsDialog.h"
 
-class EWPresenter;
+class OptionsDialogPres;
+class ConfigData;
 class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 {
 	public:
 
-		OptionsDialog(wxWindow* parent, EWPresenter* presenter, wxWindowID id=wxID_ANY);
+		OptionsDialog(wxWindow* parent, OptionsDialogPres* presenter, wxWindowID id=wxID_ANY);
 		virtual ~OptionsDialog();
 
         virtual ConfigData getData() const;
@@ -109,7 +110,7 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		//*)
 		void OnOKClick(wxCommandEvent& event);
 
-		EWPresenter* m_Presenter;
+		OptionsDialogPres* m_Presenter;
 
 		DECLARE_EVENT_TABLE()
 };

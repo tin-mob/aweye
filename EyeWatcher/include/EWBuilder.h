@@ -12,6 +12,7 @@ class EWMainFrame;
 class MyWxTimer;
 class ExitCommand;
 class EyeWatcherApp;
+class OptionsDialogPres;
 class EWBuilder
 {
     public:
@@ -30,6 +31,7 @@ class EWBuilder
         EWMainFrame* m_MainFrame;
         //EWTaskBar* m_TaskBar;
         ExitCommand* m_ExitCmd;
+        OptionsDialogPres* m_OptionsPres;
 
     protected:
     private:

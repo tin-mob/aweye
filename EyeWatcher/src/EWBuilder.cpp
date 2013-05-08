@@ -11,11 +11,13 @@
 #include "MyWxTimer.h"
 #include "EyeWatcherApp.h"
 #include "ExitCommand.h"
+#include "OptionsDialogPres.h"
 
 EWBuilder::EWBuilder(EyeWatcherApp* app) :
     m_MsgHandler(NULL), m_Config(NULL), m_TimeHandler(NULL),
     m_PresenceHandler(NULL), m_TimeKeeper(NULL), m_ClockTimer(NULL),
-    m_Presenter(NULL), m_MainFramePres(NULL), m_MainFrame(NULL), m_ExitCmd(NULL)
+    m_Presenter(NULL), m_MainFramePres(NULL), m_MainFrame(NULL),
+    m_ExitCmd(NULL), m_OptionsPres(NULL)
 {
     //ctor
     try
@@ -37,7 +39,8 @@ EWBuilder::EWBuilder(EyeWatcherApp* app) :
             this->m_ExitCmd = new ExitCommand(app);
             this->m_Presenter = new EWPresenter(m_MsgHandler, m_Config, m_TimeKeeper,
                 m_PresenceHandler, m_CheckTimer, m_ClockTimer, m_ExitCmd);
-            this->m_MainFramePres = new EWMainFramePres(m_Presenter, m_MsgHandler);
+            this->m_OptionsPres = new OptionsDialogPres(m_Presenter);
+            this->m_MainFramePres = new EWMainFramePres(m_Presenter, m_MsgHandler, m_OptionsPres);
             this->m_MainFrame = new EWMainFrame(NULL, m_MainFramePres);
         }
         catch (BaseException e)
@@ -70,4 +73,5 @@ void EWBuilder::deleteFields()
     if (this->m_MainFramePres != NULL) delete this->m_MainFramePres;
     // since m_MainFrame inherits from wxFrame, it is deleted by wx, not by us
     if (this->m_ExitCmd != NULL) delete this->m_ExitCmd;
+    if (this->m_OptionsPres != NULL) delete this->m_OptionsPres;
 }

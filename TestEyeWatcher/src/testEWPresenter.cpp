@@ -81,7 +81,7 @@ SUITE(TestEWPresenter)
 {
     TEST_FIXTURE(EWPresenterFixture, TestValidConfig)
     {
-        ConfigData data =
+        ConfigData newData =
         {
             ConfigData::default_WorkLength + boost::posix_time::seconds(1),
             ConfigData::default_PauseLength + boost::posix_time::seconds(1),
@@ -99,44 +99,42 @@ SUITE(TestEWPresenter)
             "test.cfg",
             "test.wav"
         };
-        this->dialog->setData(data);
-        CHECK_EQUAL(true, presenter->saveConfig(dialog));
-        this->dialog->setData(ConfigData());
-        presenter->loadConfig(dialog);
 
-        ConfigData returnedData = dialog->getData();
-        CHECK_EQUAL(data.workLength, returnedData.workLength);
-        CHECK_EQUAL(data.pauseLength, returnedData.pauseLength);
-        CHECK_EQUAL(data.remFreq, returnedData.remFreq);
-        CHECK_EQUAL(data.checkFreq, returnedData.checkFreq);
-        CHECK_EQUAL(data.pauseTol, returnedData.pauseTol);
-        CHECK_EQUAL(data.startup, returnedData.startup);
-        CHECK_EQUAL(data.soundAlarm, returnedData.soundAlarm);
-        CHECK_EQUAL(data.popupAlarm, returnedData.popupAlarm);
-        CHECK_EQUAL(data.emailAlarm, returnedData.emailAlarm);
-        CHECK_EQUAL(data.emailAddr, returnedData.emailAddr);
-        CHECK_EQUAL(data.webcamIndex, returnedData.webcamIndex);
-        CHECK_EQUAL(data.faceSizeX, returnedData.faceSizeX);
-        CHECK_EQUAL(data.faceSizeY, returnedData.faceSizeY);
-        CHECK_EQUAL(data.cascadePath, returnedData.cascadePath);
-        CHECK_EQUAL(data.soundPath, returnedData.soundPath);
+        CHECK_EQUAL(true, presenter->saveConfig(newData));
+        ConfigData returnedData = presenter->getConfigData();
 
-        CHECK_EQUAL(data.cascadePath, this->presHandler->cascadePath);
-        CHECK_EQUAL(data.webcamIndex, this->presHandler->webcamIndex);
-        CHECK_EQUAL(data.faceSizeX, this->presHandler->faceSizeX);
-        CHECK_EQUAL(data.faceSizeY, this->presHandler->faceSizeY);
+        CHECK_EQUAL(newData.workLength, returnedData.workLength);
+        CHECK_EQUAL(newData.pauseLength, returnedData.pauseLength);
+        CHECK_EQUAL(newData.remFreq, returnedData.remFreq);
+        CHECK_EQUAL(newData.checkFreq, returnedData.checkFreq);
+        CHECK_EQUAL(newData.pauseTol, returnedData.pauseTol);
+        CHECK_EQUAL(newData.startup, returnedData.startup);
+        CHECK_EQUAL(newData.soundAlarm, returnedData.soundAlarm);
+        CHECK_EQUAL(newData.popupAlarm, returnedData.popupAlarm);
+        CHECK_EQUAL(newData.emailAlarm, returnedData.emailAlarm);
+        CHECK_EQUAL(newData.emailAddr, returnedData.emailAddr);
+        CHECK_EQUAL(newData.webcamIndex, returnedData.webcamIndex);
+        CHECK_EQUAL(newData.faceSizeX, returnedData.faceSizeX);
+        CHECK_EQUAL(newData.faceSizeY, returnedData.faceSizeY);
+        CHECK_EQUAL(newData.cascadePath, returnedData.cascadePath);
+        CHECK_EQUAL(newData.soundPath, returnedData.soundPath);
 
-        CHECK_EQUAL(data.checkFreq, this->keeper->checkFreq);
-        CHECK_EQUAL(data.pauseLength, this->keeper->pauseLength);
-        CHECK_EQUAL(data.pauseTol, this->keeper->pauseTol);
-        CHECK_EQUAL(data.remFreq, this->keeper->remFreq);
-        CHECK_EQUAL(data.workLength, this->keeper->workLength);
+        CHECK_EQUAL(newData.cascadePath, this->presHandler->cascadePath);
+        CHECK_EQUAL(newData.webcamIndex, this->presHandler->webcamIndex);
+        CHECK_EQUAL(newData.faceSizeX, this->presHandler->faceSizeX);
+        CHECK_EQUAL(newData.faceSizeY, this->presHandler->faceSizeY);
+
+        CHECK_EQUAL(newData.checkFreq, this->keeper->checkFreq);
+        CHECK_EQUAL(newData.pauseLength, this->keeper->pauseLength);
+        CHECK_EQUAL(newData.pauseTol, this->keeper->pauseTol);
+        CHECK_EQUAL(newData.remFreq, this->keeper->remFreq);
+        CHECK_EQUAL(newData.workLength, this->keeper->workLength);
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestInvalidConfig)
     {
             config->fail = true;
-            CHECK_EQUAL(false, presenter->saveConfig(dialog));
+            CHECK_EQUAL(false, presenter->saveConfig(data));
             CHECK_EQUAL("Testing!", msgHandler->lastError);
     }
 

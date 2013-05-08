@@ -1,6 +1,6 @@
 #include "wx_pch.h"
 #include "OptionsDialog.h"
-#include "EWPresenter.h"
+#include "OptionsDialogPres.h"
 #include "AbstractOptionsDialog.h"
 #include "ConfigData.h"
 
@@ -53,7 +53,7 @@ BEGIN_EVENT_TABLE(OptionsDialog,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-OptionsDialog::OptionsDialog(wxWindow* parent, EWPresenter* presenter, wxWindowID id) : m_Presenter(presenter)
+OptionsDialog::OptionsDialog(wxWindow* parent, OptionsDialogPres* presenter, wxWindowID id) : m_Presenter(presenter)
 {
 	//(*Initialize(OptionsDialog)
 	wxFlexGridSizer* wrkFlexGridSizer;
@@ -212,7 +212,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, EWPresenter* presenter, wxWindowI
 	optionsFlexGridSizer->SetSizeHints(this);
 	//*)
 
-	this->m_Presenter->loadConfig(this);
+	this->setData(this->m_Presenter->getData());
 
 	Connect(wxID_OK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&OptionsDialog::OnOKClick);
 }
@@ -248,11 +248,6 @@ ConfigData OptionsDialog::getData() const
     };
 }
 
-const int default_WebcamIndex = 0;
-const unsigned int default_FaceSizeX = 30;
-const unsigned int default_FaceSizeY = 30;
-const std::string default_CascadePath = "haarcascade_frontalface_alt.xml";
-
 void OptionsDialog::setData(const ConfigData& data)
 {
     this->startupCheckBox->SetValue(data.startup);
@@ -278,7 +273,7 @@ void OptionsDialog::setData(const ConfigData& data)
 
 void OptionsDialog::OnOKClick(wxCommandEvent& event)
 {
-    if (this->m_Presenter->saveConfig(this))
+    if (this->m_Presenter->saveData(this->getData()))
     {
         Close();
     }
