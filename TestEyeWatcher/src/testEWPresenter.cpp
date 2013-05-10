@@ -221,4 +221,18 @@ SUITE(TestEWPresenter)
         presenter->toggleStart();
         CHECK_EQUAL(presenter->getStartButtonLabel(), presenter->m_StopBtnLabel);
     }
+
+    TEST_FIXTURE(EWPresenterFixture, TestHideButtonsLabels)
+    {
+        CHECK_EQUAL(presenter->getHideButtonLabel(), presenter->m_HideBtnLabel);
+        CHECK_EQUAL(true, presenter->isShown());
+
+        presenter->show(false);
+        CHECK_EQUAL(presenter->getHideButtonLabel(), presenter->m_RestoreBtnLabel);
+        CHECK_EQUAL(false, presenter->isShown());
+
+        presenter->show(true);
+        CHECK_EQUAL(presenter->getHideButtonLabel(), presenter->m_HideBtnLabel);
+        CHECK_EQUAL(true, presenter->isShown());
+    }
 }

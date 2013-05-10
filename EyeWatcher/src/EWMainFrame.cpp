@@ -95,7 +95,7 @@ EWMainFrame::EWMainFrame(wxWindow* parent, EWMainFramePres* presenter, wxWindowI
     buttonsBoxSizer->Add(optionsButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     aboutButton = new wxButton(this, ID_BUTTON5, _("About"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON5"));
     buttonsBoxSizer->Add(aboutButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    quitButton = new wxButton(this, ID_BUTTON6, _("Quit"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON6"));
+    quitButton = new wxButton(this, ID_BUTTON6, _("Exit"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON6"));
     buttonsBoxSizer->Add(quitButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     mainBoxSizer->Add(buttonsBoxSizer, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
     timesGrid = new wxGridSizer(2, 5, 0, 0);
@@ -106,7 +106,7 @@ EWMainFrame::EWMainFrame(wxWindow* parent, EWMainFramePres* presenter, wxWindowI
     onBoxSizer->Add(onLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     onClock = new wxStaticText(this, ID_STATICTEXT2, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
     onBoxSizer->Add(onClock, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    timesGrid->Add(onBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+    timesGrid->Add(onBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
     offBoxSizer = new wxBoxSizer(wxVERTICAL);
     offLabel = new wxStaticText(this, ID_STATICTEXT3, _("Last Pause"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
     offBoxSizer->Add(offLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -135,6 +135,7 @@ EWMainFrame::EWMainFrame(wxWindow* parent, EWMainFramePres* presenter, wxWindowI
     Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnOptionsButtonClick);
     Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnAbout);
     Connect(ID_BUTTON6,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnQuit);
+    Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&EWMainFrame::OnClose);
     //*)
 
     this->m_Presenter->attachFrame(this);
@@ -155,6 +156,12 @@ void EWMainFrame::setValues( std::string status, std::string onClock,
     this->offClock->SetLabel(wxString(offClock.c_str(), wxConvUTF8));
     this->runningClock->SetLabel(wxString(runningClock.c_str(), wxConvUTF8));
     this->leftClock->SetLabel(wxString(leftClock.c_str(), wxConvUTF8));
+
+    this->StatusLabel->GetParent()->Layout();
+    this->onClock->GetParent()->Layout();
+    this->offClock->GetParent()->Layout();
+    this->runningClock->GetParent()->Layout();
+    this->leftClock->GetParent()->Layout();
 }
 
 /// @note: only available in wxwidgets 2.9 :(
@@ -165,9 +172,9 @@ void EWMainFrame::notifyMessage(std::string message, bool warning)
     //norification->show();
 }
 
-void EWMainFrame::show()
+void EWMainFrame::show(bool show)
 {
-    Show();
+    Show(show);
 }
 
 void EWMainFrame::setPauseButtonLabel(std::string label)
@@ -209,8 +216,13 @@ void EWMainFrame::OnPlayButtonClick(wxCommandEvent& event)
 
 void EWMainFrame::OnClose(wxCloseEvent& event)
 {
-    /// @todo: maybe will have to be changed ater taskbar (hide)...
-    Destroy();
+    if (!event.CanVeto())
+    {
+        this->m_Presenter->OnQuit();
+        Destroy();
+    }
+    event.Veto();
+    this->m_Presenter->OnClose();
 }
 
 void EWMainFrame::OnPauseButtonClick(wxCommandEvent& event)

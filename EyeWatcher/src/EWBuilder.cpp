@@ -12,12 +12,14 @@
 #include "EyeWatcherApp.h"
 #include "ExitCommand.h"
 #include "OptionsDialogPres.h"
+#include "EWTaskBar.h"
+#include "EWTaskBarPres.h"
 
 EWBuilder::EWBuilder(EyeWatcherApp* app) :
     m_MsgHandler(NULL), m_Config(NULL), m_TimeHandler(NULL),
     m_PresenceHandler(NULL), m_TimeKeeper(NULL), m_ClockTimer(NULL),
     m_Presenter(NULL), m_MainFramePres(NULL), m_MainFrame(NULL),
-    m_ExitCmd(NULL), m_OptionsPres(NULL)
+    m_TaskBarPres(NULL), m_TaskBar(NULL), m_ExitCmd(NULL), m_OptionsPres(NULL)
 {
     //ctor
     try
@@ -42,6 +44,8 @@ EWBuilder::EWBuilder(EyeWatcherApp* app) :
             this->m_OptionsPres = new OptionsDialogPres(m_Presenter);
             this->m_MainFramePres = new EWMainFramePres(m_Presenter, m_MsgHandler, m_OptionsPres);
             this->m_MainFrame = new EWMainFrame(NULL, m_MainFramePres);
+            this->m_TaskBarPres = new EWTaskBarPres(m_Presenter);
+            this->m_TaskBar = new EWTaskBar(m_TaskBarPres);
         }
         catch (BaseException e)
         {
@@ -72,6 +76,8 @@ void EWBuilder::deleteFields()
     if (this->m_Presenter != NULL) delete this->m_Presenter;
     if (this->m_MainFramePres != NULL) delete this->m_MainFramePres;
     // since m_MainFrame inherits from wxFrame, it is deleted by wx, not by us
+    if (this->m_TaskBarPres != NULL) delete this->m_TaskBarPres;
+    if (this->m_TaskBar != NULL) delete this->m_TaskBar;
     if (this->m_ExitCmd != NULL) delete this->m_ExitCmd;
     if (this->m_OptionsPres != NULL) delete this->m_OptionsPres;
 }

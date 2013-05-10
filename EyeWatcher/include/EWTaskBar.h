@@ -6,37 +6,37 @@
 #include "AbstractEWTaskbar.h"
 
 class wxMenu;
-class EWPresenter;
+class EWTaskBarPres;
+class ObservableWxMenu;
 class EWTaskBar : public AbstractEWTaskbar, public wxTaskBarIcon
 {
     public:
-        EWTaskBar(EWPresenter* presenter, std::string iconLoc);
+        EWTaskBar(EWTaskBarPres* presenter);
         virtual ~EWTaskBar();
-        virtual void setPopupMenu( bool running, bool snoozed,
+        virtual void setPopupMenu( std::string hideRestoreLabel,
+            std::string startStopLabel, std::string pauseResumeLabel,
             std::string onClock, std::string offClock,
             std::string runningClock, std::string leftClock);
-        virtual void reloadIcon();
+        virtual void setIcon(std::string loc);
+
         virtual void update(Observable*);
     protected:
     private:
-        void OnMenuRestore(wxCommandEvent&);
-        void OnMenuStart(wxCommandEvent&);
-        void OnMenuStop(wxCommandEvent&);
-        void OnMenuPause(wxCommandEvent&);
-        void OnMenuResume(wxCommandEvent&);
+        void OnMenuHideRestore(wxCommandEvent&);
+        void OnMenuStartStop(wxCommandEvent&);
+        void OnMenuPauseResume(wxCommandEvent&);
         void OnMenuExit(wxCommandEvent&);
 
-        EWPresenter* m_Presenter;
-        std::string m_IconLoc;
-        wxMenu* m_Menu;
+        virtual wxMenu* CreatePopupMenu();
+
+        EWTaskBarPres* m_Presenter;
+        ObservableWxMenu* m_Menu;
 
         enum Menu_IDS
         {
-            ID_RESTORE,
-            ID_START,
-            ID_STOP,
-            ID_PAUSE,
-            ID_RESUME,
+            ID_HIDE_RESTORE,
+            ID_START_STOP,
+            ID_PAUSE_RESUME,
             ID_EXIT,
             ID_ON_TIME,
             ID_OFF_TIME,

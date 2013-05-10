@@ -27,11 +27,13 @@ class EWPresenter : public Observer, public Observable
         void togglePause();
         void toggleStart();
         void quit();
+        void show(bool show);
 
         void update(Observable* source);
         void updateStatus();
         void updateTimes();
 
+        std::string getHideButtonLabel() const;
         std::string getPauseButtonLabel() const;
         std::string getStartButtonLabel() const;
         std::string getStatus() const;
@@ -40,8 +42,11 @@ class EWPresenter : public Observer, public Observable
         std::string getTimeRunning() const;
         std::string getTimeLeft() const;
         const ConfigData& getConfigData() const;
+        bool isShown() const;
 
         const std::string m_LateMsg;
+        const std::string m_HideBtnLabel;
+        const std::string m_RestoreBtnLabel;
         const std::string m_PauseBtnLabel;
         const std::string m_ResumeBtnLabel;
         const std::string m_StartBtnLabel;
@@ -56,6 +61,7 @@ class EWPresenter : public Observer, public Observable
         void stop();
 
         bool m_Warn;
+        bool m_Shown;
         AbstractConfig* m_Config;
         AbstractTimeKeeper* m_TimeKeeper;
         AbstractMsgHandler* m_MsgHandler;

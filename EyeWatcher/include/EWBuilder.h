@@ -9,6 +9,8 @@ class TimeKeeper;
 class EWPresenter;
 class EWMainFramePres;
 class EWMainFrame;
+class EWTaskBarPres;
+class EWTaskBar;
 class MyWxTimer;
 class ExitCommand;
 class EyeWatcherApp;
@@ -29,7 +31,8 @@ class EWBuilder
         EWPresenter* m_Presenter;
         EWMainFramePres* m_MainFramePres;
         EWMainFrame* m_MainFrame;
-        //EWTaskBar* m_TaskBar;
+        EWTaskBarPres* m_TaskBarPres;
+        EWTaskBar* m_TaskBar;
         ExitCommand* m_ExitCmd;
         OptionsDialogPres* m_OptionsPres;
 

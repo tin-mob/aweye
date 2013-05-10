@@ -18,8 +18,9 @@
 EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config,
                          AbstractTimeKeeper* keeper, AbstractPresenceHandler* presenceHandler,
                          AbstractTimer* checkTimer, AbstractTimer* clockTimer, Command* exitCmd)
-    :  m_LateMsg("Time for a pause!"), m_PauseBtnLabel("Pause"), m_ResumeBtnLabel("Resume"),
-    m_StartBtnLabel("Start"), m_StopBtnLabel("Stop"), m_Warn(true), m_Config(config),
+    :  m_LateMsg("Time for a pause!"), m_HideBtnLabel("Hide"), m_RestoreBtnLabel("Restore"),
+    m_PauseBtnLabel("Pause"), m_ResumeBtnLabel("Resume"), m_StartBtnLabel("Start"),
+    m_StopBtnLabel("Stop"), m_Warn(true), m_Shown(true), m_Config(config),
     m_TimeKeeper(keeper), m_MsgHandler(msgHandler), m_PresenceHandler(presenceHandler),
     m_CheckTimer(checkTimer), m_ClockTimer(clockTimer), m_ExitCmd(exitCmd)
 {
@@ -87,6 +88,12 @@ void EWPresenter::quit()
     this->m_ExitCmd->execute();
 }
 
+void EWPresenter::show(bool show)
+{
+    this->m_Shown = show;
+    this->notify();
+}
+
 void EWPresenter::updateStatus()
 {
     try
@@ -143,6 +150,18 @@ void EWPresenter::toggleStart()
     else
     {
         this->start();
+    }
+}
+
+std::string EWPresenter::getHideButtonLabel() const
+{
+    if (this->m_Shown)
+    {
+        return this->m_HideBtnLabel;
+    }
+    else
+    {
+        return this->m_RestoreBtnLabel;
     }
 }
 
@@ -216,6 +235,11 @@ std::string EWPresenter::getTimeLeft() const
 {
     const boost::posix_time::time_duration stamp = this->m_TimeKeeper->getTimeLeft();
     return EWPresenter::durationToString(stamp);
+}
+
+bool EWPresenter::isShown() const
+{
+    return this->m_Shown;
 }
 
 void EWPresenter::alert()
