@@ -10,7 +10,7 @@ class ConfigStub : public AbstractConfig
     public:
         ConfigStub(ConfigData data) : fail(false), m_data(data) {}
         virtual ~ConfigStub() {}
-        virtual void checkLoad() {}
+        virtual void load() {}
         virtual void save(const ConfigData& data)
         {
             if (fail) { throw BaseException("Testing!"); }

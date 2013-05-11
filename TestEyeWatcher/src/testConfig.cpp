@@ -1,16 +1,15 @@
 #include <unittest++/UnitTest++.h>
+#include "boost/date_time/posix_time/posix_time.hpp"
 #include <string>
 #include "Config.h"
-
-#include <boost/filesystem.hpp>
-#include "boost/date_time/posix_time/posix_time.hpp"
+#include "ConfigImplStub.h"
 
 struct ConfigFixture
 {
-    ConfigFixture() : configPath("/tmp/test.cfg") {boost::filesystem::remove(configPath);}
-    ~ConfigFixture() {boost::filesystem::remove(configPath);}
+    ConfigFixture() {}
+    ~ConfigFixture() {}
 
-    const std::string configPath;
+    ConfigImplStub impl;
 };
 
 SUITE(TestConfig)
@@ -56,9 +55,7 @@ SUITE(TestConfig)
 
     TEST_FIXTURE(ConfigFixture, TestEmptyConstruction)
     {
-        CHECK(!boost::filesystem::exists(configPath));
-        Config config(configPath);
-        CHECK(boost::filesystem::exists(configPath));
+        Config config(&impl);
 
         ConfigData data = config.getData();
         CHECK_EQUAL(ConfigData::default_WorkLength, data.workLength);
@@ -76,26 +73,6 @@ SUITE(TestConfig)
         CHECK_EQUAL(ConfigData::default_FaceSizeY, data.faceSizeY);
         CHECK_EQUAL(ConfigData::default_CascadePath, data.cascadePath);
         CHECK_EQUAL(ConfigData::default_SoundPath, data.soundPath);
-    }
-
-    TEST_FIXTURE(ConfigFixture, TestEmptyNameConstruction)
-    {
-        CHECK(!boost::filesystem::exists(configPath));
-        CHECK_THROW(Config config(""), InvalidConfigFileException);
-    }
-
-    TEST_FIXTURE(ConfigFixture, TestInvalidFileConstruction)
-    {
-        std::string fileName = "TestFiles/invalidConfig.cfg";
-        CHECK(boost::filesystem::exists(fileName));
-        CHECK_THROW(Config config(fileName), InvalidConfigFileException);
-    }
-
-    TEST_FIXTURE(ConfigFixture, TestInvalidDataConstruction)
-    {
-        std::string fileName = "TestFiles/invalidValConfig.cfg";
-        CHECK(boost::filesystem::exists(fileName));
-        CHECK_THROW(Config config(fileName), InvalidConfigFileException);
     }
 
     TEST_FIXTURE(ConfigFixture, TestSaveLoad)
@@ -120,11 +97,11 @@ SUITE(TestConfig)
             "test.wav"
         };
 
-        Config config(configPath);
-        Config config2(configPath);
+        Config config(&impl);
+        Config config2(&impl);
         config.save(srcData);
 
-        config2.checkLoad();
+        config2.load();
         data = config2.getData();
 
         CHECK_EQUAL(srcData.workLength, data.workLength);
@@ -143,8 +120,8 @@ SUITE(TestConfig)
         CHECK_EQUAL(srcData.cascadePath, data.cascadePath);
         CHECK_EQUAL(srcData.soundPath, data.soundPath);
 
-        Config config3(configPath);
-        config3.checkLoad();
+        Config config3(&impl);
+        config3.load();
         data = config3.getData();
 
         CHECK_EQUAL(srcData.workLength, data.workLength);
@@ -163,4 +140,13 @@ SUITE(TestConfig)
         CHECK_EQUAL(srcData.cascadePath, data.cascadePath);
         CHECK_EQUAL(srcData.soundPath, data.soundPath);
     }
+
+
+    TEST_FIXTURE(ConfigFixture, TestInvalidSave)
+    {
+        ConfigData data = {boost::posix_time::neg_infin};
+        Config config(&impl);
+        CHECK_THROW(config.save(data), InvalidConfigDataException);
+    }
+
 }

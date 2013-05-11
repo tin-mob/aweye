@@ -22,6 +22,9 @@
 //(*InternalHeaders(EWMainFrame)
 #include <wx/string.h>
 #include <wx/intl.h>
+#include <wx/bitmap.h>
+#include <wx/icon.h>
+#include <wx/image.h>
 //*)
 
 //helper functions
@@ -84,6 +87,11 @@ EWMainFrame::EWMainFrame(wxWindow* parent, EWMainFramePres* presenter, wxWindowI
     wxBoxSizer* leftBoxSizer;
 
     Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
+    {
+    	wxIcon FrameIcon;
+    	FrameIcon.CopyFromBitmap(wxBitmap(wxImage(_T("/home/bob/CodeZone/EyeWatcher/EyeWatcher/webcam.ico"))));
+    	SetIcon(FrameIcon);
+    }
     mainBoxSizer = new wxBoxSizer(wxVERTICAL);
     buttonsBoxSizer = new wxBoxSizer(wxHORIZONTAL);
     pauseButton = new wxButton(this, ID_BUTTON1, _("Pause"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));

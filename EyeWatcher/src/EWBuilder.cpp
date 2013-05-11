@@ -1,5 +1,6 @@
 #include "EWBuilder.h"
 
+#include "wxConfigImpl.h"
 #include "Config.h"
 #include "MsgHandler.h"
 #include "WebcamHandler.h"
@@ -15,8 +16,9 @@
 #include "EWTaskBar.h"
 #include "EWTaskBarPres.h"
 
+/// @todo: make this testable? With an abstract factory perharps?
 EWBuilder::EWBuilder(EyeWatcherApp* app) :
-    m_MsgHandler(NULL), m_Config(NULL), m_TimeHandler(NULL),
+    m_MsgHandler(NULL), m_ConfigImpl(NULL), m_Config(NULL), m_TimeHandler(NULL),
     m_PresenceHandler(NULL), m_TimeKeeper(NULL), m_ClockTimer(NULL),
     m_Presenter(NULL), m_MainFramePres(NULL), m_MainFrame(NULL),
     m_TaskBarPres(NULL), m_TaskBar(NULL), m_ExitCmd(NULL), m_OptionsPres(NULL)
@@ -27,9 +29,9 @@ EWBuilder::EWBuilder(EyeWatcherApp* app) :
         this->m_MsgHandler = new MsgHandler();
         try
         {
-            this->m_Config = new Config();
+            this->m_ConfigImpl = new wxConfigImpl();
+            this->m_Config = new Config(m_ConfigImpl);
             ConfigData data = this->m_Config->getData();
-
             this->m_TimeHandler = new TimeHandler();
             this->m_PresenceHandler = new WebcamHandler(data.webcamIndex, data.cascadePath,
                 data.faceSizeX, data.faceSizeY);
@@ -69,6 +71,7 @@ EWBuilder::~EWBuilder()
 void EWBuilder::deleteFields()
 {
     if (this->m_MsgHandler != NULL) delete this->m_MsgHandler;
+    if (this->m_ConfigImpl != NULL) delete this->m_ConfigImpl;
     if (this->m_Config != NULL) delete this->m_Config;
     if (this->m_TimeHandler != NULL) delete this->m_TimeHandler;
     if (this->m_PresenceHandler != NULL) delete this->m_PresenceHandler;

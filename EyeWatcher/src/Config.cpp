@@ -1,21 +1,12 @@
 #include "Config.h"
-
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
+#include "AbstractConfigImpl.h"
 #include "boost/date_time/posix_time/posix_time.hpp"
 
-Config::Config(std::string filename)
+///@todo: unnecessary level? merge this with presenter?
+Config::Config(AbstractConfigImpl* impl) : m_Impl(impl)
 {
     //ctor
-    if (filename != "")
-    {
-        this->m_filename = filename;
-        this->checkLoad();
-    }
-    else
-    {
-        throw InvalidConfigFileException();
-    }
+    this->load();
 }
 
 Config::~Config()
@@ -28,59 +19,29 @@ const ConfigData& Config::getData() const
     return this->m_data;
 }
 
-void Config::checkLoad()
-{
-    std::ifstream fin(this->m_filename.c_str());
-    if (fin) {
-        // file exists
-        fin.close();
-        this->load();
-    } else {
-        // file doesn't exist
-        using boost::property_tree::ptree;
-        ptree pt;
-        this->generate(pt);
-        this->write();
-    }
-}
-
 void Config::load()
-{
-    // Create an empty property tree object
-    using boost::property_tree::ptree;
-    ptree pt;
-
-    // Load the XML file into the property tree. If reading fails
-    // (cannot open file, parse error), an exception is thrown.
-    try {
-        read_json(this->m_filename, pt);
-    }
-    catch (boost::property_tree::json_parser_error) {
-        throw InvalidConfigFileException();
-    }
-    this->generate(pt);
-}
-
-// Loads Config structure from the specified XML file
-void Config::generate(boost::property_tree::ptree &pt)
 {
     ConfigData tempData =
     {
-        pt.get("WorkLength", ConfigData::default_WorkLength),
-        pt.get("PauseLength", ConfigData::default_PauseLength),
-        pt.get("RemFreq", ConfigData::default_RemFreq),
-        pt.get("CheckFreq", ConfigData::default_CheckFreq),
-        pt.get("PauseTol", ConfigData::default_PauseTol),
-        pt.get("Startup", ConfigData::default_Startup),
-        pt.get("SoundAlarm", ConfigData::default_SoundAlarm),
-        pt.get("PopupAlarm", ConfigData::default_PopupAlarm),
-        pt.get("EmailAlarm", ConfigData::default_EmailAlarm),
-        pt.get("EmailAddr", ConfigData::default_EmailAddr),
-        pt.get("WebcamIndex", ConfigData::default_WebcamIndex),
-        pt.get("FaceSizeX", ConfigData::default_FaceSizeX),
-        pt.get("FaceSizeY", ConfigData::default_FaceSizeY),
-        pt.get("CascadePath", ConfigData::default_CascadePath),
-        pt.get("SoundPath", ConfigData::default_SoundPath)
+        boost::posix_time::duration_from_string(this->m_Impl->read("WorkLength",
+            boost::posix_time::to_simple_string(ConfigData::default_WorkLength))),
+        boost::posix_time::duration_from_string(this->m_Impl->read("PauseLength",
+            boost::posix_time::to_simple_string(ConfigData::default_PauseLength))),
+        boost::posix_time::duration_from_string(this->m_Impl->read("RemFreq",
+            boost::posix_time::to_simple_string(ConfigData::default_RemFreq))),
+        boost::posix_time::duration_from_string(this->m_Impl->read("CheckFreq",
+            boost::posix_time::to_simple_string(ConfigData::default_CheckFreq))),
+        (unsigned int)this->m_Impl->read("PauseTol", (long)ConfigData::default_PauseTol),
+        this->m_Impl->read("Startup", ConfigData::default_Startup),
+        this->m_Impl->read("SoundAlarm", ConfigData::default_SoundAlarm),
+        this->m_Impl->read("PopupAlarm", ConfigData::default_PopupAlarm),
+        this->m_Impl->read("EmailAlarm", ConfigData::default_EmailAlarm),
+        this->m_Impl->read("EmailAddr", ConfigData::default_EmailAddr),
+        (int)this->m_Impl->read("WebcamIndex", (long)ConfigData::default_WebcamIndex),
+        (unsigned int)this->m_Impl->read("FaceSizeX", (long)ConfigData::default_FaceSizeX),
+        (unsigned int)this->m_Impl->read("FaceSizeY", (long)ConfigData::default_FaceSizeY),
+        this->m_Impl->read("CascadePath", ConfigData::default_CascadePath),
+        this->m_Impl->read("SoundPath", ConfigData::default_SoundPath)
     };
 
     if (Config::validateData(tempData))
@@ -108,29 +69,23 @@ void Config::save(const ConfigData& data)
 
 void Config::write()
 {
-    // Create an empty property tree object
-    using boost::property_tree::ptree;
-    ptree pt;
+    this->m_Impl->write("Startup", this->m_data.startup);
+    this->m_Impl->write("WorkLength", boost::posix_time::to_simple_string(this->m_data.workLength));
+    this->m_Impl->write("PauseLength", boost::posix_time::to_simple_string(this->m_data.pauseLength));
+    this->m_Impl->write("RemFreq", boost::posix_time::to_simple_string(this->m_data.remFreq));
+    this->m_Impl->write("CheckFreq", boost::posix_time::to_simple_string(this->m_data.checkFreq));
+    this->m_Impl->write("PauseTol", (long)this->m_data.pauseTol);
+    this->m_Impl->write("SoundAlarm", this->m_data.soundAlarm);
+    this->m_Impl->write("PopupAlarm", this->m_data.popupAlarm);
+    this->m_Impl->write("EmailAlarm", this->m_data.emailAlarm);
+    this->m_Impl->write("EmailAddr", this->m_data.emailAddr);
+    this->m_Impl->write("WebcamIndex", (long)this->m_data.webcamIndex);
+    this->m_Impl->write("FaceSizeX", (long)this->m_data.faceSizeX);
+    this->m_Impl->write("FaceSizeY", (long)this->m_data.faceSizeY);
+    this->m_Impl->write("CascadePath", this->m_data.cascadePath);
+    this->m_Impl->write("SoundPath", this->m_data.soundPath);
 
-    // Put log filename in property tree
-    pt.put("WorkLength", this->m_data.workLength);
-    pt.put("PauseLength", this->m_data.pauseLength);
-    pt.put("RemFreq", this->m_data.remFreq);
-    pt.put("CheckFreq", this->m_data.checkFreq);
-    pt.put("PauseTol", this->m_data.pauseTol);
-    pt.put("Startup", this->m_data.startup);
-    pt.put("SoundAlarm", this->m_data.soundAlarm);
-    pt.put("PopupAlarm", this->m_data.popupAlarm);
-    pt.put("EmailAlarm", this->m_data.emailAlarm);
-    pt.put("EmailAddr", this->m_data.emailAddr);
-    pt.put("WebcamIndex", this->m_data.webcamIndex);
-    pt.put("FaceSizeX", this->m_data.faceSizeX);
-    pt.put("FaceSizeY", this->m_data.faceSizeY);
-    pt.put("CascadePath", this->m_data.cascadePath);
-    pt.put("SoundPath", this->m_data.soundPath);
-
-    // Write the property tree to the XML file.
-    write_json(this->m_filename, pt);
+    this->m_Impl->flush();
 }
 
 /// @todo: more specific errors?, correct cascadePath?

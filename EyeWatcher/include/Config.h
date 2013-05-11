@@ -1,7 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include <boost/property_tree/ptree_fwd.hpp>
 #include "BaseException.h"
 
 #include "ConfigData.h"
@@ -19,27 +18,26 @@ class InvalidConfigDataException : public BaseException
           InvalidConfigDataException() :  BaseException("invalid configuration data.") { }
 };
 
+class AbstractConfigImpl;
 class Config : public AbstractConfig
 {
     public:
         /// @todo: check config path...
-        Config(std::string filename = "EyeWatcher.cfg");
+        Config(AbstractConfigImpl* impl);
         virtual ~Config();
 
         const ConfigData& getData() const;
 
-        void checkLoad();
+        void load();
         void save(const ConfigData& data);
 
         static bool validateData(const ConfigData& data);
 
     protected:
     private:
-        void load();
-        void generate(boost::property_tree::ptree &pt);
         void write();
 
-        std::string m_filename;
+        AbstractConfigImpl* m_Impl;
         ConfigData m_data;
 };
 

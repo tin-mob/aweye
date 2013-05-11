@@ -2,6 +2,7 @@
 #define EWBUILDER_H
 
 class MsgHandler;
+class wxConfigImpl;
 class Config;
 class TimeHandler;
 class WebcamHandler;
@@ -22,6 +23,7 @@ class EWBuilder
         virtual ~EWBuilder();
 
         MsgHandler* m_MsgHandler;
+        wxConfigImpl* m_ConfigImpl;
         Config* m_Config;
         TimeHandler* m_TimeHandler;
         WebcamHandler* m_PresenceHandler;

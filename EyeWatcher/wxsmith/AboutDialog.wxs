@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <wxsmith>
-	<object class="wxDialog" name="About">
+	<object class="wxDialog" name="AboutDialog">
 		<id_arg>0</id_arg>
 		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
 			<orient>wxVERTICAL</orient>
 			<object class="sizeritem">
 				<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
-					<label>EyeWatcher by Robert Morin, 2013&#x0A;&#x0A;[Grab a GPL license and put it there]</label>
+					<label>EyeWatcher by Robert Morin, 2013&#x0A;&#x0A;[Grab a GPL license and put it there]&#x0A;&#x0A;Don&apos;t forget icon + sound file credits.</label>
 				</object>
 				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 				<border>5</border>
