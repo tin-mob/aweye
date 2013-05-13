@@ -1,5 +1,4 @@
 #include "MsgHandler.h"
-#include "Command.h"
 #include "wx_pch.h"
 #include <wx/notifmsg.h>
 #include <wx/sound.h>
@@ -14,12 +13,11 @@ MsgHandler::~MsgHandler()
     //dtor
 }
 
-///@todo: does it leak?
 void MsgHandler::displayError(std::string msg)
 {
-    wxMessageDialog *errorDialog = new wxMessageDialog(NULL,
+    wxMessageDialog errorDialog(NULL,
         wxString(msg.c_str(), wxConvUTF8), wxT("Error"), wxOK | wxICON_ERROR);
-    errorDialog->ShowModal();
+    errorDialog.ShowModal();
 }
 
 void MsgHandler::displayAlert(std::string msg)

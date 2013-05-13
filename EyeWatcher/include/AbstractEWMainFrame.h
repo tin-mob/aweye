@@ -16,6 +16,7 @@ class AbstractEWMainFrame
         virtual void show(bool show = true) = 0;
         virtual void setPauseButtonLabel(std::string label) = 0;
         virtual void setStartButtonLabel(std::string label) = 0;
+        virtual void close() = 0;
     protected:
     private:
 };

@@ -194,9 +194,14 @@ void EWMainFrame::setStartButtonLabel(std::string label)
     this->playButton->SetLabel(wxString(label.c_str(), wxConvUTF8));
 }
 
+void EWMainFrame::close()
+{
+    Destroy();
+}
+
 void EWMainFrame::OnQuit(wxCommandEvent& event)
 {
-    this->m_Presenter->OnQuit();
+    this->m_Presenter->OnFrameQuit();
 }
 
 void EWMainFrame::OnAbout(wxCommandEvent& event)
@@ -207,7 +212,7 @@ void EWMainFrame::OnAbout(wxCommandEvent& event)
 
 void EWMainFrame::OnOptionsButtonClick(wxCommandEvent& event)
 {
-        this->m_Presenter->OnOptionsButtonClick();
+        this->m_Presenter->OnFrameOptionsButtonClick();
 }
 
 void EWMainFrame::displayOptionsDialog(OptionsDialogPres* presenter)
@@ -218,21 +223,21 @@ void EWMainFrame::displayOptionsDialog(OptionsDialogPres* presenter)
 
 void EWMainFrame::OnPlayButtonClick(wxCommandEvent& event)
 {
-    this->m_Presenter->OnPlayButtonClick();
+    this->m_Presenter->OnFramePlayButtonClick();
 }
 
 void EWMainFrame::OnClose(wxCloseEvent& event)
 {
     if (!event.CanVeto())
     {
-        this->m_Presenter->OnQuit();
+        this->m_Presenter->OnFrameQuit();
         Destroy();
     }
     event.Veto();
-    this->m_Presenter->OnClose();
+    this->m_Presenter->OnFrameClose();
 }
 
 void EWMainFrame::OnPauseButtonClick(wxCommandEvent& event)
 {
-    this->m_Presenter->OnPauseButtonClick();
+    this->m_Presenter->OnFramePauseButtonClick();
 }

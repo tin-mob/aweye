@@ -7,8 +7,7 @@
 #include "TimeKeeperStub.h"
 #include "PresenceHandlerStub.h"
 #include "TimerStub.h"
-#include "ObserverStub.h"
-#include "CommandStub.h"
+#include "EWViewObserverStub.h"
 
 struct EWPresenterFixture
 {
@@ -28,13 +27,12 @@ struct EWPresenterFixture
                 this->checkTimer = new TimerStub();
                 this->clockTimer = new TimerStub();
                 this->dialog = new OptionsDialogStub();
-                this->observer = new ObserverStub();
-                this->cmd = new CommandStub();
+                this->viewObserver = new EWViewObserverStub();
                 this->presenter = new EWPresenter(this->msgHandler,
                     this->config, this->keeper, this->presHandler,
-                    this->checkTimer, this->clockTimer, this->cmd);
+                    this->checkTimer, this->clockTimer);
 
-                this->presenter->attach(observer);
+                this->presenter->attach(this->viewObserver);
             }
             catch (...)
             {
@@ -55,8 +53,7 @@ struct EWPresenterFixture
         TimerStub* checkTimer;
         TimerStub* clockTimer;
         OptionsDialogStub* dialog;
-        ObserverStub* observer;
-        CommandStub* cmd;
+        EWViewObserverStub* viewObserver;
 
         EWPresenter* presenter;
 
@@ -71,8 +68,7 @@ struct EWPresenterFixture
             if (this->checkTimer != NULL) {delete this->checkTimer;}
             if (this->clockTimer != NULL) {delete this->clockTimer;}
             if (this->dialog != NULL) {delete this->dialog;}
-            if (this->observer != NULL) {delete this->observer;}
-            if (this->cmd != NULL) {delete this->cmd;}
+            if (this->viewObserver != NULL) {delete this->viewObserver;}
             if (this->presenter != NULL) {delete this->presenter;}
         }
 };
@@ -144,13 +140,13 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(keeper->getStatus(), AbstractTimeKeeper::HERE);
         CHECK_EQUAL(checkTimer->running, true);
         CHECK_EQUAL(clockTimer->running, true);
-        CHECK_EQUAL(observer->checkUpdated(), true);
+        CHECK_EQUAL(viewObserver->checkStatUpdated(), true);
 
         presenter->toggleStart();
         CHECK_EQUAL(keeper->getStatus(), AbstractTimeKeeper::OFF);
         CHECK_EQUAL(checkTimer->running, false);
         CHECK_EQUAL(clockTimer->running, false);
-        CHECK_EQUAL(observer->checkUpdated(), true);
+        CHECK_EQUAL(viewObserver->checkStatUpdated(), true);
 
         keeper->fail = true;
         CHECK_EQUAL(msgHandler->lastError, "");
@@ -158,7 +154,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(keeper->getStatus(), AbstractTimeKeeper::OFF);
         CHECK_EQUAL(checkTimer->running, false);
         CHECK_EQUAL(clockTimer->running, false);
-        CHECK_EQUAL(observer->checkUpdated(), false);
+        CHECK_EQUAL(viewObserver->checkStatUpdated(), false);
         CHECK_EQUAL(msgHandler->lastError, "Testing!");
     }
 
@@ -187,25 +183,25 @@ SUITE(TestEWPresenter)
 
         keeper->late = true;
         presenter->togglePause();
-        presenter->updateStatus();
+        presenter->update(this->checkTimer);
         CHECK_EQUAL(msgHandler->lastAlert, "");
         CHECK_EQUAL(msgHandler->lastSound, "");
 
         presenter->togglePause();
-        presenter->updateStatus();
+        presenter->update(this->checkTimer);
         CHECK_EQUAL(msgHandler->lastAlert, presenter->m_LateMsg);
         CHECK_EQUAL(msgHandler->lastSound, data.soundPath);
 
         keeper->fail = true;
         CHECK_EQUAL(msgHandler->lastError, "");
-        presenter->updateStatus();
+        presenter->update(this->checkTimer);
         CHECK_EQUAL(msgHandler->lastError, "Testing!");
     }
 
-    TEST_FIXTURE(EWPresenterFixture, ThereAreNoStupidTestQuit)
+    TEST_FIXTURE(EWPresenterFixture, TestQuit)
     {
         presenter->quit();
-        CHECK_EQUAL(true, cmd->isExecuted());
+        CHECK_EQUAL(viewObserver->checkQuitUpdated(), true);
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestPauseButtonsLabels)
@@ -249,5 +245,11 @@ SUITE(TestEWPresenter)
 
         keeper->workLeft = boost::posix_time::seconds(0);
         CHECK_EQUAL(presenter->getIconName(), presenter->m_RedWebcamIcon);
+    }
+
+    TEST_FIXTURE(EWPresenterFixture, TestUpdateTime)
+    {
+        presenter->update(this->clockTimer);
+        CHECK_EQUAL(viewObserver->checkTimeUpdated(), true);
     }
 }

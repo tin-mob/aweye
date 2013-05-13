@@ -7,7 +7,7 @@
 #include "AbstractPresenceHandler.h"
 #include "BaseException.h"
 #include "ConfigData.h"
-#include "Command.h"
+#include "EWViewObserver.h"
 
 #include "boost/date_time/posix_time/posix_time.hpp"
 
@@ -17,14 +17,10 @@
 
 EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config,
                          AbstractTimeKeeper* keeper, AbstractPresenceHandler* presenceHandler,
-                         AbstractTimer* checkTimer, AbstractTimer* clockTimer, Command* exitCmd)
-    :  m_LateMsg("Time for a pause!"), m_HideBtnLabel("Hide"), m_RestoreBtnLabel("Restore"),
-    m_PauseBtnLabel("Pause"), m_ResumeBtnLabel("Resume"), m_StartBtnLabel("Start"),
-    m_StopBtnLabel("Stop"), m_StopWebcamIcon("webcam-stop.png"), m_GreenWebcamIcon("webcam-green.png"),
-    m_YellowWebcamIcon("webcam-yellow.png"), m_RedWebcamIcon("webcam-red.png"),
-    m_Warn(true), m_Shown(true), m_Config(config), m_TimeKeeper(keeper),
+                         AbstractTimer* checkTimer, AbstractTimer* clockTimer)
+    : m_Warn(true), m_Shown(true), m_Config(config), m_TimeKeeper(keeper),
     m_MsgHandler(msgHandler), m_PresenceHandler(presenceHandler), m_CheckTimer(checkTimer),
-    m_ClockTimer(clockTimer), m_ExitCmd(exitCmd)
+    m_ClockTimer(clockTimer)
 {
     this->m_CheckTimer->attach(this);
     this->m_ClockTimer->attach(this);
@@ -82,20 +78,18 @@ void EWPresenter::stop()
     this->m_TimeKeeper->stop();
     this->m_CheckTimer->stopTimer();
     this->m_ClockTimer->stopTimer();
-    this->notify();
+    this->notify(&EWViewObserver::OnStatusUpdate);
 }
 
-/// @todo: notify view to allow them to be closed properly rather than
-/// ending the main loop - causes an assertion when it is hidden.
 void EWPresenter::quit()
 {
-    this->m_ExitCmd->execute();
+    this->notify(&EWViewObserver::OnQuit);
 }
 
 void EWPresenter::show(bool show)
 {
     this->m_Shown = show;
-    this->notify();
+    this->notify(&EWViewObserver::OnStatusUpdate);
 }
 
 void EWPresenter::updateStatus()
@@ -104,7 +98,7 @@ void EWPresenter::updateStatus()
     {
         this->m_TimeKeeper->updateStatus();
         this->m_CheckTimer->startTimer(this->m_TimeKeeper->getTimerInterval().total_milliseconds(), true);
-        this->notify();
+        this->notify(&EWViewObserver::OnStatusUpdate);
 
         if (this->m_TimeKeeper->isLate() && this->m_TimeKeeper->getStatus() == AbstractTimeKeeper::HERE)
         {
@@ -120,7 +114,7 @@ void EWPresenter::updateStatus()
 
 void EWPresenter::updateTimes()
 {
-    this->notify();
+    this->notify(&EWViewObserver::OnTimeUpdate);
 }
 
 void EWPresenter::update(Observable* source)
@@ -142,7 +136,7 @@ void EWPresenter::update(Observable* source)
 void EWPresenter::togglePause()
 {
     m_Warn = !m_Warn;
-    this->notify();
+    this->notify(&EWViewObserver::OnStatusUpdate);
 }
 
 void EWPresenter::toggleStart()

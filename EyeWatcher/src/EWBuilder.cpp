@@ -11,7 +11,6 @@
 #include "EWMainFrame.h"
 #include "MyWxTimer.h"
 #include "EyeWatcherApp.h"
-#include "ExitCommand.h"
 #include "OptionsDialogPres.h"
 #include "EWTaskBar.h"
 #include "EWTaskBarPres.h"
@@ -21,7 +20,7 @@ EWBuilder::EWBuilder(EyeWatcherApp* app, std::string configPath) :
     m_MsgHandler(NULL), m_ConfigImpl(NULL), m_Config(NULL), m_TimeHandler(NULL),
     m_PresenceHandler(NULL), m_TimeKeeper(NULL), m_ClockTimer(NULL),
     m_Presenter(NULL), m_MainFramePres(NULL), m_MainFrame(NULL),
-    m_TaskBarPres(NULL), m_TaskBar(NULL), m_ExitCmd(NULL), m_OptionsPres(NULL)
+    m_TaskBarPres(NULL), m_TaskBar(NULL), m_OptionsPres(NULL)
 {
     //ctor
     try
@@ -40,9 +39,8 @@ EWBuilder::EWBuilder(EyeWatcherApp* app, std::string configPath) :
                 data.checkFreq, data.pauseTol);
             this->m_CheckTimer = new MyWxTimer();
             this->m_ClockTimer = new MyWxTimer();
-            this->m_ExitCmd = new ExitCommand(app);
             this->m_Presenter = new EWPresenter(m_MsgHandler, m_Config, m_TimeKeeper,
-                m_PresenceHandler, m_CheckTimer, m_ClockTimer, m_ExitCmd);
+                m_PresenceHandler, m_CheckTimer, m_ClockTimer);
             this->m_OptionsPres = new OptionsDialogPres(m_Presenter);
             this->m_MainFramePres = new EWMainFramePres(m_Presenter, m_MsgHandler, m_OptionsPres);
             this->m_MainFrame = new EWMainFrame(NULL, m_MainFramePres);
@@ -81,6 +79,5 @@ void EWBuilder::deleteFields()
     // since m_MainFrame inherits from wxFrame, it is deleted by wx, not by us
     if (this->m_TaskBarPres != NULL) delete this->m_TaskBarPres;
     if (this->m_TaskBar != NULL) delete this->m_TaskBar;
-    if (this->m_ExitCmd != NULL) delete this->m_ExitCmd;
     if (this->m_OptionsPres != NULL) delete this->m_OptionsPres;
 }

@@ -21,37 +21,54 @@ EWMainFramePres::~EWMainFramePres()
 void EWMainFramePres::attachFrame(AbstractEWMainFrame* frame)
 {
     this->m_Frame = frame;
-    this->m_Presenter->updateTimes();
+
+    // force update
+    this->OnStatusUpdate();
+    this->OnTimeUpdate();
 }
 
-// coarse update for now...
-void EWMainFramePres::update(Observable*)
+void EWMainFramePres::OnStatusUpdate()
 {
     assert(this->m_Frame != NULL);
     bool shown = this->m_Presenter->isShown();
     this->m_Frame->show(shown);
     if (shown)
     {
+        this->m_Frame->setPauseButtonLabel(this->m_Presenter->getPauseButtonLabel());
+        this->m_Frame->setStartButtonLabel(this->m_Presenter->getStartButtonLabel());
+    }
+}
+
+void EWMainFramePres::OnTimeUpdate()
+{
+    assert(this->m_Frame != NULL);
+    bool shown = this->m_Presenter->isShown();
+    if (shown)
+    {
         this->m_Frame->setValues(this->m_Presenter->getStatus(), this->m_Presenter->getTimeOn(),
             this->m_Presenter->getTimeOff(), this->m_Presenter->getTimeRunning(),
             this->m_Presenter->getTimeLeft());
-        this->m_Frame->setPauseButtonLabel(this->m_Presenter->getPauseButtonLabel());
-        this->m_Frame->setStartButtonLabel(this->m_Presenter->getStartButtonLabel());
     }
 }
 
 void EWMainFramePres::OnQuit()
 {
     assert(this->m_Frame != NULL);
+    this->m_Frame->close();
+}
+
+void EWMainFramePres::OnFrameQuit()
+{
+    assert(this->m_Frame != NULL);
     this->m_Presenter->quit();
 }
 
-void EWMainFramePres::OnAbout()
+void EWMainFramePres::OnFrameAbout()
 {
     assert(this->m_Frame != NULL);
 }
 
-void EWMainFramePres::OnOptionsButtonClick()
+void EWMainFramePres::OnFrameOptionsButtonClick()
 {
     assert(this->m_Frame != NULL);
     try
@@ -64,19 +81,19 @@ void EWMainFramePres::OnOptionsButtonClick()
     }
 }
 
-void EWMainFramePres::OnPlayButtonClick()
+void EWMainFramePres::OnFramePlayButtonClick()
 {
     assert(this->m_Frame != NULL);
     this->m_Presenter->toggleStart();
 }
 
-void EWMainFramePres::OnClose()
+void EWMainFramePres::OnFrameClose()
 {
     assert(this->m_Frame != NULL);
     this->m_Presenter->show(false);
 }
 
-void EWMainFramePres::OnPauseButtonClick()
+void EWMainFramePres::OnFramePauseButtonClick()
 {
     assert(this->m_Frame != NULL);
     this->m_Presenter->togglePause();

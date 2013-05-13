@@ -38,6 +38,7 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
         virtual void show(bool show = true);
         virtual void setPauseButtonLabel(std::string label);
         virtual void setStartButtonLabel(std::string label);
+        virtual void close();
 
     private:
 

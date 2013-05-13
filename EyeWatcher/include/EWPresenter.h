@@ -4,59 +4,46 @@
 #include <string>
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 #include "Observer.h"
+#include "AbstractEWPresenter.h"
 
 class AbstractConfig;
 class AbstractMsgHandler;
 class AbstractTimeKeeper;
 class AbstractPresenceHandler;
 class AbstractTimer;
-class Command;
 class ConfigData;
 
 /// @todo: split into smallers presenters...
-class EWPresenter : public Observer, public Observable
+class EWPresenter : public Observer, public AbstractEWPresenter
 {
     public:
         EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config,
                     AbstractTimeKeeper* keeper, AbstractPresenceHandler* presenceHandler,
-                    AbstractTimer* checkTimer, AbstractTimer* clockTimer, Command* exitCmd);
+                    AbstractTimer* checkTimer, AbstractTimer* clockTimer);
         virtual ~EWPresenter();
 
         bool saveConfig(const ConfigData& data);
 
-        void togglePause();
-        void toggleStart();
-        void quit();
-        void show(bool show);
+        virtual void togglePause();
+        virtual void toggleStart();
+        virtual void quit();
+        virtual void show(bool show);
 
         void update(Observable* source);
-        void updateStatus();
-        void updateTimes();
+        virtual void updateStatus();
+        virtual void updateTimes();
 
-        std::string getHideButtonLabel() const;
-        std::string getPauseButtonLabel() const;
-        std::string getStartButtonLabel() const;
-        std::string getStatus() const;
-        std::string getTimeOn() const;
-        std::string getTimeOff() const;
-        std::string getTimeRunning() const;
-        std::string getTimeLeft() const;
-        const ConfigData& getConfigData() const;
-        bool isShown() const;
-        std::string getIconName()const;
-
-        const std::string m_LateMsg;
-        const std::string m_HideBtnLabel;
-        const std::string m_RestoreBtnLabel;
-        const std::string m_PauseBtnLabel;
-        const std::string m_ResumeBtnLabel;
-        const std::string m_StartBtnLabel;
-        const std::string m_StopBtnLabel;
-
-        const std::string m_StopWebcamIcon;
-        const std::string m_GreenWebcamIcon;
-        const std::string m_YellowWebcamIcon;
-        const std::string m_RedWebcamIcon;
+        virtual std::string getHideButtonLabel() const;
+        virtual std::string getPauseButtonLabel() const;
+        virtual std::string getStartButtonLabel() const;
+        virtual std::string getStatus() const;
+        virtual std::string getTimeOn() const;
+        virtual std::string getTimeOff() const;
+        virtual std::string getTimeRunning() const;
+        virtual std::string getTimeLeft() const;
+        virtual const ConfigData& getConfigData() const;
+        virtual bool isShown() const;
+        virtual std::string getIconName()const;
 
     protected:
     private:
@@ -74,7 +61,6 @@ class EWPresenter : public Observer, public Observable
         AbstractPresenceHandler* m_PresenceHandler;
         AbstractTimer* m_CheckTimer;
         AbstractTimer* m_ClockTimer;
-        Command* m_ExitCmd;
 };
 
 #endif // EWPRESENTER_H
