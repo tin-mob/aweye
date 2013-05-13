@@ -46,6 +46,7 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		wxStaticText* soundLocStaticText;
 		wxTextCtrl* emailTextCtrl;
 		wxSpinCtrl* wrkSecSpinCtrl;
+		wxSpinCtrl* runningLateMinSpinCtrl;
 		wxNotebook* optionsNotebook;
 		wxSpinCtrl* tolSpinCtrl;
 		wxStaticText* StaticText1;
@@ -60,8 +61,10 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		wxFilePickerCtrl* cascadeFilePickerCtrl;
 		wxButton* testEmailButton;
 		wxStaticText* remLabel;
+		wxSpinCtrl* runningLateSecSpinCtrl;
 		wxStaticText* chkStaticText;
 		wxCheckBox* emailCheckBox;
+		wxStaticText* runningLateStaticText;
 		wxStaticText* FaceSizeStaticText;
 		wxSpinCtrl* remMinSpinCtrl;
 		wxSpinCtrl* FaceSizeXSpinCtrl;
@@ -100,6 +103,9 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		static const long ID_CUSTOM1;
 		static const long ID_STATICTEXT9;
 		static const long ID_CUSTOM2;
+		static const long ID_STATICTEXT10;
+		static const long ID_SPINCTRL13;
+		static const long ID_SPINCTRL14;
 		static const long ID_PANEL2;
 		static const long ID_NOTEBOOK1;
 		//*)

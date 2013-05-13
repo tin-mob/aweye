@@ -1,5 +1,7 @@
 #include "MsgHandler.h"
+#include "Command.h"
 #include "wx_pch.h"
+#include <wx/notifmsg.h>
 #include <wx/sound.h>
 
 MsgHandler::MsgHandler()
@@ -12,6 +14,7 @@ MsgHandler::~MsgHandler()
     //dtor
 }
 
+///@todo: does it leak?
 void MsgHandler::displayError(std::string msg)
 {
     wxMessageDialog *errorDialog = new wxMessageDialog(NULL,
@@ -21,14 +24,14 @@ void MsgHandler::displayError(std::string msg)
 
 void MsgHandler::displayAlert(std::string msg)
 {
-    wxMessageDialog *errorDialog = new wxMessageDialog(NULL,
-        wxString(msg.c_str(), wxConvUTF8), wxT("Alert"), wxOK | wxICON_EXCLAMATION);
-    errorDialog->ShowModal();
+    wxNotificationMessage notification(
+        wxT("EyeWatcher"), wxString(msg.c_str(), wxConvUTF8), NULL, wxICON_INFORMATION);
+    notification.Show();
 }
 
 void MsgHandler::playSound(std::string filename)
 {
-    ///@todo: investigate why this is not working (sample does not work either)
+    ///@todo: investigate why this is not working (sample does not work either) / works in windows
     wxSound sound(wxString(filename.c_str(), wxConvUTF8));
     bool played = sound.Play(wxSOUND_SYNC);
     assert(played);

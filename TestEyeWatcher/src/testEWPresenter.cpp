@@ -235,4 +235,19 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(presenter->getHideButtonLabel(), presenter->m_HideBtnLabel);
         CHECK_EQUAL(true, presenter->isShown());
     }
+
+    TEST_FIXTURE(EWPresenterFixture, TestIconName)
+    {
+        CHECK_EQUAL(presenter->getIconName(), presenter->m_StopWebcamIcon);
+
+        presenter->toggleStart();
+        keeper->workLeft = boost::posix_time::hours(1);
+        CHECK_EQUAL(presenter->getIconName(), presenter->m_GreenWebcamIcon);
+
+        keeper->workLeft = boost::posix_time::seconds(1);
+        CHECK_EQUAL(presenter->getIconName(), presenter->m_YellowWebcamIcon);
+
+        keeper->workLeft = boost::posix_time::seconds(0);
+        CHECK_EQUAL(presenter->getIconName(), presenter->m_RedWebcamIcon);
+    }
 }

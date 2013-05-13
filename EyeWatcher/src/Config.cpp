@@ -41,7 +41,9 @@ void Config::load()
         (unsigned int)this->m_Impl->read("FaceSizeX", (long)ConfigData::default_FaceSizeX),
         (unsigned int)this->m_Impl->read("FaceSizeY", (long)ConfigData::default_FaceSizeY),
         this->m_Impl->read("CascadePath", ConfigData::default_CascadePath),
-        this->m_Impl->read("SoundPath", ConfigData::default_SoundPath)
+        this->m_Impl->read("SoundPath", ConfigData::default_SoundPath),
+        boost::posix_time::duration_from_string(this->m_Impl->read("RunningLateThreshold",
+            boost::posix_time::to_simple_string(ConfigData::default_RunningLateThreshold))),
     };
 
     if (Config::validateData(tempData))
@@ -84,6 +86,7 @@ void Config::write()
     this->m_Impl->write("FaceSizeY", (long)this->m_data.faceSizeY);
     this->m_Impl->write("CascadePath", this->m_data.cascadePath);
     this->m_Impl->write("SoundPath", this->m_data.soundPath);
+    this->m_Impl->write("RunningLateThreshold", boost::posix_time::to_simple_string(this->m_data.runningLateThreshold));
 
     this->m_Impl->flush();
 }
@@ -99,6 +102,7 @@ bool Config::validateData(const ConfigData& data)
         data.pauseLength.total_seconds() <= 0 ||
         data.remFreq.total_seconds() <= 0 ||
         data.checkFreq.total_seconds() <= 0 ||
+        data.runningLateThreshold.is_special() ||
         data.pauseTol < 0)
     {
         return false;

@@ -109,6 +109,11 @@ boost::posix_time::ptime TimeKeeper::getAwayStamp() const
     return this->m_AwayStamp;
 }
 
+boost::posix_time::time_duration TimeKeeper::getWorkTimeLeft() const
+{
+    return this->m_States.find(AbstractTimeKeeper::HERE)->second->getTimeLeft(this);
+}
+
 void TimeKeeper::setStatus(Status status)
 {
     this->m_CurrentState = status;

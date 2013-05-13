@@ -1,10 +1,17 @@
 #include "wxConfigImpl.h"
 #include <wx/config.h>
 
-wxConfigImpl::wxConfigImpl() :m_Config(wxConfigBase::Get())
+/// @todo: check invalid path behaviour
+wxConfigImpl::wxConfigImpl(std::string configPath)
 {
     //ctor
-    wxString path = this->m_Config->GetPath();
+    if (configPath != "")
+    {
+        wxConfigBase::Set( new wxFileConfig(wxEmptyString, wxEmptyString,
+            wxString(configPath.c_str(), wxConvUTF8), wxEmptyString,
+            wxCONFIG_USE_LOCAL_FILE| wxCONFIG_USE_RELATIVE_PATH));
+    }
+    m_Config = wxConfigBase::Get();
 }
 
 wxConfigImpl::~wxConfigImpl()

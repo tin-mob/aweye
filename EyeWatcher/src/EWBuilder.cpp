@@ -17,7 +17,7 @@
 #include "EWTaskBarPres.h"
 
 /// @todo: make this testable? With an abstract factory perharps?
-EWBuilder::EWBuilder(EyeWatcherApp* app) :
+EWBuilder::EWBuilder(EyeWatcherApp* app, std::string configPath) :
     m_MsgHandler(NULL), m_ConfigImpl(NULL), m_Config(NULL), m_TimeHandler(NULL),
     m_PresenceHandler(NULL), m_TimeKeeper(NULL), m_ClockTimer(NULL),
     m_Presenter(NULL), m_MainFramePres(NULL), m_MainFrame(NULL),
@@ -29,7 +29,7 @@ EWBuilder::EWBuilder(EyeWatcherApp* app) :
         this->m_MsgHandler = new MsgHandler();
         try
         {
-            this->m_ConfigImpl = new wxConfigImpl();
+            this->m_ConfigImpl = new wxConfigImpl(configPath);
             this->m_Config = new Config(m_ConfigImpl);
             ConfigData data = this->m_Config->getData();
             this->m_TimeHandler = new TimeHandler();

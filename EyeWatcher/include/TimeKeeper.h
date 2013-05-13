@@ -12,6 +12,7 @@ class TKStateOff;
 class AbstractPresenceHandler;
 class AbstractTimeHandler;
 
+///@toodo: cummulative pause alternative
 class TimeKeeper : public AbstractTimeKeeper
 {
     public:
@@ -36,6 +37,7 @@ class TimeKeeper : public AbstractTimeKeeper
         virtual boost::posix_time::time_duration getTimeLeft() const;
         virtual boost::posix_time::ptime getHereStamp() const;
         virtual boost::posix_time::ptime getAwayStamp() const;
+        virtual boost::posix_time::time_duration getWorkTimeLeft() const;
 
         virtual void setWorkLength(boost::posix_time::time_duration workLength);
         virtual void setPauseLength(boost::posix_time::time_duration pauseLength);

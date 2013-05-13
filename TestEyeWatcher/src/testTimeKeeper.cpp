@@ -48,6 +48,8 @@ struct TimeKeeperFixture
 
 };
 
+///@todo: really really have to find a better way to test this. Modifications are a pain
+/// to propagate...
 SUITE(TestTimeKeeper)
 {
     TEST_FIXTURE(TimeKeeperFixture, TestOnOff)
@@ -59,6 +61,7 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper->getTimeLeft(), boost::posix_time::seconds(0));
         CHECK_EQUAL(this->keeper->getHereStamp(), boost::posix_time::not_a_date_time);
         CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
+        CHECK_EQUAL(this->keeper->getWorkTimeLeft(), boost::posix_time::not_a_date_time);
 
         this->keeper->start();
         CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::HERE);
@@ -68,6 +71,7 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength);
         CHECK_EQUAL(this->keeper->getHereStamp(), timeHandler->getTime());
         CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
+        CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength);
 
 
         this->keeper->stop();
@@ -78,6 +82,8 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper->getTimeLeft(), boost::posix_time::seconds(0));
         CHECK_EQUAL(this->keeper->getHereStamp(), boost::posix_time::not_a_date_time);
         CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
+        CHECK_EQUAL(this->keeper->getWorkTimeLeft(), boost::posix_time::not_a_date_time);
+
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestSimpleRun)
@@ -93,6 +99,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength);
         }
         {
             // simulate next check period
@@ -109,6 +116,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - interval);
         }
         {
             // simulate next check period
@@ -123,6 +131,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - interval);
         }
         {
             // simulate end of work period
@@ -137,6 +146,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - interval);
         }
         {
             // change values to verify that no reminder is issued
@@ -156,6 +166,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - interval);
         }
     }
 
@@ -177,6 +188,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - interval);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
@@ -184,6 +196,7 @@ SUITE(TestTimeKeeper)
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
+            boost::posix_time::time_duration workInterval = timeHandler->getTime() - startingTime;
             boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
             CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
@@ -192,11 +205,14 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - workInterval);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
+
+            boost::posix_time::time_duration workInterval = timeHandler->getTime() - startingTime;
             boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
             CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), boost::posix_time::seconds(1));
@@ -205,12 +221,14 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - workInterval);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
+            boost::posix_time::time_duration workInterval = timeHandler->getTime() - startingTime;
             boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
             CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
@@ -219,12 +237,14 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - workInterval);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
+            boost::posix_time::time_duration workInterval = timeHandler->getTime() - startingTime;
             boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
             CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
@@ -233,6 +253,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - workInterval);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
@@ -248,6 +269,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - interval);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
@@ -262,6 +284,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - interval);
         }
     }
 
@@ -284,12 +307,14 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - interval);
         }
         {
             pauseTime = timeHandler->getTime();
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
+            boost::posix_time::time_duration workInterval = timeHandler->getTime() - startingTime;
             boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
             CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
@@ -298,12 +323,14 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - workInterval);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.pauseLength);
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
+            boost::posix_time::time_duration workInterval = timeHandler->getTime() - startingTime;
             boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
             CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
@@ -312,6 +339,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - workInterval);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + this->data.checkFreq);
@@ -327,6 +355,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - interval);
         }
     }
 
@@ -349,12 +378,14 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - interval);
         }
         {
             pauseTime = timeHandler->getTime();
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
+            boost::posix_time::time_duration workInterval = timeHandler->getTime() - startingTime;
             boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
             CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
@@ -363,12 +394,14 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - workInterval);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
+            boost::posix_time::time_duration workInterval = timeHandler->getTime() - startingTime;
             boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
             CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
@@ -377,6 +410,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - workInterval);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
@@ -391,6 +425,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - interval);
         }
     }
 
@@ -413,12 +448,14 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.workLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), boost::posix_time::not_a_date_time);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - interval);
         }
         {
             pauseTime = timeHandler->getTime();
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
+            boost::posix_time::time_duration workInterval = timeHandler->getTime() - startingTime;
             boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
             CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
@@ -427,12 +464,14 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - workInterval);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(true);
             this->keeper->updateStatus();
 
+            boost::posix_time::time_duration workInterval = timeHandler->getTime() - startingTime;
             boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
             CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
@@ -441,12 +480,14 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - workInterval);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
+            boost::posix_time::time_duration workInterval = timeHandler->getTime() - startingTime;
             boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
             CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), boost::posix_time::seconds(1));
@@ -455,12 +496,14 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - workInterval);
         }
         {
             timeHandler->setTime(timeHandler->getTime() + boost::posix_time::seconds(1));
             presenceHandler->pushResult(false);
             this->keeper->updateStatus();
 
+            boost::posix_time::time_duration workInterval = timeHandler->getTime() - startingTime;
             boost::posix_time::time_duration interval = timeHandler->getTime() - pauseTime;
             CHECK_EQUAL(this->keeper->getStatus(), AbstractTimeKeeper::AWAY);
             CHECK_EQUAL(this->keeper->getTimerInterval(), this->data.checkFreq);
@@ -469,6 +512,7 @@ SUITE(TestTimeKeeper)
             CHECK_EQUAL(this->keeper->getTimeLeft(), this->data.pauseLength - interval);
             CHECK_EQUAL(this->keeper->getHereStamp(), startingTime);
             CHECK_EQUAL(this->keeper->getAwayStamp(), pauseTime);
+            CHECK_EQUAL(this->keeper->getWorkTimeLeft(), this->data.workLength - workInterval);
         }
     }
 }

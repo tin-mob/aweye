@@ -20,9 +20,11 @@ EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config,
                          AbstractTimer* checkTimer, AbstractTimer* clockTimer, Command* exitCmd)
     :  m_LateMsg("Time for a pause!"), m_HideBtnLabel("Hide"), m_RestoreBtnLabel("Restore"),
     m_PauseBtnLabel("Pause"), m_ResumeBtnLabel("Resume"), m_StartBtnLabel("Start"),
-    m_StopBtnLabel("Stop"), m_Warn(true), m_Shown(true), m_Config(config),
-    m_TimeKeeper(keeper), m_MsgHandler(msgHandler), m_PresenceHandler(presenceHandler),
-    m_CheckTimer(checkTimer), m_ClockTimer(clockTimer), m_ExitCmd(exitCmd)
+    m_StopBtnLabel("Stop"), m_StopWebcamIcon("webcam-stop.png"), m_GreenWebcamIcon("webcam-green.png"),
+    m_YellowWebcamIcon("webcam-yellow.png"), m_RedWebcamIcon("webcam-red.png"),
+    m_Warn(true), m_Shown(true), m_Config(config), m_TimeKeeper(keeper),
+    m_MsgHandler(msgHandler), m_PresenceHandler(presenceHandler), m_CheckTimer(checkTimer),
+    m_ClockTimer(clockTimer), m_ExitCmd(exitCmd)
 {
     this->m_CheckTimer->attach(this);
     this->m_ClockTimer->attach(this);
@@ -83,6 +85,8 @@ void EWPresenter::stop()
     this->notify();
 }
 
+/// @todo: notify view to allow them to be closed properly rather than
+/// ending the main loop - causes an assertion when it is hidden.
 void EWPresenter::quit()
 {
     this->m_ExitCmd->execute();
@@ -195,6 +199,31 @@ std::string EWPresenter::getStatus() const
     return this->m_TimeKeeper->getStatusStr();
 }
 
+std::string EWPresenter::getIconName()const
+{
+    if (this->m_TimeKeeper->getStatus() == AbstractTimeKeeper::OFF)
+    {
+        return this->m_StopWebcamIcon;
+    }
+    else
+    {
+        const ConfigData& config = this->m_Config->getData();
+        boost::posix_time::time_duration timeLeft = this->m_TimeKeeper->getWorkTimeLeft();
+        if (timeLeft > config.runningLateThreshold)
+        {
+            return this->m_GreenWebcamIcon;
+        }
+        else if (timeLeft > boost::posix_time::seconds(0))
+        {
+            return this->m_YellowWebcamIcon;
+        }
+        else
+        {
+            return this->m_RedWebcamIcon;
+        }
+    }
+}
+
 std::string EWPresenter::durationToString(boost::posix_time::time_duration duration)
 {
     if (duration.is_special())
@@ -252,10 +281,6 @@ void EWPresenter::alert()
     const ConfigData& config = this->m_Config->getData();
     if (config.popupAlarm)
     {
-        //sadly, only available in wxwidgets 2.9
-        //frame->notifyMessage(m_LateMsg);
-
-        // remove when notify is working...
         this->m_MsgHandler->displayAlert(m_LateMsg);
     }
 

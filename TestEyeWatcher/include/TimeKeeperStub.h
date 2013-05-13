@@ -17,6 +17,7 @@ class TimeKeeperStub : public AbstractTimeKeeper
             hereStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(10,59,00))),
             awayStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(11,31,01))),
             interval(boost::posix_time::seconds(2)), left(boost::posix_time::minutes(3)),
+            workLeft(boost::posix_time::minutes(1)),
             workLength(boost::posix_time::time_duration(00,00,00)),
             pauseLength(boost::posix_time::time_duration(00,00,01)),
             remFreq(boost::posix_time::time_duration(00,00,10)),
@@ -45,6 +46,7 @@ class TimeKeeperStub : public AbstractTimeKeeper
         virtual boost::posix_time::time_duration getTimeLeft() const {return left;}
         virtual boost::posix_time::ptime getHereStamp() const {return hereStamp;}
         virtual boost::posix_time::ptime getAwayStamp() const {return awayStamp;}
+        virtual boost::posix_time::time_duration getWorkTimeLeft() const {return workLeft;};
 
         virtual void setWorkLength(boost::posix_time::time_duration wl) {workLength = wl;}
         virtual void setPauseLength(boost::posix_time::time_duration pl) {pauseLength = pl;}
@@ -59,6 +61,7 @@ class TimeKeeperStub : public AbstractTimeKeeper
         boost::posix_time::ptime awayStamp;
         boost::posix_time::time_duration interval;
         boost::posix_time::time_duration left;
+        boost::posix_time::time_duration workLeft;
 
         boost::posix_time::time_duration workLength;
         boost::posix_time::time_duration pauseLength;

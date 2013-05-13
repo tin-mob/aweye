@@ -12,6 +12,7 @@
 
 #include <wx/app.h>
 
+class wxCmdLineParser;
 class EWBuilder;
 class EyeWatcherApp : public wxApp
 {
@@ -19,8 +20,11 @@ class EyeWatcherApp : public wxApp
         EyeWatcherApp();
        ~EyeWatcherApp();
         virtual bool OnInit();
+        virtual void OnInitCmdLine(wxCmdLineParser& parser);
+        virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
     private:
         EWBuilder* m_Builder;
+        wxString m_ConfigPath;
 };
 
 #endif // EYEWATCHERAPP_H

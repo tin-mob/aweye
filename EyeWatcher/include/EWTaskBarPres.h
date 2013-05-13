@@ -22,6 +22,7 @@ class EWTaskBarPres : public Observer
     private:
         EWPresenter* m_Presenter;
         AbstractEWTaskbar* m_TaskBar;
+        std::string m_LastIcon;
 };
 
 #endif // EWTASKBARPRES_H

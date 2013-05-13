@@ -51,6 +51,10 @@ SUITE(TestConfig)
         data.checkFreq = boost::posix_time::not_a_date_time;
         CHECK_EQUAL(false, Config::validateData(data));
         data.checkFreq = ConfigData::default_CheckFreq;
+
+        data.runningLateThreshold = boost::posix_time::not_a_date_time;
+        CHECK_EQUAL(false, Config::validateData(data));
+        data.runningLateThreshold = ConfigData::default_RunningLateThreshold;
     }
 
     TEST_FIXTURE(ConfigFixture, TestEmptyConstruction)
@@ -73,6 +77,7 @@ SUITE(TestConfig)
         CHECK_EQUAL(ConfigData::default_FaceSizeY, data.faceSizeY);
         CHECK_EQUAL(ConfigData::default_CascadePath, data.cascadePath);
         CHECK_EQUAL(ConfigData::default_SoundPath, data.soundPath);
+        CHECK_EQUAL(ConfigData::default_RunningLateThreshold, data.runningLateThreshold);
     }
 
     TEST_FIXTURE(ConfigFixture, TestSaveLoad)
@@ -94,7 +99,8 @@ SUITE(TestConfig)
             ConfigData::default_FaceSizeX + 1,
             ConfigData::default_FaceSizeY + 1,
             "test.cfg",
-            "test.wav"
+            "test.wav",
+            ConfigData::default_CheckFreq + boost::posix_time::seconds(1)
         };
 
         Config config(&impl);
@@ -119,6 +125,7 @@ SUITE(TestConfig)
         CHECK_EQUAL(srcData.faceSizeY, data.faceSizeY);
         CHECK_EQUAL(srcData.cascadePath, data.cascadePath);
         CHECK_EQUAL(srcData.soundPath, data.soundPath);
+        CHECK_EQUAL(srcData.runningLateThreshold, data.runningLateThreshold);
 
         Config config3(&impl);
         config3.load();
@@ -139,6 +146,7 @@ SUITE(TestConfig)
         CHECK_EQUAL(srcData.faceSizeY, data.faceSizeY);
         CHECK_EQUAL(srcData.cascadePath, data.cascadePath);
         CHECK_EQUAL(srcData.soundPath, data.soundPath);
+        CHECK_EQUAL(srcData.runningLateThreshold, data.runningLateThreshold);
     }
 
 

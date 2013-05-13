@@ -35,6 +35,7 @@ class AbstractTimeKeeper
         virtual boost::posix_time::time_duration getTimeLeft() const = 0;
         virtual boost::posix_time::ptime getHereStamp() const = 0;
         virtual boost::posix_time::ptime getAwayStamp() const = 0;
+        virtual boost::posix_time::time_duration getWorkTimeLeft() const = 0;
 
         virtual void setWorkLength(boost::posix_time::time_duration workLength) = 0;
         virtual void setPauseLength(boost::posix_time::time_duration pauseLength) = 0;

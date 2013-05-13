@@ -43,6 +43,7 @@ class EWPresenter : public Observer, public Observable
         std::string getTimeLeft() const;
         const ConfigData& getConfigData() const;
         bool isShown() const;
+        std::string getIconName()const;
 
         const std::string m_LateMsg;
         const std::string m_HideBtnLabel;
@@ -51,6 +52,11 @@ class EWPresenter : public Observer, public Observable
         const std::string m_ResumeBtnLabel;
         const std::string m_StartBtnLabel;
         const std::string m_StopBtnLabel;
+
+        const std::string m_StopWebcamIcon;
+        const std::string m_GreenWebcamIcon;
+        const std::string m_YellowWebcamIcon;
+        const std::string m_RedWebcamIcon;
 
     protected:
     private:

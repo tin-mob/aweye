@@ -7,7 +7,7 @@ class wxConfigBase;
 class wxConfigImpl : public AbstractConfigImpl
 {
     public:
-        wxConfigImpl();
+        wxConfigImpl(std::string configPath = "");
         virtual ~wxConfigImpl();
 
         virtual std::string read(std::string key, std::string defaultValue) const;

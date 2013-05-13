@@ -57,29 +57,28 @@ wxMenu* EWTaskBar::CreatePopupMenu()
     }
     this->m_Menu = new ObservableWxMenu();
     this->m_Menu->attach(this);
-    this->m_Menu->Append(EWTaskBar::ID_HIDE_RESTORE, wxEmptyString);
+    this->m_Menu->Append(EWTaskBar::ID_HIDE_RESTORE, wxT("Hide/Restore"));
     this->m_Menu->Append(EWTaskBar::ID_EXIT, wxT("Exit"));
     this->m_Menu->AppendSeparator();
-    this->m_Menu->Append(EWTaskBar::ID_START_STOP, wxEmptyString);
-    this->m_Menu->Append(EWTaskBar::ID_PAUSE_RESUME, wxEmptyString);
+    this->m_Menu->Append(EWTaskBar::ID_START_STOP, wxT("Start/Stop"));
+    this->m_Menu->Append(EWTaskBar::ID_PAUSE_RESUME, wxT("Pause/Resume"));
     this->m_Menu->AppendSeparator();
-    this->m_Menu->Append(EWTaskBar::ID_ON_TIME, wxEmptyString);
-    this->m_Menu->Append(EWTaskBar::ID_OFF_TIME, wxEmptyString);
-    this->m_Menu->Append(EWTaskBar::ID_RUNNING_TIME, wxEmptyString);
-    this->m_Menu->Append(EWTaskBar::ID_LEFT_TIME, wxEmptyString);
+    this->m_Menu->Append(EWTaskBar::ID_ON_TIME, wxT("Last Session"));
+    this->m_Menu->Append(EWTaskBar::ID_OFF_TIME, wxT("Last Pause"));
+    this->m_Menu->Append(EWTaskBar::ID_RUNNING_TIME, wxT("Running"));
+    this->m_Menu->Append(EWTaskBar::ID_LEFT_TIME, wxT("Time Left"));
 
     this->m_Presenter->update(NULL);
 
     return this->m_Menu;
 }
 
+// all icons are png files for now...
+///@todo: load icons so that we don't have to create them again...
 void EWTaskBar::setIcon(std::string loc)
 {
-    if(this->IsIconInstalled())
-    {
-        this->RemoveIcon();
-    }
-    this->SetIcon(wxIcon(wxString(loc.c_str(), wxConvUTF8)));
+    wxIcon icon(wxString(loc.c_str(), wxConvUTF8), wxBITMAP_TYPE_PNG );
+    this->SetIcon(icon);
 }
 
 // the menu is managed by Wx. When It decides to delete it, we receive

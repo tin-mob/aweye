@@ -19,7 +19,7 @@ class OptionsDialogPres;
 class EWBuilder
 {
     public:
-        EWBuilder(EyeWatcherApp* app);
+        EWBuilder(EyeWatcherApp* app, std::string configPath = "");
         virtual ~EWBuilder();
 
         MsgHandler* m_MsgHandler;

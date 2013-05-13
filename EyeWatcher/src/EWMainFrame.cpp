@@ -14,7 +14,7 @@
 #include <wx/msgdlg.h>
 #include <wx/valgen.h>
 #include <wx/utils.h>
-//#include <wx/notifmsg.h>
+#include <wx/notifmsg.h>
 #include "BaseException.h"
 #include "EWMainFramePres.h"
 #include "EWPresenter.h"
@@ -172,7 +172,6 @@ void EWMainFrame::setValues( std::string status, std::string onClock,
     this->leftClock->GetParent()->Layout();
 }
 
-/// @note: only available in wxwidgets 2.9 :(
 void EWMainFrame::notifyMessage(std::string message, bool warning)
 {
     //wxNotificationMessage *notification = new wxNotificationMessage(
