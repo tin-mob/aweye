@@ -3,7 +3,7 @@
 #include "wxConfigImpl.h"
 #include "Config.h"
 #include "MsgHandler.h"
-#include "WebcamHandler.h"
+#include "WebcamHandlerProc.h"
 #include "TimeHandler.h"
 #include "TimeKeeper.h"
 #include "EWPresenter.h"
@@ -32,7 +32,7 @@ EWBuilder::EWBuilder(EyeWatcherApp* app, std::string configPath) :
             this->m_Config = new Config(m_ConfigImpl);
             ConfigData data = this->m_Config->getData();
             this->m_TimeHandler = new TimeHandler();
-            this->m_PresenceHandler = new WebcamHandler(data.webcamIndex, data.cascadePath,
+            this->m_PresenceHandler = new WebcamHandlerProc(data.webcamIndex, data.cascadePath,
                 data.faceSizeX, data.faceSizeY);
             this->m_TimeKeeper = new TimeKeeper(m_TimeHandler,
                 m_PresenceHandler, data.workLength, data.pauseLength, data.remFreq,

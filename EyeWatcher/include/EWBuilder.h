@@ -5,7 +5,7 @@ class MsgHandler;
 class wxConfigImpl;
 class Config;
 class TimeHandler;
-class WebcamHandler;
+class WebcamHandlerProc;
 class TimeKeeper;
 class EWPresenter;
 class EWMainFramePres;
@@ -25,7 +25,7 @@ class EWBuilder
         wxConfigImpl* m_ConfigImpl;
         Config* m_Config;
         TimeHandler* m_TimeHandler;
-        WebcamHandler* m_PresenceHandler;
+        WebcamHandlerProc* m_PresenceHandler;
         TimeKeeper* m_TimeKeeper;
         MyWxTimer* m_CheckTimer;
         MyWxTimer* m_ClockTimer;

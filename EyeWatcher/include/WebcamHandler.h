@@ -23,7 +23,6 @@ class AbstractConfig;
 class WebcamHandler : public AbstractPresenceHandler
 {
     public:
-        /// @todo: find best minimum size
         WebcamHandler(int index, std::string faceCascadeName,
                       int faceSizeX, int faceSizeY);
         ~WebcamHandler();

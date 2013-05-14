@@ -12,9 +12,8 @@
 #include "EWBuilder.h"
 #include "EWMainFrame.h"
 #include <wx/cmdline.h>
-//(*AppHeaders
+#include "EWMainFrame.h"
 #include <wx/image.h>
-//*)
 
 IMPLEMENT_APP(EyeWatcherApp);
 
@@ -32,15 +31,13 @@ bool EyeWatcherApp::OnInit()
     if (!wxApp::OnInit())
         return false;
 
-    //(*AppInitialize
     bool wxsOK = true;
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
-        if (this->m_Builder == NULL) this->m_Builder = new EWBuilder(this, std::string(m_ConfigPath.mb_str()));
+    	if (this->m_Builder == NULL) this->m_Builder = new EWBuilder(this, std::string(m_ConfigPath.mb_str()));
         SetTopWindow(this->m_Builder->m_MainFrame);
     }
-    //*)
     return wxsOK;
 
 }
