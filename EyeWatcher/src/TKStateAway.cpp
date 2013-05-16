@@ -21,6 +21,14 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
 
     if (isHere)
     {
+        // make sure when we change state (false negatives)
+        const bool isHere2 = parent->m_PresenceHandler->isHere();
+
+        if (!isHere2)
+        {
+            return;
+        }
+
         boost::posix_time::time_duration timeLeft = this->getTimeLeft(parent);
         if (timeLeft > boost::posix_time::time_duration(0,0,0,0))
         {
@@ -34,7 +42,7 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
                 parent->m_CurrentState = AbstractTimeKeeper::HERE;
             }
         }
-        else if (timeLeft <= boost::posix_time::time_duration(0,0,0,0))
+        else
         {
             parent->setStatus(AbstractTimeKeeper::HERE);
         }
@@ -81,4 +89,9 @@ boost::posix_time::time_duration TKStateAway::getInterval(const TimeKeeper* pare
 boost::posix_time::time_duration TKStateAway::getTimeLeft(const TimeKeeper* parent) const
 {
     return parent->m_AwayStamp + parent->m_PauseLength - parent->m_TimeHandler->getTime();
+}
+
+boost::posix_time::time_duration TKStateAway::getWorkTimeLeft(const TimeKeeper* parent) const
+{
+    return parent->m_WorkLength - (parent->m_AwayStamp - parent->m_HereStamp);
 }

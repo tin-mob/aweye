@@ -19,7 +19,13 @@ void TKStateHere::updateStatus(TimeKeeper* parent)
     const bool isHere = parent->m_PresenceHandler->isHere();
     if (!isHere)
     {
-        parent->setStatus(AbstractTimeKeeper::AWAY);
+        // make sure when we change state (false negatives)
+        const bool isHere2 = parent->m_PresenceHandler->isHere();
+
+        if (!isHere2)
+        {
+            parent->setStatus(AbstractTimeKeeper::AWAY);
+        }
     }
 }
 
@@ -68,4 +74,9 @@ boost::posix_time::time_duration TKStateHere::getInterval(const TimeKeeper* pare
 boost::posix_time::time_duration TKStateHere::getTimeLeft(const TimeKeeper* parent) const
 {
     return parent->m_HereStamp + parent->m_WorkLength - parent->m_TimeHandler->getTime();
+}
+
+boost::posix_time::time_duration TKStateHere::getWorkTimeLeft(const TimeKeeper* parent) const
+{
+    return this->getTimeLeft(parent);
 }

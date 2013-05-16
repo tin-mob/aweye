@@ -156,5 +156,4 @@ SUITE(TestConfig)
         Config config(&impl);
         CHECK_THROW(config.save(data), InvalidConfigDataException);
     }
-
 }

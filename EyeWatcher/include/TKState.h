@@ -15,7 +15,7 @@ class TKState
         virtual bool isLate(const TimeKeeper* parent) const = 0;
         virtual boost::posix_time::time_duration getInterval(const TimeKeeper* parent) const = 0;
         virtual boost::posix_time::time_duration getTimeLeft(const TimeKeeper* parent) const = 0;
-
+        virtual boost::posix_time::time_duration getWorkTimeLeft(const TimeKeeper* parent) const = 0;
     protected:
     private:
 };

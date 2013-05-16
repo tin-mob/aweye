@@ -42,3 +42,8 @@ boost::posix_time::time_duration TKStateOff::getTimeLeft(const TimeKeeper* paren
 {
     return boost::posix_time::time_duration(0,0,0,0);
 }
+
+boost::posix_time::time_duration TKStateOff::getWorkTimeLeft(const TimeKeeper* parent) const
+{
+    return boost::posix_time::not_a_date_time;
+}
