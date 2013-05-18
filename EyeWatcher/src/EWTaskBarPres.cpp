@@ -2,6 +2,8 @@
 #include "EWPresenter.h"
 #include "AbstractEWTaskbar.h"
 
+///@todo: add remove tray icon without restarting
+
 EWTaskBarPres::EWTaskBarPres(EWPresenter* presenter) : m_Presenter(presenter), m_LastIcon("")
 {
     //ctor
@@ -44,6 +46,13 @@ void EWTaskBarPres::OnTimeUpdate()
         "Last Pause : " + this->m_Presenter->getTimeOff(),
         "Running : " + this->m_Presenter->getTimeRunning(),
         "Time Left : " + this->m_Presenter->getTimeLeft());
+
+    std::string newIcon = this->m_Presenter->getIconName();
+    if (newIcon != this->m_LastIcon)
+    {
+        this->m_LastIcon = newIcon;
+        this->m_TaskBar->setIcon(this->m_LastIcon);
+    }
 }
 
 void EWTaskBarPres::OnQuit()

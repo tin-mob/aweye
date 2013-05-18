@@ -67,11 +67,9 @@ SUITE(TestConfig)
         CHECK_EQUAL(ConfigData::default_RemFreq, data.remFreq);
         CHECK_EQUAL(ConfigData::default_CheckFreq, data.checkFreq);
         CHECK_EQUAL(ConfigData::default_PauseTol, data.pauseTol);
-        CHECK_EQUAL(ConfigData::default_Startup, data.startup);
         CHECK_EQUAL(ConfigData::default_SoundAlarm, data.soundAlarm);
         CHECK_EQUAL(ConfigData::default_PopupAlarm, data.popupAlarm);
-        CHECK_EQUAL(ConfigData::default_EmailAlarm, data.emailAlarm);
-        CHECK_EQUAL(ConfigData::default_EmailAddr, data.emailAddr);
+        CHECK_EQUAL(ConfigData::default_TrayIcon, data.trayIcon);
         CHECK_EQUAL(ConfigData::default_WebcamIndex, data.webcamIndex);
         CHECK_EQUAL(ConfigData::default_FaceSizeX, data.faceSizeX);
         CHECK_EQUAL(ConfigData::default_FaceSizeY, data.faceSizeY);
@@ -90,11 +88,9 @@ SUITE(TestConfig)
             ConfigData::default_RemFreq + boost::posix_time::seconds(1),
             ConfigData::default_CheckFreq + boost::posix_time::seconds(1),
             ConfigData::default_PauseTol + 1,
-            !ConfigData::default_Startup,
             !ConfigData::default_SoundAlarm,
             !ConfigData::default_PopupAlarm,
-            !ConfigData::default_EmailAlarm,
-            "test@test.test",
+            !ConfigData::default_TrayIcon,
             ConfigData::default_WebcamIndex + 1,
             ConfigData::default_FaceSizeX + 1,
             ConfigData::default_FaceSizeY + 1,
@@ -115,11 +111,9 @@ SUITE(TestConfig)
         CHECK_EQUAL(srcData.remFreq, data.remFreq);
         CHECK_EQUAL(srcData.checkFreq, data.checkFreq);
         CHECK_EQUAL(srcData.pauseTol, data.pauseTol);
-        CHECK_EQUAL(srcData.startup, data.startup);
         CHECK_EQUAL(srcData.soundAlarm, data.soundAlarm);
         CHECK_EQUAL(srcData.popupAlarm, data.popupAlarm);
-        CHECK_EQUAL(srcData.emailAlarm, data.emailAlarm);
-        CHECK_EQUAL(srcData.emailAddr, data.emailAddr);
+        CHECK_EQUAL(srcData.trayIcon, data.trayIcon);
         CHECK_EQUAL(srcData.webcamIndex, data.webcamIndex);
         CHECK_EQUAL(srcData.faceSizeX, data.faceSizeX);
         CHECK_EQUAL(srcData.faceSizeY, data.faceSizeY);
@@ -136,11 +130,9 @@ SUITE(TestConfig)
         CHECK_EQUAL(srcData.remFreq, data.remFreq);
         CHECK_EQUAL(srcData.checkFreq, data.checkFreq);
         CHECK_EQUAL(srcData.pauseTol, data.pauseTol);
-        CHECK_EQUAL(srcData.startup, data.startup);
         CHECK_EQUAL(srcData.soundAlarm, data.soundAlarm);
         CHECK_EQUAL(srcData.popupAlarm, data.popupAlarm);
-        CHECK_EQUAL(srcData.emailAlarm, data.emailAlarm);
-        CHECK_EQUAL(srcData.emailAddr, data.emailAddr);
+        CHECK_EQUAL(srcData.trayIcon, data.trayIcon);
         CHECK_EQUAL(srcData.webcamIndex, data.webcamIndex);
         CHECK_EQUAL(srcData.faceSizeX, data.faceSizeX);
         CHECK_EQUAL(srcData.faceSizeY, data.faceSizeY);

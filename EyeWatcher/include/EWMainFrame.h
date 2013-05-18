@@ -12,7 +12,8 @@
 
 //(*Headers(EWMainFrame)
 #include <wx/sizer.h>
-#include <wx/button.h>
+#include <wx/menu.h>
+#include <wx/statline.h>
 #include <wx/frame.h>
 #include <wx/stattext.h>
 //*)
@@ -27,13 +28,13 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
 {
     public:
 
-        EWMainFrame(wxWindow* parent, EWMainFramePres* presenter, wxWindowID id = -1);
+        EWMainFrame(wxWindow* parent, EWMainFramePres* presenter,
+                    bool taskbarCreated = true, wxWindowID id = -1);
         virtual ~EWMainFrame();
 
         virtual void setValues( std::string status, std::string onClock,
                        std::string offClock, std::string runningClock,
                        std::string leftClock);
-        virtual void notifyMessage(std::string message, bool warning = false);
         virtual void displayOptionsDialog(OptionsDialogPres* presenter);
         virtual void show(bool show = true);
         virtual void setPauseButtonLabel(std::string label);
@@ -52,40 +53,47 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
         //*)
 
         //(*Identifiers(EWMainFrame)
-        static const long ID_BUTTON1;
-        static const long ID_BUTTON3;
-        static const long ID_BUTTON4;
-        static const long ID_BUTTON5;
-        static const long ID_BUTTON6;
         static const long ID_STATICTEXT9;
+        static const long ID_STATICLINE1;
         static const long ID_STATICTEXT1;
         static const long ID_STATICTEXT2;
+        static const long ID_STATICLINE2;
         static const long ID_STATICTEXT3;
         static const long ID_STATICTEXT4;
+        static const long ID_STATICLINE3;
         static const long ID_STATICTEXT5;
         static const long ID_STATICTEXT6;
+        static const long ID_STATICLINE4;
         static const long ID_STATICTEXT7;
         static const long ID_STATICTEXT8;
+        static const long ID_STARTMENUITEM;
+        static const long ID_PAUSEMENUITEM;
+        static const long ID_OPTIONSMENUITEM;
+        static const long ID_ABOUTMENUITEM;
+        static const long ID_EXITMENUITEM;
         //*)
 
         //(*Declarations(EWMainFrame)
-        wxButton* quitButton;
         wxStaticText* runningClock;
+        wxMenuItem* StartMenuItem;
+        wxStaticLine* StaticLine2;
         wxStaticText* onClock;
         wxStaticText* onLabel;
         wxStaticText* runningLabel;
-        wxButton* playButton;
+        wxMenu* DoMenu;
+        wxMenuBar* EwMenuBar;
         wxStaticText* leftClock;
-        wxButton* pauseButton;
         wxStaticText* offClock;
+        wxStaticLine* StaticLine1;
+        wxStaticLine* StaticLine3;
         wxStaticText* StatusLabel;
         wxStaticText* offLabel;
         wxStaticText* leftLabel;
-        wxButton* optionsButton;
-        wxButton* aboutButton;
+        wxStaticLine* StaticLine4;
         //*)
 
         EWMainFramePres* m_Presenter;
+        bool m_TaskbarCreated;
 
         DECLARE_EVENT_TABLE()
 };

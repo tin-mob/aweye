@@ -18,7 +18,7 @@ class OptionsDialogPres;
 class EWBuilder
 {
     public:
-        EWBuilder(EyeWatcherApp* app, std::string configPath = "");
+        EWBuilder(EyeWatcherApp* app, std::string configPath = "", bool createTaskbar = true);
         virtual ~EWBuilder();
 
         MsgHandler* m_MsgHandler;

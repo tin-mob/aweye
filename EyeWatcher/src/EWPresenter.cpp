@@ -199,6 +199,11 @@ std::string EWPresenter::getIconName()const
     {
         return this->m_StopWebcamIcon;
     }
+    else if (this->m_TimeKeeper->getStatus() == AbstractTimeKeeper::AWAY &&
+             this->m_TimeKeeper->getTimeLeft() <= boost::posix_time::seconds(0))
+    {
+        return this->m_GreenWebcamIcon;
+    }
     else
     {
         const ConfigData& config = this->m_Config->getData();
@@ -281,10 +286,5 @@ void EWPresenter::alert()
     if (config.soundAlarm)
     {
         this->m_MsgHandler->playSound(config.soundPath);
-    }
-
-    if (config.emailAlarm)
-    {
-        ///@todo
     }
 }

@@ -54,20 +54,24 @@ wxString wxbuildinfo(wxbuildinfoformat format)
 }
 
 //(*IdInit(EWMainFrame)
-const long EWMainFrame::ID_BUTTON1 = wxNewId();
-const long EWMainFrame::ID_BUTTON3 = wxNewId();
-const long EWMainFrame::ID_BUTTON4 = wxNewId();
-const long EWMainFrame::ID_BUTTON5 = wxNewId();
-const long EWMainFrame::ID_BUTTON6 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT9 = wxNewId();
+const long EWMainFrame::ID_STATICLINE1 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT1 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT2 = wxNewId();
+const long EWMainFrame::ID_STATICLINE2 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT3 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT4 = wxNewId();
+const long EWMainFrame::ID_STATICLINE3 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT5 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT6 = wxNewId();
+const long EWMainFrame::ID_STATICLINE4 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT7 = wxNewId();
 const long EWMainFrame::ID_STATICTEXT8 = wxNewId();
+const long EWMainFrame::ID_STARTMENUITEM = wxNewId();
+const long EWMainFrame::ID_PAUSEMENUITEM = wxNewId();
+const long EWMainFrame::ID_OPTIONSMENUITEM = wxNewId();
+const long EWMainFrame::ID_ABOUTMENUITEM = wxNewId();
+const long EWMainFrame::ID_EXITMENUITEM = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
@@ -75,14 +79,18 @@ BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
     //*)
 END_EVENT_TABLE()
 
-EWMainFrame::EWMainFrame(wxWindow* parent, EWMainFramePres* presenter, wxWindowID id) : m_Presenter(presenter)
+EWMainFrame::EWMainFrame(wxWindow* parent, EWMainFramePres* presenter,
+                         bool taskbarCreated, wxWindowID id) :
+                         m_Presenter(presenter), m_TaskbarCreated(taskbarCreated)
 {
     //(*Initialize(EWMainFrame)
-    wxBoxSizer* buttonsBoxSizer;
+    wxMenuItem* AboutMenuItem;
     wxBoxSizer* offBoxSizer;
-    wxBoxSizer* mainBoxSizer;
-    wxGridSizer* timesGrid;
+    wxMenuItem* OptionsMenuItem;
+    wxMenuItem* PauseMenuItem;
+    wxMenuItem* ExitMenuItem;
     wxBoxSizer* runningBoxSizer;
+    wxFlexGridSizer* mainFlexGridSizer;
     wxBoxSizer* onBoxSizer;
     wxBoxSizer* leftBoxSizer;
 
@@ -92,57 +100,64 @@ EWMainFrame::EWMainFrame(wxWindow* parent, EWMainFramePres* presenter, wxWindowI
     	FrameIcon.CopyFromBitmap(wxBitmap(wxImage(_T("/home/bob/CodeZone/EyeWatcher/EyeWatcher/webcam.ico"))));
     	SetIcon(FrameIcon);
     }
-    mainBoxSizer = new wxBoxSizer(wxVERTICAL);
-    buttonsBoxSizer = new wxBoxSizer(wxHORIZONTAL);
-    pauseButton = new wxButton(this, ID_BUTTON1, _("Pause"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
-    pauseButton->SetMinSize(wxSize(-1,-1));
-    buttonsBoxSizer->Add(pauseButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    playButton = new wxButton(this, ID_BUTTON3, _("Start"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON3"));
-    buttonsBoxSizer->Add(playButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    optionsButton = new wxButton(this, ID_BUTTON4, _("Options"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON4"));
-    buttonsBoxSizer->Add(optionsButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    aboutButton = new wxButton(this, ID_BUTTON5, _("About"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON5"));
-    buttonsBoxSizer->Add(aboutButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    quitButton = new wxButton(this, ID_BUTTON6, _("Exit"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON6"));
-    buttonsBoxSizer->Add(quitButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    mainBoxSizer->Add(buttonsBoxSizer, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
-    timesGrid = new wxGridSizer(2, 5, 0, 0);
+    mainFlexGridSizer = new wxFlexGridSizer(0, 1, 0, 0);
     StatusLabel = new wxStaticText(this, ID_STATICTEXT9, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
-    timesGrid->Add(StatusLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    mainFlexGridSizer->Add(StatusLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticLine1 = new wxStaticLine(this, ID_STATICLINE1, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE1"));
+    mainFlexGridSizer->Add(StaticLine1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     onBoxSizer = new wxBoxSizer(wxVERTICAL);
     onLabel = new wxStaticText(this, ID_STATICTEXT1, _("Last Session"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
     onBoxSizer->Add(onLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     onClock = new wxStaticText(this, ID_STATICTEXT2, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
     onBoxSizer->Add(onClock, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    timesGrid->Add(onBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
+    mainFlexGridSizer->Add(onBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+    StaticLine2 = new wxStaticLine(this, ID_STATICLINE2, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE2"));
+    mainFlexGridSizer->Add(StaticLine2, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     offBoxSizer = new wxBoxSizer(wxVERTICAL);
     offLabel = new wxStaticText(this, ID_STATICTEXT3, _("Last Pause"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
     offBoxSizer->Add(offLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     offClock = new wxStaticText(this, ID_STATICTEXT4, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
     offBoxSizer->Add(offClock, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    timesGrid->Add(offBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+    mainFlexGridSizer->Add(offBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+    StaticLine3 = new wxStaticLine(this, ID_STATICLINE3, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE3"));
+    mainFlexGridSizer->Add(StaticLine3, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     runningBoxSizer = new wxBoxSizer(wxVERTICAL);
     runningLabel = new wxStaticText(this, ID_STATICTEXT5, _("Running"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
     runningBoxSizer->Add(runningLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     runningClock = new wxStaticText(this, ID_STATICTEXT6, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
     runningBoxSizer->Add(runningClock, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    timesGrid->Add(runningBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+    mainFlexGridSizer->Add(runningBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+    StaticLine4 = new wxStaticLine(this, ID_STATICLINE4, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE4"));
+    mainFlexGridSizer->Add(StaticLine4, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     leftBoxSizer = new wxBoxSizer(wxVERTICAL);
     leftLabel = new wxStaticText(this, ID_STATICTEXT7, _("Time Left"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
     leftBoxSizer->Add(leftLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     leftClock = new wxStaticText(this, ID_STATICTEXT8, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
     leftBoxSizer->Add(leftClock, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    timesGrid->Add(leftBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
-    mainBoxSizer->Add(timesGrid, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    SetSizer(mainBoxSizer);
-    mainBoxSizer->Fit(this);
-    mainBoxSizer->SetSizeHints(this);
+    mainFlexGridSizer->Add(leftBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+    SetSizer(mainFlexGridSizer);
+    EwMenuBar = new wxMenuBar();
+    DoMenu = new wxMenu();
+    StartMenuItem = new wxMenuItem(DoMenu, ID_STARTMENUITEM, _("Start"), wxEmptyString, wxITEM_NORMAL);
+    DoMenu->Append(StartMenuItem);
+    PauseMenuItem = new wxMenuItem(DoMenu, ID_PAUSEMENUITEM, _("Pause"), wxEmptyString, wxITEM_NORMAL);
+    DoMenu->Append(PauseMenuItem);
+    OptionsMenuItem = new wxMenuItem(DoMenu, ID_OPTIONSMENUITEM, _("Options"), wxEmptyString, wxITEM_NORMAL);
+    DoMenu->Append(OptionsMenuItem);
+    AboutMenuItem = new wxMenuItem(DoMenu, ID_ABOUTMENUITEM, _("About"), wxEmptyString, wxITEM_NORMAL);
+    DoMenu->Append(AboutMenuItem);
+    ExitMenuItem = new wxMenuItem(DoMenu, ID_EXITMENUITEM, _("Exit"), wxEmptyString, wxITEM_NORMAL);
+    DoMenu->Append(ExitMenuItem);
+    EwMenuBar->Append(DoMenu, _("Do"));
+    SetMenuBar(EwMenuBar);
+    mainFlexGridSizer->Fit(this);
+    mainFlexGridSizer->SetSizeHints(this);
 
-    Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnPauseButtonClick);
-    Connect(ID_BUTTON3,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnPlayButtonClick);
-    Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnOptionsButtonClick);
-    Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnAbout);
-    Connect(ID_BUTTON6,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EWMainFrame::OnQuit);
+    Connect(ID_STARTMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&EWMainFrame::OnPlayButtonClick);
+    Connect(ID_PAUSEMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&EWMainFrame::OnPauseButtonClick);
+    Connect(ID_OPTIONSMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&EWMainFrame::OnOptionsButtonClick);
+    Connect(ID_ABOUTMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&EWMainFrame::OnAbout);
+    Connect(ID_EXITMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&EWMainFrame::OnQuit);
     Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&EWMainFrame::OnClose);
     //*)
 
@@ -172,13 +187,6 @@ void EWMainFrame::setValues( std::string status, std::string onClock,
     this->leftClock->GetParent()->Layout();
 }
 
-void EWMainFrame::notifyMessage(std::string message, bool warning)
-{
-    //wxNotificationMessage *notification = new wxNotificationMessage(
-    //    wxT("EyeWatcher"), wxString(message.c_str(), wxConvUTF8), this, warning ? wxICON_WARNING : wxICON_INFORMATION);
-    //norification->show();
-}
-
 void EWMainFrame::show(bool show)
 {
     Show(show);
@@ -186,12 +194,12 @@ void EWMainFrame::show(bool show)
 
 void EWMainFrame::setPauseButtonLabel(std::string label)
 {
-    this->pauseButton->SetLabel(wxString(label.c_str(), wxConvUTF8));
+    this->DoMenu->SetLabel(this->ID_PAUSEMENUITEM, wxString(label.c_str(), wxConvUTF8));
 }
 
 void EWMainFrame::setStartButtonLabel(std::string label)
 {
-    this->playButton->SetLabel(wxString(label.c_str(), wxConvUTF8));
+    this->DoMenu->SetLabel(this->ID_STARTMENUITEM, wxString(label.c_str(), wxConvUTF8));
 }
 
 void EWMainFrame::close()
@@ -228,7 +236,7 @@ void EWMainFrame::OnPlayButtonClick(wxCommandEvent& event)
 
 void EWMainFrame::OnClose(wxCloseEvent& event)
 {
-    if (!event.CanVeto())
+    if (!event.CanVeto() || !this->m_TaskbarCreated)
     {
         this->m_Presenter->OnFrameQuit();
         Destroy();

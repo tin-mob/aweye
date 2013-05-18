@@ -85,14 +85,14 @@ wxMenu* EWTaskBar::CreatePopupMenu()
 ///@todo: load icons so that we don't have to create them again...
 void EWTaskBar::setIcon(std::string loc)
 {
-    if (IsIconInstalled())
-    {
-        RemoveIcon();
-    }
     if (loc != "")
     {
         wxIcon icon(wxString(loc.c_str(), wxConvUTF8), wxBITMAP_TYPE_PNG );
         this->SetIcon(icon);
+    }
+    else
+    {
+        RemoveIcon();
     }
 
 }

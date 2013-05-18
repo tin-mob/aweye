@@ -11,6 +11,7 @@
 	//*)
 #endif
 //(*InternalHeaders(OptionsDialog)
+#include <wx/button.h>
 //*)
 
 //(*IdInit(OptionsDialog)
@@ -26,12 +27,9 @@ const long OptionsDialog::ID_SPINCTRL9 = wxNewId();
 const long OptionsDialog::ID_STATICTEXT4 = wxNewId();
 const long OptionsDialog::ID_SPINCTRL11 = wxNewId();
 const long OptionsDialog::ID_SPINCTRL12 = wxNewId();
-const long OptionsDialog::ID_CHECKBOX1 = wxNewId();
 const long OptionsDialog::ID_CHECKBOX2 = wxNewId();
 const long OptionsDialog::ID_CHECKBOX3 = wxNewId();
-const long OptionsDialog::ID_CHECKBOX4 = wxNewId();
-const long OptionsDialog::ID_BUTTON1 = wxNewId();
-const long OptionsDialog::ID_TEXTCTRL1 = wxNewId();
+const long OptionsDialog::ID_CHECKBOX5 = wxNewId();
 const long OptionsDialog::ID_PANEL1 = wxNewId();
 const long OptionsDialog::ID_STATICTEXT6 = wxNewId();
 const long OptionsDialog::ID_SPINCTRL4 = wxNewId();
@@ -56,12 +54,12 @@ BEGIN_EVENT_TABLE(OptionsDialog,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-OptionsDialog::OptionsDialog(wxWindow* parent, OptionsDialogPres* presenter, wxWindowID id) : m_Presenter(presenter)
+OptionsDialog::OptionsDialog(wxWindow* parent, OptionsDialogPres* presenter, wxWindowID id) :
+                             m_Presenter(presenter)
 {
 	//(*Initialize(OptionsDialog)
 	wxFlexGridSizer* runningLateFlexGridSizer;
 	wxFlexGridSizer* wrkFlexGridSizer;
-	wxFlexGridSizer* FlexGridSizer2;
 	wxFlexGridSizer* faceSizeFlexGridSizer;
 	wxFlexGridSizer* tolFlexGridSizer;
 	wxFlexGridSizer* chkFlexGridSizer;
@@ -70,21 +68,21 @@ OptionsDialog::OptionsDialog(wxWindow* parent, OptionsDialogPres* presenter, wxW
 	wxFlexGridSizer* optionsFlexGridSizer;
 	wxFlexGridSizer* indexFlexGridSizer;
 	wxStaticBoxSizer* timeStaticBoxSizer;
-	wxFlexGridSizer* FlexGridSizer3;
 	wxFlexGridSizer* zzzFlexGridSizer;
 	wxFlexGridSizer* generalFlexGridSizer;
 	wxFlexGridSizer* remFlexGridSizer;
 	wxStdDialogButtonSizer* optionsStdDialogButtonSizer;
 	wxFlexGridSizer* advancedFlexGridSizer;
-	wxStaticBoxSizer* emailStaticBoxSizer;
 
 	Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	optionsFlexGridSizer = new wxFlexGridSizer(0, 1, 0, 0);
 	optionsNotebook = new wxNotebook(this, ID_NOTEBOOK1, wxDefaultPosition, wxDefaultSize, 0, _T("ID_NOTEBOOK1"));
 	GeneralPanel = new wxPanel(optionsNotebook, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
 	generalFlexGridSizer = new wxFlexGridSizer(0, 1, 0, 0);
+	generalFlexGridSizer->AddGrowableCol(0);
 	timeStaticBoxSizer = new wxStaticBoxSizer(wxVERTICAL, GeneralPanel, _("Time (Minutes / Seconds)"));
 	wrkFlexGridSizer = new wxFlexGridSizer(0, 4, 0, 0);
+	wrkFlexGridSizer->AddGrowableCol(1);
 	workingLabel = new wxStaticText(GeneralPanel, ID_STATICTEXT1, _("Working Length"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
 	wrkFlexGridSizer->Add(workingLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	wrkFlexGridSizer->Add(22,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -96,6 +94,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, OptionsDialogPres* presenter, wxW
 	wrkFlexGridSizer->Add(wrkSecSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	timeStaticBoxSizer->Add(wrkFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	zzzFlexGridSizer = new wxFlexGridSizer(0, 4, 0, 0);
+	zzzFlexGridSizer->AddGrowableCol(1);
 	zzzLabel = new wxStaticText(GeneralPanel, ID_STATICTEXT2, _("Pause Period"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
 	zzzFlexGridSizer->Add(zzzLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	zzzFlexGridSizer->Add(40,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -107,8 +106,10 @@ OptionsDialog::OptionsDialog(wxWindow* parent, OptionsDialogPres* presenter, wxW
 	zzzFlexGridSizer->Add(zzzSecSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	timeStaticBoxSizer->Add(zzzFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	remFlexGridSizer = new wxFlexGridSizer(0, 4, 0, 0);
+	remFlexGridSizer->AddGrowableCol(1);
 	remLabel = new wxStaticText(GeneralPanel, ID_STATICTEXT3, _("Reminder Frequency"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	remFlexGridSizer->Add(remLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	remFlexGridSizer->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	remMinSpinCtrl = new wxSpinCtrl(GeneralPanel, ID_SPINCTRL8, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 1000, 0, _T("ID_SPINCTRL8"));
 	remMinSpinCtrl->SetValue(_T("0"));
 	remFlexGridSizer->Add(remMinSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -117,6 +118,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, OptionsDialogPres* presenter, wxW
 	remFlexGridSizer->Add(remSecSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	timeStaticBoxSizer->Add(remFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	chkFlexGridSizer = new wxFlexGridSizer(0, 4, 0, 0);
+	chkFlexGridSizer->AddGrowableCol(1);
 	chkStaticText = new wxStaticText(GeneralPanel, ID_STATICTEXT4, _("Check Interval"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
 	chkFlexGridSizer->Add(chkStaticText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	chkFlexGridSizer->Add(29,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -128,29 +130,15 @@ OptionsDialog::OptionsDialog(wxWindow* parent, OptionsDialogPres* presenter, wxW
 	chkFlexGridSizer->Add(chkSecSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	timeStaticBoxSizer->Add(chkFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
 	generalFlexGridSizer->Add(timeStaticBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	startupCheckBox = new wxCheckBox(GeneralPanel, ID_CHECKBOX1, _("Start at PC Startup"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX1"));
-	startupCheckBox->SetValue(false);
-	generalFlexGridSizer->Add(startupCheckBox, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	soundCheckBox = new wxCheckBox(GeneralPanel, ID_CHECKBOX2, _("Sound Alarm"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX2"));
 	soundCheckBox->SetValue(false);
 	generalFlexGridSizer->Add(soundCheckBox, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	popupCheckBox = new wxCheckBox(GeneralPanel, ID_CHECKBOX3, _("Popup Alarm"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX3"));
 	popupCheckBox->SetValue(false);
 	generalFlexGridSizer->Add(popupCheckBox, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	emailStaticBoxSizer = new wxStaticBoxSizer(wxVERTICAL, GeneralPanel, _("Email"));
-	FlexGridSizer3 = new wxFlexGridSizer(0, 1, 0, 0);
-	FlexGridSizer2 = new wxFlexGridSizer(0, 3, 0, 0);
-	emailCheckBox = new wxCheckBox(GeneralPanel, ID_CHECKBOX4, _("Email Alert When Pause Ends"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX4"));
-	emailCheckBox->SetValue(false);
-	FlexGridSizer2->Add(emailCheckBox, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer2->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	testEmailButton = new wxButton(GeneralPanel, ID_BUTTON1, _("Test"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
-	FlexGridSizer2->Add(testEmailButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer3->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
-	emailTextCtrl = new wxTextCtrl(GeneralPanel, ID_TEXTCTRL1, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_TEXTCTRL1"));
-	FlexGridSizer3->Add(emailTextCtrl, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	emailStaticBoxSizer->Add(FlexGridSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
-	generalFlexGridSizer->Add(emailStaticBoxSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	trayIconCheckBox = new wxCheckBox(GeneralPanel, ID_CHECKBOX5, _("Tray Icon"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX5"));
+	trayIconCheckBox->SetValue(false);
+	generalFlexGridSizer->Add(trayIconCheckBox, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	GeneralPanel->SetSizer(generalFlexGridSizer);
 	generalFlexGridSizer->Fit(GeneralPanel);
 	generalFlexGridSizer->SetSizeHints(GeneralPanel);
@@ -160,7 +148,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, OptionsDialogPres* presenter, wxW
 	faceSizeFlexGridSizer->AddGrowableCol(1);
 	FaceSizeStaticText = new wxStaticText(AdvancedPanel, ID_STATICTEXT6, _("Minimum Face Size (X/Y)"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
 	faceSizeFlexGridSizer->Add(FaceSizeStaticText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	faceSizeFlexGridSizer->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	faceSizeFlexGridSizer->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FaceSizeXSpinCtrl = new wxSpinCtrl(AdvancedPanel, ID_SPINCTRL4, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 100, 0, _T("ID_SPINCTRL4"));
 	FaceSizeXSpinCtrl->SetValue(_T("0"));
 	faceSizeFlexGridSizer->Add(FaceSizeXSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -203,9 +191,9 @@ OptionsDialog::OptionsDialog(wxWindow* parent, OptionsDialogPres* presenter, wxW
 	advancedFlexGridSizer->Add(soundLocFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 	runningLateFlexGridSizer = new wxFlexGridSizer(0, 4, 0, 0);
 	runningLateFlexGridSizer->AddGrowableCol(1);
-	runningLateStaticText = new wxStaticText(AdvancedPanel, ID_STATICTEXT10, _("Running Late Threshold"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT10"));
+	runningLateStaticText = new wxStaticText(AdvancedPanel, ID_STATICTEXT10, _("Yellow Icon Threshold"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT10"));
 	runningLateFlexGridSizer->Add(runningLateStaticText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	runningLateFlexGridSizer->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	runningLateFlexGridSizer->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	runningLateMinSpinCtrl = new wxSpinCtrl(AdvancedPanel, ID_SPINCTRL13, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 100, 0, _T("ID_SPINCTRL13"));
 	runningLateMinSpinCtrl->SetValue(_T("0"));
 	runningLateFlexGridSizer->Add(runningLateMinSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -252,11 +240,9 @@ ConfigData OptionsDialog::getData() const
         boost::posix_time::seconds(
             this->chkMinSpinCtrl->GetValue() * 60 + this->chkSecSpinCtrl->GetValue()),
         this->tolSpinCtrl->GetValue(),
-        this->startupCheckBox->GetValue(),
         this->soundCheckBox->GetValue(),
         this->popupCheckBox->GetValue(),
-        this->emailCheckBox->GetValue(),
-        std::string(this->emailTextCtrl->GetValue().mb_str()),
+        this->trayIconCheckBox->GetValue(),
         this->indexSpinCtrl->GetValue(),
         this->FaceSizeXSpinCtrl->GetValue(),
         this->FaceSizeYSpinCtrl->GetValue(),
@@ -269,18 +255,15 @@ ConfigData OptionsDialog::getData() const
 
 void OptionsDialog::setData(const ConfigData& data)
 {
-    this->startupCheckBox->SetValue(data.startup);
 	this->soundCheckBox->SetValue(data.soundAlarm);
     this->tolSpinCtrl->SetValue(data.pauseTol);
     this->wrkMinSpinCtrl->SetValue(data.workLength.total_seconds() / 60);
     this->wrkSecSpinCtrl->SetValue(data.workLength.seconds());
     this->popupCheckBox->SetValue(data.popupAlarm);
-    this->emailTextCtrl->SetValue(wxString(data.emailAddr.c_str(), wxConvUTF8));
     this->zzzMinSpinCtrl->SetValue(data.pauseLength.total_seconds() / 60);
     this->zzzSecSpinCtrl->SetValue(data.pauseLength.seconds());
     this->chkMinSpinCtrl->SetValue(data.checkFreq.total_seconds() / 60);
     this->chkSecSpinCtrl->SetValue(data.checkFreq.seconds());
-    this->emailCheckBox->SetValue(data.emailAlarm);
     this->remMinSpinCtrl->SetValue(data.remFreq.total_seconds() / 60);
     this->remSecSpinCtrl->SetValue(data.remFreq.seconds());
     this->indexSpinCtrl->SetValue(data.webcamIndex);
@@ -290,6 +273,10 @@ void OptionsDialog::setData(const ConfigData& data)
     this->soundLocFilePickerCtrl->SetPath(wxString(data.soundPath.c_str(), wxConvUTF8));
     this->runningLateMinSpinCtrl->SetValue(data.runningLateThreshold.total_seconds() / 60);
     this->runningLateSecSpinCtrl->SetValue(data.runningLateThreshold.seconds());
+
+    ///@todo:disable option when not available (in presenter...)
+    this->trayIconCheckBox->SetValue(data.trayIcon);
+    //this->trayIconCheckBox->Disable();
 }
 
 void OptionsDialog::OnOKClick(wxCommandEvent& event)

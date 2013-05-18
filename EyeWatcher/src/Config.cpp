@@ -32,11 +32,9 @@ void Config::load()
         boost::posix_time::duration_from_string(this->m_Impl->read("CheckFreq",
             boost::posix_time::to_simple_string(ConfigData::default_CheckFreq))),
         (unsigned int)this->m_Impl->read("PauseTol", (long)ConfigData::default_PauseTol),
-        this->m_Impl->read("Startup", ConfigData::default_Startup),
         this->m_Impl->read("SoundAlarm", ConfigData::default_SoundAlarm),
         this->m_Impl->read("PopupAlarm", ConfigData::default_PopupAlarm),
-        this->m_Impl->read("EmailAlarm", ConfigData::default_EmailAlarm),
-        this->m_Impl->read("EmailAddr", ConfigData::default_EmailAddr),
+        this->m_Impl->read("TrayIcon", ConfigData::default_TrayIcon),
         (int)this->m_Impl->read("WebcamIndex", (long)ConfigData::default_WebcamIndex),
         (unsigned int)this->m_Impl->read("FaceSizeX", (long)ConfigData::default_FaceSizeX),
         (unsigned int)this->m_Impl->read("FaceSizeY", (long)ConfigData::default_FaceSizeY),
@@ -71,7 +69,6 @@ void Config::save(const ConfigData& data)
 
 void Config::write()
 {
-    this->m_Impl->write("Startup", this->m_data.startup);
     this->m_Impl->write("WorkLength", boost::posix_time::to_simple_string(this->m_data.workLength));
     this->m_Impl->write("PauseLength", boost::posix_time::to_simple_string(this->m_data.pauseLength));
     this->m_Impl->write("RemFreq", boost::posix_time::to_simple_string(this->m_data.remFreq));
@@ -79,8 +76,7 @@ void Config::write()
     this->m_Impl->write("PauseTol", (long)this->m_data.pauseTol);
     this->m_Impl->write("SoundAlarm", this->m_data.soundAlarm);
     this->m_Impl->write("PopupAlarm", this->m_data.popupAlarm);
-    this->m_Impl->write("EmailAlarm", this->m_data.emailAlarm);
-    this->m_Impl->write("EmailAddr", this->m_data.emailAddr);
+    this->m_Impl->write("TrayIcon", this->m_data.trayIcon);
     this->m_Impl->write("WebcamIndex", (long)this->m_data.webcamIndex);
     this->m_Impl->write("FaceSizeX", (long)this->m_data.faceSizeX);
     this->m_Impl->write("FaceSizeY", (long)this->m_data.faceSizeY);
@@ -91,7 +87,7 @@ void Config::write()
     this->m_Impl->flush();
 }
 
-/// @todo: more specific errors?, correct cascadePath?
+/// @todo: more specific errors?, existing files?
 bool Config::validateData(const ConfigData& data)
 {
     if (data.workLength.is_special() ||

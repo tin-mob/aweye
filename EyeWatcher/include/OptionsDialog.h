@@ -6,10 +6,8 @@
 	#include <wx/checkbox.h>
 	#include <wx/dialog.h>
 	#include <wx/sizer.h>
-	#include <wx/button.h>
 	#include <wx/panel.h>
 	#include <wx/stattext.h>
-	#include <wx/textctrl.h>
 	//*)
 #endif
 //(*Headers(OptionsDialog)
@@ -35,7 +33,6 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		//(*Declarations(OptionsDialog)
 		wxStaticText* workingLabel;
 		wxSpinCtrl* chkMinSpinCtrl;
-		wxCheckBox* startupCheckBox;
 		wxCheckBox* soundCheckBox;
 		wxSpinCtrl* FaceSizeYSpinCtrl;
 		wxFilePickerCtrl* soundLocFilePickerCtrl;
@@ -44,7 +41,6 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		wxStaticText* zzzLabel;
 		wxSpinCtrl* chkSecSpinCtrl;
 		wxStaticText* soundLocStaticText;
-		wxTextCtrl* emailTextCtrl;
 		wxSpinCtrl* wrkSecSpinCtrl;
 		wxSpinCtrl* runningLateMinSpinCtrl;
 		wxNotebook* optionsNotebook;
@@ -54,16 +50,15 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		wxSpinCtrl* zzzSecSpinCtrl;
 		wxPanel* GeneralPanel;
 		wxSpinCtrl* remSecSpinCtrl;
+		wxCheckBox* trayIconCheckBox;
 		wxPanel* AdvancedPanel;
 		wxSpinCtrl* wrkMinSpinCtrl;
 		wxStaticText* indexStaticText;
 		wxSpinCtrl* zzzMinSpinCtrl;
 		wxFilePickerCtrl* cascadeFilePickerCtrl;
-		wxButton* testEmailButton;
 		wxStaticText* remLabel;
 		wxSpinCtrl* runningLateSecSpinCtrl;
 		wxStaticText* chkStaticText;
-		wxCheckBox* emailCheckBox;
 		wxStaticText* runningLateStaticText;
 		wxStaticText* FaceSizeStaticText;
 		wxSpinCtrl* remMinSpinCtrl;
@@ -85,12 +80,9 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		static const long ID_STATICTEXT4;
 		static const long ID_SPINCTRL11;
 		static const long ID_SPINCTRL12;
-		static const long ID_CHECKBOX1;
 		static const long ID_CHECKBOX2;
 		static const long ID_CHECKBOX3;
-		static const long ID_CHECKBOX4;
-		static const long ID_BUTTON1;
-		static const long ID_TEXTCTRL1;
+		static const long ID_CHECKBOX5;
 		static const long ID_PANEL1;
 		static const long ID_STATICTEXT6;
 		static const long ID_SPINCTRL4;

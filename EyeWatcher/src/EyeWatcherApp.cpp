@@ -14,6 +14,7 @@
 #include <wx/cmdline.h>
 #include "EWMainFrame.h"
 #include <wx/image.h>
+#include <wx/taskbar.h>
 
 IMPLEMENT_APP(EyeWatcherApp);
 
@@ -35,7 +36,8 @@ bool EyeWatcherApp::OnInit()
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
-    	if (this->m_Builder == NULL) this->m_Builder = new EWBuilder(this, std::string(m_ConfigPath.mb_str()));
+    	if (this->m_Builder == NULL) this->m_Builder =
+            new EWBuilder(this, std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable());
         SetTopWindow(this->m_Builder->m_MainFrame);
     }
     return wxsOK;

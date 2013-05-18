@@ -84,11 +84,9 @@ SUITE(TestEWPresenter)
             ConfigData::default_RemFreq + boost::posix_time::seconds(1),
             ConfigData::default_CheckFreq + boost::posix_time::seconds(1),
             ConfigData::default_PauseTol + 1,
-            !ConfigData::default_Startup,
             !ConfigData::default_SoundAlarm,
             !ConfigData::default_PopupAlarm,
-            !ConfigData::default_EmailAlarm,
-            "test@test.test",
+            !ConfigData::default_TrayIcon,
             ConfigData::default_WebcamIndex + 1,
             ConfigData::default_FaceSizeX + 1,
             ConfigData::default_FaceSizeY + 1,
@@ -104,11 +102,9 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(newData.remFreq, returnedData.remFreq);
         CHECK_EQUAL(newData.checkFreq, returnedData.checkFreq);
         CHECK_EQUAL(newData.pauseTol, returnedData.pauseTol);
-        CHECK_EQUAL(newData.startup, returnedData.startup);
         CHECK_EQUAL(newData.soundAlarm, returnedData.soundAlarm);
         CHECK_EQUAL(newData.popupAlarm, returnedData.popupAlarm);
-        CHECK_EQUAL(newData.emailAlarm, returnedData.emailAlarm);
-        CHECK_EQUAL(newData.emailAddr, returnedData.emailAddr);
+        CHECK_EQUAL(newData.trayIcon, returnedData.trayIcon);
         CHECK_EQUAL(newData.webcamIndex, returnedData.webcamIndex);
         CHECK_EQUAL(newData.faceSizeX, returnedData.faceSizeX);
         CHECK_EQUAL(newData.faceSizeY, returnedData.faceSizeY);
@@ -245,6 +241,10 @@ SUITE(TestEWPresenter)
 
         keeper->workLeft = boost::posix_time::seconds(0);
         CHECK_EQUAL(presenter->getIconName(), presenter->m_RedWebcamIcon);
+
+        keeper->status = AbstractTimeKeeper::AWAY;
+        keeper->left = boost::posix_time::seconds(0);
+        CHECK_EQUAL(presenter->getIconName(), presenter->m_GreenWebcamIcon);
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestUpdateTime)
