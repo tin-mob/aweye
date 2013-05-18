@@ -1,10 +1,10 @@
 #include "EWTaskBarPres.h"
-#include "EWPresenter.h"
+#include "AbstractEWPresenter.h"
 #include "AbstractEWTaskbar.h"
 
 ///@todo: add remove tray icon without restarting
 
-EWTaskBarPres::EWTaskBarPres(EWPresenter* presenter) : m_Presenter(presenter), m_LastIcon("")
+EWTaskBarPres::EWTaskBarPres(AbstractEWPresenter* presenter) : m_Presenter(presenter), m_LastIcon("")
 {
     //ctor
     this->m_Presenter->attach(this);

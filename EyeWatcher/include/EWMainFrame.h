@@ -22,20 +22,21 @@
 
 #include "AbstractEWMainFrame.h"
 
-class EWMainFramePres;
+class AbstractEWMainFramePres;
 class EWPresenter;
+class AbstractOptionsDialogPres;
 class EWMainFrame: public wxFrame, public AbstractEWMainFrame
 {
     public:
 
-        EWMainFrame(wxWindow* parent, EWMainFramePres* presenter,
+        EWMainFrame(wxWindow* parent, AbstractEWMainFramePres* presenter,
                     bool taskbarCreated = true, wxWindowID id = -1);
         virtual ~EWMainFrame();
 
         virtual void setValues( std::string status, std::string onClock,
                        std::string offClock, std::string runningClock,
                        std::string leftClock);
-        virtual void displayOptionsDialog(OptionsDialogPres* presenter);
+        virtual void displayOptionsDialog(AbstractOptionsDialogPres* presenter);
         virtual void show(bool show = true);
         virtual void setPauseButtonLabel(std::string label);
         virtual void setStartButtonLabel(std::string label);
@@ -92,7 +93,7 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
         wxStaticLine* StaticLine4;
         //*)
 
-        EWMainFramePres* m_Presenter;
+        AbstractEWMainFramePres* m_Presenter;
         bool m_TaskbarCreated;
 
         DECLARE_EVENT_TABLE()

@@ -22,7 +22,7 @@ class EWPresenter : public Observer, public AbstractEWPresenter
                     AbstractTimer* checkTimer, AbstractTimer* clockTimer);
         virtual ~EWPresenter();
 
-        bool saveConfig(const ConfigData& data);
+        virtual bool saveConfig(const ConfigData& data);
 
         virtual void togglePause();
         virtual void toggleStart();

@@ -79,7 +79,7 @@ BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
     //*)
 END_EVENT_TABLE()
 
-EWMainFrame::EWMainFrame(wxWindow* parent, EWMainFramePres* presenter,
+EWMainFrame::EWMainFrame(wxWindow* parent, AbstractEWMainFramePres* presenter,
                          bool taskbarCreated, wxWindowID id) :
                          m_Presenter(presenter), m_TaskbarCreated(taskbarCreated)
 {
@@ -220,10 +220,10 @@ void EWMainFrame::OnAbout(wxCommandEvent& event)
 
 void EWMainFrame::OnOptionsButtonClick(wxCommandEvent& event)
 {
-        this->m_Presenter->OnFrameOptionsButtonClick();
+    this->m_Presenter->OnFrameOptionsButtonClick();
 }
 
-void EWMainFrame::displayOptionsDialog(OptionsDialogPres* presenter)
+void EWMainFrame::displayOptionsDialog(AbstractOptionsDialogPres* presenter)
 {
     OptionsDialog dialog(this, presenter);
     dialog.ShowModal();

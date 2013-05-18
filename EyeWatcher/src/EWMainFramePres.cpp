@@ -1,13 +1,13 @@
 #include "EWMainFramePres.h"
 
 #include "AbstractEWMainFrame.h"
-#include "EWPresenter.h"
+#include "AbstractEWPresenter.h"
 #include "BaseException.h"
 #include "AbstractMsgHandler.h"
-#include "OptionsDialogPres.h"
+#include "AbstractOptionsDialogPres.h"
 
 ///@todo: test this
-EWMainFramePres::EWMainFramePres(EWPresenter* pres, AbstractMsgHandler* msgHandler, OptionsDialogPres* optPres) :
+EWMainFramePres::EWMainFramePres(AbstractEWPresenter* pres, AbstractMsgHandler* msgHandler, AbstractOptionsDialogPres* optPres) :
     m_Presenter(pres), m_Frame(NULL), m_MsgHandler(msgHandler), m_OptionsPres(optPres)
 {
     //ctor

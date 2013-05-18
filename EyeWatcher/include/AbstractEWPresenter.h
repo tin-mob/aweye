@@ -4,6 +4,7 @@
 #include "Subject.h"
 #include "EWViewObserver.h"
 
+class ConfigData;
 class AbstractEWPresenter : public Subject<EWViewObserver>
 {
     public:
@@ -16,6 +17,9 @@ class AbstractEWPresenter : public Subject<EWViewObserver>
         {
         }
         virtual ~AbstractEWPresenter() {}
+
+        virtual bool saveConfig(const ConfigData& data) = 0;
+        virtual const ConfigData& getConfigData() const = 0;
 
         virtual void togglePause() = 0;
         virtual void toggleStart() = 0;

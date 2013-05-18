@@ -1,22 +1,24 @@
 #include "EWBuilder.h"
+#include "AbstractEWFactory.h"
+#include "ConfigData.h"
+#include "BaseException.h"
 
-#include "wxConfigImpl.h"
-#include "Config.h"
-#include "MsgHandler.h"
-#include "WebcamHandlerProc.h"
-#include "TimeHandler.h"
-#include "TimeKeeper.h"
-#include "EWPresenter.h"
-#include "EWMainFramePres.h"
-#include "EWMainFrame.h"
-#include "MyWxTimer.h"
-#include "EyeWatcherApp.h"
-#include "OptionsDialogPres.h"
-#include "EWTaskBar.h"
-#include "EWTaskBarPres.h"
+#include "AbstractConfigImpl.h"
+#include "AbstractConfig.h"
+#include "AbstractMsgHandler.h"
+#include "AbstractPresenceHandler.h"
+#include "AbstractTimeHandler.h"
+#include "AbstractTimeKeeper.h"
+#include "AbstractEWPresenter.h"
+#include "AbstractEWMainFramePres.h"
+#include "AbstractEWMainFrame.h"
+#include "AbstractTimer.h"
+#include "AbstractOptionsDialogPres.h"
+#include "AbstractEWTaskbar.h"
+#include "AbstractEWTaskbarPres.h"
+#include "SetTopWindowInt.h"
 
-/// @todo: make this testable? With an abstract factory perharps?
-EWBuilder::EWBuilder(EyeWatcherApp* app, std::string configPath, bool createTaskbar) :
+EWBuilder::EWBuilder(AbstractEWFactory* factory, SetTopWindowInt* topInt, std::string configPath, bool createTaskbar) :
     m_MsgHandler(NULL), m_ConfigImpl(NULL), m_Config(NULL), m_TimeHandler(NULL),
     m_PresenceHandler(NULL), m_TimeKeeper(NULL), m_ClockTimer(NULL),
     m_Presenter(NULL), m_MainFramePres(NULL), m_MainFrame(NULL),
@@ -25,29 +27,35 @@ EWBuilder::EWBuilder(EyeWatcherApp* app, std::string configPath, bool createTask
     //ctor
     try
     {
-        this->m_MsgHandler = new MsgHandler();
+        this->m_MsgHandler = factory->createMsgHandler();
         try
         {
-            this->m_ConfigImpl = new wxConfigImpl(configPath);
-            this->m_Config = new Config(m_ConfigImpl);
+            this->m_ConfigImpl = factory->createConfigImpl(configPath);
+            this->m_Config = factory->createConfig(m_ConfigImpl);
             ConfigData data = this->m_Config->getData();
-            this->m_TimeHandler = new TimeHandler();
-            this->m_PresenceHandler = new WebcamHandlerProc(data.webcamIndex, data.cascadePath,
-                data.faceSizeX, data.faceSizeY);
-            this->m_TimeKeeper = new TimeKeeper(m_TimeHandler,
+            this->m_TimeHandler = factory->createTimeHandler();
+            this->m_PresenceHandler = factory->createPresenceHandler(data.webcamIndex,
+                data.cascadePath, data.faceSizeX, data.faceSizeY);
+            this->m_TimeKeeper = factory->createTimeKeeper(m_TimeHandler,
                 m_PresenceHandler, data.workLength, data.pauseLength, data.remFreq,
                 data.checkFreq, data.pauseTol);
-            this->m_CheckTimer = new MyWxTimer();
-            this->m_ClockTimer = new MyWxTimer();
-            this->m_Presenter = new EWPresenter(m_MsgHandler, m_Config, m_TimeKeeper,
-                m_PresenceHandler, m_CheckTimer, m_ClockTimer);
-            this->m_OptionsPres = new OptionsDialogPres(m_Presenter);
-            this->m_MainFramePres = new EWMainFramePres(m_Presenter, m_MsgHandler, m_OptionsPres);
-            this->m_MainFrame = new EWMainFrame(NULL, m_MainFramePres, createTaskbar && data.trayIcon);
+            this->m_CheckTimer = factory->createTimer();
+            this->m_ClockTimer = factory->createTimer();
+            this->m_Presenter = factory->createEWPresenter(m_MsgHandler, m_Config,
+                m_TimeKeeper, m_PresenceHandler, m_CheckTimer, m_ClockTimer);
+            this->m_OptionsPres = factory->createOptionsDialogPres(m_Presenter);
+            this->m_MainFramePres = factory->createEWMainFramePres(m_Presenter,
+                m_MsgHandler, m_OptionsPres);
+            this->m_MainFrame = factory->createEWMainFrame(m_MainFramePres,
+                createTaskbar && data.trayIcon);
+            if (topInt != NULL)
+            {
+                topInt->setTopWindow(m_MainFrame);
+            }
             if (createTaskbar && data.trayIcon)
             {
-                this->m_TaskBarPres = new EWTaskBarPres(m_Presenter);
-                this->m_TaskBar = new EWTaskBar(m_TaskBarPres);
+                this->m_TaskBarPres = factory->createEWTaskBarPres(m_Presenter);
+                this->m_TaskBar = factory->createEWTaskBar(m_TaskBarPres);
             }
         }
         catch (BaseException e)

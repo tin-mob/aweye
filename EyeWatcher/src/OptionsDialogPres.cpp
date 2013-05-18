@@ -2,7 +2,7 @@
 #include "EWPresenter.h"
 #include "ConfigData.h"
 
-OptionsDialogPres::OptionsDialogPres(EWPresenter* presenter) :m_Presenter(presenter)
+OptionsDialogPres::OptionsDialogPres(AbstractEWPresenter* presenter) :m_Presenter(presenter)
 {
     //ctor
 }

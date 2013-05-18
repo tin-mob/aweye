@@ -11,10 +11,13 @@
 #define EYEWATCHERAPP_H
 
 #include <wx/app.h>
+#include "SetTopWindowInt.h"
 
 class wxCmdLineParser;
 class EWBuilder;
-class EyeWatcherApp : public wxApp
+class AbstractEWMainFrame;
+class EWMainFrame;
+class EyeWatcherApp : public wxApp, public SetTopWindowInt
 {
     public:
         EyeWatcherApp();
@@ -22,6 +25,8 @@ class EyeWatcherApp : public wxApp
         virtual bool OnInit();
         virtual void OnInitCmdLine(wxCmdLineParser& parser);
         virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
+
+        virtual void setTopWindow(AbstractEWMainFrame* frame);
     private:
         EWBuilder* m_Builder;
         wxString m_ConfigPath;

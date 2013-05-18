@@ -2,15 +2,16 @@
 #define EWMAINFRAMEPRES_H
 
 #include "EWViewObserver.h"
+#include "AbstractEWMainFramePres.h"
 
-class EWPresenter;
+class AbstractEWPresenter;
 class AbstractEWMainFrame;
 class AbstractMsgHandler;
-class OptionsDialogPres;
-class EWMainFramePres : public EWViewObserver
+class AbstractOptionsDialogPres;
+class EWMainFramePres : public AbstractEWMainFramePres, public EWViewObserver
 {
     public:
-        EWMainFramePres(EWPresenter* pres, AbstractMsgHandler* msgHandler, OptionsDialogPres* optPres);
+        EWMainFramePres(AbstractEWPresenter* pres, AbstractMsgHandler* msgHandler, AbstractOptionsDialogPres* optPres);
         virtual ~EWMainFramePres();
 
         virtual void attachFrame(AbstractEWMainFrame* frame);
@@ -18,18 +19,18 @@ class EWMainFramePres : public EWViewObserver
         virtual void OnTimeUpdate();
         virtual void OnQuit();
 
-        void OnFrameQuit();
-        void OnFrameAbout();
-        void OnFrameOptionsButtonClick();
-        void OnFramePlayButtonClick();
-        void OnFramePauseButtonClick();
-        void OnFrameClose();
+        virtual void OnFrameQuit();
+        virtual void OnFrameAbout();
+        virtual void OnFrameOptionsButtonClick();
+        virtual void OnFramePlayButtonClick();
+        virtual void OnFramePauseButtonClick();
+        virtual void OnFrameClose();
     protected:
     private:
-        EWPresenter* m_Presenter;
+        AbstractEWPresenter* m_Presenter;
         AbstractEWMainFrame* m_Frame;
         AbstractMsgHandler* m_MsgHandler;
-        OptionsDialogPres* m_OptionsPres;
+        AbstractOptionsDialogPres* m_OptionsPres;
 };
 
 #endif // EWMAINFRAMEPRES_H

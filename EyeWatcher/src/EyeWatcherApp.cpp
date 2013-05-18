@@ -10,6 +10,7 @@
 #include "wx_pch.h"
 #include "EyeWatcherApp.h"
 #include "EWBuilder.h"
+#include "WxEWFactory.h"
 #include "EWMainFrame.h"
 #include <wx/cmdline.h>
 #include "EWMainFrame.h"
@@ -36,9 +37,12 @@ bool EyeWatcherApp::OnInit()
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
-    	if (this->m_Builder == NULL) this->m_Builder =
-            new EWBuilder(this, std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable());
-        SetTopWindow(this->m_Builder->m_MainFrame);
+    	if (this->m_Builder == NULL)
+    	{
+    	    WxEWFactory factory;
+    	    this->m_Builder =
+            new EWBuilder(&factory, this, std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable());
+    	}
     }
     return wxsOK;
 
@@ -56,4 +60,15 @@ bool EyeWatcherApp::OnCmdLineParsed(wxCmdLineParser& parser)
 {
     parser.Found(wxT("c"), &m_ConfigPath);
     return true;
+}
+
+void EyeWatcherApp::setTopWindow(AbstractEWMainFrame* frame)
+{
+    EWMainFrame* castedFrame = dynamic_cast<EWMainFrame*>(frame);
+
+    assert(castedFrame != NULL);
+    if (castedFrame != NULL)
+    {
+        SetTopWindow(castedFrame);
+    }
 }

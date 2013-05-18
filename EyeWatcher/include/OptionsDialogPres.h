@@ -1,18 +1,20 @@
 #ifndef OPTIONSDIALOGPRES_H
 #define OPTIONSDIALOGPRES_H
 
-class EWPresenter;
+#include "AbstractOptionsDialogPres.h"
+
+class AbstractEWPresenter;
 class ConfigData;
-class OptionsDialogPres
+class OptionsDialogPres :  public AbstractOptionsDialogPres
 {
     public:
-        OptionsDialogPres(EWPresenter* presenter);
+        OptionsDialogPres(AbstractEWPresenter* presenter);
         virtual ~OptionsDialogPres();
-        const ConfigData&  getData() const;
-        bool saveData(const ConfigData& data);
+        virtual const ConfigData&  getData() const;
+        virtual bool saveData(const ConfigData& data);
     protected:
     private:
-        EWPresenter* m_Presenter;
+        AbstractEWPresenter* m_Presenter;
 };
 
 #endif // OPTIONSDIALOGPRES_H

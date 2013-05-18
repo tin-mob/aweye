@@ -1,6 +1,6 @@
 #include "EWTaskBar.h"
 
-#include "EWTaskBarPres.h"
+#include "AbstractEWTaskbarPres.h"
 #include "wx_pch.h"
 #include <wx/menu.h>
 #include "ObservableWxMenu.h"
@@ -12,7 +12,7 @@ BEGIN_EVENT_TABLE(EWTaskBar,wxTaskBarIcon)
     EVT_MENU(ID_EXIT,EWTaskBar::OnMenuExit)
 END_EVENT_TABLE()
 
-EWTaskBar::EWTaskBar(EWTaskBarPres* presenter) :
+EWTaskBar::EWTaskBar(AbstractEWTaskbarPres* presenter) :
     m_Presenter(presenter), m_Menu(NULL)
 {
     //ctor

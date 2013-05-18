@@ -54,7 +54,7 @@ BEGIN_EVENT_TABLE(OptionsDialog,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-OptionsDialog::OptionsDialog(wxWindow* parent, OptionsDialogPres* presenter, wxWindowID id) :
+OptionsDialog::OptionsDialog(wxWindow* parent, AbstractOptionsDialogPres* presenter, wxWindowID id) :
                              m_Presenter(presenter)
 {
 	//(*Initialize(OptionsDialog)
