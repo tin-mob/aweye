@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <wxsmith>
 	<object class="wxFrame" name="EWMainFrame">
-		<icon>/home/bob/CodeZone/EyeWatcher/EyeWatcher/webcam.ico</icon>
+		<icon>webcam.ico</icon>
 		<id_arg>0</id_arg>
 		<handler function="OnClose" entry="EVT_CLOSE" />
 		<object class="wxFlexGridSizer" variable="mainFlexGridSizer" member="no">

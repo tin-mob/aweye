@@ -97,7 +97,7 @@ EWMainFrame::EWMainFrame(wxWindow* parent, AbstractEWMainFramePres* presenter,
     Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
     {
     	wxIcon FrameIcon;
-    	FrameIcon.CopyFromBitmap(wxBitmap(wxImage(_T("/home/bob/CodeZone/EyeWatcher/EyeWatcher/webcam.ico"))));
+    	FrameIcon.CopyFromBitmap(wxBitmap(wxImage(_T("webcam.ico"))));
     	SetIcon(FrameIcon);
     }
     mainFlexGridSizer = new wxFlexGridSizer(0, 1, 0, 0);

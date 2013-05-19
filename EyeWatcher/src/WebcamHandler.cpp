@@ -3,10 +3,10 @@
 
 #include <fstream>
 
-/// @todo: opencv 2.3.1 leaks in ishere (videocapture and mat not deleted)
+/// @note: opencv 2.3.1 leaks in ishere (videocapture and mat not deleted)
 /// options are either installing 2.4 from source, installing a new version
 /// of os or put this in a separate process...
-/// @Edit: tried 2.4.5? and the camera is not released at the end...
+/// @note: tried 2.4.5? and the camera is not released at the end...
 /// so it is used for now in a throwaway subprocess (see main-Ishere.cpp)
 
 WebcamHandler::WebcamHandler(int index, std::string faceCascadeName,
