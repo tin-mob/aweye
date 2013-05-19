@@ -5,6 +5,7 @@
 int main(int argc, char* argv[])
 {
     assert(argc == 5);
+    if (argc != 5) return -1;
 
     char* indexChar = argv[1];
     char* faceCascadeName = argv[2];
@@ -16,13 +17,27 @@ int main(int argc, char* argv[])
     int faceSizeX;
     int faceSizeY;
 
-    assert(iss >> index);
+    if (!iss >> index)
+    {
+        assert(0);
+        return -1;
+    }
+
     iss.str(faceSizeXChar);
     iss.clear();
-    assert(iss >> faceSizeX);
+    if (!iss >> faceSizeX)
+    {
+        assert(0);
+        return -1;
+    }
+
     iss.str(faceSizeYChar);
     iss.clear();
-    assert(iss >> faceSizeY);
+    if (!iss >> faceSizeY)
+    {
+        assert(0);
+        return -1;
+    }
 
     WebcamHandler handler(index, faceCascadeName, faceSizeX, faceSizeY);
 

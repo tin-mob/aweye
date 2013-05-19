@@ -30,6 +30,8 @@ void EWMainFramePres::attachFrame(AbstractEWMainFrame* frame)
 void EWMainFramePres::OnStatusUpdate()
 {
     assert(this->m_Frame != NULL);
+    if (this->m_Frame == NULL) return;
+
     bool shown = this->m_Presenter->isShown();
     this->m_Frame->show(shown);
     if (shown)
@@ -47,6 +49,8 @@ void EWMainFramePres::OnStatusUpdate()
 void EWMainFramePres::OnTimeUpdate()
 {
     assert(this->m_Frame != NULL);
+    if (this->m_Frame == NULL) return;
+
     bool shown = this->m_Presenter->isShown();
     if (shown)
     {
@@ -58,24 +62,23 @@ void EWMainFramePres::OnTimeUpdate()
 
 void EWMainFramePres::OnQuit()
 {
-    assert(this->m_Frame != NULL);
     this->m_Frame->close();
 }
 
 void EWMainFramePres::OnFrameQuit()
 {
-    assert(this->m_Frame != NULL);
     this->m_Presenter->quit();
 }
 
 void EWMainFramePres::OnFrameAbout()
 {
-    assert(this->m_Frame != NULL);
 }
 
 void EWMainFramePres::OnFrameOptionsButtonClick()
 {
     assert(this->m_Frame != NULL);
+    if (this->m_Frame == NULL) return;
+
     try
     {
         this->m_Frame->displayOptionsDialog(this->m_OptionsPres);
@@ -88,18 +91,15 @@ void EWMainFramePres::OnFrameOptionsButtonClick()
 
 void EWMainFramePres::OnFramePlayButtonClick()
 {
-    assert(this->m_Frame != NULL);
     this->m_Presenter->toggleStart();
 }
 
 void EWMainFramePres::OnFrameClose()
 {
-    assert(this->m_Frame != NULL);
     this->m_Presenter->show(false);
 }
 
 void EWMainFramePres::OnFramePauseButtonClick()
 {
-    assert(this->m_Frame != NULL);
     this->m_Presenter->togglePause();
 }

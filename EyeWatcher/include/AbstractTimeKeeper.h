@@ -15,7 +15,7 @@ class AbstractTimeKeeper
                 case AbstractTimeKeeper::OFF: return "Off";
                 case AbstractTimeKeeper::HERE: return "Here";
                 case AbstractTimeKeeper::AWAY: return "Away";
-                default: assert(0);
+                default: assert(0); return "";
             }
         }
         std::string getStatusStr() const

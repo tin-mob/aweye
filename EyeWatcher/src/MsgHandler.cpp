@@ -31,6 +31,5 @@ void MsgHandler::playSound(std::string filename)
 {
     ///@todo: investigate why this is not working (sample does not work either) / works in windows
     wxSound sound(wxString(filename.c_str(), wxConvUTF8));
-    bool played = sound.Play(wxSOUND_SYNC);
-    assert(played);
+    sound.Play(wxSOUND_SYNC);
 }

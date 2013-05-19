@@ -2,9 +2,10 @@
 #include "AbstractEWPresenter.h"
 #include "AbstractEWTaskbar.h"
 
-///@todo: add remove tray icon without restarting
+///@todo: observer sync with view + poors man data binding
 
-EWTaskBarPres::EWTaskBarPres(AbstractEWPresenter* presenter) : m_Presenter(presenter), m_LastIcon("")
+EWTaskBarPres::EWTaskBarPres(AbstractEWPresenter* presenter) :
+    m_Presenter(presenter), m_TaskBar(NULL), m_LastIcon("")
 {
     //ctor
     this->m_Presenter->attach(this);
@@ -26,6 +27,9 @@ void EWTaskBarPres::attachTaskBar(AbstractEWTaskbar* taskBar)
 
 void EWTaskBarPres::OnStatusUpdate()
 {
+    assert(this->m_TaskBar != NULL);
+    if (this->m_TaskBar == NULL) return;
+
     this->m_TaskBar->setPopupMenuCommands(
         this->m_Presenter->getHideButtonLabel(),
         this->m_Presenter->getStartButtonLabel(),
@@ -41,6 +45,9 @@ void EWTaskBarPres::OnStatusUpdate()
 
 void EWTaskBarPres::OnTimeUpdate()
 {
+    assert(this->m_TaskBar != NULL);
+    if (this->m_TaskBar == NULL) return;
+
     this->m_TaskBar->setPopupMenuTimes(
         "Last Session : " + this->m_Presenter->getTimeOn(),
         "Last Pause : " + this->m_Presenter->getTimeOff(),
@@ -57,6 +64,9 @@ void EWTaskBarPres::OnTimeUpdate()
 
 void EWTaskBarPres::OnQuit()
 {
+    assert(this->m_TaskBar != NULL);
+    if (this->m_TaskBar == NULL) return;
+
     this->m_TaskBar->setIcon("");
 }
 
