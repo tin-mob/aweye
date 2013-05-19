@@ -3,18 +3,18 @@
 
 #include "AbstractOptionsDialogPres.h"
 
-class AbstractEWPresenter;
+class AbstractEWAppController;
 class ConfigData;
 class OptionsDialogPres :  public AbstractOptionsDialogPres
 {
     public:
-        OptionsDialogPres(AbstractEWPresenter* presenter);
+        OptionsDialogPres(AbstractEWAppController* controller);
         virtual ~OptionsDialogPres();
         virtual const ConfigData&  getData() const;
         virtual bool saveData(const ConfigData& data);
     protected:
     private:
-        AbstractEWPresenter* m_Presenter;
+        AbstractEWAppController* m_Controller;
 };
 
 #endif // OPTIONSDIALOGPRES_H

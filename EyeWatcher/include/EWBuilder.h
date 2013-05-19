@@ -2,6 +2,7 @@
 #define EWBUILDER_H
 
 #include <string>
+#include "AbstractEWAppController.h"
 
 class AbstractMsgHandler;
 class AbstractConfigImpl;
@@ -18,12 +19,21 @@ class AbstractEWTaskbarPres;
 class AbstractEWTaskbar;
 class AbstractEWFactory;
 class SetTopWindowInt;
-class EWBuilder
+class ConfigData;
+
+class EWBuilder : public AbstractEWAppController
 {
     public:
         EWBuilder(AbstractEWFactory* factory, SetTopWindowInt* topInt = NULL,
                   std::string configPath = "", bool createTaskbar = true);
         virtual ~EWBuilder();
+
+        virtual bool saveConfig(const ConfigData& data);
+        virtual const ConfigData& getConfigData() const;
+
+    protected:
+    private:
+        void deleteFields();
 
         AbstractMsgHandler* m_MsgHandler;
         AbstractConfigImpl* m_ConfigImpl;
@@ -39,10 +49,6 @@ class EWBuilder
         AbstractEWTaskbarPres* m_TaskBarPres;
         AbstractEWTaskbar* m_TaskBar;
         AbstractOptionsDialogPres* m_OptionsPres;
-
-    protected:
-    private:
-        void deleteFields();
 };
 
 #endif // EWBUILDER_H

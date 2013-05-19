@@ -72,18 +72,19 @@ AbstractTimer* WxEWFactory::createTimer()
 }
 
 AbstractEWPresenter* WxEWFactory::createEWPresenter(
-    AbstractMsgHandler* msgHandler, AbstractConfig* config,
-    AbstractTimeKeeper* keeper, AbstractPresenceHandler* presenceHandler,
-    AbstractTimer* checkTimer, AbstractTimer* clockTimer)
+    AbstractMsgHandler* msgHandler, AbstractTimeKeeper* keeper,
+    AbstractTimer* checkTimer, AbstractTimer* clockTimer,
+    bool popupAlarm, bool soundAlarm, std::string soundPath,
+    boost::posix_time::time_duration runningLateThreshold)
 {
-    return new EWPresenter(msgHandler, config, keeper, presenceHandler,
-        checkTimer, clockTimer);
+    return new EWPresenter(msgHandler, keeper,
+        checkTimer, clockTimer, popupAlarm, soundAlarm, soundPath, runningLateThreshold);
 }
 
 AbstractOptionsDialogPres* WxEWFactory::createOptionsDialogPres(
-    AbstractEWPresenter* presenter)
+    AbstractEWAppController* controller)
 {
-    return new OptionsDialogPres(presenter);
+    return new OptionsDialogPres(controller);
 }
 
 AbstractEWMainFramePres* WxEWFactory::createEWMainFramePres(

@@ -1,6 +1,7 @@
 #ifndef ABSTRACTEWPRESENTER_H
 #define ABSTRACTEWPRESENTER_H
 
+#include "boost/date_time/posix_time/posix_time_types.hpp"
 #include "Subject.h"
 #include "EWViewObserver.h"
 
@@ -17,9 +18,6 @@ class AbstractEWPresenter : public Subject<EWViewObserver>
         {
         }
         virtual ~AbstractEWPresenter() {}
-
-        virtual bool saveConfig(const ConfigData& data) = 0;
-        virtual const ConfigData& getConfigData() const = 0;
 
         virtual void togglePause() = 0;
         virtual void toggleStart() = 0;
@@ -39,6 +37,12 @@ class AbstractEWPresenter : public Subject<EWViewObserver>
         virtual std::string getTimeLeft() const = 0;
         virtual bool isShown() const = 0;
         virtual std::string getIconName()const = 0;
+
+        virtual void setRunningLateThreshold(
+            boost::posix_time::time_duration runningLateThreshold) = 0;
+        virtual void setPopupAlarm(bool popupAlarm) = 0;
+        virtual void setSoundAlarm(bool soundAlarm) = 0;
+        virtual void setSoundPath(std::string soundPath) = 0;
 
         const std::string m_LateMsg;
         const std::string m_HideBtnLabel;

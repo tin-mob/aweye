@@ -1,8 +1,8 @@
 #include "OptionsDialogPres.h"
-#include "EWPresenter.h"
+#include "AbstractEWAppController.h"
 #include "ConfigData.h"
 
-OptionsDialogPres::OptionsDialogPres(AbstractEWPresenter* presenter) :m_Presenter(presenter)
+OptionsDialogPres::OptionsDialogPres(AbstractEWAppController* controller) :m_Controller(controller)
 {
     //ctor
 }
@@ -14,10 +14,10 @@ OptionsDialogPres::~OptionsDialogPres()
 
 const ConfigData& OptionsDialogPres::getData() const
 {
-    return this->m_Presenter->getConfigData();
+    return this->m_Controller->getConfigData();
 }
 
 bool OptionsDialogPres::saveData(const ConfigData& data)
 {
-    return this->m_Presenter->saveConfig(data);
+    return this->m_Controller->saveConfig(data);
 }

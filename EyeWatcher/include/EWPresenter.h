@@ -17,12 +17,11 @@ class ConfigData;
 class EWPresenter : public Observer, public AbstractEWPresenter
 {
     public:
-        EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config,
-                    AbstractTimeKeeper* keeper, AbstractPresenceHandler* presenceHandler,
-                    AbstractTimer* checkTimer, AbstractTimer* clockTimer);
+        EWPresenter(AbstractMsgHandler* msgHandler, AbstractTimeKeeper* keeper,
+                    AbstractTimer* checkTimer, AbstractTimer* clockTimer,
+                    bool popupAlarm = true, bool soundAlarm = false, std::string soundPath = "",
+                    boost::posix_time::time_duration runningLateThreshold = boost::posix_time::minutes(4));
         virtual ~EWPresenter();
-
-        virtual bool saveConfig(const ConfigData& data);
 
         virtual void togglePause();
         virtual void toggleStart();
@@ -41,9 +40,14 @@ class EWPresenter : public Observer, public AbstractEWPresenter
         virtual std::string getTimeOff() const;
         virtual std::string getTimeRunning() const;
         virtual std::string getTimeLeft() const;
-        virtual const ConfigData& getConfigData() const;
         virtual bool isShown() const;
         virtual std::string getIconName()const;
+
+        virtual void setRunningLateThreshold(
+            boost::posix_time::time_duration runningLateThreshold);
+        virtual void setPopupAlarm(bool popupAlarm);
+        virtual void setSoundAlarm(bool soundAlarm);
+        virtual void setSoundPath(std::string soundPath);
 
     protected:
     private:
@@ -55,12 +59,16 @@ class EWPresenter : public Observer, public AbstractEWPresenter
 
         bool m_Warn;
         bool m_Shown;
-        AbstractConfig* m_Config;
+
         AbstractTimeKeeper* m_TimeKeeper;
         AbstractMsgHandler* m_MsgHandler;
-        AbstractPresenceHandler* m_PresenceHandler;
         AbstractTimer* m_CheckTimer;
         AbstractTimer* m_ClockTimer;
+
+        bool m_PopupAlarm;
+        bool m_SoundAlarm;
+        std::string m_SoundPath;
+        boost::posix_time::time_duration m_RunningLateThreshold;
 };
 
 #endif // EWPRESENTER_H

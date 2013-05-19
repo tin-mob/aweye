@@ -18,6 +18,8 @@
 #include "AbstractEWTaskbarPres.h"
 #include "SetTopWindowInt.h"
 
+///@todo: rename EWBuilder to EWAppController
+
 EWBuilder::EWBuilder(AbstractEWFactory* factory, SetTopWindowInt* topInt, std::string configPath, bool createTaskbar) :
     m_MsgHandler(NULL), m_ConfigImpl(NULL), m_Config(NULL), m_TimeHandler(NULL),
     m_PresenceHandler(NULL), m_TimeKeeper(NULL), m_ClockTimer(NULL),
@@ -41,9 +43,10 @@ EWBuilder::EWBuilder(AbstractEWFactory* factory, SetTopWindowInt* topInt, std::s
                 data.checkFreq, data.pauseTol);
             this->m_CheckTimer = factory->createTimer();
             this->m_ClockTimer = factory->createTimer();
-            this->m_Presenter = factory->createEWPresenter(m_MsgHandler, m_Config,
-                m_TimeKeeper, m_PresenceHandler, m_CheckTimer, m_ClockTimer);
-            this->m_OptionsPres = factory->createOptionsDialogPres(m_Presenter);
+            this->m_Presenter = factory->createEWPresenter(m_MsgHandler,
+                m_TimeKeeper, m_CheckTimer, m_ClockTimer, data.popupAlarm,
+                data.soundAlarm, data.soundPath, data.runningLateThreshold);
+            this->m_OptionsPres = factory->createOptionsDialogPres(this);
             this->m_MainFramePres = factory->createEWMainFramePres(m_Presenter,
                 m_MsgHandler, m_OptionsPres);
             this->m_MainFrame = factory->createEWMainFrame(m_MainFramePres,
@@ -92,3 +95,39 @@ void EWBuilder::deleteFields()
     if (this->m_TaskBar != NULL) delete this->m_TaskBar;
     if (this->m_OptionsPres != NULL) delete this->m_OptionsPres;
 }
+
+
+bool EWBuilder::saveConfig(const ConfigData& data)
+{
+    try
+    {
+        this->m_Config->save(data);
+
+        this->m_PresenceHandler->setCascade(data.cascadePath);
+        this->m_PresenceHandler->setFaceSize(data.faceSizeX, data.faceSizeY);
+        this->m_PresenceHandler->setIndex(data.webcamIndex);
+
+        this->m_TimeKeeper->setCheckFreq(data.checkFreq);
+        this->m_TimeKeeper->setPauseLength(data.pauseLength);
+        this->m_TimeKeeper->setPauseTol(data.pauseTol);
+        this->m_TimeKeeper->setRemFreq(data.remFreq);
+        this->m_TimeKeeper->setWorkLength(data.workLength);
+
+        this->m_Presenter->setPopupAlarm(data.popupAlarm);
+        this->m_Presenter->setSoundAlarm(data.soundAlarm);
+        this->m_Presenter->setSoundPath(data.soundPath);
+        this->m_Presenter->setRunningLateThreshold(data.runningLateThreshold);
+    }
+    catch (BaseException e)
+    {
+        this->m_MsgHandler->displayError(e.what());
+        return false;
+    }
+    return true;
+}
+
+const ConfigData& EWBuilder::getConfigData() const
+{
+    return this->m_Config->getData();
+}
+

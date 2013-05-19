@@ -1,12 +1,9 @@
 #include "EWPresenter.h"
 
-#include "AbstractConfig.h"
 #include "AbstractMsgHandler.h"
 #include "AbstractTimeKeeper.h"
 #include "AbstractTimer.h"
-#include "AbstractPresenceHandler.h"
 #include "BaseException.h"
-#include "ConfigData.h"
 #include "EWViewObserver.h"
 
 #include "boost/date_time/posix_time/posix_time.hpp"
@@ -15,12 +12,14 @@
 #include <iomanip>
 #include <stdlib.h>
 
-EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config,
-                         AbstractTimeKeeper* keeper, AbstractPresenceHandler* presenceHandler,
-                         AbstractTimer* checkTimer, AbstractTimer* clockTimer)
-    : m_Warn(true), m_Shown(true), m_Config(config), m_TimeKeeper(keeper),
-    m_MsgHandler(msgHandler), m_PresenceHandler(presenceHandler), m_CheckTimer(checkTimer),
-    m_ClockTimer(clockTimer)
+/// @todo: EWPresenter to EWTimeKeeperPresenter
+EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractTimeKeeper* keeper,
+                         AbstractTimer* checkTimer, AbstractTimer* clockTimer,
+                         bool popupAlarm, bool soundAlarm, std::string soundPath,
+                         boost::posix_time::time_duration runningLateThreshold)
+    : m_Warn(true), m_Shown(true), m_TimeKeeper(keeper), m_MsgHandler(msgHandler),
+    m_CheckTimer(checkTimer), m_ClockTimer(clockTimer), m_PopupAlarm(popupAlarm),
+    m_SoundAlarm(soundAlarm), m_SoundPath(soundPath), m_RunningLateThreshold(runningLateThreshold)
 {
     this->m_CheckTimer->attach(this);
     this->m_ClockTimer->attach(this);
@@ -28,35 +27,6 @@ EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractConfig* config,
 
 EWPresenter::~EWPresenter()
 {
-}
-
-bool EWPresenter::saveConfig(const ConfigData& data)
-{
-    try
-    {
-        this->m_Config->save(data);
-
-        this->m_PresenceHandler->setCascade(data.cascadePath);
-        this->m_PresenceHandler->setFaceSize(data.faceSizeX, data.faceSizeY);
-        this->m_PresenceHandler->setIndex(data.webcamIndex);
-
-        this->m_TimeKeeper->setCheckFreq(data.checkFreq);
-        this->m_TimeKeeper->setPauseLength(data.pauseLength);
-        this->m_TimeKeeper->setPauseTol(data.pauseTol);
-        this->m_TimeKeeper->setRemFreq(data.remFreq);
-        this->m_TimeKeeper->setWorkLength(data.workLength);
-    }
-    catch (BaseException e)
-    {
-        this->m_MsgHandler->displayError(e.what());
-        return false;
-    }
-    return true;
-}
-
-const ConfigData& EWPresenter::getConfigData() const
-{
-    return this->m_Config->getData();
 }
 
 void EWPresenter::start()
@@ -206,9 +176,8 @@ std::string EWPresenter::getIconName()const
     }
     else
     {
-        const ConfigData& config = this->m_Config->getData();
         boost::posix_time::time_duration timeLeft = this->m_TimeKeeper->getWorkTimeLeft();
-        if (timeLeft > config.runningLateThreshold)
+        if (timeLeft > this->m_RunningLateThreshold)
         {
             return this->m_GreenWebcamIcon;
         }
@@ -270,21 +239,41 @@ bool EWPresenter::isShown() const
     return this->m_Shown;
 }
 
+void EWPresenter::setRunningLateThreshold(
+            boost::posix_time::time_duration runningLateThreshold)
+{
+    this->m_RunningLateThreshold = runningLateThreshold;
+}
+
+void EWPresenter::setPopupAlarm(bool popupAlarm)
+{
+    this->m_PopupAlarm = popupAlarm;
+}
+
+void EWPresenter::setSoundAlarm(bool soundAlarm)
+{
+    this->m_SoundAlarm = soundAlarm;
+}
+
+void EWPresenter::setSoundPath(std::string soundPath)
+{
+    this->m_SoundPath = soundPath;
+}
+
+/// @todo: does this belong there?
 void EWPresenter::alert()
 {
     if (!this->m_Warn)
     {
         return;
     }
-
-    const ConfigData& config = this->m_Config->getData();
-    if (config.popupAlarm)
+    if (this->m_PopupAlarm)
     {
         this->m_MsgHandler->displayAlert(m_LateMsg);
     }
 
-    if (config.soundAlarm)
+    if (this->m_SoundAlarm)
     {
-        this->m_MsgHandler->playSound(config.soundPath);
+        this->m_MsgHandler->playSound(this->m_SoundPath);
     }
 }

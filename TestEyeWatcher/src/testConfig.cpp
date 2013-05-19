@@ -149,3 +149,4 @@ SUITE(TestConfig)
         CHECK_THROW(config.save(data), InvalidConfigDataException);
     }
 }
+

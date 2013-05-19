@@ -12,6 +12,7 @@ class AbstractPresenceHandler;
 class AbstractTimeKeeper;
 class AbstractTimer;
 class AbstractEWPresenter;
+class AbstractEWAppController;
 class AbstractOptionsDialogPres;
 class AbstractEWMainFramePres;
 class AbstractEWMainFrame;
@@ -38,11 +39,12 @@ class AbstractEWFactory
             unsigned int pauseTol) = 0;
         virtual AbstractTimer* createTimer() = 0;
         virtual AbstractEWPresenter* createEWPresenter(
-            AbstractMsgHandler* msgHandler, AbstractConfig* config,
-            AbstractTimeKeeper* keeper, AbstractPresenceHandler* presenceHandler,
-            AbstractTimer* checkTimer, AbstractTimer* clockTimer) = 0;
+            AbstractMsgHandler* msgHandler, AbstractTimeKeeper* keeper,
+            AbstractTimer* checkTimer, AbstractTimer* clockTimer,
+            bool popupAlarm, bool soundAlarm, std::string soundPath,
+            boost::posix_time::time_duration runningLateThreshold) = 0;
         virtual AbstractOptionsDialogPres* createOptionsDialogPres(
-            AbstractEWPresenter* presenter) = 0;
+            AbstractEWAppController* controller) = 0;
         virtual AbstractEWMainFramePres* createEWMainFramePres(
             AbstractEWPresenter* presenter, AbstractMsgHandler* msgHandler,
             AbstractOptionsDialogPres* optionPres) = 0;

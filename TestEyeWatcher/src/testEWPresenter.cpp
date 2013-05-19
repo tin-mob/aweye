@@ -12,25 +12,23 @@
 struct EWPresenterFixture
 {
     public:
-        EWPresenterFixture() : config(NULL), msgHandler(NULL), keeper(NULL),
-            presHandler(NULL), checkTimer(NULL), clockTimer(NULL), presenter(NULL)
+        EWPresenterFixture() : msgHandler(NULL), keeper(NULL),
+            checkTimer(NULL), clockTimer(NULL), presenter(NULL)
         {
             this->data = {boost::posix_time::seconds(5), boost::posix_time::seconds(3),
                 boost::posix_time::seconds(1), boost::posix_time::seconds(2)};
             data.soundAlarm = true;
             try
             {
-                this->config = new ConfigStub(data);
                 this->msgHandler = new MsgHandlerStub();
                 this->keeper = new TimeKeeperStub();
-                this->presHandler = new PresenceHandlerStub();
                 this->checkTimer = new TimerStub();
                 this->clockTimer = new TimerStub();
                 this->dialog = new OptionsDialogStub();
                 this->viewObserver = new EWViewObserverStub();
                 this->presenter = new EWPresenter(this->msgHandler,
-                    this->config, this->keeper, this->presHandler,
-                    this->checkTimer, this->clockTimer);
+                    this->keeper, this->checkTimer, this->clockTimer,
+                    data.popupAlarm, data.soundAlarm, data.soundPath);
 
                 this->presenter->attach(this->viewObserver);
             }
@@ -46,10 +44,8 @@ struct EWPresenterFixture
         }
 
         ConfigData data;
-        ConfigStub* config;
         MsgHandlerStub* msgHandler;
         TimeKeeperStub* keeper;
-        PresenceHandlerStub* presHandler;
         TimerStub* checkTimer;
         TimerStub* clockTimer;
         OptionsDialogStub* dialog;
@@ -61,10 +57,8 @@ struct EWPresenterFixture
     private:
         void deleteFixture()
         {
-            if (this->config != NULL) {delete this->config;}
             if (this->msgHandler != NULL) {delete this->msgHandler;}
             if (this->keeper != NULL) {delete this->keeper;}
-            if (this->presHandler != NULL) {delete this->presHandler;}
             if (this->checkTimer != NULL) {delete this->checkTimer;}
             if (this->clockTimer != NULL) {delete this->clockTimer;}
             if (this->dialog != NULL) {delete this->dialog;}
@@ -75,6 +69,8 @@ struct EWPresenterFixture
 
 SUITE(TestEWPresenter)
 {
+    /// @todo: move this in future AppController test suite
+    /*
     TEST_FIXTURE(EWPresenterFixture, TestValidConfig)
     {
         ConfigData newData =
@@ -128,7 +124,7 @@ SUITE(TestEWPresenter)
             config->fail = true;
             CHECK_EQUAL(false, presenter->saveConfig(data));
             CHECK_EQUAL("Testing!", msgHandler->lastError);
-    }
+    }*/
 
     TEST_FIXTURE(EWPresenterFixture, TestStartStop)
     {
