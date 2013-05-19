@@ -8,10 +8,11 @@ class AbstractEWPresenter;
 class AbstractEWMainFrame;
 class AbstractMsgHandler;
 class AbstractOptionsDialogPres;
+class AbstractEWAppController;
 class EWMainFramePres : public AbstractEWMainFramePres, public EWViewObserver
 {
     public:
-        EWMainFramePres(AbstractEWPresenter* pres, AbstractMsgHandler* msgHandler, AbstractOptionsDialogPres* optPres);
+        EWMainFramePres(AbstractEWPresenter* pres, AbstractEWAppController* controller);
         virtual ~EWMainFramePres();
 
         virtual void attachFrame(AbstractEWMainFrame* frame);
@@ -29,8 +30,7 @@ class EWMainFramePres : public AbstractEWMainFramePres, public EWViewObserver
     private:
         AbstractEWPresenter* m_Presenter;
         AbstractEWMainFrame* m_Frame;
-        AbstractMsgHandler* m_MsgHandler;
-        AbstractOptionsDialogPres* m_OptionsPres;
+        AbstractEWAppController* m_Controller;
 };
 
 #endif // EWMAINFRAMEPRES_H

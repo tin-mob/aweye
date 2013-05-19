@@ -2,7 +2,6 @@
 #define ABSTRACTEWTASKBAR_H
 
 #include <string>
-#include "Observer.h"
 
 class AbstractEWTaskbar
 {

@@ -16,6 +16,7 @@
 #include "OptionsDialogPres.h"
 #include "EWTaskBar.h"
 #include "EWTaskBarPres.h"
+#include "DisplayOptionsDialogCmd.h"
 
 WxEWFactory::WxEWFactory()
 {
@@ -88,10 +89,9 @@ AbstractOptionsDialogPres* WxEWFactory::createOptionsDialogPres(
 }
 
 AbstractEWMainFramePres* WxEWFactory::createEWMainFramePres(
-    AbstractEWPresenter* presenter, AbstractMsgHandler* msgHandler,
-    AbstractOptionsDialogPres* optionPres)
+    AbstractEWPresenter* presenter, AbstractEWAppController* controller)
 {
-    return new EWMainFramePres(presenter, msgHandler, optionPres);
+    return new EWMainFramePres(presenter, controller);
 }
 
 AbstractEWMainFrame* WxEWFactory::createEWMainFrame(AbstractEWMainFramePres* pres,
@@ -108,4 +108,10 @@ AbstractEWTaskbarPres* WxEWFactory::createEWTaskBarPres(AbstractEWPresenter* pre
 AbstractEWTaskbar* WxEWFactory::createEWTaskBar(AbstractEWTaskbarPres* presenter)
 {
     return new EWTaskBar(presenter);
+}
+
+AbstractCommand* WxEWFactory::createDisplayOptionsDialogCmd(
+            AbstractEWAppController* controller, AbstractOptionsDialogPres* presenter)
+{
+    return new DisplayOptionsDialogCmd(controller, presenter);
 }

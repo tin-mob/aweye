@@ -17,9 +17,10 @@
 #include "AbstractEWTaskbar.h"
 #include "AbstractEWTaskbarPres.h"
 #include "SetTopWindowInt.h"
+#include "AbstractCommand.h"
 
 ///@todo: rename EWBuilder to EWAppController
-
+///@todo:find a better way to do this. the factory is very large... Bonus point without news.
 EWBuilder::EWBuilder(AbstractEWFactory* factory, SetTopWindowInt* topInt, std::string configPath, bool createTaskbar) :
     m_MsgHandler(NULL), m_ConfigImpl(NULL), m_Config(NULL), m_TimeHandler(NULL),
     m_PresenceHandler(NULL), m_TimeKeeper(NULL), m_ClockTimer(NULL),
@@ -47,8 +48,7 @@ EWBuilder::EWBuilder(AbstractEWFactory* factory, SetTopWindowInt* topInt, std::s
                 m_TimeKeeper, m_CheckTimer, m_ClockTimer, data.popupAlarm,
                 data.soundAlarm, data.soundPath, data.runningLateThreshold);
             this->m_OptionsPres = factory->createOptionsDialogPres(this);
-            this->m_MainFramePres = factory->createEWMainFramePres(m_Presenter,
-                m_MsgHandler, m_OptionsPres);
+            this->m_MainFramePres = factory->createEWMainFramePres(m_Presenter, this);
             this->m_MainFrame = factory->createEWMainFrame(m_MainFramePres,
                 createTaskbar && data.trayIcon);
             if (topInt != NULL)
@@ -60,6 +60,8 @@ EWBuilder::EWBuilder(AbstractEWFactory* factory, SetTopWindowInt* topInt, std::s
                 this->m_TaskBarPres = factory->createEWTaskBarPres(m_Presenter);
                 this->m_TaskBar = factory->createEWTaskBar(m_TaskBarPres);
             }
+            this->m_DisplayOptionsDialogCmd = factory->createDisplayOptionsDialogCmd(
+                this, this->m_OptionsPres);
         }
         catch (BaseException e)
         {
@@ -94,6 +96,7 @@ void EWBuilder::deleteFields()
     if (this->m_TaskBarPres != NULL) delete this->m_TaskBarPres;
     if (this->m_TaskBar != NULL) delete this->m_TaskBar;
     if (this->m_OptionsPres != NULL) delete this->m_OptionsPres;
+    if (this->m_DisplayOptionsDialogCmd != NULL) delete this->m_DisplayOptionsDialogCmd;
 }
 
 
@@ -131,3 +134,14 @@ const ConfigData& EWBuilder::getConfigData() const
     return this->m_Config->getData();
 }
 
+void EWBuilder::displayOptionsDialog()
+{
+    try
+    {
+        this->m_DisplayOptionsDialogCmd->execute();
+    }
+    catch (BaseException e)
+    {
+        this->m_MsgHandler->displayError(e.what());
+    }
+}

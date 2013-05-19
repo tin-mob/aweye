@@ -3,12 +3,11 @@
 #include "AbstractEWMainFrame.h"
 #include "AbstractEWPresenter.h"
 #include "BaseException.h"
-#include "AbstractMsgHandler.h"
-#include "AbstractOptionsDialogPres.h"
+#include "AbstractEWAppController.h"
 
 ///@todo: test this
-EWMainFramePres::EWMainFramePres(AbstractEWPresenter* pres, AbstractMsgHandler* msgHandler, AbstractOptionsDialogPres* optPres) :
-    m_Presenter(pres), m_Frame(NULL), m_MsgHandler(msgHandler), m_OptionsPres(optPres)
+EWMainFramePres::EWMainFramePres(AbstractEWPresenter* pres, AbstractEWAppController* controller) :
+    m_Presenter(pres), m_Frame(NULL), m_Controller(controller)
 {
     //ctor
     this->m_Presenter->attach(this);
@@ -77,17 +76,7 @@ void EWMainFramePres::OnFrameAbout()
 
 void EWMainFramePres::OnFrameOptionsButtonClick()
 {
-    assert(this->m_Frame != NULL);
-    if (this->m_Frame == NULL) return;
-
-    try
-    {
-        this->m_Frame->displayOptionsDialog(this->m_OptionsPres);
-    }
-    catch (BaseException e)
-    {
-        this->m_MsgHandler->displayError(e.what());
-    }
+    this->m_Controller->displayOptionsDialog();
 }
 
 void EWMainFramePres::OnFramePlayButtonClick()

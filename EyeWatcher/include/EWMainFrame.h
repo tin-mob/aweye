@@ -36,7 +36,6 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
         virtual void setValues( std::string status, std::string onClock,
                        std::string offClock, std::string runningClock,
                        std::string leftClock);
-        virtual void displayOptionsDialog(AbstractOptionsDialogPres* presenter);
         virtual void show(bool show = true);
         virtual void setPauseButtonLabel(std::string label);
         virtual void setStartButtonLabel(std::string label);

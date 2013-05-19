@@ -19,6 +19,7 @@ class AbstractEWMainFramePres;
 class AbstractEWMainFrame;
 class AbstractEWTaskbarPres;
 class AbstractEWTaskbar;
+class AbstractCommand;
 class WxEWFactory : public AbstractEWFactory
 {
     public:
@@ -48,12 +49,13 @@ class WxEWFactory : public AbstractEWFactory
         virtual AbstractOptionsDialogPres* createOptionsDialogPres(
             AbstractEWAppController* controller);
         virtual AbstractEWMainFramePres* createEWMainFramePres(
-            AbstractEWPresenter* presenter, AbstractMsgHandler* msgHandler,
-            AbstractOptionsDialogPres* optionPres);
+            AbstractEWPresenter* presenter, AbstractEWAppController* controller);
         virtual AbstractEWMainFrame* createEWMainFrame(AbstractEWMainFramePres* pres,
             bool createdTaskBar);
         virtual AbstractEWTaskbarPres* createEWTaskBarPres(AbstractEWPresenter* presenter);
         virtual AbstractEWTaskbar* createEWTaskBar(AbstractEWTaskbarPres* presenter);
+        virtual AbstractCommand* createDisplayOptionsDialogCmd(
+            AbstractEWAppController* controller, AbstractOptionsDialogPres* presenter);
     protected:
     private:
 };

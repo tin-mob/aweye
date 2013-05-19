@@ -11,7 +11,6 @@ class AbstractEWMainFrame
         virtual void setValues( std::string status, std::string onClock,
                                std::string offClock, std::string runningClock,
                                std::string leftClock) = 0;
-        virtual void displayOptionsDialog(AbstractOptionsDialogPres* presenter) = 0;
         virtual void show(bool show = true) = 0;
         virtual void setPauseButtonLabel(std::string label) = 0;
         virtual void setStartButtonLabel(std::string label) = 0;

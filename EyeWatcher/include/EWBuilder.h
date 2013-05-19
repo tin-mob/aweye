@@ -19,6 +19,7 @@ class AbstractEWTaskbarPres;
 class AbstractEWTaskbar;
 class AbstractEWFactory;
 class SetTopWindowInt;
+class AbstractCommand;
 class ConfigData;
 
 class EWBuilder : public AbstractEWAppController
@@ -30,6 +31,8 @@ class EWBuilder : public AbstractEWAppController
 
         virtual bool saveConfig(const ConfigData& data);
         virtual const ConfigData& getConfigData() const;
+
+        virtual void displayOptionsDialog();
 
     protected:
     private:
@@ -49,6 +52,7 @@ class EWBuilder : public AbstractEWAppController
         AbstractEWTaskbarPres* m_TaskBarPres;
         AbstractEWTaskbar* m_TaskBar;
         AbstractOptionsDialogPres* m_OptionsPres;
+        AbstractCommand* m_DisplayOptionsDialogCmd;
 };
 
 #endif // EWBUILDER_H

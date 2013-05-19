@@ -223,12 +223,6 @@ void EWMainFrame::OnOptionsButtonClick(wxCommandEvent& event)
     this->m_Presenter->OnFrameOptionsButtonClick();
 }
 
-void EWMainFrame::displayOptionsDialog(AbstractOptionsDialogPres* presenter)
-{
-    OptionsDialog dialog(this, presenter);
-    dialog.ShowModal();
-}
-
 void EWMainFrame::OnPlayButtonClick(wxCommandEvent& event)
 {
     this->m_Presenter->OnFramePlayButtonClick();
