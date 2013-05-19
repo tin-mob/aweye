@@ -4,11 +4,11 @@
 #include <wx/taskbar.h>
 #include <string>
 #include "AbstractEWTaskbar.h"
+#include "ObservableWxMenu.h"
 
 class wxMenu;
 class AbstractEWTaskbarPres;
-class ObservableWxMenu;
-class EWTaskBar : public AbstractEWTaskbar, public wxTaskBarIcon
+class EWTaskBar : public AbstractEWTaskbar, public wxTaskBarIcon, public ObservableWxMenuObserver
 {
     public:
         EWTaskBar(AbstractEWTaskbarPres* presenter);
@@ -19,7 +19,7 @@ class EWTaskBar : public AbstractEWTaskbar, public wxTaskBarIcon
             std::string runningClock, std::string leftClock);
         virtual void setIcon(std::string loc);
 
-        virtual void update(Observable*);
+        virtual void onMenuDelete(ObservableWxMenu* menu);
     protected:
     private:
         void OnMenuHideRestore(wxCommandEvent&);

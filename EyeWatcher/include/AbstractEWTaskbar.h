@@ -4,7 +4,7 @@
 #include <string>
 #include "Observer.h"
 
-class AbstractEWTaskbar : public Observer
+class AbstractEWTaskbar
 {
     public:
         virtual ~AbstractEWTaskbar() {}

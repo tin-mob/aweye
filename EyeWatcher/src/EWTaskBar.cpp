@@ -98,7 +98,7 @@ void EWTaskBar::setIcon(std::string loc)
 
 // the menu is managed by Wx. When It decides to delete it, we receive
 // a nice warning...
-void EWTaskBar::update(Observable*)
+void EWTaskBar::onMenuDelete(ObservableWxMenu* menu)
 {
     this->m_Menu = NULL;
 }

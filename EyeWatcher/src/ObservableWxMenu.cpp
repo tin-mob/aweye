@@ -3,5 +3,5 @@
 ObservableWxMenu::~ObservableWxMenu()
 {
     //dtor
-    notify();
+    notify(&ObservableWxMenuObserver::onMenuDelete, this);
 }

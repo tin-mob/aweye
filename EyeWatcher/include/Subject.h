@@ -1,10 +1,11 @@
 #ifndef SUBJECT_H
 #define SUBJECT_H
 
+#include <list>
+
 // could have used boost::signal. Oh Well.
 // Edit: more complicated to use an interface with it...
 // http://stackoverflow.com/questions/2997732/how-to-convert-an-existing-callback-interface-to-use-boost-signals-slots
-#include <list>
 
 template <class TObserver, class TParam>
 class Subject
