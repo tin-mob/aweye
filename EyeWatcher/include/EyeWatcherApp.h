@@ -14,7 +14,7 @@
 #include "SetTopWindowInt.h"
 
 class wxCmdLineParser;
-class EWBuilder;
+class EWAppController;
 class AbstractEWMainFrame;
 class EWMainFrame;
 class EyeWatcherApp : public wxApp, public SetTopWindowInt
@@ -28,7 +28,7 @@ class EyeWatcherApp : public wxApp, public SetTopWindowInt
 
         virtual void setTopWindow(AbstractEWMainFrame* frame);
     private:
-        EWBuilder* m_Builder;
+        EWAppController* m_AppController;
         wxString m_ConfigPath;
 };
 

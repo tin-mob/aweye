@@ -9,7 +9,7 @@
 
 #include "wx_pch.h"
 #include "EyeWatcherApp.h"
-#include "EWBuilder.h"
+#include "EWAppController.h"
 #include "WxEWFactory.h"
 #include "EWMainFrame.h"
 #include <wx/cmdline.h>
@@ -19,13 +19,13 @@
 
 IMPLEMENT_APP(EyeWatcherApp);
 
-EyeWatcherApp::EyeWatcherApp() : m_Builder(NULL)
+EyeWatcherApp::EyeWatcherApp() : m_AppController(NULL)
 {
 }
 
 EyeWatcherApp::~EyeWatcherApp()
 {
-    if (this->m_Builder != NULL) delete this->m_Builder;
+    if (this->m_AppController != NULL) delete this->m_AppController;
 }
 
 bool EyeWatcherApp::OnInit()
@@ -37,11 +37,11 @@ bool EyeWatcherApp::OnInit()
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
-    	if (this->m_Builder == NULL)
+    	if (this->m_AppController == NULL)
     	{
     	    WxEWFactory factory;
-    	    this->m_Builder =
-            new EWBuilder(&factory, this, std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable());
+    	    this->m_AppController =
+            new EWAppController(&factory, this, std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable());
     	}
     }
     return wxsOK;
