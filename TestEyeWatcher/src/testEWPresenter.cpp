@@ -147,18 +147,18 @@ SUITE(TestEWPresenter)
 
         this->keeper.late = true;
         this->presenter.togglePause();
-        this->presenter.update(&this->checkTimer);
+        this->checkTimer.ring();
         CHECK_EQUAL(this->msgHandler.lastAlert, "");
         CHECK_EQUAL(this->msgHandler.lastSound, "");
 
         this->presenter.togglePause();
-        this->presenter.update(&this->checkTimer);
+        this->checkTimer.ring();
         CHECK_EQUAL(this->msgHandler.lastAlert, this->presenter.m_LateMsg);
         CHECK_EQUAL(this->msgHandler.lastSound, data.soundPath);
 
         this->keeper.fail = true;
         CHECK_EQUAL(this->msgHandler.lastError, "");
-        this->presenter.update(&this->checkTimer);
+        this->checkTimer.ring();
         CHECK_EQUAL(this->msgHandler.lastError, "Testing!");
     }
 
@@ -217,7 +217,7 @@ SUITE(TestEWPresenter)
 
     TEST_FIXTURE(EWPresenterFixture, TestUpdateTime)
     {
-        this->presenter.update(&this->clockTimer);
+        this->clockTimer.ring();
         CHECK_EQUAL(this->viewObserver.checkTimeUpdated(), true);
     }
 }

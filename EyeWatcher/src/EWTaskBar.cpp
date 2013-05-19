@@ -75,8 +75,7 @@ wxMenu* EWTaskBar::CreatePopupMenu()
     this->m_Menu->Append(EWTaskBar::ID_LEFT_TIME, wxT("Time Left"));
 
     // force update
-    this->m_Presenter->OnStatusUpdate();
-    this->m_Presenter->OnTimeUpdate();
+    this->m_Presenter->forceUpdate();
 
     return this->m_Menu;
 }

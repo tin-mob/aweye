@@ -6,7 +6,7 @@
 #include "EWViewObserver.h"
 
 class ConfigData;
-class AbstractEWPresenter : public Subject<EWViewObserver>
+class AbstractEWPresenter : public Subject<EWViewObserver, AbstractEWPresenter*>
 {
     public:
         AbstractEWPresenter() : m_LateMsg("Time for a pause!"),

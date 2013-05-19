@@ -3,8 +3,8 @@
 
 #include <string>
 #include "boost/date_time/posix_time/posix_time_types.hpp"
-#include "Observer.h"
 #include "AbstractEWPresenter.h"
+#include "AbstractTimer.h"
 
 class AbstractConfig;
 class AbstractMsgHandler;
@@ -13,8 +13,9 @@ class AbstractPresenceHandler;
 class AbstractTimer;
 class ConfigData;
 
-/// @todo: split into smallers presenters...
-class EWPresenter : public Observer, public AbstractEWPresenter
+///@todo: that's a whole lotta public method there...
+
+class EWPresenter : public AbstractEWPresenter, public TimerInterface
 {
     public:
         EWPresenter(AbstractMsgHandler* msgHandler, AbstractTimeKeeper* keeper,
@@ -28,7 +29,7 @@ class EWPresenter : public Observer, public AbstractEWPresenter
         virtual void quit();
         virtual void show(bool show);
 
-        void update(Observable* source);
+        virtual void onTimerRing(AbstractTimer* timer);
         virtual void updateStatus();
         virtual void updateTimes();
 

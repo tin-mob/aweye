@@ -8,9 +8,7 @@ class AbstractEWTaskbarPres
         virtual ~AbstractEWTaskbarPres() {}
 
         virtual void attachTaskBar(AbstractEWTaskbar* taskBar) = 0;
-        virtual void OnStatusUpdate() = 0;
-        virtual void OnTimeUpdate() = 0;
-        virtual void OnQuit() = 0;
+        virtual void forceUpdate() = 0;
 
         virtual void OnMenuHideRestore() = 0;
         virtual void OnMenuStartStop() = 0;

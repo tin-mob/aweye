@@ -23,11 +23,12 @@ void EWMainFramePres::attachFrame(AbstractEWMainFrame* frame)
     this->m_Frame = frame;
 
     // force update
-    this->OnStatusUpdate();
-    this->OnTimeUpdate();
+    /// @todo: less hackish
+    this->OnStatusUpdate(NULL);
+    this->OnTimeUpdate(NULL);
 }
 
-void EWMainFramePres::OnStatusUpdate()
+void EWMainFramePres::OnStatusUpdate(AbstractEWPresenter* subject)
 {
     assert(this->m_Frame != NULL);
     if (this->m_Frame == NULL) return;
@@ -46,7 +47,7 @@ void EWMainFramePres::OnStatusUpdate()
     }
 }
 
-void EWMainFramePres::OnTimeUpdate()
+void EWMainFramePres::OnTimeUpdate(AbstractEWPresenter* subject)
 {
     assert(this->m_Frame != NULL);
     if (this->m_Frame == NULL) return;
@@ -60,7 +61,7 @@ void EWMainFramePres::OnTimeUpdate()
     }
 }
 
-void EWMainFramePres::OnQuit()
+void EWMainFramePres::OnQuit(AbstractEWPresenter* subject)
 {
     this->m_Frame->close();
 }

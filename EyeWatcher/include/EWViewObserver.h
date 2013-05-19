@@ -1,14 +1,14 @@
 #ifndef EWVIEWOBSERVER_H
 #define EWVIEWOBSERVER_H
 
-
+class AbstractEWPresenter;
 class EWViewObserver
 {
     public:
         virtual ~EWViewObserver() {}
-        virtual void OnStatusUpdate() = 0;
-        virtual void OnTimeUpdate() = 0;
-        virtual void OnQuit() = 0;
+        virtual void OnStatusUpdate(AbstractEWPresenter* subject) = 0;
+        virtual void OnTimeUpdate(AbstractEWPresenter* subject) = 0;
+        virtual void OnQuit(AbstractEWPresenter* subject) = 0;
     protected:
     private:
 };

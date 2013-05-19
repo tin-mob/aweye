@@ -8,9 +8,6 @@ class AbstractEWMainFramePres
         virtual ~AbstractEWMainFramePres() {}
 
         virtual void attachFrame(AbstractEWMainFrame* frame) = 0;
-        virtual void OnStatusUpdate() = 0;
-        virtual void OnTimeUpdate() = 0;
-        virtual void OnQuit() = 0;
 
         virtual void OnFrameQuit() = 0;
         virtual void OnFrameAbout() = 0;

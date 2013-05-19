@@ -1,39 +1,41 @@
 #ifndef SUBJECT_H
 #define SUBJECT_H
 
-// source : http://www.codeproject.com/Articles/3267/Implementing-a-Subject-Observer-pattern-with-templ
+// could have used boost::signal. Oh Well.
+// Edit: more complicated to use an interface with it...
+// http://stackoverflow.com/questions/2997732/how-to-convert-an-existing-callback-interface-to-use-boost-signals-slots
 #include <list>
 
-template <class T>
+template <class TObserver, class TParam>
 class Subject
 {
     public:
         Subject() {}
         virtual ~Subject() {}
 
-        void attach (T* observer)
+        void attach (TObserver* observer)
         {
             m_Observers.push_back(observer);
         }
 
-        void detach(T* observer)
+        void detach(TObserver* observer)
         {
             m_Observers.remove(observer);
         }
 
-        void notify(void (T::*ptMethod)())
+        void notify(void (TObserver::*ptMethod)(TParam), TParam param)
         {
-            typename std::list<T*>::iterator i = m_Observers.begin();
-            typename std::list<T*>::iterator end = m_Observers.end();
+            typename std::list<TObserver*>::iterator i = m_Observers.begin();
+            typename std::list<TObserver*>::iterator end = m_Observers.end();
             for (; i != end; ++i)
             {
-                T* ptr = *i;
-                (ptr->*ptMethod)();
+                TObserver* ptr = *i;
+                (ptr->*ptMethod)(param);
             }
         }
     protected:
     private:
-        std::list<T*> m_Observers;
+        std::list<TObserver*> m_Observers;
 };
 
 #endif // SUBJECT_H

@@ -48,18 +48,18 @@ void EWPresenter::stop()
     this->m_TimeKeeper->stop();
     this->m_CheckTimer->stopTimer();
     this->m_ClockTimer->stopTimer();
-    this->notify(&EWViewObserver::OnStatusUpdate);
+    this->notify(&EWViewObserver::OnStatusUpdate, this);
 }
 
 void EWPresenter::quit()
 {
-    this->notify(&EWViewObserver::OnQuit);
+    this->notify(&EWViewObserver::OnQuit, this);
 }
 
 void EWPresenter::show(bool show)
 {
     this->m_Shown = show;
-    this->notify(&EWViewObserver::OnStatusUpdate);
+    this->notify(&EWViewObserver::OnStatusUpdate, this);
 }
 
 void EWPresenter::updateStatus()
@@ -68,7 +68,7 @@ void EWPresenter::updateStatus()
     {
         this->m_TimeKeeper->updateStatus();
         this->m_CheckTimer->startTimer(this->m_TimeKeeper->getTimerInterval().total_milliseconds(), true);
-        this->notify(&EWViewObserver::OnStatusUpdate);
+        this->notify(&EWViewObserver::OnStatusUpdate, this);
 
         if (this->m_TimeKeeper->isLate() && this->m_TimeKeeper->getStatus() == AbstractTimeKeeper::HERE)
         {
@@ -84,16 +84,16 @@ void EWPresenter::updateStatus()
 
 void EWPresenter::updateTimes()
 {
-    this->notify(&EWViewObserver::OnTimeUpdate);
+    this->notify(&EWViewObserver::OnTimeUpdate, this);
 }
 
-void EWPresenter::update(Observable* source)
+void EWPresenter::onTimerRing(AbstractTimer* timer)
 {
-    if (source == this->m_ClockTimer)
+    if (timer == this->m_ClockTimer)
     {
         this->updateTimes();
     }
-    else if (source == this->m_CheckTimer)
+    else if (timer == this->m_CheckTimer)
     {
         this->updateStatus();
     }
@@ -106,7 +106,7 @@ void EWPresenter::update(Observable* source)
 void EWPresenter::togglePause()
 {
     m_Warn = !m_Warn;
-    this->notify(&EWViewObserver::OnStatusUpdate);
+    this->notify(&EWViewObserver::OnStatusUpdate, this);
 }
 
 void EWPresenter::toggleStart()

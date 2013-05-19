@@ -22,6 +22,5 @@ void MyWxTimer::stopTimer()
 
 void MyWxTimer::Notify()
 {
-    // sigh...
-    this->notify();
+    this->notify(&TimerInterface::onTimerRing, this);
 }

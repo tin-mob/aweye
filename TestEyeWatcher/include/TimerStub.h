@@ -19,7 +19,7 @@ class TimerStub : public AbstractTimer
         }
         void ring()
         {
-            notify();
+            notify(&TimerInterface::onTimerRing, this);
         }
 
         bool running;

@@ -15,9 +15,9 @@ class EWMainFramePres : public AbstractEWMainFramePres, public EWViewObserver
         virtual ~EWMainFramePres();
 
         virtual void attachFrame(AbstractEWMainFrame* frame);
-        virtual void OnStatusUpdate();
-        virtual void OnTimeUpdate();
-        virtual void OnQuit();
+        virtual void OnStatusUpdate(AbstractEWPresenter* subject);
+        virtual void OnTimeUpdate(AbstractEWPresenter* subject);
+        virtual void OnQuit(AbstractEWPresenter* subject);
 
         virtual void OnFrameQuit();
         virtual void OnFrameAbout();

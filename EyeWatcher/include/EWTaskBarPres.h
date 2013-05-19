@@ -13,9 +13,11 @@ class EWTaskBarPres : public AbstractEWTaskbarPres, public EWViewObserver
         virtual ~EWTaskBarPres();
 
         virtual void attachTaskBar(AbstractEWTaskbar* taskBar);
-        virtual void OnStatusUpdate();
-        virtual void OnTimeUpdate();
-        virtual void OnQuit();
+        virtual void forceUpdate();
+
+        virtual void OnStatusUpdate(AbstractEWPresenter* subject);
+        virtual void OnTimeUpdate(AbstractEWPresenter* subject);
+        virtual void OnQuit(AbstractEWPresenter* subject);
 
         virtual void OnMenuHideRestore();
         virtual void OnMenuStartStop();

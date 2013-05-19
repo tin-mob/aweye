@@ -1,8 +1,17 @@
 #ifndef ABSTRACTTIMER_H
 #define ABSTRACTTIMER_H
 
-#include "Observer.h"
-class AbstractTimer : public Observable
+#include "Subject.h"
+
+class AbstractTimer;
+class TimerInterface
+{
+    public:
+        virtual ~TimerInterface() {}
+        virtual void onTimerRing(AbstractTimer* timer) = 0;
+};
+
+class AbstractTimer : public Subject<TimerInterface, AbstractTimer*>
 {
     public:
         virtual ~AbstractTimer() {}
