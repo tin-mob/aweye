@@ -9,23 +9,37 @@
 
 #include "wx_pch.h"
 #include "EyeWatcherApp.h"
-#include "EWAppController.h"
-#include "WxEWFactory.h"
-#include "EWMainFrame.h"
 #include <wx/cmdline.h>
-#include "EWMainFrame.h"
 #include <wx/image.h>
 #include <wx/taskbar.h>
 
+#include "EWBuilder.h"
+
+#include "MsgHandler.h"
+#include "wxConfigImpl.h"
+#include "Config.h"
+#include "WebcamHandlerProc.h"
+#include "TimeHandler.h"
+#include "TimeKeeper.h"
+#include "MyWxTimer.h"
+#include "EWAppController.h"
+#include "EWPresenter.h"
+#include "EWMainFramePres.h"
+#include "EWMainFrame.h"
+#include "OptionsDialogPres.h"
+#include "EWTaskBarPres.h"
+#include "EWTaskBar.h"
+#include "DisplayOptionsDialogCmd.h"
+
 IMPLEMENT_APP(EyeWatcherApp);
 
-EyeWatcherApp::EyeWatcherApp() : m_AppController(NULL)
+EyeWatcherApp::EyeWatcherApp() : m_AppImpl(NULL)
 {
 }
 
 EyeWatcherApp::~EyeWatcherApp()
 {
-    if (this->m_AppController != NULL) delete this->m_AppController;
+    if (this->m_AppImpl != NULL) delete this->m_AppImpl;
 }
 
 bool EyeWatcherApp::OnInit()
@@ -37,11 +51,13 @@ bool EyeWatcherApp::OnInit()
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
-    	if (this->m_AppController == NULL)
+    	if (this->m_AppImpl == NULL)
     	{
-    	    WxEWFactory factory;
-    	    this->m_AppController =
-            new EWAppController(&factory, this, std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable());
+    	    this->m_AppImpl = new EWBuilder<MsgHandler, wxConfigImpl, Config,
+                WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, EWAppController,
+                EWPresenter, EWMainFramePres, EWMainFrame, OptionsDialogPres,
+                EWTaskBarPres, EWTaskBar, DisplayOptionsDialogCmd>(this,
+                std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable());
     	}
     }
     return wxsOK;

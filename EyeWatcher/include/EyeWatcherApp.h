@@ -14,9 +14,27 @@
 #include "SetTopWindowInt.h"
 
 class wxCmdLineParser;
-class EWAppController;
+template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
+    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWAppController, class TEWPresenter,
+    class TEWMainFramePres, class TEWMainFrame, class TOptionsDialogPres, class TEWTaskbarPres,
+    class TEWTaskbar, class TDisplayOptionsDialogCmd>
+class EWBuilder;
 class AbstractEWMainFrame;
+class MsgHandler;
+class wxConfigImpl;
+class Config;
+class WebcamHandlerProc;
+class TimeHandler;
+class TimeKeeper;
+class MyWxTimer;
+class EWAppController;
+class EWPresenter;
+class EWMainFramePres;
 class EWMainFrame;
+class OptionsDialogPres;
+class EWTaskBarPres;
+class EWTaskBar;
+class DisplayOptionsDialogCmd;
 class EyeWatcherApp : public wxApp, public SetTopWindowInt
 {
     public:
@@ -28,7 +46,10 @@ class EyeWatcherApp : public wxApp, public SetTopWindowInt
 
         virtual void setTopWindow(AbstractEWMainFrame* frame);
     private:
-        EWAppController* m_AppController;
+        EWBuilder<MsgHandler, wxConfigImpl, Config,
+            WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, EWAppController,
+            EWPresenter, EWMainFramePres, EWMainFrame, OptionsDialogPres,
+            EWTaskBarPres, EWTaskBar, DisplayOptionsDialogCmd>* m_AppImpl;
         wxString m_ConfigPath;
 };
 
