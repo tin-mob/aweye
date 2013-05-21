@@ -20,14 +20,26 @@ EWMainFramePres::~EWMainFramePres()
 void EWMainFramePres::attachFrame(AbstractEWMainFrame* frame)
 {
     this->m_Frame = frame;
-
-    // force update
-    /// @todo: less hackish
-    this->OnStatusUpdate(NULL);
-    this->OnTimeUpdate(NULL);
+    this->doStatusUpdate();
+    this->doTimeUpdate();
 }
 
-void EWMainFramePres::OnStatusUpdate(AbstractEWPresenter* subject)
+void EWMainFramePres::OnStatusUpdate(AbstractEWPresenter*)
+{
+    this->doStatusUpdate();
+}
+
+void EWMainFramePres::OnTimeUpdate(AbstractEWPresenter*)
+{
+    this->doTimeUpdate();
+}
+
+void EWMainFramePres::OnQuit(AbstractEWPresenter*)
+{
+    this->doQuit();
+}
+
+void EWMainFramePres::doStatusUpdate()
 {
     assert(this->m_Frame != NULL);
     if (this->m_Frame == NULL) return;
@@ -46,7 +58,7 @@ void EWMainFramePres::OnStatusUpdate(AbstractEWPresenter* subject)
     }
 }
 
-void EWMainFramePres::OnTimeUpdate(AbstractEWPresenter* subject)
+void EWMainFramePres::doTimeUpdate()
 {
     assert(this->m_Frame != NULL);
     if (this->m_Frame == NULL) return;
@@ -60,7 +72,7 @@ void EWMainFramePres::OnTimeUpdate(AbstractEWPresenter* subject)
     }
 }
 
-void EWMainFramePres::OnQuit(AbstractEWPresenter* subject)
+void EWMainFramePres::doQuit()
 {
     this->m_Frame->close();
 }

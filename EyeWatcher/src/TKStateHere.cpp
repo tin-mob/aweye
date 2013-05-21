@@ -14,18 +14,12 @@ TKStateHere::~TKStateHere()
     //dtor
 }
 
+/// @todo: manage false negatives...
 void TKStateHere::updateStatus(TimeKeeper* parent)
 {
-    const bool isHere = parent->m_PresenceHandler->isHere();
-    if (!isHere)
+    if (!parent->m_PresenceHandler->isHere())
     {
-        // make sure when we change state (false negatives)
-        const bool isHere2 = parent->m_PresenceHandler->isHere();
-
-        if (!isHere2)
-        {
-            parent->setStatus(AbstractTimeKeeper::AWAY);
-        }
+        parent->setStatus(AbstractTimeKeeper::AWAY);
     }
 }
 
@@ -36,10 +30,9 @@ void TKStateHere::updateTimeStamps(TimeKeeper* parent)
 
 boost::posix_time::time_duration TKStateHere::getTimerInterval(const TimeKeeper* parent) const
 {
-    const boost::posix_time::ptime now = parent->m_TimeHandler->getTime();
     boost::posix_time::time_duration timerInterval = parent->m_CheckFreq;
-
-    boost::posix_time::time_duration hereInterval = now - parent->m_HereStamp;
+    boost::posix_time::time_duration hereInterval =
+        parent->m_TimeHandler->getTime() - parent->m_HereStamp;
     // work period ended
     if (hereInterval >= parent->m_WorkLength)
     {

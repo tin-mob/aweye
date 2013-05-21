@@ -24,12 +24,26 @@ void EWTaskBarPres::attachTaskBar(AbstractEWTaskbar* taskBar)
 
 void EWTaskBarPres::forceUpdate()
 {
-    /// @todo: less hackish
-    this->OnStatusUpdate(NULL);
-    this->OnTimeUpdate(NULL);
+    this->doStatusUpdate();
+    this->doTimeUpdate();
 }
 
 void EWTaskBarPres::OnStatusUpdate(AbstractEWPresenter* subject)
+{
+    this->doStatusUpdate();
+}
+
+void EWTaskBarPres::OnTimeUpdate(AbstractEWPresenter* subject)
+{
+    this->doTimeUpdate();
+}
+
+void EWTaskBarPres::OnQuit(AbstractEWPresenter* subject)
+{
+    this->doQuit();
+}
+
+void EWTaskBarPres::doStatusUpdate()
 {
     assert(this->m_TaskBar != NULL);
     if (this->m_TaskBar == NULL) return;
@@ -47,7 +61,7 @@ void EWTaskBarPres::OnStatusUpdate(AbstractEWPresenter* subject)
     }
 }
 
-void EWTaskBarPres::OnTimeUpdate(AbstractEWPresenter* subject)
+void EWTaskBarPres::doTimeUpdate()
 {
     assert(this->m_TaskBar != NULL);
     if (this->m_TaskBar == NULL) return;
@@ -66,7 +80,7 @@ void EWTaskBarPres::OnTimeUpdate(AbstractEWPresenter* subject)
     }
 }
 
-void EWTaskBarPres::OnQuit(AbstractEWPresenter* subject)
+void EWTaskBarPres::doQuit()
 {
     assert(this->m_TaskBar != NULL);
     if (this->m_TaskBar == NULL) return;

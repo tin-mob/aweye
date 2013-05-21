@@ -16,21 +16,9 @@ TKStateAway::~TKStateAway()
 
 void TKStateAway::updateStatus(TimeKeeper* parent)
 {
-    const bool isHere = parent->m_PresenceHandler->isHere();
-    std::string msg = "";
-
-    if (isHere)
+    if (parent->m_PresenceHandler->isHere())
     {
-        // make sure when we change state (false negatives)
-        const bool isHere2 = parent->m_PresenceHandler->isHere();
-
-        if (!isHere2)
-        {
-            return;
-        }
-
-        boost::posix_time::time_duration timeLeft = this->getTimeLeft(parent);
-        if (timeLeft > boost::posix_time::time_duration(0,0,0,0))
+        if (this->getTimeLeft(parent) > boost::posix_time::time_duration(0,0,0,0))
         {
             if (parent->m_NumTolerated < parent->m_PauseTol)
             {
@@ -58,10 +46,9 @@ void TKStateAway::updateTimeStamps(TimeKeeper* parent)
 
 boost::posix_time::time_duration TKStateAway::getTimerInterval(const TimeKeeper* parent) const
 {
-    const boost::posix_time::ptime now = parent->m_TimeHandler->getTime();
     boost::posix_time::time_duration timerInterval = parent->m_CheckFreq;
-
-    boost::posix_time::time_duration pauseInterval = now - parent->m_AwayStamp;
+    boost::posix_time::time_duration pauseInterval =
+        parent->m_TimeHandler->getTime() - parent->m_AwayStamp;
     // work period ended
     if (pauseInterval >= parent->m_PauseLength)
     {

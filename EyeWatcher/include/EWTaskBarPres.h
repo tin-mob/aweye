@@ -15,9 +15,9 @@ class EWTaskBarPres : public AbstractEWTaskbarPres, public EWViewObserver
         virtual void attachTaskBar(AbstractEWTaskbar* taskBar);
         virtual void forceUpdate();
 
-        virtual void OnStatusUpdate(AbstractEWPresenter* subject);
-        virtual void OnTimeUpdate(AbstractEWPresenter* subject);
-        virtual void OnQuit(AbstractEWPresenter* subject);
+        virtual void OnStatusUpdate(AbstractEWPresenter*);
+        virtual void OnTimeUpdate(AbstractEWPresenter*);
+        virtual void OnQuit(AbstractEWPresenter*);
 
         virtual void OnMenuHideRestore();
         virtual void OnMenuStartStop();
@@ -25,6 +25,10 @@ class EWTaskBarPres : public AbstractEWTaskbarPres, public EWViewObserver
         virtual void OnMenuExit();
     protected:
     private:
+        void doStatusUpdate();
+        void doTimeUpdate();
+        void doQuit();
+
         AbstractEWPresenter* m_Presenter;
         AbstractEWTaskbar* m_TaskBar;
         std::string m_LastIcon;
