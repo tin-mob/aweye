@@ -1,4 +1,5 @@
 #include "ConfigData.h"
+#include <iostream>
 
 const boost::posix_time::time_duration ConfigData::default_WorkLength(0,50,0,0);
 const boost::posix_time::time_duration ConfigData::default_PauseLength(0,10,0,0);
@@ -28,3 +29,33 @@ ConfigData::ConfigData(boost::posix_time::time_duration wl,
     soundPath(sp), runningLateThreshold(lt)
 {
 }
+
+bool ConfigData::operator==(const ConfigData& other) const
+{
+    return (workLength == other.workLength &&
+            pauseLength == other.pauseLength &&
+            remFreq == other.remFreq &&
+            checkFreq == other.checkFreq &&
+            pauseTol == other.pauseTol &&
+            soundAlarm == other.soundAlarm &&
+            popupAlarm == other.popupAlarm &&
+            trayIcon == other.trayIcon &&
+            webcamIndex == other.webcamIndex &&
+            faceSizeX == other.faceSizeX &&
+            faceSizeY == other.faceSizeY &&
+            cascadePath == other.cascadePath &&
+            soundPath == other.soundPath &&
+            runningLateThreshold == other.runningLateThreshold
+            );
+}
+
+std::ostream& operator<<(std::ostream& os, const ConfigData& cd)
+{
+    os << cd.workLength << "; " << cd.pauseLength << "; " << cd.remFreq << "; "
+       << cd.checkFreq << "; " << cd.pauseTol << "; " << cd.soundAlarm << "; "
+       << cd.popupAlarm << "; " << cd.trayIcon << "; " << cd.webcamIndex << "; "
+       << cd.faceSizeX << "; " << cd.faceSizeY << "; " << cd.cascadePath << "; "
+       << cd.soundPath << "; " << cd.runningLateThreshold;
+    return os;
+}
+

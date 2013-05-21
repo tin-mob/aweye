@@ -62,20 +62,7 @@ SUITE(TestConfig)
         Config config(&impl);
 
         ConfigData data = config.getData();
-        CHECK_EQUAL(ConfigData::default_WorkLength, data.workLength);
-        CHECK_EQUAL(ConfigData::default_PauseLength, data.pauseLength);
-        CHECK_EQUAL(ConfigData::default_RemFreq, data.remFreq);
-        CHECK_EQUAL(ConfigData::default_CheckFreq, data.checkFreq);
-        CHECK_EQUAL(ConfigData::default_PauseTol, data.pauseTol);
-        CHECK_EQUAL(ConfigData::default_SoundAlarm, data.soundAlarm);
-        CHECK_EQUAL(ConfigData::default_PopupAlarm, data.popupAlarm);
-        CHECK_EQUAL(ConfigData::default_TrayIcon, data.trayIcon);
-        CHECK_EQUAL(ConfigData::default_WebcamIndex, data.webcamIndex);
-        CHECK_EQUAL(ConfigData::default_FaceSizeX, data.faceSizeX);
-        CHECK_EQUAL(ConfigData::default_FaceSizeY, data.faceSizeY);
-        CHECK_EQUAL(ConfigData::default_CascadePath, data.cascadePath);
-        CHECK_EQUAL(ConfigData::default_SoundPath, data.soundPath);
-        CHECK_EQUAL(ConfigData::default_RunningLateThreshold, data.runningLateThreshold);
+        CHECK_EQUAL(ConfigData(), data);
     }
 
     TEST_FIXTURE(ConfigFixture, TestSaveLoad)
@@ -106,39 +93,13 @@ SUITE(TestConfig)
         config2.load();
         data = config2.getData();
 
-        CHECK_EQUAL(srcData.workLength, data.workLength);
-        CHECK_EQUAL(srcData.pauseLength, data.pauseLength);
-        CHECK_EQUAL(srcData.remFreq, data.remFreq);
-        CHECK_EQUAL(srcData.checkFreq, data.checkFreq);
-        CHECK_EQUAL(srcData.pauseTol, data.pauseTol);
-        CHECK_EQUAL(srcData.soundAlarm, data.soundAlarm);
-        CHECK_EQUAL(srcData.popupAlarm, data.popupAlarm);
-        CHECK_EQUAL(srcData.trayIcon, data.trayIcon);
-        CHECK_EQUAL(srcData.webcamIndex, data.webcamIndex);
-        CHECK_EQUAL(srcData.faceSizeX, data.faceSizeX);
-        CHECK_EQUAL(srcData.faceSizeY, data.faceSizeY);
-        CHECK_EQUAL(srcData.cascadePath, data.cascadePath);
-        CHECK_EQUAL(srcData.soundPath, data.soundPath);
-        CHECK_EQUAL(srcData.runningLateThreshold, data.runningLateThreshold);
+        CHECK_EQUAL(srcData, data);
 
         Config config3(&impl);
         config3.load();
         data = config3.getData();
 
-        CHECK_EQUAL(srcData.workLength, data.workLength);
-        CHECK_EQUAL(srcData.pauseLength, data.pauseLength);
-        CHECK_EQUAL(srcData.remFreq, data.remFreq);
-        CHECK_EQUAL(srcData.checkFreq, data.checkFreq);
-        CHECK_EQUAL(srcData.pauseTol, data.pauseTol);
-        CHECK_EQUAL(srcData.soundAlarm, data.soundAlarm);
-        CHECK_EQUAL(srcData.popupAlarm, data.popupAlarm);
-        CHECK_EQUAL(srcData.trayIcon, data.trayIcon);
-        CHECK_EQUAL(srcData.webcamIndex, data.webcamIndex);
-        CHECK_EQUAL(srcData.faceSizeX, data.faceSizeX);
-        CHECK_EQUAL(srcData.faceSizeY, data.faceSizeY);
-        CHECK_EQUAL(srcData.cascadePath, data.cascadePath);
-        CHECK_EQUAL(srcData.soundPath, data.soundPath);
-        CHECK_EQUAL(srcData.runningLateThreshold, data.runningLateThreshold);
+        CHECK_EQUAL(srcData, data);
     }
 
 

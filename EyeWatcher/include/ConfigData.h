@@ -2,6 +2,7 @@
 #define CONFIGDATA_H
 
 #include <string>
+#include <iostream>
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 
 struct ConfigData
@@ -20,6 +21,9 @@ struct ConfigData
         std::string cp = default_CascadePath,
         std::string sp = default_SoundPath,
         boost::posix_time::time_duration lt = default_RunningLateThreshold);
+
+    bool operator==(const ConfigData& other) const;
+    friend std::ostream& operator<<(std::ostream& os, const ConfigData& cd);
 
     boost::posix_time::time_duration workLength;
     boost::posix_time::time_duration pauseLength;
