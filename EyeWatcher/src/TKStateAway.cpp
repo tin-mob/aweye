@@ -6,12 +6,10 @@
 
 TKStateAway::TKStateAway()
 {
-    //ctor
 }
 
 TKStateAway::~TKStateAway()
 {
-    //dtor
 }
 
 void TKStateAway::updateStatus(TimeKeeper* parent)

@@ -7,13 +7,12 @@
 EWTaskBarPres::EWTaskBarPres(AbstractEWPresenter* presenter) :
     m_Presenter(presenter), m_TaskBar(NULL), m_LastIcon("")
 {
-    //ctor
+    assert(presenter);
     this->m_Presenter->attach(this);
 }
 
 EWTaskBarPres::~EWTaskBarPres()
 {
-    //dtor
 }
 
 void EWTaskBarPres::attachTaskBar(AbstractEWTaskbar* taskBar)

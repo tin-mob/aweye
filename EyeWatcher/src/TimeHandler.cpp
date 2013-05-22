@@ -3,12 +3,10 @@
 
 TimeHandler::TimeHandler()
 {
-    //ctor
 }
 
 TimeHandler::~TimeHandler()
 {
-    //dtor
 }
 
 boost::posix_time::ptime TimeHandler::getTime() const

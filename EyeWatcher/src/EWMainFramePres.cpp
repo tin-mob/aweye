@@ -9,7 +9,9 @@
 EWMainFramePres::EWMainFramePres(AbstractEWPresenter* pres, AbstractEWAppController* controller) :
     m_Presenter(pres), m_Frame(NULL), m_Controller(controller)
 {
-    //ctor
+    assert(pres);
+    assert(controller);
+
     this->m_Presenter->attach(this);
 }
 
@@ -63,8 +65,7 @@ void EWMainFramePres::doTimeUpdate()
     assert(this->m_Frame != NULL);
     if (this->m_Frame == NULL) return;
 
-    bool shown = this->m_Presenter->isShown();
-    if (shown)
+    if (this->m_Presenter->isShown())
     {
         this->m_Frame->setValues(this->m_Presenter->getStatus(), this->m_Presenter->getTimeOn(),
             this->m_Presenter->getTimeOff(), this->m_Presenter->getTimeRunning(),

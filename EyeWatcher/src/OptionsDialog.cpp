@@ -57,6 +57,7 @@ END_EVENT_TABLE()
 OptionsDialog::OptionsDialog(wxWindow* parent, AbstractOptionsDialogPres* presenter, wxWindowID id) :
                              m_Presenter(presenter)
 {
+    assert(presenter);
 	//(*Initialize(OptionsDialog)
 	wxFlexGridSizer* runningLateFlexGridSizer;
 	wxFlexGridSizer* wrkFlexGridSizer;

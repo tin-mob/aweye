@@ -21,7 +21,8 @@ TimeKeeper::TimeKeeper(AbstractTimeHandler* timeHandler,
     m_WorkLength(workLength), m_PauseLength(pauseLength), m_RemFreq(remFreq), m_CheckFreq(checkFreq),
     m_PauseTol(pauseTol)
 {
-    //ctor
+    assert(timeHandler);
+    assert(presenceHandler);
     try
     {
         this->m_States[AbstractTimeKeeper::OFF] = new TKStateOff();
@@ -38,7 +39,6 @@ TimeKeeper::TimeKeeper(AbstractTimeHandler* timeHandler,
 
 TimeKeeper::~TimeKeeper()
 {
-    //dtor
     this->deleteStates();
 }
 

@@ -11,7 +11,7 @@ struct OptionsDialogPresFixture
     OptionsDialogPres pres;
 };
 
-SUITE(TestConfig)
+SUITE(TestOptionsDialogPres)
 {
     TEST_FIXTURE(OptionsDialogPresFixture, TestGet)
     {

@@ -12,7 +12,8 @@
 #include <iomanip>
 #include <stdlib.h>
 
-/// @todo: EWPresenter to EWTimeKeeperPresenter
+/// @todo: EWPresenter to EWTimeKeeperPresenter,
+/// give more to specific presenters?
 EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractTimeKeeper* keeper,
                          AbstractTimer* checkTimer, AbstractTimer* clockTimer,
                          bool popupAlarm, bool soundAlarm, std::string soundPath,
@@ -21,6 +22,11 @@ EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractTimeKeeper* kee
     m_CheckTimer(checkTimer), m_ClockTimer(clockTimer), m_PopupAlarm(popupAlarm),
     m_SoundAlarm(soundAlarm), m_SoundPath(soundPath), m_RunningLateThreshold(runningLateThreshold)
 {
+    assert(msgHandler);
+    assert(keeper);
+    assert(checkTimer);
+    assert(clockTimer);
+
     this->m_CheckTimer->attach(this);
     this->m_ClockTimer->attach(this);
 }

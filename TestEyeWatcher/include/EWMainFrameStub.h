@@ -6,8 +6,9 @@
 class EWMainFrameStub : public AbstractEWMainFrame
 {
     public:
-        EWMainFrameStub() : running(false), lastTotal(-1), status(""), onClock(""),
-                            runningClock(""), leftClock("") {}
+        EWMainFrameStub() : closed(false), shown(false), status(""),
+            onClock(""), runningClock(""), leftClock(""),
+            pauseLabel(""), startLabel("") {}
         virtual ~EWMainFrameStub() {}
 
         virtual void setValues( std::string s, std::string onC,
@@ -21,26 +22,21 @@ class EWMainFrameStub : public AbstractEWMainFrame
             leftClock = l;
         }
 
-        virtual void startTimer(long total_milliseconds)
-        {
-            running = true;
-            lastTotal = total_milliseconds;
-        }
+        virtual void show(bool show = true) {shown = show;}
 
-        virtual void stopTimer()
-        {
-            running = false;
-        }
-
-        virtual void show() {}
-
-        bool running;
-        long lastTotal;
+        bool closed;
+        bool shown;
         std::string status;
         std::string onClock;
         std::string offClock;
         std::string runningClock;
         std::string leftClock;
+        std::string pauseLabel;
+        std::string startLabel;
+
+        virtual void setPauseButtonLabel(std::string label) {pauseLabel = label;}
+        virtual void setStartButtonLabel(std::string label) {startLabel = label;}
+        virtual void close() {closed = true;}
 
     protected:
     private:

@@ -6,12 +6,10 @@
 
 TKStateHere::TKStateHere()
 {
-    //ctor
 }
 
 TKStateHere::~TKStateHere()
 {
-    //dtor
 }
 
 /// @todo: manage false negatives...

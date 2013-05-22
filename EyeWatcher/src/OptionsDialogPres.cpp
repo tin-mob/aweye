@@ -4,12 +4,11 @@
 
 OptionsDialogPres::OptionsDialogPres(AbstractEWAppController* controller) :m_Controller(controller)
 {
-    //ctor
+    assert(controller);
 }
 
 OptionsDialogPres::~OptionsDialogPres()
 {
-    //dtor
 }
 
 const ConfigData& OptionsDialogPres::getData() const

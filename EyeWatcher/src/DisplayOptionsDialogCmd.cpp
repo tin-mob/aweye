@@ -3,16 +3,17 @@
 #include "AbstractOptionsDialogPres.h"
 #include "OptionsDialog.h"
 
+///@todo: remove unnecessary param
 DisplayOptionsDialogCmd::DisplayOptionsDialogCmd(
     AbstractEWAppController* controller, AbstractOptionsDialogPres* presenter) :
     m_Controller(controller), m_Presenter(presenter)
 {
-    //ctor
+    assert(controller);
+    assert(presenter);
 }
 
 DisplayOptionsDialogCmd::~DisplayOptionsDialogCmd()
 {
-    //dtor
 }
 
 void DisplayOptionsDialogCmd::execute()

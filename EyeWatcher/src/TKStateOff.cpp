@@ -4,12 +4,10 @@
 
 TKStateOff::TKStateOff()
 {
-    //ctor
 }
 
 TKStateOff::~TKStateOff()
 {
-    //dtor
 }
 
 

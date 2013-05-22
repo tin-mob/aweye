@@ -13,18 +13,23 @@ EWAppController::EWAppController() :
     m_MsgHandler(NULL), m_Config(NULL), m_PresenceHandler(NULL),
     m_TimeKeeper(NULL), m_Presenter(NULL), m_DisplayOptionsDialogCmd(NULL)
 {
-    //ctor
 }
 
 EWAppController::~EWAppController()
 {
-    //dtor
 }
 
 void EWAppController::link(AbstractMsgHandler* msgHandler, AbstractConfig* config,
     AbstractPresenceHandler* presenceHandler, AbstractTimeKeeper* timeKeeper,
     AbstractEWPresenter* presenter, AbstractCommand* displayCmd)
 {
+    assert(msgHandler);
+    assert(config);
+    assert(presenceHandler);
+    assert(timeKeeper);
+    assert(presenter);
+    assert(displayCmd);
+
     this->m_MsgHandler = msgHandler;
     this->m_Config = config;
     this->m_PresenceHandler = presenceHandler;

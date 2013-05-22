@@ -83,6 +83,7 @@ EWMainFrame::EWMainFrame(wxWindow* parent, AbstractEWMainFramePres* presenter,
                          bool taskbarCreated, wxWindowID id) :
                          m_Presenter(presenter), m_TaskbarCreated(taskbarCreated)
 {
+    assert(presenter);
     //(*Initialize(EWMainFrame)
     wxMenuItem* AboutMenuItem;
     wxBoxSizer* offBoxSizer;

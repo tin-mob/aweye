@@ -9,7 +9,7 @@ struct ConfigDataFixture
     ~ConfigDataFixture() {}
 };
 
-SUITE(TestConfig)
+SUITE(TestConfigData)
 {
     TEST_FIXTURE(ConfigDataFixture, TestComparison)
     {

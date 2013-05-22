@@ -4,7 +4,6 @@
 /// @todo: check invalid path behaviour
 wxConfigImpl::wxConfigImpl(std::string configPath)
 {
-    //ctor
     if (configPath != "")
     {
         wxConfigBase::Set( new wxFileConfig(wxEmptyString, wxEmptyString,
@@ -16,7 +15,6 @@ wxConfigImpl::wxConfigImpl(std::string configPath)
 
 wxConfigImpl::~wxConfigImpl()
 {
-    //dtor
     // m_Config is managed by wx
 }
 

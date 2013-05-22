@@ -15,13 +15,12 @@ END_EVENT_TABLE()
 EWTaskBar::EWTaskBar(AbstractEWTaskbarPres* presenter) :
     m_Presenter(presenter), m_Menu(NULL)
 {
-    //ctor
+    assert(presenter);
     m_Presenter->attachTaskBar(this);
 }
 
 EWTaskBar::~EWTaskBar()
 {
-    //dtor
     if (this->m_Menu != NULL)
     {
         delete this->m_Menu;

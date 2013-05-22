@@ -3,6 +3,7 @@
 
 #include "EWViewObserver.h"
 #include "AbstractEWTaskbarPres.h"
+#include <string>
 
 class AbstractEWPresenter;
 class AbstractEWTaskbar;

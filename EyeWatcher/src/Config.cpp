@@ -5,13 +5,12 @@
 ///@todo: unnecessary level? merge this with presenter?
 Config::Config(AbstractConfigImpl* impl) : m_Impl(impl)
 {
-    //ctor
+    assert(impl);
     this->load();
 }
 
 Config::~Config()
 {
-    //dtor
 }
 
 const ConfigData& Config::getData() const
