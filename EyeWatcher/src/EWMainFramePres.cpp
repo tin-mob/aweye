@@ -7,12 +7,8 @@
 
 ///@todo: test this
 EWMainFramePres::EWMainFramePres(AbstractEWPresenter* pres, AbstractEWAppController* controller) :
-    m_Presenter(pres), m_Frame(NULL), m_Controller(controller)
+    EWViewPres(pres, controller), m_Frame(NULL)
 {
-    assert(pres);
-    assert(controller);
-
-    this->m_Presenter->attach(this);
 }
 
 EWMainFramePres::~EWMainFramePres()
@@ -22,23 +18,7 @@ EWMainFramePres::~EWMainFramePres()
 void EWMainFramePres::attachFrame(AbstractEWMainFrame* frame)
 {
     this->m_Frame = frame;
-    this->doStatusUpdate();
-    this->doTimeUpdate();
-}
-
-void EWMainFramePres::OnStatusUpdate(AbstractEWPresenter*)
-{
-    this->doStatusUpdate();
-}
-
-void EWMainFramePres::OnTimeUpdate(AbstractEWPresenter*)
-{
-    this->doTimeUpdate();
-}
-
-void EWMainFramePres::OnQuit(AbstractEWPresenter*)
-{
-    this->doQuit();
+    this->forceUpdate();
 }
 
 void EWMainFramePres::doStatusUpdate()
@@ -76,33 +56,4 @@ void EWMainFramePres::doTimeUpdate()
 void EWMainFramePres::doQuit()
 {
     this->m_Frame->close();
-}
-
-void EWMainFramePres::OnFrameQuit()
-{
-    this->m_Presenter->quit();
-}
-
-void EWMainFramePres::OnFrameAbout()
-{
-}
-
-void EWMainFramePres::OnFrameOptionsButtonClick()
-{
-    this->m_Controller->displayOptionsDialog();
-}
-
-void EWMainFramePres::OnFramePlayButtonClick()
-{
-    this->m_Presenter->toggleStart();
-}
-
-void EWMainFramePres::OnFrameClose()
-{
-    this->m_Presenter->show(false);
-}
-
-void EWMainFramePres::OnFramePauseButtonClick()
-{
-    this->m_Presenter->togglePause();
 }

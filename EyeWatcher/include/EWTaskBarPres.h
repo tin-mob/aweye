@@ -1,36 +1,25 @@
 #ifndef EWTASKBARPRES_H
 #define EWTASKBARPRES_H
 
-#include "EWViewObserver.h"
-#include "AbstractEWTaskbarPres.h"
+#include "EWViewPres.h"
 #include <string>
 
 class AbstractEWPresenter;
+class AbstractEWAppController;
 class AbstractEWTaskbar;
-class EWTaskBarPres : public AbstractEWTaskbarPres, public EWViewObserver
+class EWTaskBarPres : public EWViewPres
 {
     public:
-        EWTaskBarPres(AbstractEWPresenter* presenter);
+        EWTaskBarPres(AbstractEWPresenter* pres, AbstractEWAppController* controller);
         virtual ~EWTaskBarPres();
 
         virtual void attachTaskBar(AbstractEWTaskbar* taskBar);
-        virtual void forceUpdate();
-
-        virtual void OnStatusUpdate(AbstractEWPresenter*);
-        virtual void OnTimeUpdate(AbstractEWPresenter*);
-        virtual void OnQuit(AbstractEWPresenter*);
-
-        virtual void OnMenuHideRestore();
-        virtual void OnMenuStartStop();
-        virtual void OnMenuPauseResume();
-        virtual void OnMenuExit();
     protected:
     private:
-        void doStatusUpdate();
-        void doTimeUpdate();
-        void doQuit();
+        virtual void doStatusUpdate();
+        virtual void doTimeUpdate();
+        virtual void doQuit();
 
-        AbstractEWPresenter* m_Presenter;
         AbstractEWTaskbar* m_TaskBar;
         std::string m_LastIcon;
 };

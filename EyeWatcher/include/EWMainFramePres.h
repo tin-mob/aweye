@@ -1,40 +1,27 @@
 #ifndef EWMAINFRAMEPRES_H
 #define EWMAINFRAMEPRES_H
 
-#include "EWViewObserver.h"
-#include "AbstractEWMainFramePres.h"
+#include "EWViewPres.h"
 
 class AbstractEWPresenter;
-class AbstractEWMainFrame;
-class AbstractMsgHandler;
-class AbstractOptionsDialogPres;
 class AbstractEWAppController;
-class EWMainFramePres : public AbstractEWMainFramePres, public EWViewObserver
+class AbstractEWMainFrame;
+class EWMainFramePres : public EWViewPres
 {
     public:
         EWMainFramePres(AbstractEWPresenter* pres, AbstractEWAppController* controller);
         virtual ~EWMainFramePres();
 
-        virtual void attachFrame(AbstractEWMainFrame* frame);
-        virtual void OnStatusUpdate(AbstractEWPresenter*);
-        virtual void OnTimeUpdate(AbstractEWPresenter*);
-        virtual void OnQuit(AbstractEWPresenter*);
+        ///@todo: find a way to merge with taskbar so that it can be used in view constructor
+        void attachFrame(AbstractEWMainFrame* frame);
 
-        virtual void OnFrameQuit();
-        virtual void OnFrameAbout();
-        virtual void OnFrameOptionsButtonClick();
-        virtual void OnFramePlayButtonClick();
-        virtual void OnFramePauseButtonClick();
-        virtual void OnFrameClose();
     protected:
+        virtual void doStatusUpdate();
+        virtual void doTimeUpdate();
+        virtual void doQuit();
     private:
-        void doStatusUpdate();
-        void doTimeUpdate();
-        void doQuit();
 
-        AbstractEWPresenter* m_Presenter;
         AbstractEWMainFrame* m_Frame;
-        AbstractEWAppController* m_Controller;
 };
 
 #endif // EWMAINFRAMEPRES_H

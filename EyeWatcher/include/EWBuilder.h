@@ -13,10 +13,9 @@
 #include "AbstractTimer.h"
 #include "AbstractEWAppController.h"
 #include "AbstractEWPresenter.h"
-#include "AbstractEWMainFramePres.h"
+#include "AbstractEWViewPres.h"
 #include "AbstractEWMainFrame.h"
 #include "AbstractOptionsDialogPres.h"
-#include "AbstractEWTaskbarPres.h"
 #include "AbstractEWTaskbar.h"
 #include "SetTopWindowInt.h"
 #include "AbstractCommand.h"
@@ -45,12 +44,14 @@ class EWBuilder
                     this->m_ConfigImpl = new TConfigImpl(configPath);
                     this->m_Config = new TConfig(m_ConfigImpl);
                     ConfigData data = this->m_Config->getData();
+
                     this->m_PresenceHandler = new TPresenceHandler(data.webcamIndex, data.cascadePath,
                         data.faceSizeX, data.faceSizeY);
                     this->m_TimeHandler = new TTimeHandler();
                     this->m_TimeKeeper = new TTimeKeeper(m_TimeHandler,
                         m_PresenceHandler, data.workLength, data.pauseLength, data.remFreq,
                         data.checkFreq, data.pauseTol);
+
                     this->m_CheckTimer = new TTimer();
                     this->m_ClockTimer = new TTimer();
                     TEWAppController* tmpAppCtrl = new TEWAppController();
@@ -58,14 +59,20 @@ class EWBuilder
                     this->m_Presenter = new TEWPresenter(m_MsgHandler,
                         m_TimeKeeper, m_CheckTimer, m_ClockTimer, data.popupAlarm,
                         data.soundAlarm, data.soundPath, data.runningLateThreshold);
-                    this->m_MainFramePres = new TEWMainFramePres(m_Presenter, m_AppController);
+
+                    TEWMainFramePres* tmpMainFramePres = new TEWMainFramePres(m_Presenter, m_AppController);
+                    this->m_MainFramePres = tmpMainFramePres;
                     this->m_MainFrame = new TEWMainFrame(NULL, m_MainFramePres, canCreateTaskbar && data.trayIcon);
-                    this->m_OptionsPres = new TOptionsDialogPres(m_AppController);
+                    tmpMainFramePres->attachFrame(m_MainFrame);
+
                     if (canCreateTaskbar && data.trayIcon)
                     {
-                        this->m_TaskBarPres = new TEWTaskbarPres(m_Presenter);
+                        TEWTaskbarPres* tmpTaskBarPres = new TEWTaskbarPres(m_Presenter, m_AppController);
+                        this->m_TaskBarPres = tmpTaskBarPres;
                         this->m_TaskBar = new TEWTaskbar(m_TaskBarPres);
+                        tmpTaskBarPres->attachTaskBar(m_TaskBar);
                     }
+                    this->m_OptionsPres = new TOptionsDialogPres(m_AppController);
                     this->m_DisplayOptionsDialogCmd = new TDisplayOptionsDialogCmd(
                         m_AppController, this->m_OptionsPres);
 
@@ -123,10 +130,10 @@ class EWBuilder
         AbstractTimer* m_ClockTimer;
         AbstractEWAppController* m_AppController;
         AbstractEWPresenter* m_Presenter;
-        AbstractEWMainFramePres* m_MainFramePres;
+        AbstractEWViewPres* m_MainFramePres;
         AbstractEWMainFrame* m_MainFrame;
         AbstractOptionsDialogPres* m_OptionsPres;
-        AbstractEWTaskbarPres* m_TaskBarPres;
+        AbstractEWViewPres* m_TaskBarPres;
         AbstractEWTaskbar* m_TaskBar;
         AbstractCommand* m_DisplayOptionsDialogCmd;
 };

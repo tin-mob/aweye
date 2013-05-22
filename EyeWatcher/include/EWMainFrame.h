@@ -22,14 +22,14 @@
 
 #include "AbstractEWMainFrame.h"
 
-class AbstractEWMainFramePres;
+class AbstractEWViewPres;
 class EWPresenter;
 class AbstractOptionsDialogPres;
 class EWMainFrame: public wxFrame, public AbstractEWMainFrame
 {
     public:
 
-        EWMainFrame(wxWindow* parent, AbstractEWMainFramePres* presenter,
+        EWMainFrame(wxWindow* parent, AbstractEWViewPres* presenter,
                     bool taskbarCreated = true, wxWindowID id = -1);
         virtual ~EWMainFrame();
 
@@ -92,7 +92,7 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
         wxStaticLine* StaticLine4;
         //*)
 
-        AbstractEWMainFramePres* m_Presenter;
+        AbstractEWViewPres* m_Presenter;
         bool m_TaskbarCreated;
 
         DECLARE_EVENT_TABLE()

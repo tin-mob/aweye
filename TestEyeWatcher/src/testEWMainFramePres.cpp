@@ -133,39 +133,39 @@ SUITE(TestEWMainFramePres)
     TEST_FIXTURE(EWMainFramePresFixture, TestFrameQuit)
     {
         pres.quitted = false;
-        framePres.OnFrameQuit();
+        framePres.OnViewQuit();
         CHECK_EQUAL(true, pres.quitted);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestFrameAbout)
     {
-        framePres.OnFrameAbout();
+        framePres.OnViewAbout();
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestFrameOptions)
     {
-        framePres.OnFrameOptionsButtonClick();
+        framePres.OnViewOptionsButtonClick();
         CHECK_EQUAL(true, ctrl.checkDisplayedDialog());
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestFramePlay)
     {
         pres.started = false;
-        framePres.OnFramePlayButtonClick();
+        framePres.OnViewStartStop();
         CHECK_EQUAL(true, pres.started);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestFrameClose)
     {
         pres.shown = true;
-        framePres.OnFrameClose();
+        framePres.OnViewHideRestore();
         CHECK_EQUAL(false, pres.shown);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestFramePause)
     {
         pres.paused = false;
-        framePres.OnFramePauseButtonClick();
+        framePres.OnViewPauseResume();
         CHECK_EQUAL(true, pres.paused);
     }
 }

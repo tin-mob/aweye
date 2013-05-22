@@ -7,11 +7,11 @@
 #include "ObservableWxMenu.h"
 
 class wxMenu;
-class AbstractEWTaskbarPres;
+class AbstractEWViewPres;
 class EWTaskBar : public AbstractEWTaskbar, public wxTaskBarIcon, public ObservableWxMenuObserver
 {
     public:
-        EWTaskBar(AbstractEWTaskbarPres* presenter);
+        EWTaskBar(AbstractEWViewPres* presenter);
         virtual ~EWTaskBar();
         virtual void setPopupMenuCommands( std::string hideRestoreLabel,
             std::string startStopLabel, std::string pauseResumeLabel);
@@ -29,7 +29,7 @@ class EWTaskBar : public AbstractEWTaskbar, public wxTaskBarIcon, public Observa
 
         virtual wxMenu* CreatePopupMenu();
 
-        AbstractEWTaskbarPres* m_Presenter;
+        AbstractEWViewPres* m_Presenter;
         ObservableWxMenu* m_Menu;
 
         enum Menu_IDS

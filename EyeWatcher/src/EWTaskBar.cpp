@@ -1,6 +1,6 @@
 #include "EWTaskBar.h"
 
-#include "AbstractEWTaskbarPres.h"
+#include "AbstractEWViewPres.h"
 #include "wx_pch.h"
 #include <wx/menu.h>
 #include "ObservableWxMenu.h"
@@ -12,11 +12,10 @@ BEGIN_EVENT_TABLE(EWTaskBar,wxTaskBarIcon)
     EVT_MENU(ID_EXIT,EWTaskBar::OnMenuExit)
 END_EVENT_TABLE()
 
-EWTaskBar::EWTaskBar(AbstractEWTaskbarPres* presenter) :
+EWTaskBar::EWTaskBar(AbstractEWViewPres* presenter) :
     m_Presenter(presenter), m_Menu(NULL)
 {
     assert(presenter);
-    m_Presenter->attachTaskBar(this);
 }
 
 EWTaskBar::~EWTaskBar()
@@ -102,20 +101,20 @@ void EWTaskBar::onMenuDelete(ObservableWxMenu* menu)
 
 void EWTaskBar::OnMenuHideRestore(wxCommandEvent&)
 {
-    this->m_Presenter->OnMenuHideRestore();
+    this->m_Presenter->OnViewHideRestore();
 }
 
 void EWTaskBar::OnMenuStartStop(wxCommandEvent&)
 {
-    this->m_Presenter->OnMenuStartStop();
+    this->m_Presenter->OnViewStartStop();
 }
 
 void EWTaskBar::OnMenuPauseResume(wxCommandEvent&)
 {
-    this->m_Presenter->OnMenuPauseResume();
+    this->m_Presenter->OnViewPauseResume();
 }
 
 void EWTaskBar::OnMenuExit(wxCommandEvent&)
 {
-    this->m_Presenter->OnMenuExit();
+    this->m_Presenter->OnViewQuit();
 }

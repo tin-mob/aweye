@@ -13,7 +13,7 @@ class AbstractPresenceHandler;
 class AbstractTimer;
 class ConfigData;
 
-///@todo: that's a whole lotta public method there...
+///@todo: there is a whole lotta public method...
 
 class EWPresenter : public AbstractEWPresenter, public TimerInterface
 {
