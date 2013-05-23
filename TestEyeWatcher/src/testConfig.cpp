@@ -3,6 +3,7 @@
 #include <string>
 #include "Config.h"
 #include "ConfigImplStub.h"
+#include "ConfigStub.h"
 
 struct ConfigFixture
 {
@@ -68,23 +69,7 @@ SUITE(TestConfig)
     TEST_FIXTURE(ConfigFixture, TestSaveLoad)
     {
         ConfigData data;
-        ConfigData srcData =
-        {
-            ConfigData::default_WorkLength + boost::posix_time::seconds(1),
-            ConfigData::default_PauseLength + boost::posix_time::seconds(1),
-            ConfigData::default_RemFreq + boost::posix_time::seconds(1),
-            ConfigData::default_CheckFreq + boost::posix_time::seconds(1),
-            ConfigData::default_PauseTol + 1,
-            !ConfigData::default_SoundAlarm,
-            !ConfigData::default_PopupAlarm,
-            !ConfigData::default_TrayIcon,
-            ConfigData::default_WebcamIndex + 1,
-            ConfigData::default_FaceSizeX + 1,
-            ConfigData::default_FaceSizeY + 1,
-            "test.cfg",
-            "test.wav",
-            ConfigData::default_CheckFreq + boost::posix_time::seconds(1)
-        };
+        ConfigData srcData = ConfigStub::getTestData();
 
         Config config(&impl);
         Config config2(&impl);
