@@ -210,8 +210,8 @@ std::string EWPresenter::durationToString(boost::posix_time::time_duration durat
         out << "-";
     }
 
-    out << std::setw(2) << std::setfill('0') << duration.hours() << ":" << std::setw(2)
-    << std::setfill('0') << duration.minutes() << ":" << std::setw(2)
+    out << std::setw(2) << std::setfill('0') << abs(duration.hours()) << ":" << std::setw(2)
+    << std::setfill('0') << abs(duration.minutes()) << ":" << std::setw(2)
     << std::setfill('0') << abs(duration.seconds());
     return out.str();
 }

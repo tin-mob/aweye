@@ -105,6 +105,16 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(this->msgHandler.lastError, "Testing!");
     }
 
+    TEST_FIXTURE(EWPresenterFixture, TestNegatives)
+    {
+
+        this->presenter.toggleStart();
+        this->keeper.left = boost::posix_time::hours(-1) +
+            boost::posix_time::minutes(-1) + boost::posix_time::seconds(-1);
+
+        CHECK_EQUAL("-01:01:01", this->presenter.getTimeLeft());
+    }
+
     TEST_FIXTURE(EWPresenterFixture, TestQuit)
     {
         this->presenter.quit();
