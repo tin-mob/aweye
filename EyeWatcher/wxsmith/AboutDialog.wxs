@@ -6,7 +6,7 @@
 			<orient>wxVERTICAL</orient>
 			<object class="sizeritem">
 				<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
-					<label>EyeWatcher by Robert Morin, 2013&#x0A;&#x0A;[Grab a GPL license and put it there]&#x0A;&#x0A;Don&apos;t forget icon + sound file credits.</label>
+					<label>EyeWatcher - Watches your eyes and reminds you to take a break.&#x0A;&#x0A;Copyright (C) 2013 - Robert Morin&#x0A;&#x0A;This program is free software: you can redistribute it and/or modify&#x0A;it under the terms of the GNU General Public License as published by&#x0A;the Free Software Foundation, either version 3 of the License, or&#x0A;(at your option) any later version.&#x0A;&#x0A;This program is distributed in the hope that it will be useful,&#x0A;but WITHOUT ANY WARRANTY; without even the implied warranty of&#x0A;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&#x0A;GNU General Public License for more details.&#x0A;&#x0A;You should have received a copy of the GNU General Public License&#x0A;along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.&#x0A;&#x0A;Don&apos;t forget sound files + icons licences.</label>
 				</object>
 				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 				<border>5</border>
