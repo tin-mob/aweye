@@ -2,10 +2,17 @@
 #define ABSTRACTEWVIEWPRES_H
 
 
+template <class TView>
 class AbstractEWViewPres
 {
     public:
         virtual ~AbstractEWViewPres() {}
+
+        void attachView(TView* view)
+        {
+            this->m_View = view;
+            this->forceUpdate();
+        }
 
         virtual void forceUpdate() = 0;
         virtual void OnViewQuit() = 0;
@@ -15,6 +22,8 @@ class AbstractEWViewPres
         virtual void OnViewPauseResume() = 0;
         virtual void OnViewHideRestore() = 0;
     protected:
+        TView* m_View;
+        AbstractEWViewPres() : m_View(nullptr) {}
     private:
 };
 

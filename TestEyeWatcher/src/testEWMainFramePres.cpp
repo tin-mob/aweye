@@ -8,7 +8,7 @@ struct EWMainFramePresFixture
 {
     EWMainFramePresFixture() : ctrl(), pres(), framePres(&pres, &ctrl)
     {
-        framePres.attachFrame(&frame);
+        framePres.attachView(&frame);
     }
     ~EWMainFramePresFixture() {}
 

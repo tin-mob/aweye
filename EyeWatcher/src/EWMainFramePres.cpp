@@ -7,7 +7,7 @@
 
 ///@todo: test this
 EWMainFramePres::EWMainFramePres(AbstractEWPresenter* pres, AbstractEWAppController* controller) :
-    EWViewPres(pres, controller), m_Frame(NULL)
+    EWViewPres(pres, controller)
 {
 }
 
@@ -15,26 +15,20 @@ EWMainFramePres::~EWMainFramePres()
 {
 }
 
-void EWMainFramePres::attachFrame(AbstractEWMainFrame* frame)
-{
-    this->m_Frame = frame;
-    this->forceUpdate();
-}
-
 void EWMainFramePres::doStatusUpdate()
 {
-    assert(this->m_Frame != NULL);
-    if (this->m_Frame == NULL) return;
+    assert(this->m_View != nullptr);
+    if (this->m_View == nullptr) return;
 
     bool shown = this->m_Presenter->isShown();
-    this->m_Frame->show(shown);
+    this->m_View->show(shown);
     if (shown)
     {
-        this->m_Frame->setPauseButtonLabel(this->m_Presenter->getPauseButtonLabel());
-        this->m_Frame->setStartButtonLabel(this->m_Presenter->getStartButtonLabel());
+        this->m_View->setPauseButtonLabel(this->m_Presenter->getPauseButtonLabel());
+        this->m_View->setStartButtonLabel(this->m_Presenter->getStartButtonLabel());
 
         // times could change in a status update (stop)
-        this->m_Frame->setValues(this->m_Presenter->getStatus(), this->m_Presenter->getTimeOn(),
+        this->m_View->setValues(this->m_Presenter->getStatus(), this->m_Presenter->getTimeOn(),
             this->m_Presenter->getTimeOff(), this->m_Presenter->getTimeRunning(),
             this->m_Presenter->getTimeLeft());
     }
@@ -42,12 +36,12 @@ void EWMainFramePres::doStatusUpdate()
 
 void EWMainFramePres::doTimeUpdate()
 {
-    assert(this->m_Frame != NULL);
-    if (this->m_Frame == NULL) return;
+    assert(this->m_View != nullptr);
+    if (this->m_View == nullptr) return;
 
     if (this->m_Presenter->isShown())
     {
-        this->m_Frame->setValues(this->m_Presenter->getStatus(), this->m_Presenter->getTimeOn(),
+        this->m_View->setValues(this->m_Presenter->getStatus(), this->m_Presenter->getTimeOn(),
             this->m_Presenter->getTimeOff(), this->m_Presenter->getTimeRunning(),
             this->m_Presenter->getTimeLeft());
     }
@@ -55,5 +49,5 @@ void EWMainFramePres::doTimeUpdate()
 
 void EWMainFramePres::doQuit()
 {
-    this->m_Frame->close();
+    this->m_View->close();
 }

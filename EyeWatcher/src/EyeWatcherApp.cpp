@@ -33,13 +33,13 @@
 
 IMPLEMENT_APP(EyeWatcherApp);
 
-EyeWatcherApp::EyeWatcherApp() : m_AppImpl(NULL)
+EyeWatcherApp::EyeWatcherApp() : m_AppImpl(nullptr)
 {
 }
 
 EyeWatcherApp::~EyeWatcherApp()
 {
-    if (this->m_AppImpl != NULL) delete this->m_AppImpl;
+    if (this->m_AppImpl != nullptr) delete this->m_AppImpl;
 }
 
 bool EyeWatcherApp::OnInit()
@@ -51,7 +51,7 @@ bool EyeWatcherApp::OnInit()
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
-    	if (this->m_AppImpl == NULL)
+    	if (this->m_AppImpl == nullptr)
     	{
     	    this->m_AppImpl = new EWBuilder<MsgHandler, wxConfigImpl, Config,
                 WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, EWAppController,
@@ -82,8 +82,8 @@ void EyeWatcherApp::setTopWindow(AbstractEWMainFrame* frame)
 {
     EWMainFrame* castedFrame = dynamic_cast<EWMainFrame*>(frame);
 
-    assert(castedFrame != NULL);
-    if (castedFrame != NULL)
+    assert(castedFrame != nullptr);
+    if (castedFrame != nullptr)
     {
         SetTopWindow(castedFrame);
     }

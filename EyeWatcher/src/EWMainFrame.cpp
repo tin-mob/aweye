@@ -79,7 +79,7 @@ BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
     //*)
 END_EVENT_TABLE()
 
-EWMainFrame::EWMainFrame(wxWindow* parent, AbstractEWViewPres* presenter,
+EWMainFrame::EWMainFrame(wxWindow* parent, AbstractEWViewPres<AbstractEWMainFrame>* presenter,
                          bool taskbarCreated, wxWindowID id) :
                          m_Presenter(presenter), m_TaskbarCreated(taskbarCreated)
 {
@@ -161,6 +161,8 @@ EWMainFrame::EWMainFrame(wxWindow* parent, AbstractEWViewPres* presenter,
     Connect(ID_EXITMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&EWMainFrame::OnQuit);
     Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&EWMainFrame::OnClose);
     //*)
+
+    m_Presenter->attachView(this);
 }
 
 EWMainFrame::~EWMainFrame()

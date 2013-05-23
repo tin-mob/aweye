@@ -7,7 +7,7 @@ class EWMainFrameStub : public AbstractEWMainFrame
 {
     public:
         EWMainFrameStub() : closed(false), shown(false), status(""),
-            onClock(""), runningClock(""), leftClock(""),
+            onClock(""), offClock(""), runningClock(""), leftClock(""),
             pauseLabel(""), startLabel("") {}
         virtual ~EWMainFrameStub() {}
 

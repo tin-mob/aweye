@@ -7,13 +7,11 @@
 class AbstractEWPresenter;
 class AbstractEWAppController;
 class AbstractEWTaskbar;
-class EWTaskBarPres : public EWViewPres
+class EWTaskBarPres : public EWViewPres<AbstractEWTaskbar>
 {
     public:
         EWTaskBarPres(AbstractEWPresenter* pres, AbstractEWAppController* controller);
         virtual ~EWTaskBarPres();
-
-        virtual void attachTaskBar(AbstractEWTaskbar* taskBar);
     protected:
     private:
         virtual void doStatusUpdate();

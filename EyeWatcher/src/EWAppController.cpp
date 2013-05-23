@@ -10,8 +10,8 @@
 #include "AbstractCommand.h"
 
 EWAppController::EWAppController() :
-    m_MsgHandler(NULL), m_Config(NULL), m_PresenceHandler(NULL),
-    m_TimeKeeper(NULL), m_Presenter(NULL), m_DisplayOptionsDialogCmd(NULL)
+    m_MsgHandler(nullptr), m_Config(nullptr), m_PresenceHandler(nullptr),
+    m_TimeKeeper(nullptr), m_Presenter(nullptr), m_DisplayOptionsDialogCmd(nullptr)
 {
 }
 

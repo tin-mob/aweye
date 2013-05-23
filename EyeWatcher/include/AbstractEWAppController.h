@@ -5,7 +5,6 @@ class ConfigData;
 class AbstractEWAppController
 {
     public:
-        AbstractEWAppController() {}
         virtual ~AbstractEWAppController() {}
 
         virtual bool saveConfig(const ConfigData& data) = 0;

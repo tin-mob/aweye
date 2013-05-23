@@ -1,13 +1,15 @@
 #ifndef EWTASKBARSTUB_H
 #define EWTASKBARSTUB_H
 
-#include "AbstractEWViewPres.h"
 #include "AbstractEWTaskbar.h"
 
 class EWTaskbarStub : public AbstractEWTaskbar
 {
     public:
-        EWTaskbarStub(AbstractEWViewPres* p = NULL) : presenter(p){}
+        EWTaskbarStub() : hideRestoreLabel(""),
+            startStopLabel(""), pauseResumeLabel(""), onClock(""),
+            offClock(""), runningClock(""), leftClock(""),
+            loc(""), presenter(nullptr){}
         virtual ~EWTaskbarStub() {}
 
         virtual void setPopupMenuCommands( std::string hrl,
@@ -41,7 +43,7 @@ class EWTaskbarStub : public AbstractEWTaskbar
         std::string leftClock;
         std::string loc;
 
-        AbstractEWViewPres* presenter;
+        AbstractEWViewPres<AbstractEWTaskbar>* presenter;
     protected:
     private:
 };

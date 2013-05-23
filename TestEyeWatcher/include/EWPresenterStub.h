@@ -11,8 +11,8 @@
 class EWPresenterStub : public AbstractEWPresenter
 {
     public:
-        EWPresenterStub(AbstractMsgHandler* mH = NULL, AbstractTimeKeeper* k = NULL,
-            AbstractTimer* chT = NULL, AbstractTimer* clT = NULL, bool pA = false,
+        EWPresenterStub(AbstractMsgHandler* mH = nullptr, AbstractTimeKeeper* k = nullptr,
+            AbstractTimer* chT = nullptr, AbstractTimer* clT = nullptr, bool pA = false,
             bool sA = false, std::string sP = "",
             boost::posix_time::time_duration rLT = boost::posix_time::seconds(0)) :
             popupAlarm(pA), soundAlarm(sA), soundPath(sP), runningLateThreshold(rLT),

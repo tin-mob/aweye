@@ -6,15 +6,11 @@
 class AbstractEWPresenter;
 class AbstractEWAppController;
 class AbstractEWMainFrame;
-class EWMainFramePres : public EWViewPres
+class EWMainFramePres : public EWViewPres<AbstractEWMainFrame>
 {
     public:
         EWMainFramePres(AbstractEWPresenter* pres, AbstractEWAppController* controller);
         virtual ~EWMainFramePres();
-
-        ///@todo: find a way to merge with taskbar so that it can be used in view constructor
-        void attachFrame(AbstractEWMainFrame* frame);
-
     protected:
         virtual void doStatusUpdate();
         virtual void doTimeUpdate();

@@ -15,7 +15,7 @@ MsgHandler::~MsgHandler()
 
 void MsgHandler::displayError(std::string msg)
 {
-    wxMessageDialog errorDialog(NULL,
+    wxMessageDialog errorDialog(nullptr,
         wxString(msg.c_str(), wxConvUTF8), wxT("Error"), wxOK | wxICON_ERROR);
     errorDialog.ShowModal();
 }
@@ -23,7 +23,7 @@ void MsgHandler::displayError(std::string msg)
 void MsgHandler::displayAlert(std::string msg)
 {
     wxNotificationMessage notification(
-        wxT("EyeWatcher"), wxString(msg.c_str(), wxConvUTF8), NULL, wxICON_INFORMATION);
+        wxT("EyeWatcher"), wxString(msg.c_str(), wxConvUTF8), nullptr, wxICON_INFORMATION);
     notification.Show();
 }
 

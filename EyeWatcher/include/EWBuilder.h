@@ -29,11 +29,11 @@ class EWBuilder
 {
     public:
         EWBuilder(SetTopWindowInt* topInt, std::string configPath, bool canCreateTaskbar) :
-            m_MsgHandler(NULL), m_ConfigImpl(NULL), m_Config(NULL), m_PresenceHandler(NULL),
-            m_TimeHandler(NULL), m_TimeKeeper(NULL), m_CheckTimer(NULL), m_ClockTimer(NULL),
-            m_AppController(NULL), m_Presenter(NULL), m_MainFramePres(NULL), m_MainFrame(NULL),
-            m_OptionsPres(NULL), m_TaskBarPres(NULL), m_TaskBar(NULL),
-            m_DisplayOptionsDialogCmd(NULL)
+            m_MsgHandler(nullptr), m_ConfigImpl(nullptr), m_Config(nullptr), m_PresenceHandler(nullptr),
+            m_TimeHandler(nullptr), m_TimeKeeper(nullptr), m_CheckTimer(nullptr), m_ClockTimer(nullptr),
+            m_AppController(nullptr), m_Presenter(nullptr), m_MainFramePres(nullptr), m_MainFrame(nullptr),
+            m_OptionsPres(nullptr), m_TaskBarPres(nullptr), m_TaskBar(nullptr),
+            m_DisplayOptionsDialogCmd(nullptr)
         {
             //ctor
             try
@@ -60,17 +60,13 @@ class EWBuilder
                         m_TimeKeeper, m_CheckTimer, m_ClockTimer, data.popupAlarm,
                         data.soundAlarm, data.soundPath, data.runningLateThreshold);
 
-                    TEWMainFramePres* tmpMainFramePres = new TEWMainFramePres(m_Presenter, m_AppController);
-                    this->m_MainFramePres = tmpMainFramePres;
-                    this->m_MainFrame = new TEWMainFrame(NULL, m_MainFramePres, canCreateTaskbar && data.trayIcon);
-                    tmpMainFramePres->attachFrame(m_MainFrame);
+                    this->m_MainFramePres = new TEWMainFramePres(m_Presenter, m_AppController);
+                    this->m_MainFrame = new TEWMainFrame(nullptr, m_MainFramePres, canCreateTaskbar && data.trayIcon);
 
                     if (canCreateTaskbar && data.trayIcon)
                     {
-                        TEWTaskbarPres* tmpTaskBarPres = new TEWTaskbarPres(m_Presenter, m_AppController);
-                        this->m_TaskBarPres = tmpTaskBarPres;
+                        this->m_TaskBarPres = new TEWTaskbarPres(m_Presenter, m_AppController);
                         this->m_TaskBar = new TEWTaskbar(m_TaskBarPres);
-                        tmpTaskBarPres->attachTaskBar(m_TaskBar);
                     }
                     this->m_OptionsPres = new TOptionsDialogPres(m_AppController);
                     this->m_DisplayOptionsDialogCmd = new TDisplayOptionsDialogCmd(
@@ -80,7 +76,7 @@ class EWBuilder
                         m_PresenceHandler, m_TimeKeeper, m_Presenter,
                         m_DisplayOptionsDialogCmd);
 
-                    if (topInt != NULL)
+                    if (topInt != nullptr)
                     {
                         topInt->setTopWindow(m_MainFrame);
                     }
@@ -102,22 +98,22 @@ class EWBuilder
     private:
         void deleteFields()
         {
-            if (this->m_MsgHandler != NULL) delete this->m_MsgHandler;
-            if (this->m_ConfigImpl != NULL) delete this->m_ConfigImpl;
-            if (this->m_Config != NULL) delete this->m_Config;
-            if (this->m_PresenceHandler != NULL) delete this->m_PresenceHandler;
-            if (this->m_TimeHandler != NULL) delete this->m_TimeHandler;
-            if (this->m_TimeKeeper != NULL) delete this->m_TimeKeeper;
-            if (this->m_CheckTimer != NULL) delete this->m_CheckTimer;
-            if (this->m_ClockTimer != NULL) delete this->m_ClockTimer;
-            if (this->m_AppController != NULL) delete this->m_AppController;
-            if (this->m_Presenter != NULL) delete this->m_Presenter;
-            if (this->m_MainFramePres != NULL) delete this->m_MainFramePres;
+            if (this->m_MsgHandler != nullptr) delete this->m_MsgHandler;
+            if (this->m_ConfigImpl != nullptr) delete this->m_ConfigImpl;
+            if (this->m_Config != nullptr) delete this->m_Config;
+            if (this->m_PresenceHandler != nullptr) delete this->m_PresenceHandler;
+            if (this->m_TimeHandler != nullptr) delete this->m_TimeHandler;
+            if (this->m_TimeKeeper != nullptr) delete this->m_TimeKeeper;
+            if (this->m_CheckTimer != nullptr) delete this->m_CheckTimer;
+            if (this->m_ClockTimer != nullptr) delete this->m_ClockTimer;
+            if (this->m_AppController != nullptr) delete this->m_AppController;
+            if (this->m_Presenter != nullptr) delete this->m_Presenter;
+            if (this->m_MainFramePres != nullptr) delete this->m_MainFramePres;
             // since m_MainFrame inherits from wxFrame, it is deleted by wx, not by us
-            if (this->m_OptionsPres != NULL) delete this->m_OptionsPres;
-            if (this->m_TaskBarPres != NULL) delete this->m_TaskBarPres;
-            if (this->m_TaskBar != NULL) delete this->m_TaskBar;
-            if (this->m_DisplayOptionsDialogCmd != NULL) delete this->m_DisplayOptionsDialogCmd;
+            if (this->m_OptionsPres != nullptr) delete this->m_OptionsPres;
+            if (this->m_TaskBarPres != nullptr) delete this->m_TaskBarPres;
+            if (this->m_TaskBar != nullptr) delete this->m_TaskBar;
+            if (this->m_DisplayOptionsDialogCmd != nullptr) delete this->m_DisplayOptionsDialogCmd;
         }
 
         AbstractMsgHandler* m_MsgHandler;
@@ -130,10 +126,10 @@ class EWBuilder
         AbstractTimer* m_ClockTimer;
         AbstractEWAppController* m_AppController;
         AbstractEWPresenter* m_Presenter;
-        AbstractEWViewPres* m_MainFramePres;
+        AbstractEWViewPres<AbstractEWMainFrame>* m_MainFramePres;
         AbstractEWMainFrame* m_MainFrame;
         AbstractOptionsDialogPres* m_OptionsPres;
-        AbstractEWViewPres* m_TaskBarPres;
+        AbstractEWViewPres<AbstractEWTaskbar>* m_TaskBarPres;
         AbstractEWTaskbar* m_TaskBar;
         AbstractCommand* m_DisplayOptionsDialogCmd;
 };

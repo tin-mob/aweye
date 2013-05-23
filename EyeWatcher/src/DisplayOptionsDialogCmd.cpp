@@ -18,6 +18,6 @@ DisplayOptionsDialogCmd::~DisplayOptionsDialogCmd()
 
 void DisplayOptionsDialogCmd::execute()
 {
-    OptionsDialog dialog(NULL, this->m_Presenter);
+    OptionsDialog dialog(nullptr, this->m_Presenter);
     dialog.ShowModal();
 }

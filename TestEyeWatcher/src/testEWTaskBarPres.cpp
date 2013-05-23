@@ -9,7 +9,7 @@ struct EWTaskBarPresFixture
 {
     EWTaskBarPresFixture() : ctrl(), pres(), barPres(&pres, &ctrl)
     {
-        barPres.attachTaskBar(&bar);
+        barPres.attachView(&bar);
     }
     ~EWTaskBarPresFixture() {}
 

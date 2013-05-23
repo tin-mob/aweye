@@ -9,7 +9,7 @@
 class MsgHandlerStub : public AbstractMsgHandler
 {
     public:
-        MsgHandlerStub() : lastError(""), lastAlert("") {}
+        MsgHandlerStub() : lastError(""), lastAlert(""), lastSound("") {}
         virtual ~MsgHandlerStub() {}
         virtual void displayError(std::string msg) {lastError = msg;}
         virtual void displayAlert(std::string msg) {lastAlert = msg;}

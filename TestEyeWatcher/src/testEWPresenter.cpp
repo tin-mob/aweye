@@ -41,63 +41,6 @@ struct EWPresenterFixture
 
 SUITE(TestEWPresenter)
 {
-    /// @todo: move this in future AppController test suite
-    /*
-    TEST_FIXTURE(EWPresenterFixture, TestValidConfig)
-    {
-        ConfigData newData =
-        {
-            ConfigData::default_WorkLength + boost::posix_time::seconds(1),
-            ConfigData::default_PauseLength + boost::posix_time::seconds(1),
-            ConfigData::default_RemFreq + boost::posix_time::seconds(1),
-            ConfigData::default_CheckFreq + boost::posix_time::seconds(1),
-            ConfigData::default_PauseTol + 1,
-            !ConfigData::default_SoundAlarm,
-            !ConfigData::default_PopupAlarm,
-            !ConfigData::default_TrayIcon,
-            ConfigData::default_WebcamIndex + 1,
-            ConfigData::default_FaceSizeX + 1,
-            ConfigData::default_FaceSizeY + 1,
-            "test.cfg",
-            "test.wav"
-        };
-
-        CHECK_EQUAL(true, this->presenter.saveConfig(newData));
-        ConfigData returnedData = this->presenter.getConfigData();
-
-        CHECK_EQUAL(newData.workLength, returnedData.workLength);
-        CHECK_EQUAL(newData.pauseLength, returnedData.pauseLength);
-        CHECK_EQUAL(newData.remFreq, returnedData.remFreq);
-        CHECK_EQUAL(newData.checkFreq, returnedData.checkFreq);
-        CHECK_EQUAL(newData.pauseTol, returnedData.pauseTol);
-        CHECK_EQUAL(newData.soundAlarm, returnedData.soundAlarm);
-        CHECK_EQUAL(newData.popupAlarm, returnedData.popupAlarm);
-        CHECK_EQUAL(newData.trayIcon, returnedData.trayIcon);
-        CHECK_EQUAL(newData.webcamIndex, returnedData.webcamIndex);
-        CHECK_EQUAL(newData.faceSizeX, returnedData.faceSizeX);
-        CHECK_EQUAL(newData.faceSizeY, returnedData.faceSizeY);
-        CHECK_EQUAL(newData.cascadePath, returnedData.cascadePath);
-        CHECK_EQUAL(newData.soundPath, returnedData.soundPath);
-
-        CHECK_EQUAL(newData.cascadePath, this->presHandler->cascadePath);
-        CHECK_EQUAL(newData.webcamIndex, this->presHandler->webcamIndex);
-        CHECK_EQUAL(newData.faceSizeX, this->presHandler->faceSizeX);
-        CHECK_EQUAL(newData.faceSizeY, this->presHandler->faceSizeY);
-
-        CHECK_EQUAL(newData.checkFreq, this->keeper.checkFreq);
-        CHECK_EQUAL(newData.pauseLength, this->keeper.pauseLength);
-        CHECK_EQUAL(newData.pauseTol, this->keeper.pauseTol);
-        CHECK_EQUAL(newData.remFreq, this->keeper.remFreq);
-        CHECK_EQUAL(newData.workLength, this->keeper.workLength);
-    }
-
-    TEST_FIXTURE(EWPresenterFixture, TestInvalidConfig)
-    {
-            config->fail = true;
-            CHECK_EQUAL(false, this->presenter.saveConfig(data));
-            CHECK_EQUAL("Testing!", this->msgHandler.lastError);
-    }*/
-
     TEST_FIXTURE(EWPresenterFixture, TestStartStop)
     {
         this->presenter.toggleStart();

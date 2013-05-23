@@ -12,15 +12,16 @@ BEGIN_EVENT_TABLE(EWTaskBar,wxTaskBarIcon)
     EVT_MENU(ID_EXIT,EWTaskBar::OnMenuExit)
 END_EVENT_TABLE()
 
-EWTaskBar::EWTaskBar(AbstractEWViewPres* presenter) :
-    m_Presenter(presenter), m_Menu(NULL)
+EWTaskBar::EWTaskBar(AbstractEWViewPres<AbstractEWTaskbar>* presenter) :
+    m_Presenter(presenter), m_Menu(nullptr)
 {
     assert(presenter);
+    m_Presenter->attachView(this);
 }
 
 EWTaskBar::~EWTaskBar()
 {
-    if (this->m_Menu != NULL)
+    if (this->m_Menu != nullptr)
     {
         delete this->m_Menu;
     }
@@ -30,7 +31,7 @@ EWTaskBar::~EWTaskBar()
 void EWTaskBar::setPopupMenuCommands( std::string hideRestoreLabel,
     std::string startStopLabel, std::string pauseResumeLabel)
 {
-    if (this->m_Menu != NULL)
+    if (this->m_Menu != nullptr)
     {
         this->m_Menu->FindItem(EWTaskBar::ID_HIDE_RESTORE)->SetItemLabel(wxString(hideRestoreLabel.c_str(), wxConvUTF8));
         this->m_Menu->FindItem(EWTaskBar::ID_START_STOP)->SetItemLabel(wxString(startStopLabel.c_str(), wxConvUTF8));
@@ -41,7 +42,7 @@ void EWTaskBar::setPopupMenuCommands( std::string hideRestoreLabel,
 void EWTaskBar::setPopupMenuTimes( std::string onClock, std::string offClock,
     std::string runningClock, std::string leftClock)
 {
-    if (this->m_Menu != NULL)
+    if (this->m_Menu != nullptr)
     {
         this->m_Menu->FindItem(EWTaskBar::ID_ON_TIME)->SetItemLabel(wxString(onClock.c_str(), wxConvUTF8));
         this->m_Menu->FindItem(EWTaskBar::ID_OFF_TIME)->SetItemLabel(wxString(offClock.c_str(), wxConvUTF8));
@@ -53,7 +54,7 @@ void EWTaskBar::setPopupMenuTimes( std::string onClock, std::string offClock,
 wxMenu* EWTaskBar::CreatePopupMenu()
 {
     // is this necessary? Investigate.
-    if (this->m_Menu != NULL)
+    if (this->m_Menu != nullptr)
     {
         delete this->m_Menu;
     }
@@ -96,7 +97,7 @@ void EWTaskBar::setIcon(std::string loc)
 // a nice warning...
 void EWTaskBar::onMenuDelete(ObservableWxMenu* menu)
 {
-    this->m_Menu = NULL;
+    this->m_Menu = nullptr;
 }
 
 void EWTaskBar::OnMenuHideRestore(wxCommandEvent&)
