@@ -2,7 +2,7 @@
 #include "EWPresenter.h"
 #include "ConfigStub.h"
 #include "EWMainFrameStub.h"
-#include "ConfigDialogStub.h"
+#include "OptionsDialogStub.h"
 #include "MsgHandlerStub.h"
 #include "TimeKeeperStub.h"
 #include "PresenceHandlerStub.h"

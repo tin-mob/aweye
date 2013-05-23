@@ -25,6 +25,7 @@ SUITE(TestEWMainFramePres)
     ///////////////////////////////////////////////////////////////////////////
     TEST_FIXTURE(EWMainFramePresFixture, TestStatusUpdate)
     {
+        ///@todo: remove redundancy
         std::string hbl = "hbl";
         std::string pbl = "pbl";
         std::string sbl = "sbl";

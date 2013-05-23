@@ -19,7 +19,8 @@ class EWPresenterStub : public AbstractEWPresenter
             paused(false), started(false), quitted(false),
             shown(false), statusUpdated(false), timesUpdated(false),
             hideButtonLabel(""), pauseButtonLabel(""), startButtonLabel(""), status(""),
-            timeOn(""), timeOff(""), timeRunning(""), timeLeft(""), icon(""){}
+            timeOn(""), timeOff(""), timeRunning(""), timeLeft(""), icon(""),
+            msgHandler(mH), keeper(k), checkTimer(chT), clockTimer(clT) {}
         virtual ~EWPresenterStub() {}
 
         virtual void togglePause() {paused = !paused;}
@@ -88,6 +89,11 @@ class EWPresenterStub : public AbstractEWPresenter
         std::string timeRunning;
         std::string timeLeft;
         std::string icon;
+
+        AbstractMsgHandler* msgHandler;
+        AbstractTimeKeeper* keeper;
+        AbstractTimer* checkTimer;
+        AbstractTimer* clockTimer;
 
     protected:
     private:

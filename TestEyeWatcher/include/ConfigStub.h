@@ -4,11 +4,13 @@
 #include "AbstractConfig.h"
 #include "ConfigData.h"
 #include "BaseException.h"
+#include "AbstractConfigImpl.h"
 
 class ConfigStub : public AbstractConfig
 {
     public:
-        ConfigStub(ConfigData data) : fail(false), m_data(data) {}
+        ConfigStub(ConfigData data = ConfigData()) : fail(false), impl(nullptr), m_data(data) {}
+        ConfigStub(AbstractConfigImpl* i) : fail(false), impl(i) {}
         virtual ~ConfigStub() {}
         virtual void load() {}
         virtual void save(const ConfigData& data)
@@ -41,6 +43,8 @@ class ConfigStub : public AbstractConfig
                     ConfigData::default_CheckFreq + boost::posix_time::seconds(1)
                 };
         }
+
+        AbstractConfigImpl* impl;
     protected:
     private:
         ConfigData m_data;

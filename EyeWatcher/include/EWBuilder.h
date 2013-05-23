@@ -61,7 +61,7 @@ class EWBuilder
                         data.soundAlarm, data.soundPath, data.runningLateThreshold);
 
                     this->m_MainFramePres = new TEWMainFramePres(m_Presenter, m_AppController);
-                    this->m_MainFrame = new TEWMainFrame(nullptr, m_MainFramePres, canCreateTaskbar && data.trayIcon);
+                    this->m_MainFrame = new TEWMainFrame(m_MainFramePres, canCreateTaskbar && data.trayIcon);
 
                     if (canCreateTaskbar && data.trayIcon)
                     {
@@ -95,6 +95,22 @@ class EWBuilder
         }
         virtual ~EWBuilder() {}
     protected:
+        TMsgHandler* m_MsgHandler;
+        TConfigImpl* m_ConfigImpl;
+        TConfig* m_Config;
+        TPresenceHandler* m_PresenceHandler;
+        TTimeHandler* m_TimeHandler;
+        TTimeKeeper* m_TimeKeeper;
+        TTimer* m_CheckTimer;
+        TTimer* m_ClockTimer;
+        TEWAppController* m_AppController;
+        TEWPresenter* m_Presenter;
+        TEWMainFramePres* m_MainFramePres;
+        TEWMainFrame* m_MainFrame;
+        TOptionsDialogPres* m_OptionsPres;
+        TEWTaskbarPres* m_TaskBarPres;
+        TEWTaskbar* m_TaskBar;
+        TDisplayOptionsDialogCmd* m_DisplayOptionsDialogCmd;
     private:
         void deleteFields()
         {
@@ -115,23 +131,6 @@ class EWBuilder
             if (this->m_TaskBar != nullptr) delete this->m_TaskBar;
             if (this->m_DisplayOptionsDialogCmd != nullptr) delete this->m_DisplayOptionsDialogCmd;
         }
-
-        AbstractMsgHandler* m_MsgHandler;
-        AbstractConfigImpl* m_ConfigImpl;
-        AbstractConfig* m_Config;
-        AbstractPresenceHandler* m_PresenceHandler;
-        AbstractTimeHandler* m_TimeHandler;
-        AbstractTimeKeeper* m_TimeKeeper;
-        AbstractTimer* m_CheckTimer;
-        AbstractTimer* m_ClockTimer;
-        AbstractEWAppController* m_AppController;
-        AbstractEWPresenter* m_Presenter;
-        AbstractEWViewPres<AbstractEWMainFrame>* m_MainFramePres;
-        AbstractEWMainFrame* m_MainFrame;
-        AbstractOptionsDialogPres* m_OptionsPres;
-        AbstractEWViewPres<AbstractEWTaskbar>* m_TaskBarPres;
-        AbstractEWTaskbar* m_TaskBar;
-        AbstractCommand* m_DisplayOptionsDialogCmd;
 };
 
 #endif // EWBUILDER_H

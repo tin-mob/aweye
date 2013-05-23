@@ -7,7 +7,7 @@
 class ConfigImplStub : public AbstractConfigImpl
 {
     public:
-        ConfigImplStub() {}
+        ConfigImplStub(std::string p = "") : path(p) {}
         virtual ~ConfigImplStub() {}
 
         virtual std::string read(std::string key, std::string defaultValue) const
@@ -48,10 +48,12 @@ class ConfigImplStub : public AbstractConfigImpl
 
         bool getFlushed() {bool t = flushed; flushed = false; return t;}
 
-        // I know, I can do better... but its quicker to code this way.
+        /// @todo: better code
         std::map<std::string,std::string> stringData;
         std::map<std::string,long> longData;
         std::map<std::string,bool> boolData;
+
+        std::string path;
 
     protected:
     private:

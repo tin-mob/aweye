@@ -13,7 +13,7 @@ struct TimeKeeperFixture
         TimeKeeperFixture() :
             data({boost::posix_time::seconds(5), boost::posix_time::seconds(3),
                 boost::posix_time::seconds(1), boost::posix_time::seconds(2)}),
-            timeHandler(TimeHandlerStub(boost::posix_time::second_clock::local_time())),
+            timeHandler(TimeHandlerStub()),
             presenceHandler(), keeper(TimeKeeper(&timeHandler, &presenceHandler,
                 data.workLength, data.pauseLength, data.remFreq, data.checkFreq, data.pauseTol))
         {

@@ -2,13 +2,16 @@
 #define EWMAINFRAMESTUB_H
 
 #include "AbstractEWMainFrame.h"
+#include "AbstractEWViewPres.h"
 
 class EWMainFrameStub : public AbstractEWMainFrame
 {
     public:
-        EWMainFrameStub() : closed(false), shown(false), status(""),
+        EWMainFrameStub(AbstractEWViewPres<AbstractEWMainFrame>* p = nullptr,
+            bool tc = true) :
+            closed(false), shown(false), status(""),
             onClock(""), offClock(""), runningClock(""), leftClock(""),
-            pauseLabel(""), startLabel("") {}
+            pauseLabel(""), startLabel(""), presenter(p), taskbarCreated(tc) {}
         virtual ~EWMainFrameStub() {}
 
         virtual void setValues( std::string s, std::string onC,
@@ -33,6 +36,9 @@ class EWMainFrameStub : public AbstractEWMainFrame
         std::string leftClock;
         std::string pauseLabel;
         std::string startLabel;
+
+        AbstractEWViewPres<AbstractEWMainFrame>* presenter;
+        bool taskbarCreated;
 
         virtual void setPauseButtonLabel(std::string label) {pauseLabel = label;}
         virtual void setStartButtonLabel(std::string label) {startLabel = label;}

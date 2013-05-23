@@ -3,6 +3,12 @@
 
 #include "AbstractEWAppController.h"
 #include "ConfigData.h"
+#include "AbstractMsgHandler.h"
+#include "AbstractConfig.h"
+#include "AbstractPresenceHandler.h"
+#include "AbstractTimeKeeper.h"
+#include "AbstractEWPresenter.h"
+#include "AbstractCommand.h"
 
 class EWAppControllerStub : public AbstractEWAppController
 {
@@ -16,7 +22,25 @@ class EWAppControllerStub : public AbstractEWAppController
 
         bool checkDisplayedDialog() {bool temp = displayedDialog; displayedDialog = false; return temp;}
 
+        void link(AbstractMsgHandler* mh, AbstractConfig* c,
+            AbstractPresenceHandler* ph, AbstractTimeKeeper* tk,
+            AbstractEWPresenter* p, AbstractCommand* dc)
+        {
+            msgHandler = mh;
+            config = c;
+            presenceHandler = ph;
+            timeKeeper = tk;
+            presenter = p;
+            displayCmd = dc;
+        }
+
         ConfigData data;
+        AbstractMsgHandler* msgHandler;
+        AbstractConfig* config;
+        AbstractPresenceHandler* presenceHandler;
+        AbstractTimeKeeper* timeKeeper;
+        AbstractEWPresenter* presenter;
+        AbstractCommand* displayCmd;
     protected:
     private:
         bool displayedDialog;

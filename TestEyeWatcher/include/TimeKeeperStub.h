@@ -4,25 +4,30 @@
 
 #include "AbstractTimeKeeper.h"
 #include "BaseException.h"
+#include "AbstractTimeHandler.h"
+#include "AbstractPresenceHandler.h"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/date_defs.hpp>
 #include <boost/date_time/gregorian/greg_date.hpp>
 
-/// note to self : add stuff only as needed
 class TimeKeeperStub : public AbstractTimeKeeper
 {
     public:
-        TimeKeeperStub() : fail(false), late(false), status(AbstractTimeKeeper::OFF),
+        TimeKeeperStub(AbstractTimeHandler* th = nullptr,
+                   AbstractPresenceHandler* ph = nullptr,
+                   boost::posix_time::time_duration wl = boost::posix_time::time_duration(00,00,00),
+                   boost::posix_time::time_duration pl = boost::posix_time::time_duration(00,00,01),
+                   boost::posix_time::time_duration rf = boost::posix_time::time_duration(00,00,10),
+                   boost::posix_time::time_duration cf = boost::posix_time::time_duration(00,00,11),
+                   unsigned int pt = 1000) :
+            fail(false), late(false), status(AbstractTimeKeeper::OFF),
             hereStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(10,59,00))),
             awayStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(11,31,01))),
             interval(boost::posix_time::seconds(2)), left(boost::posix_time::minutes(3)),
             workLeft(boost::posix_time::minutes(1)),
-            workLength(boost::posix_time::time_duration(00,00,00)),
-            pauseLength(boost::posix_time::time_duration(00,00,01)),
-            remFreq(boost::posix_time::time_duration(00,00,10)),
-            checkFreq(boost::posix_time::time_duration(00,00,11)),
-            pauseTol(1000)
+            workLength(wl), pauseLength(pl), remFreq(rf), checkFreq(cf), pauseTol(pt),
+            timeHandler(th), presenceHandler(ph)
             {}
         virtual ~TimeKeeperStub() {}
 
@@ -68,6 +73,9 @@ class TimeKeeperStub : public AbstractTimeKeeper
         boost::posix_time::time_duration remFreq;
         boost::posix_time::time_duration checkFreq;
         unsigned int pauseTol;
+
+        AbstractTimeHandler* timeHandler;
+        AbstractPresenceHandler* presenceHandler;
 
     protected:
     private:

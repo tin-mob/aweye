@@ -6,10 +6,10 @@
 class EWTaskbarStub : public AbstractEWTaskbar
 {
     public:
-        EWTaskbarStub() : hideRestoreLabel(""),
+        EWTaskbarStub(AbstractEWViewPres<AbstractEWTaskbar>* p = nullptr) : hideRestoreLabel(""),
             startStopLabel(""), pauseResumeLabel(""), onClock(""),
             offClock(""), runningClock(""), leftClock(""),
-            loc(""), presenter(nullptr){}
+            loc(""), presenter(p){}
         virtual ~EWTaskbarStub() {}
 
         virtual void setPopupMenuCommands( std::string hrl,

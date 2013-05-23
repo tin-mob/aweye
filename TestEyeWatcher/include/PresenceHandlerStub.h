@@ -10,8 +10,8 @@
 class PresenceHandlerStub : public AbstractPresenceHandler
 {
     public:
-        PresenceHandlerStub() : cascadePath(""), webcamIndex(1001),
-            faceSizeX(1010), faceSizeY(1011){}
+        PresenceHandlerStub(int i = 1001, std::string fcn = "", int fx = 1010, int fy = 1011) :
+            cascadePath(fcn), webcamIndex(i), faceSizeX(fx), faceSizeY(fy){}
         virtual ~PresenceHandlerStub() {}
 
         virtual bool isHere()

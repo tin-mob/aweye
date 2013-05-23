@@ -29,8 +29,8 @@ class AbstractOptionsDialogPres;
 class EWMainFrame: public wxFrame, public AbstractEWMainFrame
 {
     public:
-        EWMainFrame(wxWindow* parent, AbstractEWViewPres<AbstractEWMainFrame>* presenter,
-                    bool taskbarCreated = true, wxWindowID id = -1);
+        EWMainFrame(AbstractEWViewPres<AbstractEWMainFrame>* presenter,
+                    bool taskbarCreated = true, wxWindow* parent = nullptr, wxWindowID id = -1);
         virtual ~EWMainFrame();
 
         virtual void setValues( std::string status, std::string onClock,

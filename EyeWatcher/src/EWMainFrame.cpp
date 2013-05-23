@@ -79,8 +79,8 @@ BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
     //*)
 END_EVENT_TABLE()
 
-EWMainFrame::EWMainFrame(wxWindow* parent, AbstractEWViewPres<AbstractEWMainFrame>* presenter,
-                         bool taskbarCreated, wxWindowID id) :
+EWMainFrame::EWMainFrame(AbstractEWViewPres<AbstractEWMainFrame>* presenter,
+                         bool taskbarCreated, wxWindow* parent, wxWindowID id) :
                          m_Presenter(presenter), m_TaskbarCreated(taskbarCreated)
 {
     assert(presenter);
