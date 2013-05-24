@@ -34,7 +34,7 @@ const int ConfigData::default_WebcamIndex = 0;
 const unsigned int ConfigData::default_FaceSizeX = 100;
 const unsigned int ConfigData::default_FaceSizeY = 100;
 const std::string ConfigData::default_CascadePath = "haarcascade_frontalface_alt.xml";
-const std::string ConfigData::default_SoundPath = "BEEPPURE.WAV";
+const std::string ConfigData::default_SoundPath = "beep-1.wav";
 const boost::posix_time::time_duration ConfigData::default_RunningLateThreshold(0,4,0,0);
 
 ConfigData::ConfigData(boost::posix_time::time_duration wl,
