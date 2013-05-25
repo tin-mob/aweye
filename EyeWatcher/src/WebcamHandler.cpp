@@ -20,7 +20,6 @@
 
 
 #include "WebcamHandler.h"
-#include <boost/filesystem.hpp>
 
 #include <fstream>
 

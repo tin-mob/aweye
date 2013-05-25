@@ -21,8 +21,8 @@
 
 #include "wxConfigImpl.h"
 #include <wx/config.h>
+#include <wx/filename.h>
 
-/// @todo: check invalid path behaviour
 wxConfigImpl::wxConfigImpl(std::string configPath)
 {
     if (configPath != "")
@@ -75,4 +75,14 @@ void wxConfigImpl::write(std::string key, bool value)
 void wxConfigImpl::flush()
 {
     this->m_Config->Flush();
+}
+
+bool wxConfigImpl::fileExists(std::string name)
+{
+    wxFileName fileName(wxString(name.c_str(), wxConvUTF8));
+    if(fileName.IsOk())
+    {
+        return wxFileName::FileExists(fileName. GetFullPath());
+    }
+    return false;
 }

@@ -39,44 +39,51 @@ SUITE(TestConfig)
     TEST_FIXTURE(ConfigFixture, TestValidation)
     {
         ConfigData data;
+        Config config(&impl);
 
-        CHECK_EQUAL(true, Config::validateData(data));
+        CHECK_EQUAL(true, config.validateData(data));
 
         data.workLength = boost::posix_time::seconds(0);
-        CHECK_EQUAL(false, Config::validateData(data));
+        CHECK_EQUAL(false, config.validateData(data));
         data.workLength = ConfigData::default_WorkLength;
 
         data.pauseLength = boost::posix_time::seconds(0);
-        CHECK_EQUAL(false, Config::validateData(data));
+        CHECK_EQUAL(false, config.validateData(data));
         data.pauseLength = ConfigData::default_PauseLength;
 
         data.remFreq = boost::posix_time::seconds(0);
-        CHECK_EQUAL(false, Config::validateData(data));
+        CHECK_EQUAL(false, config.validateData(data));
         data.remFreq = ConfigData::default_RemFreq;
 
         data.checkFreq = boost::posix_time::seconds(0);
-        CHECK_EQUAL(false, Config::validateData(data));
+        CHECK_EQUAL(false, config.validateData(data));
         data.checkFreq = ConfigData::default_CheckFreq;
 
         data.workLength = boost::posix_time::not_a_date_time;
-        CHECK_EQUAL(false, Config::validateData(data));
+        CHECK_EQUAL(false, config.validateData(data));
         data.workLength = ConfigData::default_WorkLength;
 
         data.pauseLength = boost::posix_time::not_a_date_time;
-        CHECK_EQUAL(false, Config::validateData(data));
+        CHECK_EQUAL(false, config.validateData(data));
         data.pauseLength = ConfigData::default_PauseLength;
 
         data.remFreq = boost::posix_time::not_a_date_time;
-        CHECK_EQUAL(false, Config::validateData(data));
+        CHECK_EQUAL(false, config.validateData(data));
         data.remFreq = ConfigData::default_RemFreq;
 
         data.checkFreq = boost::posix_time::not_a_date_time;
-        CHECK_EQUAL(false, Config::validateData(data));
+        CHECK_EQUAL(false, config.validateData(data));
         data.checkFreq = ConfigData::default_CheckFreq;
 
         data.runningLateThreshold = boost::posix_time::not_a_date_time;
-        CHECK_EQUAL(false, Config::validateData(data));
+        CHECK_EQUAL(false, config.validateData(data));
         data.runningLateThreshold = ConfigData::default_RunningLateThreshold;
+
+        impl.failName = data.cascadePath;
+        CHECK_EQUAL(false, config.validateData(data));
+
+        impl.failName = data.soundPath;
+        CHECK_EQUAL(false, config.validateData(data));
     }
 
     TEST_FIXTURE(ConfigFixture, TestEmptyConstruction)

@@ -40,6 +40,8 @@ class wxConfigImpl : public AbstractConfigImpl
         virtual void write(std::string key, bool value);
 
         virtual void flush();
+
+        virtual bool fileExists(std::string name);
     protected:
     private:
         wxConfigBase* m_Config;

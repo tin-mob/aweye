@@ -52,7 +52,7 @@ class Config : public AbstractConfig
         void load();
         void save(const ConfigData& data);
 
-        static bool validateData(const ConfigData& data);
+        bool validateData(const ConfigData& data);
 
     protected:
     private:

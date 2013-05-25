@@ -23,12 +23,13 @@
 #define CONFIGIMPLSTUB_H
 
 #include <map>
+#include <string>
 #include "AbstractConfigImpl.h"
 
 class ConfigImplStub : public AbstractConfigImpl
 {
     public:
-        ConfigImplStub(std::string p = "") : path(p) {}
+        ConfigImplStub(std::string p = "") : path(p), failName("") {}
         virtual ~ConfigImplStub() {}
 
         virtual std::string read(std::string key, std::string defaultValue) const
@@ -69,12 +70,21 @@ class ConfigImplStub : public AbstractConfigImpl
 
         bool getFlushed() {bool t = flushed; flushed = false; return t;}
 
-        /// @todo: better code
+        virtual bool fileExists(std::string name)
+        {
+            if (name == failName)
+            {
+                return false;
+            }
+            return true;
+        }
+
         std::map<std::string,std::string> stringData;
         std::map<std::string,long> longData;
         std::map<std::string,bool> boolData;
 
         std::string path;
+        std::string failName;
 
     protected:
     private:

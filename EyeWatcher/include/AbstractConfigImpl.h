@@ -37,6 +37,8 @@ class AbstractConfigImpl
         virtual void write(std::string key, bool value) = 0;
 
         virtual void flush() = 0;
+
+        virtual bool fileExists(std::string name) = 0;
     protected:
     private:
 };

@@ -23,7 +23,6 @@
 #include "AbstractConfigImpl.h"
 #include "boost/date_time/posix_time/posix_time.hpp"
 
-///@todo: unnecessary level? merge this with presenter?
 Config::Config(AbstractConfigImpl* impl) : m_Impl(impl)
 {
     assert(impl);
@@ -64,7 +63,7 @@ void Config::load()
             boost::posix_time::to_simple_string(ConfigData::default_RunningLateThreshold))),
     };
 
-    if (Config::validateData(tempData))
+    if (this->validateData(tempData))
     {
         this->m_data = tempData;
     }
@@ -76,7 +75,7 @@ void Config::load()
 
 void Config::save(const ConfigData& data)
 {
-    if (Config::validateData(data))
+    if (this->validateData(data))
     {
         this->m_data = data;
         this->write();
@@ -107,7 +106,6 @@ void Config::write()
     this->m_Impl->flush();
 }
 
-/// @todo: more specific errors?, existing files?
 bool Config::validateData(const ConfigData& data)
 {
     if (data.workLength.is_special() ||
@@ -119,7 +117,10 @@ bool Config::validateData(const ConfigData& data)
         data.remFreq.total_seconds() <= 0 ||
         data.checkFreq.total_seconds() <= 0 ||
         data.runningLateThreshold.is_special() ||
-        data.pauseTol < 0)
+        data.pauseTol < 0 ||
+        !this->m_Impl->fileExists(data.cascadePath) ||
+        !this->m_Impl->fileExists(data.soundPath)
+        )
     {
         return false;
     }
