@@ -30,13 +30,13 @@
 class MissingCascadeFileException : public BaseException
 {
     public:
-          MissingCascadeFileException() :  BaseException("Missing cascade file.") { }
+          MissingCascadeFileException() :  BaseException("Cascade file not found.") { }
 };
 
 class InvalidCameraException : public BaseException
 {
     public:
-          InvalidCameraException() :  BaseException("Camera is not working.") { }
+          InvalidCameraException() :  BaseException("Error using the camera.") { }
 };
 
 class AbstractMsgHandler;

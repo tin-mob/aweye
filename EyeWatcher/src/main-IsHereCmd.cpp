@@ -18,7 +18,7 @@
 
  **************************************************************/
 
-
+#include "IsHereCmd.h"
 #include "WebcamHandler.h"
 #include <sstream>
 
@@ -26,7 +26,7 @@
 int main(int argc, char* argv[])
 {
     assert(argc == 5);
-    if (argc != 5) return -1;
+    if (argc != 5) return IsHereCmd::INVALID_NB_ARGS;
 
     char* indexChar = argv[1];
     char* faceCascadeName = argv[2];
@@ -34,14 +34,14 @@ int main(int argc, char* argv[])
     char* faceSizeYChar = argv[4];
 
     std::istringstream iss(indexChar);
-    int index;
-    int faceSizeX;
-    int faceSizeY;
+    int index = 0;
+    int faceSizeX = 0;
+    int faceSizeY = 0;
 
     if (!iss >> index)
     {
         assert(0);
-        return -1;
+        return IsHereCmd::INVALID_INDEX;
     }
 
     iss.str(faceSizeXChar);
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
     if (!iss >> faceSizeX)
     {
         assert(0);
-        return -1;
+        return IsHereCmd::INVALID_FACEX;
     }
 
     iss.str(faceSizeYChar);
@@ -57,10 +57,31 @@ int main(int argc, char* argv[])
     if (!iss >> faceSizeY)
     {
         assert(0);
-        return -1;
+        return IsHereCmd::INVALID_FACEY;
     }
 
-    WebcamHandler handler(index, faceCascadeName, faceSizeX, faceSizeY);
-
-    return (int)handler.isHere();
+    try
+    {
+        WebcamHandler handler(index, faceCascadeName, faceSizeX, faceSizeY);
+        if(handler.isHere())
+        {
+            return IsHereCmd::HERE;
+        }
+        else
+        {
+            return IsHereCmd::AWAY;
+        }
+    }
+    catch (MissingCascadeFileException)
+    {
+        return IsHereCmd::INVALID_CASCADE;
+    }
+    catch (InvalidCameraException)
+    {
+        return IsHereCmd::INVALID_CAMERA;
+    }
+    catch (...)
+    {
+        return IsHereCmd::OTHER_ERROR;
+    }
 }

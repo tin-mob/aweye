@@ -22,6 +22,15 @@
 #ifndef ABSTRACTPRESENCEHANDLER_H
 #define ABSTRACTPRESENCEHANDLER_H
 
+#include "BaseException.h"
+
+class GenericPresenceHandlerException : public BaseException
+{
+    public:
+          GenericPresenceHandlerException() :  BaseException("Error while establishing presence.") { }
+};
+
+
 class AbstractPresenceHandler
 {
     public:

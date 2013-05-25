@@ -20,6 +20,8 @@
 
 
 #include "WebcamHandlerProc.h"
+#include "WebcamHandler.h"
+#include "IsHereCmd.h"
 #include <wx/stdpaths.h>
 
 WebcamHandlerProc::WebcamHandlerProc(int index, std::string faceCascadeName,
@@ -59,8 +61,26 @@ bool WebcamHandlerProc::isHere()
     wxString cascade(this->m_FaceCascadeName.c_str(), wxConvUTF8);
 
     cmd << this->m_index << "' '" << cascade << "' '" << this->m_FaceSizeX << "' '" << this->m_FaceSizeY << "'";
-    long ret = wxExecute(cmd, wxEXEC_SYNC);
+    IsHereCmd::ReturnCodes code = (IsHereCmd::ReturnCodes)wxExecute(cmd, wxEXEC_SYNC);
 
-    assert(ret != -1);
-    return ret == 1;
+    switch (code)
+    {
+        case IsHereCmd::HERE:
+            return true;
+        case IsHereCmd::AWAY:
+            return false;
+        case IsHereCmd::INVALID_CAMERA:
+            throw InvalidCameraException();
+        case IsHereCmd::INVALID_CASCADE:
+            throw MissingCascadeFileException();
+        case IsHereCmd::INVALID_FACEX:
+        case IsHereCmd::INVALID_FACEY:
+        case IsHereCmd::INVALID_INDEX:
+        case IsHereCmd::INVALID_NB_ARGS:
+        case IsHereCmd::OTHER_ERROR:
+        default:
+            throw GenericPresenceHandlerException();
+    }
+
+    return false;
 }

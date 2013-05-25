@@ -19,28 +19,24 @@
  **************************************************************/
 
 
-#ifndef WEBCAMHANDLERPROC_H
-#define WEBCAMHANDLERPROC_H
+#ifndef ISHERECMD_H_INCLUDED
+#define ISHERECMD_H_INCLUDED
 
-#include "AbstractPresenceHandler.h"
-
-class WebcamHandlerProc : public AbstractPresenceHandler
+struct IsHereCmd
 {
-    public:
-        WebcamHandlerProc(int index, std::string faceCascadeName,
-                      int faceSizeX, int faceSizeY);
-        ~WebcamHandlerProc();
-
-        bool isHere();
-        void setCascade(std::string name);
-        void setIndex(int index);
-        void setFaceSize(unsigned int x, unsigned int y);
-    protected:
-    private:
-        int m_index;
-        std::string m_FaceCascadeName;
-        int m_FaceSizeX;
-        int m_FaceSizeY;
+    enum ReturnCodes
+    {
+        AWAY,
+        HERE,
+        INVALID_NB_ARGS,
+        INVALID_INDEX,
+        INVALID_FACEX,
+        INVALID_FACEY,
+        INVALID_CASCADE,
+        INVALID_CAMERA,
+        OTHER_ERROR
+    };
 };
 
-#endif // WEBCAMHANDLERPROC_H
+
+#endif // ISHERECMD_H_INCLUDED
