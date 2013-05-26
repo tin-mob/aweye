@@ -286,7 +286,6 @@ void EWPresenter::setSoundPath(std::string soundPath)
     this->m_SoundPath = soundPath;
 }
 
-/// @todo: does this belong there?
 void EWPresenter::alert()
 {
     if (!this->m_Warn)

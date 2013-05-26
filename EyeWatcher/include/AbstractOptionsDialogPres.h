@@ -23,12 +23,13 @@
 #define ABSTRACTOPTIONSDIALOGPRES_H
 
 class ConfigData;
+class AbstractOptionsDialog;
 class AbstractOptionsDialogPres
 {
     public:
         virtual ~AbstractOptionsDialogPres() {}
-        virtual const ConfigData&  getData() const = 0;
         virtual bool saveData(const ConfigData& data) = 0;
+        virtual void init(AbstractOptionsDialog* dialog) = 0;
     protected:
     private:
 };

@@ -24,14 +24,15 @@
 
 #include "AbstractOptionsDialogPres.h"
 
+class AbstractEWAppController;
 class OptionsDialogPresStub : public AbstractOptionsDialogPres
 {
     public:
         OptionsDialogPresStub(AbstractEWAppController* c) : controller(c) {}
         virtual ~OptionsDialogPresStub() {}
 
-        virtual const ConfigData&  getData() const {return data;}
         virtual bool saveData(const ConfigData& data) {return true;}
+        virtual void init(AbstractOptionsDialog* dialog) {}
 
         AbstractEWAppController* controller;
         ConfigData data;

@@ -28,7 +28,7 @@
 ///@todo: sort TaskBar/Taskbar
 struct EWTaskBarPresFixture
 {
-    EWTaskBarPresFixture() : ctrl(), pres(), barPres(&pres, &ctrl)
+    EWTaskBarPresFixture() : ctrl(true), pres(), barPres(&pres, &ctrl)
     {
         barPres.attachView(&bar);
     }

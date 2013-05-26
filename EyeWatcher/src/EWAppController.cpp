@@ -30,9 +30,10 @@
 #include "AbstractEWPresenter.h"
 #include "AbstractCommand.h"
 
-EWAppController::EWAppController() :
+EWAppController::EWAppController(bool canCreateTaskbar) :
     m_MsgHandler(nullptr), m_Config(nullptr), m_PresenceHandler(nullptr),
-    m_TimeKeeper(nullptr), m_Presenter(nullptr), m_DisplayOptionsDialogCmd(nullptr)
+    m_TimeKeeper(nullptr), m_Presenter(nullptr), m_DisplayOptionsDialogCmd(nullptr),
+    m_CanCreateTaskbar(canCreateTaskbar)
 {
 }
 
@@ -103,4 +104,9 @@ void EWAppController::displayOptionsDialog()
     {
         this->m_MsgHandler->displayError(e.what());
     }
+}
+
+bool EWAppController::canCreateTaskBar()
+{
+    return this->m_CanCreateTaskbar;
 }

@@ -22,10 +22,11 @@
 #include <unittest++/UnitTest++.h>
 #include "OptionsDialogPres.h"
 #include "EWAppControllerStub.h"
+#include "OptionsDialogStub.h"
 
 struct OptionsDialogPresFixture
 {
-    OptionsDialogPresFixture() : ctrl(), pres(&ctrl){}
+    OptionsDialogPresFixture() : ctrl(true), pres(&ctrl){}
     ~OptionsDialogPresFixture() {}
 
     EWAppControllerStub ctrl;
@@ -34,17 +35,31 @@ struct OptionsDialogPresFixture
 
 SUITE(TestOptionsDialogPres)
 {
-    TEST_FIXTURE(OptionsDialogPresFixture, TestGet)
-    {
-        ctrl.data = {boost::posix_time::not_a_date_time};
-        ConfigData newData = pres.getData();
-        CHECK_EQUAL(ctrl.data, newData);
-    }
-
     TEST_FIXTURE(OptionsDialogPresFixture, TestSave)
     {
         ConfigData newData = {boost::posix_time::not_a_date_time};
         pres.saveData(newData);
         CHECK_EQUAL(ctrl.data, newData);
+    }
+
+    TEST_FIXTURE(OptionsDialogPresFixture, TestInit)
+    {
+        OptionsDialogStub dialog;
+        ctrl.data = {boost::posix_time::not_a_date_time};
+        pres.init(&dialog);
+        CHECK_EQUAL(ctrl.data, dialog.getData());
+        CHECK_EQUAL(false, dialog.disabled);
+    }
+
+    TEST_FIXTURE(OptionsDialogPresFixture, TestInitNoTray)
+    {
+        EWAppControllerStub ctrl2(false);
+        OptionsDialogPres pres2(&ctrl2);
+        OptionsDialogStub dialog;
+
+        ctrl2.data = {boost::posix_time::not_a_date_time};
+        pres2.init(&dialog);
+        CHECK_EQUAL(ctrl2.data, dialog.getData());
+        CHECK_EQUAL(true, dialog.disabled);
     }
 }

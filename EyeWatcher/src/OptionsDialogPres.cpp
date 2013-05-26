@@ -22,6 +22,7 @@
 #include "OptionsDialogPres.h"
 #include "AbstractEWAppController.h"
 #include "ConfigData.h"
+#include "AbstractOptionsDialog.h"
 
 OptionsDialogPres::OptionsDialogPres(AbstractEWAppController* controller) :m_Controller(controller)
 {
@@ -32,12 +33,16 @@ OptionsDialogPres::~OptionsDialogPres()
 {
 }
 
-const ConfigData& OptionsDialogPres::getData() const
-{
-    return this->m_Controller->getConfigData();
-}
-
 bool OptionsDialogPres::saveData(const ConfigData& data)
 {
     return this->m_Controller->saveConfig(data);
+}
+
+void OptionsDialogPres::init(AbstractOptionsDialog* dialog)
+{
+    dialog->setData(this->m_Controller->getConfigData());
+    if (!this->m_Controller->canCreateTaskBar())
+    {
+        dialog->disableTray();
+    }
 }

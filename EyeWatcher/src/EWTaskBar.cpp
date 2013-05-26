@@ -98,7 +98,6 @@ wxMenu* EWTaskBar::CreatePopupMenu()
 }
 
 // all icons are png files for now...
-///@todo: load icons so that we don't have to create them again...
 void EWTaskBar::setIcon(std::string loc)
 {
     if (loc != "")

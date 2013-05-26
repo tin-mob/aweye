@@ -238,8 +238,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, AbstractOptionsDialogPres* presen
 	optionsFlexGridSizer->Fit(this);
 	optionsFlexGridSizer->SetSizeHints(this);
 	//*)
-
-	this->setData(this->m_Presenter->getData());
+    this->m_Presenter->init(this);
 
 	Connect(wxID_OK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&OptionsDialog::OnOKClick);
 }
@@ -295,10 +294,12 @@ void OptionsDialog::setData(const ConfigData& data)
     this->soundLocFilePickerCtrl->SetPath(wxString(data.soundPath.c_str(), wxConvUTF8));
     this->runningLateMinSpinCtrl->SetValue(data.runningLateThreshold.total_seconds() / 60);
     this->runningLateSecSpinCtrl->SetValue(data.runningLateThreshold.seconds());
-
-    ///@todo:disable option when not available (in presenter...)
     this->trayIconCheckBox->SetValue(data.trayIcon);
-    //this->trayIconCheckBox->Disable();
+}
+
+void OptionsDialog::disableTray()
+{
+    this->trayIconCheckBox->Disable();
 }
 
 void OptionsDialog::OnOKClick(wxCommandEvent& event)

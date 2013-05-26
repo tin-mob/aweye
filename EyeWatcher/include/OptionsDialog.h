@@ -50,6 +50,7 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 
         virtual ConfigData getData() const;
         virtual void setData(const ConfigData& data);
+        virtual void disableTray();
 
 		//(*Declarations(OptionsDialog)
 		wxStaticText* workingLabel;

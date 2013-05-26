@@ -75,7 +75,7 @@ class EWBuilder
 
                     this->m_CheckTimer = new TTimer();
                     this->m_ClockTimer = new TTimer();
-                    TEWAppController* tmpAppCtrl = new TEWAppController();
+                    TEWAppController* tmpAppCtrl = new TEWAppController(canCreateTaskbar);
                     this->m_AppController = tmpAppCtrl;
                     this->m_Presenter = new TEWPresenter(m_MsgHandler,
                         m_TimeKeeper, m_CheckTimer, m_ClockTimer, data.popupAlarm,

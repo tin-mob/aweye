@@ -26,6 +26,7 @@
 #include <string>
 #include "AbstractEWTaskbar.h"
 #include "ObservableWxMenu.h"
+#include <map>
 
 class wxMenu;
 template <class TView>

@@ -29,6 +29,7 @@ class AbstractOptionsDialog
         AbstractOptionsDialog() {}
         virtual ConfigData getData() const = 0;
         virtual void setData(const ConfigData& data) = 0;
+        virtual void disableTray() = 0;
 
     protected:
     private:

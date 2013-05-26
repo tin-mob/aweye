@@ -34,7 +34,8 @@
 class EWAppControllerStub : public AbstractEWAppController
 {
     public:
-        EWAppControllerStub() : displayedDialog(false) {}
+        EWAppControllerStub(bool cctb) :
+             m_CanCreateTaskBar(cctb), displayedDialog(false) {}
         virtual ~EWAppControllerStub() {}
 
         virtual bool saveConfig(const ConfigData& d) {data = d; return true;}
@@ -55,6 +56,8 @@ class EWAppControllerStub : public AbstractEWAppController
             displayCmd = dc;
         }
 
+        virtual bool canCreateTaskBar() {return m_CanCreateTaskBar;}
+
         ConfigData data;
         AbstractMsgHandler* msgHandler;
         AbstractConfig* config;
@@ -62,6 +65,7 @@ class EWAppControllerStub : public AbstractEWAppController
         AbstractTimeKeeper* timeKeeper;
         AbstractEWPresenter* presenter;
         AbstractCommand* displayCmd;
+        bool m_CanCreateTaskBar;
     protected:
     private:
         bool displayedDialog;

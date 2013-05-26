@@ -36,7 +36,7 @@ class ConfigData;
 class EWAppController : public AbstractEWAppController
 {
     public:
-        EWAppController();
+        EWAppController(bool canCreateTaskbar);
         virtual ~EWAppController();
 
         void link(AbstractMsgHandler* msgHandler, AbstractConfig* config,
@@ -47,6 +47,7 @@ class EWAppController : public AbstractEWAppController
         virtual const ConfigData& getConfigData() const;
 
         virtual void displayOptionsDialog();
+        virtual bool canCreateTaskBar();
 
     protected:
     private:
@@ -58,6 +59,9 @@ class EWAppController : public AbstractEWAppController
         AbstractTimeKeeper* m_TimeKeeper;
         AbstractEWPresenter* m_Presenter;
         AbstractCommand* m_DisplayOptionsDialogCmd;
+
+        bool m_CanCreateTaskbar;
+
 };
 
 #endif // EWAPPCONTROLLER_H

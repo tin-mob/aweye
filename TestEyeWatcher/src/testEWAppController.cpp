@@ -31,7 +31,7 @@
 
 struct EWAppControllerFixture
 {
-    EWAppControllerFixture() : config(data)
+    EWAppControllerFixture() : ctrl(true), config(data)
     {
         ctrl.link(&msgHandler, &config, &presenceHandler, &timeKeeper,
                   &presenter, &displayCmd);
@@ -98,5 +98,15 @@ SUITE(TestEWAppController)
         displayCmd.fail = true;
         ctrl.displayOptionsDialog();
         CHECK_EQUAL("Testing!", msgHandler.lastError);
+    }
+
+    TEST_FIXTURE(EWAppControllerFixture, TestCanCreate)
+    {
+        CHECK_EQUAL(true, ctrl.canCreateTaskBar());
+    }
+
+    TEST_FIXTURE(EWAppControllerFixture, TestCannotCreate)
+    {
+        CHECK_EQUAL(false, EWAppController(false).canCreateTaskBar());
     }
 }
