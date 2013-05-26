@@ -26,8 +26,6 @@
 #include "PresenceHandlerStub.h"
 #include "ConfigData.h"
 
-/// @todo:implement << + == operators so that tests can be much easier to read
-
 struct TimeKeeperFixture
 {
     public:

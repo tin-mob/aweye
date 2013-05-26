@@ -27,12 +27,10 @@
 class DisOptDiaCmdStub : public CommandStub
 {
     public:
-        DisOptDiaCmdStub(AbstractEWAppController* c = nullptr,
-                         AbstractOptionsDialogPres* p = nullptr) :
-                         controller(c), presenter(p) {}
+        DisOptDiaCmdStub(AbstractOptionsDialogPres* p = nullptr) :
+                         presenter(p) {}
         virtual ~DisOptDiaCmdStub() {}
 
-        AbstractEWAppController* controller;
         AbstractOptionsDialogPres* presenter;
     protected:
     private:

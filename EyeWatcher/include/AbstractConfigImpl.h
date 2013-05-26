@@ -23,6 +23,19 @@
 #define ABSTRACTCONFIGIMPL_H
 
 #include <string>
+#include "BaseException.h"
+
+class InvalidConfigFileException : public BaseException
+{
+    public:
+          InvalidConfigFileException() :  BaseException("invalid config file.") { }
+};
+
+class InvalidConfigDataException : public BaseException
+{
+    public:
+          InvalidConfigDataException() :  BaseException("invalid configuration data.") { }
+};
 
 class AbstractConfigImpl
 {

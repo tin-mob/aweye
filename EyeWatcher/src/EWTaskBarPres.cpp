@@ -23,7 +23,6 @@
 #include "AbstractEWPresenter.h"
 #include "AbstractEWTaskbar.h"
 
-///@todo: observer sync with view + poors man data binding
 EWTaskBarPres::EWTaskBarPres(AbstractEWPresenter* presenter, AbstractEWAppController* controller) :
     EWViewPres(presenter, controller), m_LastIcon("")
 {

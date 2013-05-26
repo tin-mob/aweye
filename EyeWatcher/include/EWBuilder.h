@@ -91,7 +91,7 @@ class EWBuilder
                     }
                     this->m_OptionsPres = new TOptionsDialogPres(m_AppController);
                     this->m_DisplayOptionsDialogCmd = new TDisplayOptionsDialogCmd(
-                        m_AppController, this->m_OptionsPres);
+                        this->m_OptionsPres);
 
                     tmpAppCtrl->link(m_MsgHandler, m_Config,
                         m_PresenceHandler, m_TimeKeeper, m_Presenter,

@@ -29,8 +29,7 @@ class AbstractOptionsDialogPres;
 class DisplayOptionsDialogCmd : public AbstractCommand
 {
     public:
-        DisplayOptionsDialogCmd(AbstractEWAppController* controller,
-                                AbstractOptionsDialogPres* presenter);
+        DisplayOptionsDialogCmd(AbstractOptionsDialogPres* presenter);
         virtual ~DisplayOptionsDialogCmd();
         virtual void execute();
     protected:

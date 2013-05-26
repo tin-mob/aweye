@@ -25,7 +25,6 @@
 #include "BaseException.h"
 #include "AbstractEWAppController.h"
 
-///@todo: test this
 EWMainFramePres::EWMainFramePres(AbstractEWPresenter* pres, AbstractEWAppController* controller) :
     EWViewPres(pres, controller)
 {
