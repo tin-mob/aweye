@@ -20,7 +20,7 @@
 
 
 #include "wx_pch.h"
-#include "EyeWatcherApp.h"
+#include "EWApp.h"
 #include <wx/cmdline.h>
 #include <wx/image.h>
 #include <wx/taskbar.h>
@@ -43,18 +43,18 @@
 #include "EWTaskBar.h"
 #include "DisplayOptionsDialogCmd.h"
 
-IMPLEMENT_APP(EyeWatcherApp);
+IMPLEMENT_APP(EWApp);
 
-EyeWatcherApp::EyeWatcherApp() : m_AppImpl(nullptr)
+EWApp::EWApp() : m_AppImpl(nullptr)
 {
 }
 
-EyeWatcherApp::~EyeWatcherApp()
+EWApp::~EWApp()
 {
     if (this->m_AppImpl != nullptr) delete this->m_AppImpl;
 }
 
-bool EyeWatcherApp::OnInit()
+bool EWApp::OnInit()
 {
     if (!wxApp::OnInit())
         return false;
@@ -76,7 +76,7 @@ bool EyeWatcherApp::OnInit()
 
 }
 
-void EyeWatcherApp::OnInitCmdLine(wxCmdLineParser& parser)
+void EWApp::OnInitCmdLine(wxCmdLineParser& parser)
 {
     parser.AddOption(wxT("c"),wxT("config"),
                      wxT("Use a specific configuration file."),
@@ -84,13 +84,13 @@ void EyeWatcherApp::OnInitCmdLine(wxCmdLineParser& parser)
     parser.SetSwitchChars (wxT("-"));
 }
 
-bool EyeWatcherApp::OnCmdLineParsed(wxCmdLineParser& parser)
+bool EWApp::OnCmdLineParsed(wxCmdLineParser& parser)
 {
     parser.Found(wxT("c"), &m_ConfigPath);
     return true;
 }
 
-void EyeWatcherApp::setTopWindow(AbstractEWMainFrame* frame)
+void EWApp::setTopWindow(AbstractEWMainFrame* frame)
 {
     EWMainFrame* castedFrame = dynamic_cast<EWMainFrame*>(frame);
 

@@ -19,8 +19,8 @@
  **************************************************************/
 
 
-#ifndef EYEWATCHERAPP_H
-#define EYEWATCHERAPP_H
+#ifndef EWAPP_H
+#define EWAPP_H
 
 #include <wx/app.h>
 #include "SetTopWindowInt.h"
@@ -47,11 +47,11 @@ class OptionsDialogPres;
 class EWTaskBarPres;
 class EWTaskBar;
 class DisplayOptionsDialogCmd;
-class EyeWatcherApp : public wxApp, public SetTopWindowInt
+class EWApp : public wxApp, public SetTopWindowInt
 {
     public:
-        EyeWatcherApp();
-       ~EyeWatcherApp();
+        EWApp();
+       ~EWApp();
         virtual bool OnInit();
         virtual void OnInitCmdLine(wxCmdLineParser& parser);
         virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
@@ -65,4 +65,4 @@ class EyeWatcherApp : public wxApp, public SetTopWindowInt
         wxString m_ConfigPath;
 };
 
-#endif // EYEWATCHERAPP_H
+#endif // EWAPP_H
