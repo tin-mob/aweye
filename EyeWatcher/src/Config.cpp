@@ -63,14 +63,17 @@ void Config::load()
             boost::posix_time::to_simple_string(ConfigData::default_RunningLateThreshold))),
     };
 
-    if (this->validateData(tempData))
+    // do not validate, to allow to correct it in app
+    this->m_data = tempData;
+
+    /*if (this->validateData(tempData))
     {
         this->m_data = tempData;
     }
     else
     {
         throw InvalidConfigFileException();
-    }
+    }*/
 }
 
 void Config::save(const ConfigData& data)

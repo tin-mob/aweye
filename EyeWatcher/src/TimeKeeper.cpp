@@ -40,6 +40,7 @@ TimeKeeper::TimeKeeper(AbstractTimeHandler* timeHandler,
     m_AwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_LastAwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)), m_NumTolerated(0),
     m_WorkLength(workLength), m_PauseLength(pauseLength), m_RemFreq(remFreq), m_CheckFreq(checkFreq),
+    m_PresHdlrDur(boost::posix_time::seconds(0)),
     m_PauseTol(pauseTol)
 {
     assert(timeHandler);
@@ -71,6 +72,7 @@ void TimeKeeper::deleteStates()
 
 void TimeKeeper::start()
 {
+    this->m_PresHdlrDur = boost::posix_time::seconds(0);
     if (this->m_CurrentState == TimeKeeper::OFF)
     {
         this->setStatus(AbstractTimeKeeper::HERE);
@@ -170,4 +172,13 @@ void TimeKeeper::setCheckFreq(boost::posix_time::time_duration checkFreq)
 void TimeKeeper::setPauseTol(unsigned int pauseTol)
 {
     this->m_PauseTol = pauseTol;
+}
+
+bool TimeKeeper::isHere()
+{
+    boost::posix_time::ptime start = this->m_TimeHandler->getTime();
+    bool result = this->m_PresenceHandler->isHere();
+    this->m_PresHdlrDur = this->m_TimeHandler->getTime() - start;
+
+    return result;
 }

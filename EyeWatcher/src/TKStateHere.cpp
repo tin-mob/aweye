@@ -36,7 +36,7 @@ TKStateHere::~TKStateHere()
 /// @todo: manage false negatives...
 void TKStateHere::updateStatus(TimeKeeper* parent)
 {
-    if (!parent->m_PresenceHandler->isHere())
+    if (!parent->isHere())
     {
         parent->setStatus(AbstractTimeKeeper::AWAY);
     }
@@ -70,7 +70,7 @@ boost::posix_time::time_duration TKStateHere::getTimerInterval(const TimeKeeper*
         timerInterval = parent->m_WorkLength - hereInterval;
     }
 
-    return timerInterval;
+    return timerInterval - parent->m_PresHdlrDur;
 }
 
 bool TKStateHere::isLate(const TimeKeeper* parent) const

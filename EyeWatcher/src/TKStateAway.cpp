@@ -35,7 +35,7 @@ TKStateAway::~TKStateAway()
 
 void TKStateAway::updateStatus(TimeKeeper* parent)
 {
-    if (parent->m_PresenceHandler->isHere())
+    if (parent->isHere())
     {
         if (this->getTimeLeft(parent) > boost::posix_time::time_duration(0,0,0,0))
         {
@@ -79,7 +79,7 @@ boost::posix_time::time_duration TKStateAway::getTimerInterval(const TimeKeeper*
         timerInterval = parent->m_PauseLength - pauseInterval;
     }
 
-    return timerInterval;
+    return timerInterval - parent->m_PresHdlrDur;
 }
 
 bool TKStateAway::isLate(const TimeKeeper* parent) const
