@@ -17,7 +17,7 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-
+///@todo: manage pc hibernate...
 
 #include "TimeKeeper.h"
 #include "TKStateAway.h"

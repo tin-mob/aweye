@@ -28,7 +28,7 @@
 // Edit: more complicated to use an interface with it...
 // http://stackoverflow.com/questions/2997732/how-to-convert-an-existing-callback-interface-to-use-boost-signals-slots
 
-template <class TObserver, class TParam>
+template <class TObserver, class... TParams>
 class Subject
 {
     public:
@@ -45,14 +45,14 @@ class Subject
             m_Observers.remove(observer);
         }
 
-        void notify(void (TObserver::*ptMethod)(TParam), TParam param)
+        void notify(void (TObserver::*ptMethod)(TParams...), TParams... params)
         {
             typename std::list<TObserver*>::iterator i = m_Observers.begin();
             typename std::list<TObserver*>::iterator end = m_Observers.end();
             for (; i != end; ++i)
             {
                 TObserver* ptr = *i;
-                (ptr->*ptMethod)(param);
+                (ptr->*ptMethod)(params...);
             }
         }
     protected:
@@ -61,3 +61,4 @@ class Subject
 };
 
 #endif // SUBJECT_H
+

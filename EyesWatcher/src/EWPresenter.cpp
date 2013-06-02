@@ -33,7 +33,6 @@
 #include <stdlib.h>
 
 /// @todo: EWPresenter to EWTimeKeeperPresenter,
-/// give more to specific presenters?
 EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractTimeKeeper* keeper,
                          AbstractTimer* checkTimer, AbstractTimer* clockTimer,
                          bool popupAlarm, bool soundAlarm, std::string soundPath,
