@@ -77,7 +77,6 @@ class TimeKeeper : public AbstractTimeKeeper
 
         void deleteStates();
         void setStatus(Status status);
-        bool isHere();
 
         std::map<Status,TKState*> m_States;
         Status m_CurrentState;
@@ -87,8 +86,9 @@ class TimeKeeper : public AbstractTimeKeeper
 
         boost::posix_time::time_duration m_HereDur;
         boost::posix_time::time_duration m_AwayDur;
-        boost::posix_time::time_duration m_CurrentDur;
+        boost::posix_time::time_duration m_CurrentDur; // ?
         boost::posix_time::ptime m_LastUpdate;
+        boost::posix_time::ptime m_StartTimeUpdate;
         unsigned int m_NumTolerated;
 
         boost::posix_time::ptime m_HereStamp;
@@ -99,7 +99,6 @@ class TimeKeeper : public AbstractTimeKeeper
         boost::posix_time::time_duration m_PauseLength;
         boost::posix_time::time_duration m_RemFreq;
         boost::posix_time::time_duration m_CheckFreq;
-        boost::posix_time::time_duration m_PresHdlrDur;
         unsigned int m_PauseTol;
 };
 

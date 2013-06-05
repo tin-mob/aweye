@@ -40,13 +40,13 @@ TimeKeeper::TimeKeeper(AbstractTimeHandler* timeHandler,
     m_AwayDur(boost::posix_time::seconds(0)),
     m_CurrentDur(boost::posix_time::seconds(0)),
     m_LastUpdate(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
+    m_StartTimeUpdate(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_NumTolerated(0),
     m_HereStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_AwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_LastAwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
-    m_WorkLength(workLength), m_PauseLength(pauseLength), m_RemFreq(remFreq), m_CheckFreq(checkFreq),
-    m_PresHdlrDur(boost::posix_time::seconds(0)),
-    m_PauseTol(pauseTol)
+    m_WorkLength(workLength), m_PauseLength(pauseLength), m_RemFreq(remFreq),
+    m_CheckFreq(checkFreq), m_PauseTol(pauseTol)
 {
     assert(timeHandler);
     assert(presenceHandler);
@@ -77,7 +77,7 @@ void TimeKeeper::deleteStates()
 
 void TimeKeeper::start()
 {
-    this->m_PresHdlrDur = boost::posix_time::seconds(0);
+    this->m_StartTimeUpdate = this->m_TimeHandler->getTime();
     this->m_LastUpdate = this->m_TimeHandler->getTime();
     if (this->m_CurrentState == TimeKeeper::OFF)
     {
@@ -100,6 +100,7 @@ void TimeKeeper::notifyHibernated(boost::posix_time::time_duration length)
 
 void TimeKeeper::updateStatus()
 {
+    this->m_StartTimeUpdate = this->m_TimeHandler->getTime();
     TKState* state = this->m_States.find(this->m_CurrentState)->second;
     state->updateStatus(this);
 
@@ -163,9 +164,6 @@ void TimeKeeper::setStatus(Status status)
     this->m_CurrentState = status;
 
     TKState* state = this->m_States.find(this->m_CurrentState)->second;
-
-    // Note: the timestamp is the first recorded time when the status is changed,
-    // not the time of the last occurance of the last state.
     return state->updateTimeStamps(this);
 }
 
@@ -194,12 +192,3 @@ void TimeKeeper::setPauseTol(unsigned int pauseTol)
     this->m_PauseTol = pauseTol;
 }
 
-bool TimeKeeper::isHere()
-{
-    ///@todo: do proper trimming...
-    boost::posix_time::ptime start = this->m_TimeHandler->getTime();
-    bool result = this->m_PresenceHandler->isHere();
-    this->m_PresHdlrDur = this->m_TimeHandler->getTime() - start;
-
-    return result;
-}
