@@ -42,12 +42,18 @@ void TKStateHere::updateStatus(TimeKeeper* parent)
     }
 }
 
-void TKStateHere::updateTimeStamps(TimeKeeper* parent)
+void TKStateHere::initState(TimeKeeper* parent, bool cancelled)
 {
-    parent->m_HereStamp = parent->m_TimeHandler->getTime();
-    // to be changed when cummulative...
+    if (cancelled)
+    {
+        parent->m_AwayStamp = parent->m_LastAwayStamp;
+        parent->m_HereDur += parent->m_AwayDur;
+    }
+    else
+    {
+        parent->m_HereStamp = parent->m_LastUpdate;
+    }
     parent->m_AwayDur = boost::posix_time::seconds(0);
-    parent->m_CurrentDur = boost::posix_time::seconds(0);
 }
 
 boost::posix_time::time_duration TKStateHere::getTimerInterval(const TimeKeeper* parent) const

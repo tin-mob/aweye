@@ -36,13 +36,12 @@ void TKStateOff::updateStatus(TimeKeeper* parent)
 {
 }
 
-void TKStateOff::updateTimeStamps(TimeKeeper* parent)
+void TKStateOff::initState(TimeKeeper* parent, bool cancelled)
 {
     parent->m_HereStamp = boost::posix_time::ptime(boost::posix_time::not_a_date_time);
     parent->m_AwayStamp = boost::posix_time::ptime(boost::posix_time::not_a_date_time);
     parent->m_HereDur = boost::posix_time::seconds(0);
     parent->m_AwayDur = boost::posix_time::seconds(0);
-    parent->m_CurrentDur = boost::posix_time::seconds(0);
 }
 
 boost::posix_time::time_duration TKStateOff::getTimerInterval(const TimeKeeper*) const

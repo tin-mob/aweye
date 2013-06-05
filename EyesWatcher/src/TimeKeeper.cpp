@@ -38,7 +38,6 @@ TimeKeeper::TimeKeeper(AbstractTimeHandler* timeHandler,
     m_TimeHandler(timeHandler), m_PresenceHandler(presenceHandler),
     m_HereDur(boost::posix_time::seconds(0)),
     m_AwayDur(boost::posix_time::seconds(0)),
-    m_CurrentDur(boost::posix_time::seconds(0)),
     m_LastUpdate(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_StartTimeUpdate(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_NumTolerated(0),
@@ -159,12 +158,12 @@ boost::posix_time::time_duration TimeKeeper::getWorkTimeLeft() const
     return state->getWorkTimeLeft(this);
 }
 
-void TimeKeeper::setStatus(Status status)
+void TimeKeeper::setStatus(Status status, bool cancelled)
 {
     this->m_CurrentState = status;
 
     TKState* state = this->m_States.find(this->m_CurrentState)->second;
-    return state->updateTimeStamps(this);
+    return state->initState(this, cancelled);
 }
 
 void TimeKeeper::setWorkLength(boost::posix_time::time_duration workLength)

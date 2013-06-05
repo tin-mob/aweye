@@ -31,7 +31,7 @@ class TKState
         virtual ~TKState() {}
 
         virtual void updateStatus(TimeKeeper* parent) = 0;
-        virtual void updateTimeStamps(TimeKeeper* parent) = 0;
+        virtual void initState(TimeKeeper* parent, bool cancelled) = 0;
         virtual boost::posix_time::time_duration getTimerInterval(const TimeKeeper* parent) const = 0;
         virtual bool isLate(const TimeKeeper* parent) const = 0;
         virtual boost::posix_time::time_duration getInterval(const TimeKeeper* parent) const = 0;

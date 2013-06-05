@@ -218,7 +218,7 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper.getInterval(), pauseInterval);
         CHECK_EQUAL(this->keeper.getTimeLeft(), pauseLeft);
         CHECK_EQUAL(this->keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime + pauseInterval);
+        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime);
         CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength - interval);
     }
 
@@ -245,7 +245,7 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper.getInterval(), pauseInterval);
         CHECK_EQUAL(this->keeper.getTimeLeft(), pauseLeft);
         CHECK_EQUAL(this->keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime + pauseInterval);
+        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime);
         CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength);
     }
 
@@ -271,7 +271,7 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper.getInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(this->keeper.getTimeLeft(), this->data.workLength);
         CHECK_EQUAL(this->keeper.getHereStamp(), this->timeHandler.getTime());
-        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime + this->data.pauseLength);
+        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime);
         CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength);
     }
 
@@ -301,7 +301,7 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper.getInterval(), pauseInterval);
         CHECK_EQUAL(this->keeper.getTimeLeft(), pauseLeft);
         CHECK_EQUAL(this->keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime + pauseInterval);
+        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime);
         CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength - interval);
     }
 

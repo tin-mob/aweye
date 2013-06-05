@@ -45,15 +45,11 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
             }
             else
             {
-                parent->m_AwayStamp = parent->m_LastAwayStamp;
-                parent->m_CurrentState = AbstractTimeKeeper::HERE;
-                parent->m_HereDur += parent->m_AwayDur;
-                parent->m_AwayDur = boost::posix_time::seconds(0);
+                parent->setStatus(AbstractTimeKeeper::HERE, true);
             }
         }
         else
         {
-            parent->m_NumTolerated = 0;
             parent->setStatus(AbstractTimeKeeper::HERE);
         }
     }
@@ -63,10 +59,10 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
     }
 }
 
-void TKStateAway::updateTimeStamps(TimeKeeper* parent)
+void TKStateAway::initState(TimeKeeper* parent, bool cancelled)
 {
     parent->m_LastAwayStamp = parent->m_AwayStamp;
-    parent->m_AwayStamp = parent->m_TimeHandler->getTime();
+    parent->m_AwayStamp = parent->m_LastUpdate;
     parent->m_AwayDur = boost::posix_time::seconds(0);
     parent->m_NumTolerated = 0;
 }
