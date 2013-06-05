@@ -179,12 +179,9 @@ SUITE(TestTimeKeeper)
     TEST_FIXTURE(TimeKeeperFixture, TestStartPause)
     {
         boost::posix_time::ptime startingTime = this->timeHandler.getTime();
-        boost::posix_time::time_duration interval = this->data.checkFreq;
-        boost::posix_time::ptime pauseTime = startingTime + interval;
 
         this->keeper.start();
 
-        this->timeHandler.setTime(pauseTime);
         this->presenceHandler.pushResult(false);
         this->keeper.updateStatus();
 
@@ -194,8 +191,8 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper.getInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(this->keeper.getTimeLeft(), this->data.pauseLength);
         CHECK_EQUAL(this->keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime);
-        CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength- interval);
+        CHECK_EQUAL(this->keeper.getAwayStamp(), startingTime);
+        CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestNearPauseEnd)
@@ -208,7 +205,7 @@ SUITE(TestTimeKeeper)
 
         this->keeper.start();
         this->timeHandler.setTime(pauseTime);
-        this->presenceHandler.pushResult(false);
+        this->presenceHandler.pushResult(true);
         this->keeper.updateStatus();
 
         this->timeHandler.setTime(pauseTime + pauseInterval);
@@ -221,8 +218,8 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper.getInterval(), pauseInterval);
         CHECK_EQUAL(this->keeper.getTimeLeft(), pauseLeft);
         CHECK_EQUAL(this->keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime);
-        CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength- interval);
+        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime + pauseInterval);
+        CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength - interval);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestPauseEnd)
@@ -235,7 +232,7 @@ SUITE(TestTimeKeeper)
 
         this->keeper.start();
         this->timeHandler.setTime(pauseTime);
-        this->presenceHandler.pushResult(false);
+        this->presenceHandler.pushResult(true);
         this->keeper.updateStatus();
 
         this->timeHandler.setTime(pauseTime + pauseInterval);
@@ -248,8 +245,8 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper.getInterval(), pauseInterval);
         CHECK_EQUAL(this->keeper.getTimeLeft(), pauseLeft);
         CHECK_EQUAL(this->keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime);
-        CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength- interval);
+        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime + pauseInterval);
+        CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestPauseWork)
@@ -258,13 +255,15 @@ SUITE(TestTimeKeeper)
 
         this->keeper.start();
         this->timeHandler.setTime(pauseTime);
-        this->presenceHandler.pushResult(false);
-        this->keeper.updateStatus();
-
-        this->timeHandler.setTime(pauseTime + this->data.pauseLength);
         this->presenceHandler.pushResult(true);
         this->keeper.updateStatus();
 
+        this->timeHandler.setTime(pauseTime + this->data.pauseLength);
+        this->presenceHandler.pushResult(false);
+        this->keeper.updateStatus();
+
+        this->presenceHandler.pushResult(true);
+        this->keeper.updateStatus();
 
         CHECK_EQUAL(this->keeper.getStatus(), AbstractTimeKeeper::HERE);
         CHECK_EQUAL(this->keeper.getTimerInterval(), this->data.checkFreq);
@@ -272,7 +271,7 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper.getInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(this->keeper.getTimeLeft(), this->data.workLength);
         CHECK_EQUAL(this->keeper.getHereStamp(), this->timeHandler.getTime());
-        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime);
+        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime + this->data.pauseLength);
         CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength);
     }
 
@@ -286,13 +285,15 @@ SUITE(TestTimeKeeper)
 
         this->keeper.start();
         this->timeHandler.setTime(pauseTime);
-        this->presenceHandler.pushResult(false);
-        this->keeper.updateStatus();
-
-        this->timeHandler.setTime(pauseTime + pauseInterval);
         this->presenceHandler.pushResult(true);
         this->keeper.updateStatus();
 
+        this->timeHandler.setTime(pauseTime + pauseInterval);
+        this->presenceHandler.pushResult(false);
+        this->keeper.updateStatus();
+
+        this->presenceHandler.pushResult(true);
+        this->keeper.updateStatus();
 
         CHECK_EQUAL(this->keeper.getStatus(), AbstractTimeKeeper::AWAY);
         CHECK_EQUAL(this->keeper.getTimerInterval(), pauseLeft);
@@ -300,8 +301,8 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper.getInterval(), pauseInterval);
         CHECK_EQUAL(this->keeper.getTimeLeft(), pauseLeft);
         CHECK_EQUAL(this->keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime);
-        CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength - (pauseTime - startingTime));
+        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime + pauseInterval);
+        CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength - interval);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestCancelledPause)
@@ -312,6 +313,9 @@ SUITE(TestTimeKeeper)
 
         this->keeper.start();
         this->timeHandler.setTime(startingTime + interval);
+        this->presenceHandler.pushResult(true);
+        this->keeper.updateStatus();
+
         this->presenceHandler.pushResult(false);
         this->keeper.updateStatus();
 
@@ -342,6 +346,9 @@ SUITE(TestTimeKeeper)
 
         this->keeper.start();
         this->timeHandler.setTime(pauseTime);
+        this->presenceHandler.pushResult(true);
+        this->keeper.updateStatus();
+
         this->presenceHandler.pushResult(false);
         this->keeper.updateStatus();
 

@@ -17,11 +17,39 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-
+// see : http://stackoverflow.com/questions/3546054/how-do-i-run-a-single-test-with-unittest
 
 #include <unittest++/UnitTest++.h>
+#include <unittest++/TestReporterStdout.h>
 
 int main()
 {
-    return UnitTest::RunAllTests();
+    // change if you want to run a single suite
+    std::string suite = "";
+    if( suite != "" )
+    {
+        const UnitTest::TestList& allTests( UnitTest::Test::GetTestList() );
+        UnitTest::TestList selectedTests;
+        UnitTest::Test* p = allTests.GetHead();
+        while( p )
+        {
+            if(p->m_details.suiteName == suite)
+            {
+                selectedTests.Add( p );
+                break;
+            }
+            UnitTest::Test* q = p;
+            p = p->next;
+            q->next = NULL;
+        }
+
+        //run selected test(s) only
+        UnitTest::TestReporterStdout reporter;
+        UnitTest::TestRunner runner( reporter );
+        return runner.RunTestsIf( selectedTests, 0, UnitTest::True(), 0 );
+    }
+    else
+    {
+        return UnitTest::RunAllTests();
+    }
 }

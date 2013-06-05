@@ -17,7 +17,7 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-///@todo: manage pc hibernate...
+///@todo: manage pc hibernate, stamps, les complicated...
 
 #include "TimeKeeper.h"
 #include "TKStateAway.h"
@@ -36,9 +36,14 @@ TimeKeeper::TimeKeeper(AbstractTimeHandler* timeHandler,
                    boost::posix_time::time_duration checkFreq,
                    unsigned int pauseTol):
     m_TimeHandler(timeHandler), m_PresenceHandler(presenceHandler),
+    m_HereDur(boost::posix_time::seconds(0)),
+    m_AwayDur(boost::posix_time::seconds(0)),
+    m_CurrentDur(boost::posix_time::seconds(0)),
+    m_LastUpdate(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
+    m_NumTolerated(0),
     m_HereStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_AwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
-    m_LastAwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)), m_NumTolerated(0),
+    m_LastAwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_WorkLength(workLength), m_PauseLength(pauseLength), m_RemFreq(remFreq), m_CheckFreq(checkFreq),
     m_PresHdlrDur(boost::posix_time::seconds(0)),
     m_PauseTol(pauseTol)
@@ -73,6 +78,7 @@ void TimeKeeper::deleteStates()
 void TimeKeeper::start()
 {
     this->m_PresHdlrDur = boost::posix_time::seconds(0);
+    this->m_LastUpdate = this->m_TimeHandler->getTime();
     if (this->m_CurrentState == TimeKeeper::OFF)
     {
         this->setStatus(AbstractTimeKeeper::HERE);
@@ -87,10 +93,24 @@ void TimeKeeper::stop()
     }
 }
 
+void TimeKeeper::notifyHibernated(boost::posix_time::time_duration length)
+{
+    ///@todo
+}
+
 void TimeKeeper::updateStatus()
 {
     TKState* state = this->m_States.find(this->m_CurrentState)->second;
     state->updateStatus(this);
+
+    state = this->m_States.find(this->m_CurrentState)->second;
+    state->addDuration(this);
+    this->m_LastUpdate = this->m_TimeHandler->getTime();
+
+    if (this->m_AwayDur >= this->m_PauseLength)
+    {
+        this->m_HereDur = boost::posix_time::seconds(0);
+    }
 }
 
 boost::posix_time::time_duration TimeKeeper::getTimerInterval() const
@@ -176,6 +196,7 @@ void TimeKeeper::setPauseTol(unsigned int pauseTol)
 
 bool TimeKeeper::isHere()
 {
+    ///@todo: do proper trimming...
     boost::posix_time::ptime start = this->m_TimeHandler->getTime();
     bool result = this->m_PresenceHandler->isHere();
     this->m_PresHdlrDur = this->m_TimeHandler->getTime() - start;

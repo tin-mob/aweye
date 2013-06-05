@@ -48,6 +48,7 @@ class TimeKeeper : public AbstractTimeKeeper
 
         virtual void start();
         virtual void stop();
+        virtual void notifyHibernated(boost::posix_time::time_duration length);
 
         virtual void updateStatus();
         virtual boost::posix_time::time_duration getTimerInterval() const;
@@ -84,10 +85,15 @@ class TimeKeeper : public AbstractTimeKeeper
         AbstractTimeHandler* m_TimeHandler;
         AbstractPresenceHandler* m_PresenceHandler;
 
+        boost::posix_time::time_duration m_HereDur;
+        boost::posix_time::time_duration m_AwayDur;
+        boost::posix_time::time_duration m_CurrentDur;
+        boost::posix_time::ptime m_LastUpdate;
+        unsigned int m_NumTolerated;
+
         boost::posix_time::ptime m_HereStamp;
         boost::posix_time::ptime m_AwayStamp;
         boost::posix_time::ptime m_LastAwayStamp;
-        unsigned int m_NumTolerated;
 
         boost::posix_time::time_duration m_WorkLength;
         boost::posix_time::time_duration m_PauseLength;

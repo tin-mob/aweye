@@ -58,6 +58,9 @@ class TimeKeeperStub : public AbstractTimeKeeper
             status = AbstractTimeKeeper::HERE;
         }
         virtual void stop() {status = AbstractTimeKeeper::OFF;}
+
+        virtual void notifyHibernated(boost::posix_time::time_duration length) {}
+
         virtual void updateStatus()
                 {
             if (fail) { throw BaseException("Testing!"); }

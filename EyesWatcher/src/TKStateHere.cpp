@@ -45,15 +45,17 @@ void TKStateHere::updateStatus(TimeKeeper* parent)
 void TKStateHere::updateTimeStamps(TimeKeeper* parent)
 {
     parent->m_HereStamp = parent->m_TimeHandler->getTime();
+    // to be changed when cummulative...
+    parent->m_AwayDur = boost::posix_time::seconds(0);
+    parent->m_CurrentDur = boost::posix_time::seconds(0);
 }
 
 boost::posix_time::time_duration TKStateHere::getTimerInterval(const TimeKeeper* parent) const
 {
     boost::posix_time::time_duration timerInterval = parent->m_CheckFreq;
-    boost::posix_time::time_duration hereInterval =
-        parent->m_TimeHandler->getTime() - parent->m_HereStamp;
-    // work period ended
-    if (hereInterval >= parent->m_WorkLength)
+    boost::posix_time::time_duration remaining = this->getTimeLeft(parent);
+
+    if (remaining <= boost::posix_time::seconds(0))
     {
         if (parent->m_CheckFreq > parent->m_RemFreq)
         {
@@ -64,10 +66,9 @@ boost::posix_time::time_duration TKStateHere::getTimerInterval(const TimeKeeper*
             timerInterval = parent->m_CheckFreq;
         }
     }
-    // work period ending soon
-    else if (hereInterval + parent->m_CheckFreq > parent->m_WorkLength)
+    else if (remaining < parent->m_CheckFreq)
     {
-        timerInterval = parent->m_WorkLength - hereInterval;
+        timerInterval =  remaining;
     }
 
     return timerInterval - parent->m_PresHdlrDur;
@@ -75,20 +76,25 @@ boost::posix_time::time_duration TKStateHere::getTimerInterval(const TimeKeeper*
 
 bool TKStateHere::isLate(const TimeKeeper* parent) const
 {
-    return (parent->m_TimeHandler->getTime() - parent->m_HereStamp) >= parent->m_WorkLength;
+    return parent->m_WorkLength <= parent->m_HereDur + (parent->m_TimeHandler->getTime() - parent->m_LastUpdate);
 }
 
 boost::posix_time::time_duration TKStateHere::getInterval(const TimeKeeper* parent) const
 {
-    return parent->m_TimeHandler->getTime() - parent->m_HereStamp;
+    return parent->m_HereDur + (parent->m_TimeHandler->getTime() - parent->m_LastUpdate);
 }
 
 boost::posix_time::time_duration TKStateHere::getTimeLeft(const TimeKeeper* parent) const
 {
-    return parent->m_HereStamp + parent->m_WorkLength - parent->m_TimeHandler->getTime();
+    return parent->m_WorkLength - parent->m_HereDur - (parent->m_TimeHandler->getTime() - parent->m_LastUpdate);
 }
 
 boost::posix_time::time_duration TKStateHere::getWorkTimeLeft(const TimeKeeper* parent) const
 {
     return this->getTimeLeft(parent);
+}
+
+void TKStateHere::addDuration(TimeKeeper* parent)
+{
+    parent->m_HereDur += (parent->m_TimeHandler->getTime() - parent->m_LastUpdate);
 }

@@ -41,63 +41,73 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
         {
             if (parent->m_NumTolerated < parent->m_PauseTol)
             {
-                parent->m_NumTolerated++;
+                ++parent->m_NumTolerated;
             }
             else
             {
                 parent->m_AwayStamp = parent->m_LastAwayStamp;
                 parent->m_CurrentState = AbstractTimeKeeper::HERE;
+                parent->m_HereDur += parent->m_AwayDur;
+                parent->m_AwayDur = boost::posix_time::seconds(0);
             }
         }
         else
         {
+            parent->m_NumTolerated = 0;
             parent->setStatus(AbstractTimeKeeper::HERE);
         }
+    }
+    else
+    {
+        parent->m_NumTolerated = 0;
     }
 }
 
 void TKStateAway::updateTimeStamps(TimeKeeper* parent)
 {
-    parent->m_NumTolerated = 0;
     parent->m_LastAwayStamp = parent->m_AwayStamp;
     parent->m_AwayStamp = parent->m_TimeHandler->getTime();
+    parent->m_AwayDur = boost::posix_time::seconds(0);
+    parent->m_NumTolerated = 0;
 }
 
 boost::posix_time::time_duration TKStateAway::getTimerInterval(const TimeKeeper* parent) const
 {
     boost::posix_time::time_duration timerInterval = parent->m_CheckFreq;
-    boost::posix_time::time_duration pauseInterval =
-        parent->m_TimeHandler->getTime() - parent->m_AwayStamp;
-    // work period ended
-    if (pauseInterval >= parent->m_PauseLength)
+    boost::posix_time::time_duration remaining = this->getTimeLeft(parent);
+
+    if (remaining <= boost::posix_time::seconds(0))
     {
         timerInterval = parent->m_CheckFreq;
     }
-    // pause period ending soon
-    else if (pauseInterval + parent->m_CheckFreq > parent->m_PauseLength)
+    else if (remaining < parent->m_CheckFreq)
     {
-        timerInterval = parent->m_PauseLength - pauseInterval;
+        timerInterval = remaining;
     }
-
     return timerInterval - parent->m_PresHdlrDur;
 }
 
 bool TKStateAway::isLate(const TimeKeeper* parent) const
 {
-    return (parent->m_AwayStamp - parent->m_HereStamp) >= parent->m_WorkLength;
+    return parent->m_WorkLength <= parent->m_HereDur;
 }
 
 boost::posix_time::time_duration TKStateAway::getInterval(const TimeKeeper* parent) const
 {
-    return parent->m_TimeHandler->getTime() - parent->m_AwayStamp;
+    return parent->m_AwayDur + (parent->m_TimeHandler->getTime() - parent->m_LastUpdate);
 }
 
 boost::posix_time::time_duration TKStateAway::getTimeLeft(const TimeKeeper* parent) const
 {
-    return parent->m_AwayStamp + parent->m_PauseLength - parent->m_TimeHandler->getTime();
+    return parent->m_PauseLength - parent->m_AwayDur - (parent->m_TimeHandler->getTime() - parent->m_LastUpdate);
 }
 
 boost::posix_time::time_duration TKStateAway::getWorkTimeLeft(const TimeKeeper* parent) const
 {
-    return parent->m_WorkLength - (parent->m_AwayStamp - parent->m_HereStamp);
+    return parent->m_WorkLength - parent->m_HereDur;
+}
+
+void TKStateAway::addDuration(TimeKeeper* parent)
+{
+    parent->m_AwayDur += (parent->m_TimeHandler->getTime() - parent->m_LastUpdate);
 }
