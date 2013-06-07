@@ -33,6 +33,7 @@ struct ConfigData
         boost::posix_time::time_duration rf = default_RemFreq,
         boost::posix_time::time_duration cf = default_CheckFreq,
         unsigned int pt = default_PauseTol,
+        unsigned int wt = default_WorkTol,
         bool sa = default_SoundAlarm,
         bool pa = default_PopupAlarm,
         bool tr = default_TrayIcon,
@@ -51,6 +52,7 @@ struct ConfigData
     boost::posix_time::time_duration remFreq;
     boost::posix_time::time_duration checkFreq;
     unsigned int pauseTol;
+    unsigned int workTol;
     bool soundAlarm;
     bool popupAlarm;
     bool trayIcon;
@@ -66,6 +68,7 @@ struct ConfigData
     static const boost::posix_time::time_duration default_RemFreq;
     static const boost::posix_time::time_duration default_CheckFreq;
     static const unsigned int default_PauseTol;
+    static const unsigned int default_WorkTol;
     static const bool default_SoundAlarm;
     static const bool default_PopupAlarm;
     static const bool default_TrayIcon;

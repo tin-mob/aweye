@@ -53,6 +53,7 @@ class ConfigStub : public AbstractConfig
                     ConfigData::default_RemFreq + boost::posix_time::seconds(1),
                     ConfigData::default_CheckFreq + boost::posix_time::seconds(1),
                     ConfigData::default_PauseTol + 1,
+                    ConfigData::default_WorkTol + 1,
                     !ConfigData::default_SoundAlarm,
                     !ConfigData::default_PopupAlarm,
                     !ConfigData::default_TrayIcon,

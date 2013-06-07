@@ -249,11 +249,11 @@
 									<option>1</option>
 								</object>
 								<object class="sizeritem">
-									<object class="wxFlexGridSizer" variable="tolFlexGridSizer" member="no">
+									<object class="wxFlexGridSizer" variable="pauseTolFlexGridSizer" member="no">
 										<cols>3</cols>
 										<growablecols>1</growablecols>
 										<object class="sizeritem">
-											<object class="wxStaticText" name="ID_STATICTEXT5" variable="tolStaticText" member="yes">
+											<object class="wxStaticText" name="ID_STATICTEXT5" variable="pauseTolStaticText" member="yes">
 												<label>Pause Tolerance</label>
 												<tooltip>Test</tooltip>
 											</object>
@@ -267,7 +267,38 @@
 											<option>1</option>
 										</object>
 										<object class="sizeritem">
-											<object class="wxSpinCtrl" name="ID_SPINCTRL1" variable="tolSpinCtrl" member="yes">
+											<object class="wxSpinCtrl" name="ID_SPINCTRL1" variable="pauseTolSpinCtrl" member="yes">
+												<value>0</value>
+												<max>10000</max>
+											</object>
+											<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+									</object>
+									<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+									<option>1</option>
+								</object>
+								<object class="sizeritem">
+									<object class="wxFlexGridSizer" variable="workTolFlexGridSizer" member="no">
+										<cols>3</cols>
+										<growablecols>1</growablecols>
+										<object class="sizeritem">
+											<object class="wxStaticText" name="ID_STATICTEXT11" variable="workTolStaticText" member="yes">
+												<label>Work Tolerance</label>
+												<tooltip>Test</tooltip>
+											</object>
+											<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="spacer">
+											<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxSpinCtrl" name="ID_SPINCTRL15" variable="workTolSpinCtrl" member="yes">
 												<value>0</value>
 												<max>10000</max>
 											</object>

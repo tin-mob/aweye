@@ -51,6 +51,7 @@ void Config::load()
         boost::posix_time::duration_from_string(this->m_Impl->read("CheckFreq",
             boost::posix_time::to_simple_string(ConfigData::default_CheckFreq))),
         (unsigned int)this->m_Impl->read("PauseTol", (long)ConfigData::default_PauseTol),
+        (unsigned int)this->m_Impl->read("WorkTol", (long)ConfigData::default_WorkTol),
         this->m_Impl->read("SoundAlarm", ConfigData::default_SoundAlarm),
         this->m_Impl->read("PopupAlarm", ConfigData::default_PopupAlarm),
         this->m_Impl->read("TrayIcon", ConfigData::default_TrayIcon),
@@ -96,6 +97,7 @@ void Config::write()
     this->m_Impl->write("RemFreq", boost::posix_time::to_simple_string(this->m_data.remFreq));
     this->m_Impl->write("CheckFreq", boost::posix_time::to_simple_string(this->m_data.checkFreq));
     this->m_Impl->write("PauseTol", (long)this->m_data.pauseTol);
+    this->m_Impl->write("WorkTol", (long)this->m_data.workTol);
     this->m_Impl->write("SoundAlarm", this->m_data.soundAlarm);
     this->m_Impl->write("PopupAlarm", this->m_data.popupAlarm);
     this->m_Impl->write("TrayIcon", this->m_data.trayIcon);
@@ -121,6 +123,7 @@ bool Config::validateData(const ConfigData& data)
         data.checkFreq.total_seconds() <= 0 ||
         data.runningLateThreshold.is_special() ||
         data.pauseTol < 0 ||
+        data.workTol < 0 ||
         !this->m_Impl->fileExists(data.cascadePath) ||
         !this->m_Impl->fileExists(data.soundPath)
         )

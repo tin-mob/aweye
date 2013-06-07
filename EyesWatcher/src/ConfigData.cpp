@@ -27,6 +27,7 @@ const boost::posix_time::time_duration ConfigData::default_PauseLength(0,10,0,0)
 const boost::posix_time::time_duration ConfigData::default_RemFreq(0,2,0,0);
 const boost::posix_time::time_duration ConfigData::default_CheckFreq(0,0,30,0);
 const unsigned int ConfigData::default_PauseTol = 1;
+const unsigned int ConfigData::default_WorkTol = 2;
 const bool ConfigData::default_SoundAlarm = false;
 const bool ConfigData::default_PopupAlarm = true;
 const bool ConfigData::default_TrayIcon = true;
@@ -41,11 +42,12 @@ ConfigData::ConfigData(boost::posix_time::time_duration wl,
                        boost::posix_time::time_duration pl,
                        boost::posix_time::time_duration rf,
                        boost::posix_time::time_duration cf,
-                       unsigned int pt, bool sa, bool pa, bool tr, int wi,
+                       unsigned int pt, unsigned int wt,
+                       bool sa, bool pa, bool tr, int wi,
                        unsigned int fx, unsigned int fy, std::string cp,
                        std::string sp, boost::posix_time::time_duration lt):
     workLength(wl), pauseLength(pl), remFreq(rf), checkFreq(cf),
-    pauseTol(pt), soundAlarm(sa), popupAlarm(pa), trayIcon(tr),
+    pauseTol(pt), workTol(wt), soundAlarm(sa), popupAlarm(pa), trayIcon(tr),
     webcamIndex(wi), faceSizeX(fx), faceSizeY(fy), cascadePath(cp),
     soundPath(sp), runningLateThreshold(lt)
 {
@@ -58,6 +60,7 @@ bool ConfigData::operator==(const ConfigData& other) const
             remFreq == other.remFreq &&
             checkFreq == other.checkFreq &&
             pauseTol == other.pauseTol &&
+            workTol == other.workTol &&
             soundAlarm == other.soundAlarm &&
             popupAlarm == other.popupAlarm &&
             trayIcon == other.trayIcon &&
@@ -73,10 +76,10 @@ bool ConfigData::operator==(const ConfigData& other) const
 std::ostream& operator<<(std::ostream& os, const ConfigData& cd)
 {
     os << cd.workLength << "; " << cd.pauseLength << "; " << cd.remFreq << "; "
-       << cd.checkFreq << "; " << cd.pauseTol << "; " << cd.soundAlarm << "; "
-       << cd.popupAlarm << "; " << cd.trayIcon << "; " << cd.webcamIndex << "; "
-       << cd.faceSizeX << "; " << cd.faceSizeY << "; " << cd.cascadePath << "; "
-       << cd.soundPath << "; " << cd.runningLateThreshold;
+       << cd.checkFreq << "; " << cd.pauseTol << "; " << cd.workTol << "; "
+       << cd.soundAlarm << "; " << cd.popupAlarm << "; " << cd.trayIcon << "; "
+       << cd.webcamIndex << "; " << cd.faceSizeX << "; " << cd.faceSizeY << "; "
+       << cd.cascadePath << "; " << cd.soundPath << "; " << cd.runningLateThreshold;
     return os;
 }
 

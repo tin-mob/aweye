@@ -58,6 +58,10 @@ SUITE(TestConfigData)
         CHECK_EQUAL(false, mod == src);
 
         mod = {};
+        mod.workTol = ConfigData::default_WorkTol + 1;
+        CHECK_EQUAL(false, mod == src);
+
+        mod = {};
         mod.soundAlarm = !ConfigData::default_SoundAlarm;
         CHECK_EQUAL(false, mod == src);
 

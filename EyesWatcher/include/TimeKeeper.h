@@ -33,7 +33,7 @@ class TKStateOff;
 class AbstractPresenceHandler;
 class AbstractTimeHandler;
 
-///@toodo: cummulative pause alternative
+///@todo: cummulative pause alternative
 class TimeKeeper : public AbstractTimeKeeper
 {
     public:
@@ -43,7 +43,8 @@ class TimeKeeper : public AbstractTimeKeeper
                    boost::posix_time::time_duration pauseLength,
                    boost::posix_time::time_duration remFreq,
                    boost::posix_time::time_duration checkFreq,
-                   unsigned int pauseTol);
+                   unsigned int pauseTol,
+                   unsigned int workTol);
         virtual ~TimeKeeper();
 
         virtual void start();
@@ -66,6 +67,7 @@ class TimeKeeper : public AbstractTimeKeeper
         virtual void setRemFreq(boost::posix_time::time_duration remFreq);
         virtual void setCheckFreq(boost::posix_time::time_duration checkFreq);
         virtual void setPauseTol(unsigned int pauseTol);
+        virtual void setWorkTol(unsigned int workTol);
 
     protected:
     private:
@@ -88,6 +90,7 @@ class TimeKeeper : public AbstractTimeKeeper
         boost::posix_time::time_duration m_AwayDur;
         boost::posix_time::ptime m_LastUpdate;
         boost::posix_time::ptime m_StartTimeUpdate;
+        boost::posix_time::ptime m_TolerationTime;
         unsigned int m_NumTolerated;
 
         boost::posix_time::ptime m_HereStamp;
@@ -99,6 +102,7 @@ class TimeKeeper : public AbstractTimeKeeper
         boost::posix_time::time_duration m_RemFreq;
         boost::posix_time::time_duration m_CheckFreq;
         unsigned int m_PauseTol;
+        unsigned int m_WorkTol;
 };
 
 #endif // TIMEKEEPER_H

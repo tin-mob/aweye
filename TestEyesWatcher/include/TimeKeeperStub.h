@@ -41,14 +41,15 @@ class TimeKeeperStub : public AbstractTimeKeeper
                    boost::posix_time::time_duration pl = boost::posix_time::time_duration(00,00,01),
                    boost::posix_time::time_duration rf = boost::posix_time::time_duration(00,00,10),
                    boost::posix_time::time_duration cf = boost::posix_time::time_duration(00,00,11),
-                   unsigned int pt = 1000) :
+                   unsigned int pt = 1000,
+                   unsigned int wt = 1000) :
             fail(false), late(false), status(AbstractTimeKeeper::OFF),
             hereStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(10,59,00))),
             awayStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(11,31,01))),
             interval(boost::posix_time::seconds(2)), left(boost::posix_time::minutes(3)),
             workLeft(boost::posix_time::minutes(1)),
             workLength(wl), pauseLength(pl), remFreq(rf), checkFreq(cf), pauseTol(pt),
-            timeHandler(th), presenceHandler(ph)
+            workTol(wt), timeHandler(th), presenceHandler(ph)
             {}
         virtual ~TimeKeeperStub() {}
 
@@ -82,6 +83,7 @@ class TimeKeeperStub : public AbstractTimeKeeper
         virtual void setRemFreq(boost::posix_time::time_duration rf) {remFreq = rf;}
         virtual void setCheckFreq(boost::posix_time::time_duration cf) {checkFreq = cf;}
         virtual void setPauseTol(unsigned int pt) {pauseTol = pt;}
+        virtual void setWorkTol(unsigned int wt) {workTol = wt;}
 
         bool fail;
         bool late;
@@ -97,6 +99,7 @@ class TimeKeeperStub : public AbstractTimeKeeper
         boost::posix_time::time_duration remFreq;
         boost::posix_time::time_duration checkFreq;
         unsigned int pauseTol;
+        unsigned int workTol;
 
         AbstractTimeHandler* timeHandler;
         AbstractPresenceHandler* presenceHandler;

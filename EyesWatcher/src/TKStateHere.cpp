@@ -33,12 +33,34 @@ TKStateHere::~TKStateHere()
 {
 }
 
-/// @todo: manage false negatives...
 void TKStateHere::updateStatus(TimeKeeper* parent)
 {
     if (!parent->m_PresenceHandler->isHere())
     {
-        parent->setStatus(AbstractTimeKeeper::AWAY);
+        if (this->getTimeLeft(parent) > boost::posix_time::time_duration(0,0,0,0))
+        {
+            if (parent->m_NumTolerated == 0)
+            {
+                parent->m_TolerationTime = parent->m_LastUpdate;
+            }
+
+            if (parent->m_NumTolerated < parent->m_PauseTol)
+            {
+                ++parent->m_NumTolerated;
+            }
+            else
+            {
+                parent->setStatus(AbstractTimeKeeper::AWAY, true);
+            }
+        }
+        else
+        {
+            parent->setStatus(AbstractTimeKeeper::AWAY);
+        }
+    }
+    else
+    {
+        parent->m_NumTolerated = 0;
     }
 }
 
@@ -54,6 +76,7 @@ void TKStateHere::initState(TimeKeeper* parent, bool cancelled)
         parent->m_HereStamp = parent->m_LastUpdate;
     }
     parent->m_AwayDur = boost::posix_time::seconds(0);
+    parent->m_NumTolerated = 0;
 }
 
 boost::posix_time::time_duration TKStateHere::getTimerInterval(const TimeKeeper* parent) const

@@ -53,12 +53,14 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
         virtual void disableTray();
 
 		//(*Declarations(OptionsDialog)
+		wxSpinCtrl* workTolSpinCtrl;
 		wxStaticText* workingLabel;
 		wxSpinCtrl* chkMinSpinCtrl;
+		wxStaticText* workTolStaticText;
 		wxCheckBox* soundCheckBox;
 		wxSpinCtrl* FaceSizeYSpinCtrl;
 		wxFilePickerCtrl* soundLocFilePickerCtrl;
-		wxStaticText* tolStaticText;
+		wxSpinCtrl* pauseTolSpinCtrl;
 		wxCheckBox* popupCheckBox;
 		wxStaticText* zzzLabel;
 		wxSpinCtrl* chkSecSpinCtrl;
@@ -66,7 +68,7 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		wxSpinCtrl* wrkSecSpinCtrl;
 		wxSpinCtrl* runningLateMinSpinCtrl;
 		wxNotebook* optionsNotebook;
-		wxSpinCtrl* tolSpinCtrl;
+		wxStaticText* pauseTolStaticText;
 		wxStaticText* StaticText1;
 		wxSpinCtrl* indexSpinCtrl;
 		wxSpinCtrl* zzzSecSpinCtrl;
@@ -111,6 +113,8 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		static const long ID_SPINCTRL7;
 		static const long ID_STATICTEXT5;
 		static const long ID_SPINCTRL1;
+		static const long ID_STATICTEXT11;
+		static const long ID_SPINCTRL15;
 		static const long ID_STATICTEXT8;
 		static const long ID_SPINCTRL10;
 		static const long ID_STATICTEXT7;

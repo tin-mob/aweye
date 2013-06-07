@@ -34,18 +34,20 @@ TimeKeeper::TimeKeeper(AbstractTimeHandler* timeHandler,
                    boost::posix_time::time_duration pauseLength,
                    boost::posix_time::time_duration remFreq,
                    boost::posix_time::time_duration checkFreq,
-                   unsigned int pauseTol):
+                   unsigned int pauseTol,
+                   unsigned int workTol):
     m_TimeHandler(timeHandler), m_PresenceHandler(presenceHandler),
     m_HereDur(boost::posix_time::seconds(0)),
     m_AwayDur(boost::posix_time::seconds(0)),
     m_LastUpdate(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_StartTimeUpdate(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
+    m_TolerationTime(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_NumTolerated(0),
     m_HereStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_AwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_LastAwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_WorkLength(workLength), m_PauseLength(pauseLength), m_RemFreq(remFreq),
-    m_CheckFreq(checkFreq), m_PauseTol(pauseTol)
+    m_CheckFreq(checkFreq), m_PauseTol(pauseTol), m_WorkTol(workTol)
 {
     assert(timeHandler);
     assert(presenceHandler);
@@ -189,5 +191,10 @@ void TimeKeeper::setCheckFreq(boost::posix_time::time_duration checkFreq)
 void TimeKeeper::setPauseTol(unsigned int pauseTol)
 {
     this->m_PauseTol = pauseTol;
+}
+
+void TimeKeeper::setWorkTol(unsigned int workTol)
+{
+    this->m_WorkTol = workTol;
 }
 

@@ -57,6 +57,8 @@ const long OptionsDialog::ID_SPINCTRL4 = wxNewId();
 const long OptionsDialog::ID_SPINCTRL7 = wxNewId();
 const long OptionsDialog::ID_STATICTEXT5 = wxNewId();
 const long OptionsDialog::ID_SPINCTRL1 = wxNewId();
+const long OptionsDialog::ID_STATICTEXT11 = wxNewId();
+const long OptionsDialog::ID_SPINCTRL15 = wxNewId();
 const long OptionsDialog::ID_STATICTEXT8 = wxNewId();
 const long OptionsDialog::ID_SPINCTRL10 = wxNewId();
 const long OptionsDialog::ID_STATICTEXT7 = wxNewId();
@@ -83,7 +85,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, AbstractOptionsDialogPres* presen
 	wxFlexGridSizer* runningLateFlexGridSizer;
 	wxFlexGridSizer* wrkFlexGridSizer;
 	wxFlexGridSizer* faceSizeFlexGridSizer;
-	wxFlexGridSizer* tolFlexGridSizer;
+	wxFlexGridSizer* workTolFlexGridSizer;
 	wxFlexGridSizer* chkFlexGridSizer;
 	wxFlexGridSizer* cascadeFlexGridSizer;
 	wxFlexGridSizer* soundLocFlexGridSizer;
@@ -94,6 +96,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, AbstractOptionsDialogPres* presen
 	wxFlexGridSizer* generalFlexGridSizer;
 	wxFlexGridSizer* remFlexGridSizer;
 	wxStdDialogButtonSizer* optionsStdDialogButtonSizer;
+	wxFlexGridSizer* pauseTolFlexGridSizer;
 	wxFlexGridSizer* advancedFlexGridSizer;
 
 	Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
@@ -131,7 +134,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, AbstractOptionsDialogPres* presen
 	remFlexGridSizer->AddGrowableCol(1);
 	remLabel = new wxStaticText(GeneralPanel, ID_STATICTEXT3, _("Reminder Frequency"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	remFlexGridSizer->Add(remLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	remFlexGridSizer->Add(0,0,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	remFlexGridSizer->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	remMinSpinCtrl = new wxSpinCtrl(GeneralPanel, ID_SPINCTRL8, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 1000, 0, _T("ID_SPINCTRL8"));
 	remMinSpinCtrl->SetValue(_T("0"));
 	remFlexGridSizer->Add(remMinSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -178,16 +181,26 @@ OptionsDialog::OptionsDialog(wxWindow* parent, AbstractOptionsDialogPres* presen
 	FaceSizeYSpinCtrl->SetValue(_T("0"));
 	faceSizeFlexGridSizer->Add(FaceSizeYSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	advancedFlexGridSizer->Add(faceSizeFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
-	tolFlexGridSizer = new wxFlexGridSizer(0, 3, 0, 0);
-	tolFlexGridSizer->AddGrowableCol(1);
-	tolStaticText = new wxStaticText(AdvancedPanel, ID_STATICTEXT5, _("Pause Tolerance"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
-	tolStaticText->SetToolTip(_("Test"));
-	tolFlexGridSizer->Add(tolStaticText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tolFlexGridSizer->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tolSpinCtrl = new wxSpinCtrl(AdvancedPanel, ID_SPINCTRL1, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 10000, 0, _T("ID_SPINCTRL1"));
-	tolSpinCtrl->SetValue(_T("0"));
-	tolFlexGridSizer->Add(tolSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	advancedFlexGridSizer->Add(tolFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+	pauseTolFlexGridSizer = new wxFlexGridSizer(0, 3, 0, 0);
+	pauseTolFlexGridSizer->AddGrowableCol(1);
+	pauseTolStaticText = new wxStaticText(AdvancedPanel, ID_STATICTEXT5, _("Pause Tolerance"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
+	pauseTolStaticText->SetToolTip(_("Test"));
+	pauseTolFlexGridSizer->Add(pauseTolStaticText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	pauseTolFlexGridSizer->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	pauseTolSpinCtrl = new wxSpinCtrl(AdvancedPanel, ID_SPINCTRL1, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 10000, 0, _T("ID_SPINCTRL1"));
+	pauseTolSpinCtrl->SetValue(_T("0"));
+	pauseTolFlexGridSizer->Add(pauseTolSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	advancedFlexGridSizer->Add(pauseTolFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+	workTolFlexGridSizer = new wxFlexGridSizer(0, 3, 0, 0);
+	workTolFlexGridSizer->AddGrowableCol(1);
+	workTolStaticText = new wxStaticText(AdvancedPanel, ID_STATICTEXT11, _("Work Tolerance"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT11"));
+	workTolStaticText->SetToolTip(_("Test"));
+	workTolFlexGridSizer->Add(workTolStaticText, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	workTolFlexGridSizer->Add(-1,-1,1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	workTolSpinCtrl = new wxSpinCtrl(AdvancedPanel, ID_SPINCTRL15, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 10000, 0, _T("ID_SPINCTRL15"));
+	workTolSpinCtrl->SetValue(_T("0"));
+	workTolFlexGridSizer->Add(workTolSpinCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	advancedFlexGridSizer->Add(workTolFlexGridSizer, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 	indexFlexGridSizer = new wxFlexGridSizer(0, 3, 0, 0);
 	indexFlexGridSizer->AddGrowableCol(1);
 	indexStaticText = new wxStaticText(AdvancedPanel, ID_STATICTEXT8, _("Webcam Index"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
@@ -260,7 +273,8 @@ ConfigData OptionsDialog::getData() const
             this->remMinSpinCtrl->GetValue() * 60 + this->remSecSpinCtrl->GetValue()),
         boost::posix_time::seconds(
             this->chkMinSpinCtrl->GetValue() * 60 + this->chkSecSpinCtrl->GetValue()),
-        this->tolSpinCtrl->GetValue(),
+        this->pauseTolSpinCtrl->GetValue(),
+        this->workTolSpinCtrl->GetValue(),
         this->soundCheckBox->GetValue(),
         this->popupCheckBox->GetValue(),
         this->trayIconCheckBox->GetValue(),
@@ -277,7 +291,8 @@ ConfigData OptionsDialog::getData() const
 void OptionsDialog::setData(const ConfigData& data)
 {
 	this->soundCheckBox->SetValue(data.soundAlarm);
-    this->tolSpinCtrl->SetValue(data.pauseTol);
+    this->pauseTolSpinCtrl->SetValue(data.pauseTol);
+    this->workTolSpinCtrl->SetValue(data.workTol);
     this->wrkMinSpinCtrl->SetValue(data.workLength.total_seconds() / 60);
     this->wrkSecSpinCtrl->SetValue(data.workLength.seconds());
     this->popupCheckBox->SetValue(data.popupAlarm);

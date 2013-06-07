@@ -62,9 +62,21 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
 void TKStateAway::initState(TimeKeeper* parent, bool cancelled)
 {
     parent->m_LastAwayStamp = parent->m_AwayStamp;
-    parent->m_AwayStamp = parent->m_LastUpdate;
     parent->m_AwayDur = boost::posix_time::seconds(0);
     parent->m_NumTolerated = 0;
+
+    if (cancelled)
+    {
+        boost::posix_time::time_duration interval =
+            parent->m_TimeHandler->getTime() - parent->m_TolerationTime;
+        parent->m_AwayDur += interval;
+        parent->m_HereDur -= interval;
+        parent->m_AwayStamp = parent->m_TolerationTime;
+    }
+    else
+    {
+        parent->m_AwayStamp = parent->m_LastUpdate;
+    }
 }
 
 boost::posix_time::time_duration TKStateAway::getTimerInterval(const TimeKeeper* parent) const

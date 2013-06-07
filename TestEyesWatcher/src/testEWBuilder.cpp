@@ -91,6 +91,7 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(data.remFreq, builder.links.m_TimeKeeper->remFreq);
         CHECK_EQUAL(data.checkFreq, builder.links.m_TimeKeeper->checkFreq);
         CHECK_EQUAL(data.pauseTol, builder.links.m_TimeKeeper->pauseTol);
+        CHECK_EQUAL(data.workTol, builder.links.m_TimeKeeper->workTol);
 
         CHECK_EQUAL(builder.links.m_MsgHandler, builder.links.m_Presenter->msgHandler);
         CHECK_EQUAL(builder.links.m_TimeKeeper, builder.links.m_Presenter->keeper);
