@@ -62,7 +62,8 @@ class ConfigStub : public AbstractConfig
                     ConfigData::default_FaceSizeY + 1,
                     "test.cfg",
                     "test.wav",
-                    ConfigData::default_CheckFreq + boost::posix_time::seconds(1)
+                    ConfigData::default_CheckFreq + boost::posix_time::seconds(1),
+                    !ConfigData::default_CummulPause
                 };
         }
 

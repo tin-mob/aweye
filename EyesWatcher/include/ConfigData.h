@@ -42,7 +42,8 @@ struct ConfigData
         unsigned int fy = default_FaceSizeY,
         std::string cp = default_CascadePath,
         std::string sp = default_SoundPath,
-        boost::posix_time::time_duration lt = default_RunningLateThreshold);
+        boost::posix_time::time_duration lt = default_RunningLateThreshold,
+        bool cup = default_CummulPause);
 
     bool operator==(const ConfigData& other) const;
     friend std::ostream& operator<<(std::ostream& os, const ConfigData& cd);
@@ -62,6 +63,7 @@ struct ConfigData
     std::string cascadePath;
     std::string soundPath;
     boost::posix_time::time_duration runningLateThreshold;
+    bool cummulPause;
 
     static const boost::posix_time::time_duration default_WorkLength;
     static const boost::posix_time::time_duration default_PauseLength;
@@ -78,6 +80,7 @@ struct ConfigData
     static const std::string default_CascadePath;
     static const std::string default_SoundPath;
     static const boost::posix_time::time_duration default_RunningLateThreshold;
+    static const bool default_CummulPause;
 }
 ;
 

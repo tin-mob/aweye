@@ -62,6 +62,7 @@ void Config::load()
         this->m_Impl->read("SoundPath", ConfigData::default_SoundPath),
         boost::posix_time::duration_from_string(this->m_Impl->read("RunningLateThreshold",
             boost::posix_time::to_simple_string(ConfigData::default_RunningLateThreshold))),
+        this->m_Impl->read("CummulPause", ConfigData::default_CummulPause)
     };
 
     // do not validate, to allow to correct it in app
@@ -107,6 +108,7 @@ void Config::write()
     this->m_Impl->write("CascadePath", this->m_data.cascadePath);
     this->m_Impl->write("SoundPath", this->m_data.soundPath);
     this->m_Impl->write("RunningLateThreshold", boost::posix_time::to_simple_string(this->m_data.runningLateThreshold));
+    this->m_Impl->write("CummulPause", this->m_data.cummulPause);
 
     this->m_Impl->flush();
 }

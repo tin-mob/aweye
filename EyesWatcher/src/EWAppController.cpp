@@ -73,8 +73,10 @@ bool EWAppController::saveConfig(const ConfigData& data)
         this->m_TimeKeeper->setCheckFreq(data.checkFreq);
         this->m_TimeKeeper->setPauseLength(data.pauseLength);
         this->m_TimeKeeper->setPauseTol(data.pauseTol);
+        this->m_TimeKeeper->setWorkTol(data.workTol);
         this->m_TimeKeeper->setRemFreq(data.remFreq);
         this->m_TimeKeeper->setWorkLength(data.workLength);
+        this->m_TimeKeeper->setCummulPause(data.cummulPause);
 
         this->m_Presenter->setPopupAlarm(data.popupAlarm);
         this->m_Presenter->setSoundAlarm(data.soundAlarm);

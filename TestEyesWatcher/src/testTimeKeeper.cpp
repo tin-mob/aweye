@@ -30,12 +30,12 @@ struct TimeKeeperFixture
 {
     public:
         TimeKeeperFixture() :
-            data({boost::posix_time::seconds(5), boost::posix_time::seconds(3),
+            data({boost::posix_time::seconds(5), boost::posix_time::seconds(7),
                 boost::posix_time::seconds(1), boost::posix_time::seconds(2),1,1}),
             timeHandler(TimeHandlerStub()),
             presenceHandler(), keeper(TimeKeeper(&timeHandler, &presenceHandler,
                 data.workLength, data.pauseLength, data.remFreq, data.checkFreq,
-                data.pauseTol, data.workTol))
+                data.pauseTol, data.workTol, data.cummulPause))
         {
         }
 
@@ -368,6 +368,45 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength - interval * 3);
     }
 
+    TEST_FIXTURE(TimeKeeperFixture, TestCancelledPauseCummul)
+    {
+        this->keeper.setCummulPause(true);
+        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
+
+
+        this->keeper.start();
+        this->timeHandler.setTime(startingTime + interval);
+        this->presenceHandler.pushResult(true);
+        this->keeper.updateStatus();
+
+        this->timeHandler.setTime(this->timeHandler.getTime() + interval);
+        this->presenceHandler.pushResult(false);
+        this->keeper.updateStatus();
+
+        this->timeHandler.setTime(this->timeHandler.getTime() + interval);
+        this->presenceHandler.pushResult(false);
+        this->keeper.updateStatus();
+
+        this->timeHandler.setTime(this->timeHandler.getTime() + interval);
+        this->presenceHandler.pushResult(true);
+        this->keeper.updateStatus();
+
+        this->timeHandler.setTime(this->timeHandler.getTime() + interval);
+        this->presenceHandler.pushResult(true);
+        this->keeper.updateStatus();
+
+
+        CHECK_EQUAL(this->keeper.getStatus(), AbstractTimeKeeper::HERE);
+        CHECK_EQUAL(this->keeper.getTimerInterval(), this->data.checkFreq);
+        CHECK_EQUAL(this->keeper.isLate(), false);
+        CHECK_EQUAL(this->keeper.getInterval(), interval * 3);
+        CHECK_EQUAL(this->keeper.getTimeLeft(), this->data.workLength - interval * 3);
+        CHECK_EQUAL(this->keeper.getHereStamp(), startingTime);
+        CHECK_EQUAL(this->keeper.getAwayStamp(), startingTime + interval);
+        CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength - interval * 3);
+    }
+
     TEST_FIXTURE(TimeKeeperFixture, TestRestoredPause)
     {
         boost::posix_time::ptime startingTime = this->timeHandler.getTime();
@@ -394,7 +433,7 @@ SUITE(TestTimeKeeper)
 
 
         CHECK_EQUAL(this->keeper.getStatus(), AbstractTimeKeeper::AWAY);
-        CHECK_EQUAL(this->keeper.getTimerInterval(), this->data.pauseLength - interval * 2);
+        CHECK_EQUAL(this->keeper.getTimerInterval(), this->data.checkFreq);
         CHECK_EQUAL(this->keeper.isLate(), false);
         CHECK_EQUAL(this->keeper.getInterval(), interval * 2);
         CHECK_EQUAL(this->keeper.getTimeLeft(), this->data.pauseLength - interval * 2);

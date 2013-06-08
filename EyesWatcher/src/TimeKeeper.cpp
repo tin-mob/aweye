@@ -17,7 +17,7 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-///@todo: manage pc hibernate, stamps, les complicated...
+///@todo: manage pc hibernate, time adjustment...
 
 #include "TimeKeeper.h"
 #include "TKStateAway.h"
@@ -35,7 +35,8 @@ TimeKeeper::TimeKeeper(AbstractTimeHandler* timeHandler,
                    boost::posix_time::time_duration remFreq,
                    boost::posix_time::time_duration checkFreq,
                    unsigned int pauseTol,
-                   unsigned int workTol):
+                   unsigned int workTol,
+                   bool cummulPause):
     m_TimeHandler(timeHandler), m_PresenceHandler(presenceHandler),
     m_HereDur(boost::posix_time::seconds(0)),
     m_AwayDur(boost::posix_time::seconds(0)),
@@ -47,7 +48,8 @@ TimeKeeper::TimeKeeper(AbstractTimeHandler* timeHandler,
     m_AwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_LastAwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_WorkLength(workLength), m_PauseLength(pauseLength), m_RemFreq(remFreq),
-    m_CheckFreq(checkFreq), m_PauseTol(pauseTol), m_WorkTol(workTol)
+    m_CheckFreq(checkFreq), m_PauseTol(pauseTol), m_WorkTol(workTol),
+    m_CummulPause(cummulPause)
 {
     assert(timeHandler);
     assert(presenceHandler);
@@ -196,5 +198,10 @@ void TimeKeeper::setPauseTol(unsigned int pauseTol)
 void TimeKeeper::setWorkTol(unsigned int workTol)
 {
     this->m_WorkTol = workTol;
+}
+
+void TimeKeeper::setCummulPause(bool cummulPause)
+{
+    this->m_CummulPause = cummulPause;
 }
 

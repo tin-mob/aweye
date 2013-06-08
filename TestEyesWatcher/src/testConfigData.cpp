@@ -96,5 +96,9 @@ SUITE(TestConfigData)
         mod = {};
         mod.runningLateThreshold = ConfigData::default_CheckFreq + boost::posix_time::seconds(1);
         CHECK_EQUAL(false, mod == src);
+
+        mod = {};
+        mod.cummulPause = !ConfigData::default_CummulPause;
+        CHECK_EQUAL(false, mod == src);
     }
 }

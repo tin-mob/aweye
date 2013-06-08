@@ -71,8 +71,10 @@ SUITE(TestEWAppController)
         CHECK_EQUAL(newData.checkFreq, timeKeeper.checkFreq);
         CHECK_EQUAL(newData.pauseLength, timeKeeper.pauseLength);
         CHECK_EQUAL(newData.pauseTol, timeKeeper.pauseTol);
+        CHECK_EQUAL(newData.workTol, timeKeeper.workTol);
         CHECK_EQUAL(newData.remFreq, timeKeeper.remFreq);
         CHECK_EQUAL(newData.workLength, timeKeeper.workLength);
+        CHECK_EQUAL(newData.cummulPause, timeKeeper.cummulPause);
 
         CHECK_EQUAL(newData.popupAlarm, presenter.popupAlarm);
         CHECK_EQUAL(newData.soundAlarm, presenter.soundAlarm);

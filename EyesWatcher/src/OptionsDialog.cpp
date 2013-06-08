@@ -51,6 +51,7 @@ const long OptionsDialog::ID_SPINCTRL12 = wxNewId();
 const long OptionsDialog::ID_CHECKBOX2 = wxNewId();
 const long OptionsDialog::ID_CHECKBOX3 = wxNewId();
 const long OptionsDialog::ID_CHECKBOX5 = wxNewId();
+const long OptionsDialog::ID_CHECKBOX1 = wxNewId();
 const long OptionsDialog::ID_PANEL1 = wxNewId();
 const long OptionsDialog::ID_STATICTEXT6 = wxNewId();
 const long OptionsDialog::ID_SPINCTRL4 = wxNewId();
@@ -164,6 +165,9 @@ OptionsDialog::OptionsDialog(wxWindow* parent, AbstractOptionsDialogPres* presen
 	trayIconCheckBox = new wxCheckBox(GeneralPanel, ID_CHECKBOX5, _("Tray Icon"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX5"));
 	trayIconCheckBox->SetValue(false);
 	generalFlexGridSizer->Add(trayIconCheckBox, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	cummulCheckBox = new wxCheckBox(GeneralPanel, ID_CHECKBOX1, _("Cummulative Pause"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX1"));
+	cummulCheckBox->SetValue(false);
+	generalFlexGridSizer->Add(cummulCheckBox, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	GeneralPanel->SetSizer(generalFlexGridSizer);
 	generalFlexGridSizer->Fit(GeneralPanel);
 	generalFlexGridSizer->SetSizeHints(GeneralPanel);
@@ -284,7 +288,8 @@ ConfigData OptionsDialog::getData() const
         std::string(this->cascadeFilePickerCtrl->GetPath().mb_str()),
         std::string(this->soundLocFilePickerCtrl->GetPath().mb_str()),
         boost::posix_time::seconds(
-            this->runningLateMinSpinCtrl->GetValue() * 60 + this->runningLateSecSpinCtrl->GetValue())
+            this->runningLateMinSpinCtrl->GetValue() * 60 + this->runningLateSecSpinCtrl->GetValue()),
+        this->cummulCheckBox->GetValue()
     };
 }
 
@@ -310,6 +315,7 @@ void OptionsDialog::setData(const ConfigData& data)
     this->runningLateMinSpinCtrl->SetValue(data.runningLateThreshold.total_seconds() / 60);
     this->runningLateSecSpinCtrl->SetValue(data.runningLateThreshold.seconds());
     this->trayIconCheckBox->SetValue(data.trayIcon);
+    this->cummulCheckBox->SetValue(data.cummulPause);
 }
 
 void OptionsDialog::disableTray()

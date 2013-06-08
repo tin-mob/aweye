@@ -71,7 +71,7 @@ class EWBuilder
                     this->m_TimeHandler = new TTimeHandler();
                     this->m_TimeKeeper = new TTimeKeeper(m_TimeHandler,
                         m_PresenceHandler, data.workLength, data.pauseLength, data.remFreq,
-                        data.checkFreq, data.pauseTol, data.workTol);
+                        data.checkFreq, data.pauseTol, data.workTol, data.cummulPause);
 
                     this->m_CheckTimer = new TTimer();
                     this->m_ClockTimer = new TTimer();

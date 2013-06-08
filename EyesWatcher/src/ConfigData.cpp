@@ -37,6 +37,7 @@ const unsigned int ConfigData::default_FaceSizeY = 100;
 const std::string ConfigData::default_CascadePath = "haarcascade_frontalface_alt2.xml";
 const std::string ConfigData::default_SoundPath = "beep-1.wav";
 const boost::posix_time::time_duration ConfigData::default_RunningLateThreshold(0,4,0,0);
+const bool ConfigData::default_CummulPause = false;
 
 ConfigData::ConfigData(boost::posix_time::time_duration wl,
                        boost::posix_time::time_duration pl,
@@ -45,11 +46,12 @@ ConfigData::ConfigData(boost::posix_time::time_duration wl,
                        unsigned int pt, unsigned int wt,
                        bool sa, bool pa, bool tr, int wi,
                        unsigned int fx, unsigned int fy, std::string cp,
-                       std::string sp, boost::posix_time::time_duration lt):
+                       std::string sp, boost::posix_time::time_duration lt,
+                       bool cup):
     workLength(wl), pauseLength(pl), remFreq(rf), checkFreq(cf),
     pauseTol(pt), workTol(wt), soundAlarm(sa), popupAlarm(pa), trayIcon(tr),
     webcamIndex(wi), faceSizeX(fx), faceSizeY(fy), cascadePath(cp),
-    soundPath(sp), runningLateThreshold(lt)
+    soundPath(sp), runningLateThreshold(lt), cummulPause(cup)
 {
 }
 
@@ -69,7 +71,8 @@ bool ConfigData::operator==(const ConfigData& other) const
             faceSizeY == other.faceSizeY &&
             cascadePath == other.cascadePath &&
             soundPath == other.soundPath &&
-            runningLateThreshold == other.runningLateThreshold
+            runningLateThreshold == other.runningLateThreshold &&
+            cummulPause == other.cummulPause
             );
 }
 
@@ -79,7 +82,8 @@ std::ostream& operator<<(std::ostream& os, const ConfigData& cd)
        << cd.checkFreq << "; " << cd.pauseTol << "; " << cd.workTol << "; "
        << cd.soundAlarm << "; " << cd.popupAlarm << "; " << cd.trayIcon << "; "
        << cd.webcamIndex << "; " << cd.faceSizeX << "; " << cd.faceSizeY << "; "
-       << cd.cascadePath << "; " << cd.soundPath << "; " << cd.runningLateThreshold;
+       << cd.cascadePath << "; " << cd.soundPath << "; "
+       << cd.runningLateThreshold << "; " << cd.cummulPause;
     return os;
 }
 

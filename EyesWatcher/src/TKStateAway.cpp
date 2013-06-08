@@ -37,8 +37,14 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
 {
     if (parent->m_PresenceHandler->isHere())
     {
-        if (this->getTimeLeft(parent) > boost::posix_time::time_duration(0,0,0,0))
+        if (this->getTimeLeft(parent) > boost::posix_time::time_duration(0,0,0,0) ||
+            parent->m_NumTolerated != 0)
         {
+            if (parent->m_NumTolerated == 0)
+            {
+                parent->m_TolerationTime = parent->m_LastUpdate;
+            }
+
             if (parent->m_NumTolerated < parent->m_PauseTol)
             {
                 ++parent->m_NumTolerated;
@@ -67,11 +73,18 @@ void TKStateAway::initState(TimeKeeper* parent, bool cancelled)
 
     if (cancelled)
     {
-        boost::posix_time::time_duration interval =
-            parent->m_TimeHandler->getTime() - parent->m_TolerationTime;
-        parent->m_AwayDur += interval;
-        parent->m_HereDur -= interval;
-        parent->m_AwayStamp = parent->m_TolerationTime;
+        if (!parent->m_TolerationTime.is_special())
+        {
+            boost::posix_time::time_duration interval =
+                parent->m_TimeHandler->getTime() - parent->m_TolerationTime;
+            parent->m_AwayDur += interval;
+            parent->m_HereDur -= interval;
+            parent->m_AwayStamp = parent->m_TolerationTime;
+        }
+        else
+        {
+            parent->m_AwayStamp = parent->m_StartTimeUpdate;
+        }
     }
     else
     {

@@ -75,6 +75,7 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		wxPanel* GeneralPanel;
 		wxSpinCtrl* remSecSpinCtrl;
 		wxCheckBox* trayIconCheckBox;
+		wxCheckBox* cummulCheckBox;
 		wxPanel* AdvancedPanel;
 		wxSpinCtrl* wrkMinSpinCtrl;
 		wxStaticText* indexStaticText;
@@ -107,6 +108,7 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		static const long ID_CHECKBOX2;
 		static const long ID_CHECKBOX3;
 		static const long ID_CHECKBOX5;
+		static const long ID_CHECKBOX1;
 		static const long ID_PANEL1;
 		static const long ID_STATICTEXT6;
 		static const long ID_SPINCTRL4;

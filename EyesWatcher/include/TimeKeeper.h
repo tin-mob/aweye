@@ -44,7 +44,8 @@ class TimeKeeper : public AbstractTimeKeeper
                    boost::posix_time::time_duration remFreq,
                    boost::posix_time::time_duration checkFreq,
                    unsigned int pauseTol,
-                   unsigned int workTol);
+                   unsigned int workTol,
+                   bool cummulPause);
         virtual ~TimeKeeper();
 
         virtual void start();
@@ -68,6 +69,7 @@ class TimeKeeper : public AbstractTimeKeeper
         virtual void setCheckFreq(boost::posix_time::time_duration checkFreq);
         virtual void setPauseTol(unsigned int pauseTol);
         virtual void setWorkTol(unsigned int workTol);
+        virtual void setCummulPause(bool cummulPause);
 
     protected:
     private:
@@ -103,6 +105,7 @@ class TimeKeeper : public AbstractTimeKeeper
         boost::posix_time::time_duration m_CheckFreq;
         unsigned int m_PauseTol;
         unsigned int m_WorkTol;
+        bool m_CummulPause;
 };
 
 #endif // TIMEKEEPER_H

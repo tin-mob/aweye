@@ -37,7 +37,8 @@ void TKStateHere::updateStatus(TimeKeeper* parent)
 {
     if (!parent->m_PresenceHandler->isHere())
     {
-        if (this->getTimeLeft(parent) > boost::posix_time::time_duration(0,0,0,0))
+        if (this->getTimeLeft(parent) > boost::posix_time::time_duration(0,0,0,0) ||
+            parent->m_NumTolerated != 0)
         {
             if (parent->m_NumTolerated == 0)
             {
@@ -66,16 +67,35 @@ void TKStateHere::updateStatus(TimeKeeper* parent)
 
 void TKStateHere::initState(TimeKeeper* parent, bool cancelled)
 {
-    if (cancelled)
+    if (!cancelled)
     {
-        parent->m_AwayStamp = parent->m_LastAwayStamp;
-        parent->m_HereDur += parent->m_AwayDur;
+        parent->m_HereStamp = parent->m_TolerationTime.is_special() ?
+            parent->m_StartTimeUpdate : parent->m_TolerationTime;
+    }
+    if (!parent->m_CummulPause)
+    {
+        if (cancelled)
+        {
+            parent->m_AwayStamp = parent->m_LastAwayStamp;
+            parent->m_HereDur += parent->m_AwayDur;
+        }
+        parent->m_AwayDur = boost::posix_time::seconds(0);
     }
     else
     {
-        parent->m_HereStamp = parent->m_LastUpdate;
+        if (cancelled)
+        {
+            if (!parent->m_TolerationTime.is_special())
+            {
+                boost::posix_time::time_duration interval =
+                    parent->m_TimeHandler->getTime() - parent->m_TolerationTime;
+                parent->m_HereDur += interval;
+                parent->m_AwayDur -= interval;
+            }
+        }
+        parent->m_AwayDur = boost::posix_time::seconds(0);
     }
-    parent->m_AwayDur = boost::posix_time::seconds(0);
+
     parent->m_NumTolerated = 0;
 }
 

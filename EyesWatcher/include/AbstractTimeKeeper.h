@@ -64,6 +64,8 @@ class AbstractTimeKeeper
         virtual void setRemFreq(boost::posix_time::time_duration remFreq) = 0;
         virtual void setCheckFreq(boost::posix_time::time_duration checkFreq) = 0;
         virtual void setPauseTol(unsigned int pauseTol) = 0;
+        virtual void setWorkTol(unsigned int workTol) = 0;
+        virtual void setCummulPause(bool cummulPause) = 0;
     protected:
     private:
 };
