@@ -81,6 +81,7 @@ class TimeKeeper : public AbstractTimeKeeper
 
         void deleteStates();
         void setStatus(Status status, bool cancelled = false);
+        boost::posix_time::time_duration getUpdateOffset() const;
 
         std::map<Status,TKState*> m_States;
         Status m_CurrentState;

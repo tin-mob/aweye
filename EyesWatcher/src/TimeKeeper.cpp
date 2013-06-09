@@ -109,12 +109,7 @@ void TimeKeeper::updateStatus()
 
     state = this->m_States.find(this->m_CurrentState)->second;
     state->addDuration(this);
-    this->m_LastUpdate = this->m_TimeHandler->getTime();
-
-    if (this->m_AwayDur >= this->m_PauseLength)
-    {
-        this->m_HereDur = boost::posix_time::seconds(0);
-    }
+    this->m_LastUpdate = this->m_StartTimeUpdate;
 }
 
 boost::posix_time::time_duration TimeKeeper::getTimerInterval() const
@@ -168,6 +163,12 @@ void TimeKeeper::setStatus(Status status, bool cancelled)
 
     TKState* state = this->m_States.find(this->m_CurrentState)->second;
     return state->initState(this, cancelled);
+}
+
+boost::posix_time::time_duration TimeKeeper::getUpdateOffset() const
+{
+    return this->m_TimeHandler->getTime() -
+        (this->m_HereStamp + this->m_HereDur + this->m_AwayDur);
 }
 
 void TimeKeeper::setWorkLength(boost::posix_time::time_duration workLength)

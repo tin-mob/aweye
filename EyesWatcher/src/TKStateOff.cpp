@@ -59,7 +59,7 @@ boost::posix_time::time_duration TKStateOff::getInterval(const TimeKeeper*) cons
     return boost::posix_time::time_duration(0,0,0,0);
 }
 
-boost::posix_time::time_duration TKStateOff::getTimeLeft(const TimeKeeper* parent) const
+boost::posix_time::time_duration TKStateOff::getTimeLeft(const TimeKeeper* parent, bool isUpdate) const
 {
     return boost::posix_time::time_duration(0,0,0,0);
 }
