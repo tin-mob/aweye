@@ -120,6 +120,7 @@ void EWPresenter::updateTimes()
         boost::posix_time::minutes(1))
     {
         this->m_TimeKeeper->notifyHibernated();
+        this->updateStatus();
     }
 
     this->notify(&EWViewObserver::OnTimeUpdate, this);

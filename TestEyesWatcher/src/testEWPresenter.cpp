@@ -203,9 +203,11 @@ SUITE(TestEWPresenter)
     TEST_FIXTURE(EWPresenterFixture, TestHibernated)
     {
         this->presenter.toggleStart();
+        this->keeper.status = AbstractTimeKeeper::OFF;
         this->timeHandler.setTime(this->timeHandler.getTime() + boost::posix_time::minutes(2));
         this->clockTimer.ring();
         CHECK_EQUAL(this->viewObserver.checkTimeUpdated(), true);
         CHECK_EQUAL(this->keeper.hibernated, true);
+        CHECK_EQUAL(this->keeper.status, AbstractTimeKeeper::HERE);
     }
 }
