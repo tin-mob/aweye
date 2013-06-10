@@ -29,6 +29,7 @@
 
 class AbstractConfig;
 class AbstractMsgHandler;
+class AbstractTimeHandler;
 class AbstractTimeKeeper;
 class AbstractPresenceHandler;
 class AbstractTimer;
@@ -42,7 +43,7 @@ class EWPresenter : public AbstractEWPresenter, public TimerInterface
 {
     public:
         EWPresenter(AbstractMsgHandler* msgHandler, AbstractTimeKeeper* keeper,
-                    AbstractTimer* checkTimer, AbstractTimer* clockTimer,
+                    AbstractTimer* checkTimer, AbstractTimer* clockTimer, AbstractTimeHandler* timeHandler,
                     bool popupAlarm = true, bool soundAlarm = false, std::string soundPath = "",
                     boost::posix_time::time_duration runningLateThreshold = boost::posix_time::minutes(4));
         virtual ~EWPresenter();
@@ -88,11 +89,13 @@ class EWPresenter : public AbstractEWPresenter, public TimerInterface
         AbstractMsgHandler* m_MsgHandler;
         AbstractTimer* m_CheckTimer;
         AbstractTimer* m_ClockTimer;
+        AbstractTimeHandler* m_TimeHandler;
 
         bool m_PopupAlarm;
         bool m_SoundAlarm;
         std::string m_SoundPath;
         boost::posix_time::time_duration m_RunningLateThreshold;
+        boost::posix_time::ptime m_LastTimeUpdate;
 };
 
 #endif // EWPRESENTER_H

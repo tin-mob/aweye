@@ -21,6 +21,7 @@
 
 #include "EWPresenter.h"
 #include "AbstractMsgHandler.h"
+#include "AbstractTimeHandler.h"
 #include "AbstractTimeKeeper.h"
 #include "AbstractTimer.h"
 #include "BaseException.h"
@@ -35,16 +36,20 @@
 /// @todo: EWPresenter to EWTimeKeeperPresenter,
 EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractTimeKeeper* keeper,
                          AbstractTimer* checkTimer, AbstractTimer* clockTimer,
+                         AbstractTimeHandler* timeHandler,
                          bool popupAlarm, bool soundAlarm, std::string soundPath,
                          boost::posix_time::time_duration runningLateThreshold)
     : m_Warn(true), m_Shown(true), m_TimeKeeper(keeper), m_MsgHandler(msgHandler),
-    m_CheckTimer(checkTimer), m_ClockTimer(clockTimer), m_PopupAlarm(popupAlarm),
-    m_SoundAlarm(soundAlarm), m_SoundPath(soundPath), m_RunningLateThreshold(runningLateThreshold)
+    m_CheckTimer(checkTimer), m_ClockTimer(clockTimer), m_TimeHandler(timeHandler),
+    m_PopupAlarm(popupAlarm), m_SoundAlarm(soundAlarm), m_SoundPath(soundPath),
+    m_RunningLateThreshold(runningLateThreshold),
+    m_LastTimeUpdate(boost::posix_time::not_a_date_time)
 {
     assert(msgHandler);
     assert(keeper);
     assert(checkTimer);
     assert(clockTimer);
+    assert(timeHandler);
 
     this->m_CheckTimer->attach(this);
     this->m_ClockTimer->attach(this);
@@ -61,6 +66,7 @@ void EWPresenter::start()
         this->m_TimeKeeper->start();
         this->updateStatus();
         this->m_ClockTimer->startTimer(1000, false);
+        this->m_LastTimeUpdate = this->m_TimeHandler->getTime();
     }
     catch (BaseException e)
     {
@@ -109,7 +115,15 @@ void EWPresenter::updateStatus()
 
 void EWPresenter::updateTimes()
 {
+    // if it has been a long time since last ring and is running, we have hibernated
+    if (this->m_TimeHandler->getTime() - this->m_LastTimeUpdate >
+        boost::posix_time::minutes(1))
+    {
+        this->m_TimeKeeper->notifyHibernated();
+    }
+
     this->notify(&EWViewObserver::OnTimeUpdate, this);
+    this->m_LastTimeUpdate = this->m_TimeHandler->getTime();
 }
 
 void EWPresenter::onTimerRing(AbstractTimer* timer)

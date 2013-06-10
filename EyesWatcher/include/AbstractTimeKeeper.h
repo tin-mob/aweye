@@ -46,7 +46,7 @@ class AbstractTimeKeeper
 
         virtual void start() = 0;
         virtual void stop() = 0;
-        virtual void notifyHibernated(boost::posix_time::time_duration length) = 0;
+        virtual void notifyHibernated() = 0;
 
         virtual void updateStatus() = 0;
         virtual boost::posix_time::time_duration getTimerInterval() const = 0;

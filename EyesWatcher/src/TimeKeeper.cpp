@@ -96,9 +96,29 @@ void TimeKeeper::stop()
     }
 }
 
-void TimeKeeper::notifyHibernated(boost::posix_time::time_duration length)
+void TimeKeeper::notifyHibernated()
 {
-    ///@todo
+    this->m_StartTimeUpdate = this->m_TimeHandler->getTime();
+    this->m_NumTolerated = 0;
+    this->m_LastAwayStamp = this->m_AwayStamp;
+
+    if (!this->m_TolerationTime.is_special())
+    {
+        boost::posix_time::time_duration interval =
+            this->m_LastUpdate - this->m_TolerationTime;
+        this->m_AwayDur += interval;
+        this->m_HereDur -= interval;
+        this->m_AwayStamp = this->m_TolerationTime;
+    }
+    else
+    {
+        this->m_AwayStamp = this->m_LastUpdate;
+    }
+
+
+    this->m_AwayDur += this->m_StartTimeUpdate - this->m_LastUpdate;
+    this->m_CurrentState = AbstractTimeKeeper::AWAY;
+    this->m_LastUpdate = this->m_StartTimeUpdate;
 }
 
 void TimeKeeper::updateStatus()

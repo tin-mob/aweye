@@ -25,6 +25,7 @@
 #include "EWMainFrameStub.h"
 #include "OptionsDialogStub.h"
 #include "MsgHandlerStub.h"
+#include "TimeHandlerStub.h"
 #include "TimeKeeperStub.h"
 #include "PresenceHandlerStub.h"
 #include "TimerStub.h"
@@ -36,9 +37,10 @@ struct EWPresenterFixture
         EWPresenterFixture() :
             data({boost::posix_time::seconds(5), boost::posix_time::seconds(3),
                 boost::posix_time::seconds(1), boost::posix_time::seconds(2)}),
-            msgHandler(), keeper(), checkTimer(), clockTimer(), dialog(), viewObserver(),
+            msgHandler(), timeHandler(), keeper(), checkTimer(), clockTimer(),
+            dialog(), viewObserver(),
             presenter(EWPresenter(&msgHandler, &keeper, &checkTimer,
-                &clockTimer, data.popupAlarm, true, data.soundPath))
+                &clockTimer, &timeHandler, data.popupAlarm, true, data.soundPath))
         {
             data.soundAlarm = true;
             presenter.attach(&viewObserver);
@@ -49,6 +51,7 @@ struct EWPresenterFixture
 
         ConfigData data;
         MsgHandlerStub msgHandler;
+        TimeHandlerStub timeHandler;
         TimeKeeperStub keeper;
         TimerStub checkTimer;
         TimerStub clockTimer;
@@ -191,7 +194,18 @@ SUITE(TestEWPresenter)
 
     TEST_FIXTURE(EWPresenterFixture, TestUpdateTime)
     {
+        this->presenter.toggleStart();
         this->clockTimer.ring();
         CHECK_EQUAL(this->viewObserver.checkTimeUpdated(), true);
+        CHECK_EQUAL(this->keeper.hibernated, false);
+    }
+
+    TEST_FIXTURE(EWPresenterFixture, TestHibernated)
+    {
+        this->presenter.toggleStart();
+        this->timeHandler.setTime(this->timeHandler.getTime() + boost::posix_time::minutes(2));
+        this->clockTimer.ring();
+        CHECK_EQUAL(this->viewObserver.checkTimeUpdated(), true);
+        CHECK_EQUAL(this->keeper.hibernated, true);
     }
 }

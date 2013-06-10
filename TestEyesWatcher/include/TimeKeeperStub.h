@@ -44,7 +44,7 @@ class TimeKeeperStub : public AbstractTimeKeeper
                    unsigned int pt = 1000,
                    unsigned int wt = 1000,
                    bool cup = false) :
-            fail(false), late(false), status(AbstractTimeKeeper::OFF),
+            fail(false), late(false), hibernated(false), status(AbstractTimeKeeper::OFF),
             hereStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(10,59,00))),
             awayStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(11,31,01))),
             interval(boost::posix_time::seconds(2)), left(boost::posix_time::minutes(3)),
@@ -61,7 +61,7 @@ class TimeKeeperStub : public AbstractTimeKeeper
         }
         virtual void stop() {status = AbstractTimeKeeper::OFF;}
 
-        virtual void notifyHibernated(boost::posix_time::time_duration length) {}
+        virtual void notifyHibernated() {hibernated = true;}
 
         virtual void updateStatus()
                 {
@@ -89,6 +89,7 @@ class TimeKeeperStub : public AbstractTimeKeeper
 
         bool fail;
         bool late;
+        bool hibernated;
         AbstractTimeKeeper::Status status;
         boost::posix_time::ptime hereStamp;
         boost::posix_time::ptime awayStamp;

@@ -50,7 +50,7 @@ class TimeKeeper : public AbstractTimeKeeper
 
         virtual void start();
         virtual void stop();
-        virtual void notifyHibernated(boost::posix_time::time_duration length);
+        virtual void notifyHibernated();
 
         virtual void updateStatus();
         virtual boost::posix_time::time_duration getTimerInterval() const;

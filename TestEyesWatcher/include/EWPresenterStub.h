@@ -24,6 +24,7 @@
 
 #include "AbstractEWPresenter.h"
 #include "AbstractMsgHandler.h"
+#include "AbstractTimeHandler.h"
 #include "AbstractTimeKeeper.h"
 #include "AbstractTimer.h"
 #include <string>
@@ -33,7 +34,8 @@ class EWPresenterStub : public AbstractEWPresenter
 {
     public:
         EWPresenterStub(AbstractMsgHandler* mH = nullptr, AbstractTimeKeeper* k = nullptr,
-            AbstractTimer* chT = nullptr, AbstractTimer* clT = nullptr, bool pA = false,
+            AbstractTimer* chT = nullptr, AbstractTimer* clT = nullptr,
+            AbstractTimeHandler* tH = nullptr, bool pA = false,
             bool sA = false, std::string sP = "",
             boost::posix_time::time_duration rLT = boost::posix_time::seconds(0)) :
             popupAlarm(pA), soundAlarm(sA), soundPath(sP), runningLateThreshold(rLT),
@@ -41,7 +43,7 @@ class EWPresenterStub : public AbstractEWPresenter
             shown(false), statusUpdated(false), timesUpdated(false),
             hideButtonLabel(""), pauseButtonLabel(""), startButtonLabel(""), status(""),
             timeOn(""), timeOff(""), timeRunning(""), timeLeft(""), icon(""),
-            msgHandler(mH), keeper(k), checkTimer(chT), clockTimer(clT) {}
+            msgHandler(mH), keeper(k), checkTimer(chT), clockTimer(clT), timeHandler(tH) {}
         virtual ~EWPresenterStub() {}
 
         virtual void togglePause() {paused = !paused;}
@@ -115,6 +117,7 @@ class EWPresenterStub : public AbstractEWPresenter
         AbstractTimeKeeper* keeper;
         AbstractTimer* checkTimer;
         AbstractTimer* clockTimer;
+        AbstractTimeHandler* timeHandler;
 
     protected:
     private:

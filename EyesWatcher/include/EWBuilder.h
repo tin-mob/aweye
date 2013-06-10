@@ -78,7 +78,7 @@ class EWBuilder
                     TEWAppController* tmpAppCtrl = new TEWAppController(canCreateTaskbar);
                     this->m_AppController = tmpAppCtrl;
                     this->m_Presenter = new TEWPresenter(m_MsgHandler,
-                        m_TimeKeeper, m_CheckTimer, m_ClockTimer, data.popupAlarm,
+                        m_TimeKeeper, m_CheckTimer, m_ClockTimer, m_TimeHandler, data.popupAlarm,
                         data.soundAlarm, data.soundPath, data.runningLateThreshold);
 
                     this->m_MainFramePres = new TEWMainFramePres(m_Presenter, m_AppController);

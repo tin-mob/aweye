@@ -441,6 +441,89 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime);
         CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength - (pauseTime - startingTime));
     }
+
+    TEST_FIXTURE(TimeKeeperFixture, TestSmallHibernation)
+    {
+        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        boost::posix_time::time_duration interval = this->data.checkFreq;
+        boost::posix_time::ptime pauseTime = startingTime + interval;
+        boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(2);
+        boost::posix_time::time_duration pauseInterval = this->data.pauseLength - pauseLeft;
+
+        this->keeper.start();
+        this->timeHandler.setTime(pauseTime);
+        this->presenceHandler.pushResult(true);
+        this->keeper.updateStatus();
+
+        this->timeHandler.setTime(pauseTime + pauseInterval);
+        this->presenceHandler.pushResult(true);
+        this->keeper.notifyHibernated();
+
+        CHECK_EQUAL(this->keeper.getStatus(), AbstractTimeKeeper::AWAY);
+        CHECK_EQUAL(this->keeper.getTimerInterval(), this->data.checkFreq);
+        CHECK_EQUAL(this->keeper.isLate(), false);
+        CHECK_EQUAL(this->keeper.getInterval(), pauseInterval);
+        CHECK_EQUAL(this->keeper.getTimeLeft(), this->data.pauseLength - pauseInterval);
+        CHECK_EQUAL(this->keeper.getHereStamp(), startingTime);
+        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime);
+        CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength - (pauseTime - startingTime));
+    }
+
+    TEST_FIXTURE(TimeKeeperFixture, TestLongHibernation)
+    {
+        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        boost::posix_time::time_duration interval = this->data.checkFreq;
+        boost::posix_time::ptime pauseTime = startingTime + interval;
+        boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(0);
+        boost::posix_time::time_duration pauseInterval = this->data.pauseLength - pauseLeft;
+
+        this->keeper.start();
+        this->timeHandler.setTime(pauseTime);
+        this->presenceHandler.pushResult(true);
+        this->keeper.updateStatus();
+
+        this->timeHandler.setTime(pauseTime + pauseInterval);
+        this->presenceHandler.pushResult(true);
+        this->keeper.notifyHibernated();
+
+        CHECK_EQUAL(this->keeper.getStatus(), AbstractTimeKeeper::AWAY);
+        CHECK_EQUAL(this->keeper.getTimerInterval(), this->data.checkFreq);
+        CHECK_EQUAL(this->keeper.isLate(), false);
+        CHECK_EQUAL(this->keeper.getInterval(), pauseInterval);
+        CHECK_EQUAL(this->keeper.getTimeLeft(), this->data.pauseLength - pauseInterval);
+        CHECK_EQUAL(this->keeper.getHereStamp(), startingTime);
+        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime);
+        CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength);
+    }
+
+    TEST_FIXTURE(TimeKeeperFixture, TestTolAndHibernate)
+    {
+        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
+        boost::posix_time::ptime pauseTime = startingTime + interval;
+
+        this->keeper.start();
+        this->timeHandler.setTime(pauseTime);
+        this->presenceHandler.pushResult(true);
+        this->keeper.updateStatus();
+
+        this->timeHandler.setTime(pauseTime + interval);
+        this->presenceHandler.pushResult(false);
+        this->keeper.updateStatus();
+
+        this->timeHandler.setTime(pauseTime + interval * 2);
+        this->presenceHandler.pushResult(true);
+        this->keeper.notifyHibernated();
+
+        CHECK_EQUAL(this->keeper.getStatus(), AbstractTimeKeeper::AWAY);
+        CHECK_EQUAL(this->keeper.getTimerInterval(), this->data.checkFreq);
+        CHECK_EQUAL(this->keeper.isLate(), false);
+        CHECK_EQUAL(this->keeper.getInterval(), interval * 2);
+        CHECK_EQUAL(this->keeper.getTimeLeft(), this->data.pauseLength - interval * 2);
+        CHECK_EQUAL(this->keeper.getHereStamp(), startingTime);
+        CHECK_EQUAL(this->keeper.getAwayStamp(), pauseTime);
+        CHECK_EQUAL(this->keeper.getWorkTimeLeft(), this->data.workLength - interval);
+    }
 }
 
 

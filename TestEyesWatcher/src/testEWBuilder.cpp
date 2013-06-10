@@ -97,6 +97,7 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(builder.links.m_TimeKeeper, builder.links.m_Presenter->keeper);
         CHECK_EQUAL(builder.links.m_CheckTimer, builder.links.m_Presenter->checkTimer);
         CHECK_EQUAL(builder.links.m_ClockTimer, builder.links.m_Presenter->clockTimer);
+        CHECK_EQUAL(builder.links.m_TimeHandler, builder.links.m_Presenter->timeHandler);
 
         CHECK_EQUAL(data.popupAlarm, builder.links.m_Presenter->popupAlarm);
         CHECK_EQUAL(data.soundAlarm, builder.links.m_Presenter->soundAlarm);

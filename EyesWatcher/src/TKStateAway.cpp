@@ -67,9 +67,8 @@ void TKStateAway::updateStatus(TimeKeeper* parent)
 
 void TKStateAway::initState(TimeKeeper* parent, bool cancelled)
 {
-    parent->m_LastAwayStamp = parent->m_AwayStamp;
-    parent->m_AwayDur = boost::posix_time::seconds(0);
     parent->m_NumTolerated = 0;
+    parent->m_LastAwayStamp = parent->m_AwayStamp;
 
     if (cancelled)
     {
@@ -88,6 +87,7 @@ void TKStateAway::initState(TimeKeeper* parent, bool cancelled)
     }
     else
     {
+        parent->m_AwayDur = boost::posix_time::seconds(0);
         parent->m_AwayStamp = parent->m_LastUpdate;
     }
 }
