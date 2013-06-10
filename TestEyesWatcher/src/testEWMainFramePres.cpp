@@ -46,46 +46,29 @@ SUITE(TestEWMainFramePres)
     ///////////////////////////////////////////////////////////////////////////
     TEST_FIXTURE(EWMainFramePresFixture, TestStatusUpdate)
     {
-        ///@todo: remove redundancy
-        const std::string hbl = "hbl";
-        const std::string pbl = "pbl";
-        const std::string sbl = "sbl";
-        const std::string s = "s";
-        const std::string ton = "ton";
-        const std::string toff = "toff";
-        const std::string tr = "tr";
-        const std::string tl = "tl";
-        const bool is = true;
-        const std::string in = "in";
-        pres.setDisplayValues(hbl, pbl, sbl, s, ton, toff, tr, tl, is, in);
+        EWPresenterStub::DisplayValues values =
+            EWPresenterStub::DisplayValues::getTestValues();
+        pres.setDisplayValues(values);
         pres.notifyStatus();
 
         CHECK_EQUAL(false, frame.closed);
-        CHECK_EQUAL(pbl, frame.pauseLabel);
-        CHECK_EQUAL(sbl, frame.startLabel);
-        CHECK_EQUAL(s, frame.status);
-        CHECK_EQUAL(ton, frame.onClock);
-        CHECK_EQUAL(toff, frame.offClock);
-        CHECK_EQUAL(tr, frame.runningClock);
-        CHECK_EQUAL(tl, frame.leftClock);
-        CHECK_EQUAL(is, frame.shown);
+        CHECK_EQUAL(values.pauseButtonLabel, frame.pauseLabel);
+        CHECK_EQUAL(values.startButtonLabel, frame.startLabel);
+        CHECK_EQUAL(values.status, frame.status);
+        CHECK_EQUAL(values.timeOn, frame.onClock);
+        CHECK_EQUAL(values.timeOff, frame.offClock);
+        CHECK_EQUAL(values.timeRunning, frame.runningClock);
+        CHECK_EQUAL(values.timeLeft, frame.leftClock);
+        CHECK_EQUAL(values.shown, frame.shown);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestStatusUpdateNoShow)
     {
         frame.shown = true;
 
-        const std::string hbl = "hbl";
-        const std::string pbl = "pbl";
-        const std::string sbl = "sbl";
-        const std::string s = "s";
-        const std::string ton = "ton";
-        const std::string toff = "toff";
-        const std::string tr = "tr";
-        const std::string tl = "tl";
-        const bool is = false;
-        const std::string in = "in";
-        pres.setDisplayValues(hbl, pbl, sbl, s, ton, toff, tr, tl, is, in);
+        EWPresenterStub::DisplayValues values =
+            EWPresenterStub::DisplayValues::getTestValues(false);
+        pres.setDisplayValues(values);
         pres.notifyStatus();
 
         CHECK_EQUAL(false, frame.closed);
@@ -96,47 +79,31 @@ SUITE(TestEWMainFramePres)
         CHECK_EQUAL("", frame.offClock);
         CHECK_EQUAL("", frame.runningClock);
         CHECK_EQUAL("", frame.leftClock);
-        CHECK_EQUAL(is, frame.shown);
+        CHECK_EQUAL(false, frame.shown);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestTimesUpdate)
     {
-        const std::string hbl = "hbl";
-        const std::string pbl = "pbl";
-        const std::string sbl = "sbl";
-        const std::string s = "s";
-        const std::string ton = "ton";
-        const std::string toff = "toff";
-        const std::string tr = "tr";
-        const std::string tl = "tl";
-        const bool is = true;
-        const std::string in = "in";
-        pres.setDisplayValues(hbl, pbl, sbl, s, ton, toff, tr, tl, is, in);
+        EWPresenterStub::DisplayValues values =
+            EWPresenterStub::DisplayValues::getTestValues();
+        pres.setDisplayValues(values);
         pres.notifyTime();
 
         CHECK_EQUAL(false, frame.closed);
         CHECK_EQUAL("", frame.pauseLabel);
         CHECK_EQUAL("", frame.startLabel);
-        CHECK_EQUAL(s, frame.status);
-        CHECK_EQUAL(ton, frame.onClock);
-        CHECK_EQUAL(toff, frame.offClock);
-        CHECK_EQUAL(tr, frame.runningClock);
-        CHECK_EQUAL(tl, frame.leftClock);
+        CHECK_EQUAL(values.status, frame.status);
+        CHECK_EQUAL(values.timeOn, frame.onClock);
+        CHECK_EQUAL(values.timeOff, frame.offClock);
+        CHECK_EQUAL(values.timeRunning, frame.runningClock);
+        CHECK_EQUAL(values.timeLeft, frame.leftClock);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestTimesUpdateNoShow)
     {
-        const std::string hbl = "hbl";
-        const std::string pbl = "pbl";
-        const std::string sbl = "sbl";
-        const std::string s = "s";
-        const std::string ton = "ton";
-        const std::string toff = "toff";
-        const std::string tr = "tr";
-        const std::string tl = "tl";
-        const bool is = false;
-        const std::string in = "in";
-        pres.setDisplayValues(hbl, pbl, sbl, s, ton, toff, tr, tl, is, in);
+        EWPresenterStub::DisplayValues values =
+            EWPresenterStub::DisplayValues::getTestValues(false);
+        pres.setDisplayValues(values);
         pres.notifyTime();
 
         CHECK_EQUAL(false, frame.closed);
@@ -185,9 +152,9 @@ SUITE(TestEWMainFramePres)
 
     TEST_FIXTURE(EWMainFramePresFixture, TestFrameClose)
     {
-        pres.shown = true;
+        pres.displayValues.shown = true;
         framePres.OnViewHideRestore();
-        CHECK_EQUAL(false, pres.shown);
+        CHECK_EQUAL(false, pres.displayValues.shown);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestFramePause)

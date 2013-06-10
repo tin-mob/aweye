@@ -40,30 +40,28 @@ class EWPresenterStub : public AbstractEWPresenter
             boost::posix_time::time_duration rLT = boost::posix_time::seconds(0)) :
             popupAlarm(pA), soundAlarm(sA), soundPath(sP), runningLateThreshold(rLT),
             paused(false), started(false), quitted(false),
-            shown(false), statusUpdated(false), timesUpdated(false),
-            hideButtonLabel(""), pauseButtonLabel(""), startButtonLabel(""), status(""),
-            timeOn(""), timeOff(""), timeRunning(""), timeLeft(""), icon(""),
+            statusUpdated(false), timesUpdated(false), displayValues(),
             msgHandler(mH), keeper(k), checkTimer(chT), clockTimer(clT), timeHandler(tH) {}
         virtual ~EWPresenterStub() {}
 
         virtual void togglePause() {paused = !paused;}
         virtual void toggleStart() {started = !started;}
         virtual void quit() {quitted = true;}
-        virtual void show(bool show) {shown = show;}
+        virtual void show(bool show) {displayValues.shown = show;}
 
         virtual void updateStatus() {statusUpdated = true;}
         virtual void updateTimes() {timesUpdated = true;}
 
-        virtual std::string getHideButtonLabel() const {return hideButtonLabel;}
-        virtual std::string getPauseButtonLabel() const {return pauseButtonLabel;}
-        virtual std::string getStartButtonLabel() const {return startButtonLabel;}
-        virtual std::string getStatus() const {return status;}
-        virtual std::string getTimeOn() const {return timeOn;}
-        virtual std::string getTimeOff() const {return timeOff;}
-        virtual std::string getTimeRunning() const {return timeRunning;}
-        virtual std::string getTimeLeft() const {return timeLeft;}
-        virtual bool isShown() const {return shown;}
-        virtual std::string getIconName()const {return icon;}
+        virtual std::string getHideButtonLabel() const {return displayValues.hideButtonLabel;}
+        virtual std::string getPauseButtonLabel() const {return displayValues.pauseButtonLabel;}
+        virtual std::string getStartButtonLabel() const {return displayValues.startButtonLabel;}
+        virtual std::string getStatus() const {return displayValues.status;}
+        virtual std::string getTimeOn() const {return displayValues.timeOn;}
+        virtual std::string getTimeOff() const {return displayValues.timeOff;}
+        virtual std::string getTimeRunning() const {return displayValues.timeRunning;}
+        virtual std::string getTimeLeft() const {return displayValues.timeLeft;}
+        virtual bool isShown() const {return displayValues.shown;}
+        virtual std::string getIconName()const {return displayValues.icon;}
 
         virtual void setRunningLateThreshold(
             boost::posix_time::time_duration val) {runningLateThreshold = val;}
@@ -75,21 +73,34 @@ class EWPresenterStub : public AbstractEWPresenter
         void notifyTime() {notify(&EWViewObserver::OnTimeUpdate, this);}
         void notifyQuit() {notify(&EWViewObserver::OnQuit, this);}
 
-        void setDisplayValues(std::string hbl, std::string pbl, std::string sbl,
-                              std::string s, std::string ton, std::string toff,
-                              std::string tr, std::string tl, bool is, std::string in)
+
+        struct DisplayValues
         {
-            hideButtonLabel = hbl;
-            pauseButtonLabel = pbl;
-            startButtonLabel = sbl;
-            status = s;
-            timeOn = ton;
-            timeOff = toff;
-            timeRunning = tr;
-            timeLeft = tl;
-            shown = is;
-            icon = in;
-        }
+            DisplayValues(bool s = false, std::string hbl = "", std::string pbl = "",
+                std::string sbl = "", std::string st = "", std::string ton = "",
+                std::string tof = "", std::string tr = "", std::string tl = "",
+                std::string i = "") :
+                shown(s), hideButtonLabel(hbl), pauseButtonLabel(pbl),
+                startButtonLabel(sbl), status(st), timeOn(ton), timeOff(tof),
+                timeRunning(tr), timeLeft(tl), icon(i) {}
+
+            static DisplayValues getTestValues(bool shown = true, bool hasIcon = true)
+            {
+                return {shown, "hbl", "pbl", "sbl", "s", "ton", "toff", "tr",
+                        "tl", hasIcon ? "in" : ""};
+            }
+            bool shown;
+            std::string hideButtonLabel;
+            std::string pauseButtonLabel;
+            std::string startButtonLabel;
+            std::string status;
+            std::string timeOn;
+            std::string timeOff;
+            std::string timeRunning;
+            std::string timeLeft;
+            std::string icon;
+        };
+        void setDisplayValues(const DisplayValues& v){displayValues = v;}
 
         bool popupAlarm;
         bool soundAlarm;
@@ -99,19 +110,10 @@ class EWPresenterStub : public AbstractEWPresenter
         bool paused;
         bool started;
         bool quitted;
-        bool shown;
         bool statusUpdated;
         bool timesUpdated;
 
-        std::string hideButtonLabel;
-        std::string pauseButtonLabel;
-        std::string startButtonLabel;
-        std::string status;
-        std::string timeOn;
-        std::string timeOff;
-        std::string timeRunning;
-        std::string timeLeft;
-        std::string icon;
+        DisplayValues displayValues;
 
         AbstractMsgHandler* msgHandler;
         AbstractTimeKeeper* keeper;

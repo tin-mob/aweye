@@ -47,95 +47,57 @@ SUITE(TestEWTaskBarPres)
     ///////////////////////////////////////////////////////////////////////////
     TEST_FIXTURE(EWTaskBarPresFixture, TestTimesUpdate)
     {
-        const std::string hbl = "hbl";
-        const std::string pbl = "pbl";
-        const std::string sbl = "sbl";
-        const std::string s = "s";
-        const std::string ton = "ton";
-        const std::string toff = "toff";
-        const std::string tr = "tr";
-        const std::string tl = "tl";
-        const bool is = true;
-        const std::string in = "in";
-
-        pres.setDisplayValues(hbl, pbl, sbl, s, ton, toff, tr, tl, is, in);
+        EWPresenterStub::DisplayValues values =
+            EWPresenterStub::DisplayValues::getTestValues();
+        pres.setDisplayValues(values);
         pres.notifyTime();
 
-        CHECK_EQUAL("Last Session : " + ton, bar.onClock);
-        CHECK_EQUAL("Last Pause : " + toff, bar.offClock);
-        CHECK_EQUAL("Running : " + tr, bar.runningClock);
-        CHECK_EQUAL("Time Left : " + tl, bar.leftClock);
-        CHECK_EQUAL(in, bar.loc);
+        CHECK_EQUAL("Last Session : " + values.timeOn, bar.onClock);
+        CHECK_EQUAL("Last Pause : " + values.timeOff, bar.offClock);
+        CHECK_EQUAL("Running : " + values.timeRunning, bar.runningClock);
+        CHECK_EQUAL("Time Left : " + values.timeLeft, bar.leftClock);
+        CHECK_EQUAL(values.icon, bar.loc);
     }
 
     TEST_FIXTURE(EWTaskBarPresFixture, TestTimesUpdateNoIcon)
     {
-        const std::string hbl = "hbl";
-        const std::string pbl = "pbl";
-        const std::string sbl = "sbl";
-        const std::string s = "s";
-        const std::string ton = "ton";
-        const std::string toff = "toff";
-        const std::string tr = "tr";
-        const std::string tl = "tl";
-        const bool is = true;
-        const std::string in = "";
-
+        EWPresenterStub::DisplayValues values =
+            EWPresenterStub::DisplayValues::getTestValues(true, false);
         bar.loc = "in";
-
-        pres.setDisplayValues(hbl, pbl, sbl, s, ton, toff, tr, tl, is, in);
+        pres.setDisplayValues(values);
         pres.notifyTime();
 
-        CHECK_EQUAL("Last Session : " + ton, bar.onClock);
-        CHECK_EQUAL("Last Pause : " + toff, bar.offClock);
-        CHECK_EQUAL("Running : " + tr, bar.runningClock);
-        CHECK_EQUAL("Time Left : " + tl, bar.leftClock);
+        CHECK_EQUAL("Last Session : " + values.timeOn, bar.onClock);
+        CHECK_EQUAL("Last Pause : " + values.timeOff, bar.offClock);
+        CHECK_EQUAL("Running : " + values.timeRunning, bar.runningClock);
+        CHECK_EQUAL("Time Left : " + values.timeLeft, bar.leftClock);
         CHECK_EQUAL("in", bar.loc);
     }
 
     TEST_FIXTURE(EWTaskBarPresFixture, TestStatusUpdate)
     {
-        const std::string hbl = "hbl";
-        const std::string pbl = "pbl";
-        const std::string sbl = "sbl";
-        const std::string s = "s";
-        const std::string ton = "ton";
-        const std::string toff = "toff";
-        const std::string tr = "tr";
-        const std::string tl = "tl";
-        const bool is = true;
-        const std::string in = "in";
-
-        pres.setDisplayValues(hbl, pbl, sbl, s, ton, toff, tr, tl, is, in);
+        EWPresenterStub::DisplayValues values =
+            EWPresenterStub::DisplayValues::getTestValues();
+        pres.setDisplayValues(values);
         pres.notifyStatus();
 
-        CHECK_EQUAL(hbl, bar.hideRestoreLabel);
-        CHECK_EQUAL(sbl, bar.startStopLabel);
-        CHECK_EQUAL(pbl, bar.pauseResumeLabel);
-        CHECK_EQUAL(in, bar.loc);
+        CHECK_EQUAL(values.hideButtonLabel, bar.hideRestoreLabel);
+        CHECK_EQUAL(values.startButtonLabel, bar.startStopLabel);
+        CHECK_EQUAL(values.pauseButtonLabel, bar.pauseResumeLabel);
+        CHECK_EQUAL(values.icon, bar.loc);
     }
 
     TEST_FIXTURE(EWTaskBarPresFixture, TestStatusUpdateNoIcon)
     {
-        const std::string hbl = "hbl";
-        const std::string pbl = "pbl";
-        const std::string sbl = "sbl";
-        const std::string s = "s";
-        const std::string ton = "ton";
-        const std::string toff = "toff";
-        const std::string tr = "tr";
-        const std::string tl = "tl";
-        const bool is = true;
-        const std::string in = "";
-
+        EWPresenterStub::DisplayValues values =
+            EWPresenterStub::DisplayValues::getTestValues(true, false);
         bar.loc = "in";
-
-        pres.setDisplayValues(hbl, pbl, sbl, s, ton, toff, tr, tl, is, in);
+        pres.setDisplayValues(values);
         pres.notifyStatus();
 
-        CHECK_EQUAL(hbl, bar.hideRestoreLabel);
-        CHECK_EQUAL(sbl, bar.startStopLabel);
-        CHECK_EQUAL(pbl, bar.pauseResumeLabel);
+        CHECK_EQUAL(values.hideButtonLabel, bar.hideRestoreLabel);
+        CHECK_EQUAL(values.startButtonLabel, bar.startStopLabel);
+        CHECK_EQUAL(values.pauseButtonLabel, bar.pauseResumeLabel);
         CHECK_EQUAL("in", bar.loc);
     }
 }

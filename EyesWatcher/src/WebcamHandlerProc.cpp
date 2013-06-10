@@ -79,6 +79,7 @@ bool WebcamHandlerProc::isHere()
         case IsHereCmd::INVALID_NB_ARGS:
         case IsHereCmd::OTHER_ERROR:
         default:
+            assert(false);
             throw GenericPresenceHandlerException();
     }
 
