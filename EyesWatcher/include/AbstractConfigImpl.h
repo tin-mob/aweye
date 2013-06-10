@@ -51,7 +51,7 @@ class AbstractConfigImpl
 
         virtual void flush() = 0;
 
-        virtual bool fileExists(std::string name) = 0;
+        virtual bool fileExists(std::string name) const = 0;
     protected:
     private:
 };

@@ -37,7 +37,7 @@ SUITE(TestOptionsDialogPres)
 {
     TEST_FIXTURE(OptionsDialogPresFixture, TestSave)
     {
-        ConfigData newData = {boost::posix_time::not_a_date_time};
+        const ConfigData newData = {boost::posix_time::not_a_date_time};
         pres.saveData(newData);
         CHECK_EQUAL(ctrl.data, newData);
     }

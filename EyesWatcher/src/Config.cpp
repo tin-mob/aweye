@@ -40,7 +40,7 @@ const ConfigData& Config::getData() const
 
 void Config::load()
 {
-    ConfigData tempData =
+    const ConfigData tempData =
     {
         boost::posix_time::duration_from_string(this->m_Impl->read("WorkLength",
             boost::posix_time::to_simple_string(ConfigData::default_WorkLength))),
@@ -113,7 +113,7 @@ void Config::write()
     this->m_Impl->flush();
 }
 
-bool Config::validateData(const ConfigData& data)
+bool Config::validateData(const ConfigData& data) const
 {
     if (data.workLength.is_special() ||
         data.pauseLength.is_special() ||

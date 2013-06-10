@@ -39,7 +39,7 @@ SUITE(TestConfig)
     TEST_FIXTURE(ConfigFixture, TestValidation)
     {
         ConfigData data;
-        Config config(&impl);
+        const Config config(&impl);
 
         CHECK_EQUAL(true, config.validateData(data));
 
@@ -88,7 +88,7 @@ SUITE(TestConfig)
 
     TEST_FIXTURE(ConfigFixture, TestEmptyConstruction)
     {
-        Config config(&impl);
+        const Config config(&impl);
 
         ConfigData data = config.getData();
         CHECK_EQUAL(ConfigData(), data);
@@ -97,7 +97,7 @@ SUITE(TestConfig)
     TEST_FIXTURE(ConfigFixture, TestSaveLoad)
     {
         ConfigData data;
-        ConfigData srcData = ConfigStub::getTestData();
+        const ConfigData srcData = ConfigStub::getTestData();
 
         Config config(&impl);
         Config config2(&impl);
@@ -118,7 +118,7 @@ SUITE(TestConfig)
 
     TEST_FIXTURE(ConfigFixture, TestInvalidSave)
     {
-        ConfigData data = {boost::posix_time::neg_infin};
+        const ConfigData data = {boost::posix_time::neg_infin};
         Config config(&impl);
         CHECK_THROW(config.save(data), InvalidConfigDataException);
     }

@@ -94,8 +94,8 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestUpdate)
     {
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
-        boost::posix_time::time_duration interval = this->data.checkFreq;
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::time_duration interval = this->data.checkFreq;
 
         this->keeper.start();
         this->timeHandler.setTime(this->timeHandler.getTime() + interval);
@@ -114,8 +114,8 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestNearWorkEnd)
     {
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
-        boost::posix_time::time_duration interval = this->data.workLength - boost::posix_time::seconds(1);
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::time_duration interval = this->data.workLength - boost::posix_time::seconds(1);
 
         this->keeper.start();
         this->timeHandler.setTime(this->timeHandler.getTime() + interval);
@@ -134,8 +134,8 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestWorkEnd)
     {
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
-        boost::posix_time::time_duration interval = this->data.workLength;
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::time_duration interval = this->data.workLength;
 
         this->keeper.start();
         this->timeHandler.setTime(this->timeHandler.getTime() + interval);
@@ -159,8 +159,8 @@ SUITE(TestTimeKeeper)
         this->keeper.setCheckFreq(this->data.checkFreq);
         this->keeper.setRemFreq(this->data.remFreq);
 
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
-        boost::posix_time::time_duration interval = this->data.workLength;
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::time_duration interval = this->data.workLength;
 
         this->keeper.start();
         this->timeHandler.setTime(this->timeHandler.getTime() + interval);
@@ -179,7 +179,7 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestWorkTolerance)
     {
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
 
         this->keeper.start();
 
@@ -198,7 +198,7 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestStartPause)
     {
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
 
         this->keeper.start();
 
@@ -219,11 +219,11 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestNearPauseEnd)
     {
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
-        boost::posix_time::time_duration interval = this->data.checkFreq;
-        boost::posix_time::ptime pauseTime = startingTime + interval;
-        boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(1);
-        boost::posix_time::time_duration pauseInterval = this->data.pauseLength - pauseLeft;
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::time_duration interval = this->data.checkFreq;
+        const boost::posix_time::ptime pauseTime = startingTime + interval;
+        const boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(1);
+        const boost::posix_time::time_duration pauseInterval = this->data.pauseLength - pauseLeft;
 
         this->keeper.start();
         this->timeHandler.setTime(pauseTime);
@@ -248,11 +248,11 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestPauseEnd)
     {
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
-        boost::posix_time::time_duration interval = this->data.checkFreq;
-        boost::posix_time::ptime pauseTime = startingTime + interval;
-        boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(0);
-        boost::posix_time::time_duration pauseInterval = this->data.pauseLength - pauseLeft;
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::time_duration interval = this->data.checkFreq;
+        const boost::posix_time::ptime pauseTime = startingTime + interval;
+        const boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(0);
+        const boost::posix_time::time_duration pauseInterval = this->data.pauseLength - pauseLeft;
 
         this->keeper.start();
         this->timeHandler.setTime(pauseTime);
@@ -275,7 +275,7 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestPauseWork)
     {
-        boost::posix_time::ptime pauseTime = this->timeHandler.getTime() + this->data.checkFreq;
+        const boost::posix_time::ptime pauseTime = this->timeHandler.getTime() + this->data.checkFreq;
 
         this->keeper.start();
         this->timeHandler.setTime(pauseTime);
@@ -303,11 +303,11 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestPauseTolerance)
     {
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
-        boost::posix_time::time_duration interval = this->data.checkFreq;
-        boost::posix_time::ptime pauseTime = startingTime + interval;
-        boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(1);
-        boost::posix_time::time_duration pauseInterval = this->data.pauseLength - pauseLeft;
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::time_duration interval = this->data.checkFreq;
+        const boost::posix_time::ptime pauseTime = startingTime + interval;
+        const boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(1);
+        const boost::posix_time::time_duration pauseInterval = this->data.pauseLength - pauseLeft;
 
         this->keeper.start();
         this->timeHandler.setTime(pauseTime);
@@ -335,8 +335,8 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestCancelledPause)
     {
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
-        boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
 
 
         this->keeper.start();
@@ -371,8 +371,8 @@ SUITE(TestTimeKeeper)
     TEST_FIXTURE(TimeKeeperFixture, TestCancelledPauseCummul)
     {
         this->keeper.setCummulPause(true);
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
-        boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
 
 
         this->keeper.start();
@@ -409,9 +409,9 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestRestoredPause)
     {
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
-        boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
-        boost::posix_time::ptime pauseTime = startingTime + interval;
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
+        const boost::posix_time::ptime pauseTime = startingTime + interval;
 
         this->keeper.start();
         this->timeHandler.setTime(pauseTime);
@@ -444,11 +444,11 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestSmallHibernation)
     {
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
-        boost::posix_time::time_duration interval = this->data.checkFreq;
-        boost::posix_time::ptime pauseTime = startingTime + interval;
-        boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(2);
-        boost::posix_time::time_duration pauseInterval = this->data.pauseLength - pauseLeft;
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::time_duration interval = this->data.checkFreq;
+        const boost::posix_time::ptime pauseTime = startingTime + interval;
+        const boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(2);
+        const boost::posix_time::time_duration pauseInterval = this->data.pauseLength - pauseLeft;
 
         this->keeper.start();
         this->timeHandler.setTime(pauseTime);
@@ -471,11 +471,11 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestLongHibernation)
     {
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
-        boost::posix_time::time_duration interval = this->data.checkFreq;
-        boost::posix_time::ptime pauseTime = startingTime + interval;
-        boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(0);
-        boost::posix_time::time_duration pauseInterval = this->data.pauseLength - pauseLeft;
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::time_duration interval = this->data.checkFreq;
+        const boost::posix_time::ptime pauseTime = startingTime + interval;
+        const boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(0);
+        const boost::posix_time::time_duration pauseInterval = this->data.pauseLength - pauseLeft;
 
         this->keeper.start();
         this->timeHandler.setTime(pauseTime);
@@ -498,9 +498,9 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestTolAndHibernate)
     {
-        boost::posix_time::ptime startingTime = this->timeHandler.getTime();
-        boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
-        boost::posix_time::ptime pauseTime = startingTime + interval;
+        const boost::posix_time::ptime startingTime = this->timeHandler.getTime();
+        const boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
+        const boost::posix_time::ptime pauseTime = startingTime + interval;
 
         this->keeper.start();
         this->timeHandler.setTime(pauseTime);

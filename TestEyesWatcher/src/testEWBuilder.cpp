@@ -52,7 +52,7 @@ SUITE(TestEWBuilder)
 {
     TEST_FIXTURE(EWBuilderFixture, TestGet)
     {
-        EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerStub,
+        const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerStub,
         TimeHandlerStub, TimeKeeperStub, TimerStub, EWAppControllerStub,
         EWPresenterStub, EWMainFramePresStub, EWMainFrameStub, OptionsDialogPresStub,
         EWTaskBarPresStub, EWTaskbarStub, DisOptDiaCmdStub> builder(&setTop, path, true);

@@ -70,7 +70,7 @@ class ConfigImplStub : public AbstractConfigImpl
 
         bool getFlushed() {bool t = flushed; flushed = false; return t;}
 
-        virtual bool fileExists(std::string name)
+        virtual bool fileExists(std::string name) const
         {
             if (name == failName)
             {

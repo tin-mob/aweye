@@ -27,7 +27,7 @@ wxConfigImpl::wxConfigImpl(std::string configPath)
 {
     if (configPath != "")
     {
-        wxFileName fileName(wxString(configPath.c_str(), wxConvUTF8));
+        const wxFileName fileName(wxString(configPath.c_str(), wxConvUTF8));
         if(fileName.IsOk())
         {
             wxConfigBase::Set( new wxFileConfig(wxEmptyString, wxEmptyString,
@@ -85,9 +85,9 @@ void wxConfigImpl::flush()
     this->m_Config->Flush();
 }
 
-bool wxConfigImpl::fileExists(std::string name)
+bool wxConfigImpl::fileExists(std::string name) const
 {
-    wxFileName fileName(wxString(name.c_str(), wxConvUTF8));
+    const wxFileName fileName(wxString(name.c_str(), wxConvUTF8));
     if(fileName.IsOk())
     {
         return wxFileName::FileExists(fileName. GetFullPath());

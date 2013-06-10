@@ -34,7 +34,7 @@ SUITE(TestConfigData)
 {
     TEST_FIXTURE(ConfigDataFixture, TestComparison)
     {
-        ConfigData src;
+        const ConfigData src;
         CHECK_EQUAL(src, src);
 
         ConfigData mod;

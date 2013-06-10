@@ -42,7 +42,7 @@ void EWTaskBarPres::doStatusUpdate()
         this->m_Presenter->getStartButtonLabel(),
         this->m_Presenter->getPauseButtonLabel());
 
-    std::string newIcon = this->m_Presenter->getIconName();
+    const std::string newIcon = this->m_Presenter->getIconName();
     if (newIcon != this->m_LastIcon)
     {
         this->m_LastIcon = newIcon;
@@ -61,7 +61,7 @@ void EWTaskBarPres::doTimeUpdate()
         "Running : " + this->m_Presenter->getTimeRunning(),
         "Time Left : " + this->m_Presenter->getTimeLeft());
 
-    std::string newIcon = this->m_Presenter->getIconName();
+    const std::string newIcon = this->m_Presenter->getIconName();
     if (newIcon != this->m_LastIcon)
     {
         this->m_LastIcon = newIcon;

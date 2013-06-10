@@ -17,7 +17,6 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-///@todo: manage pc hibernate, time adjustment...
 
 #include "TimeKeeper.h"
 #include "TKStateAway.h"
@@ -104,7 +103,7 @@ void TimeKeeper::notifyHibernated()
 
     if (!this->m_TolerationTime.is_special())
     {
-        boost::posix_time::time_duration interval =
+        const boost::posix_time::time_duration interval =
             this->m_LastUpdate - this->m_TolerationTime;
         this->m_AwayDur += interval;
         this->m_HereDur -= interval;

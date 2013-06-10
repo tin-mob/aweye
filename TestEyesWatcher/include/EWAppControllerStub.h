@@ -56,7 +56,7 @@ class EWAppControllerStub : public AbstractEWAppController
             displayCmd = dc;
         }
 
-        virtual bool canCreateTaskBar() {return m_CanCreateTaskBar;}
+        virtual bool canCreateTaskBar() const {return m_CanCreateTaskBar;}
 
         ConfigData data;
         AbstractMsgHandler* msgHandler;

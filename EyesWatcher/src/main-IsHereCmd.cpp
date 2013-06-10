@@ -28,10 +28,10 @@ int main(int argc, char* argv[])
     assert(argc == 5);
     if (argc != 5) return IsHereCmd::INVALID_NB_ARGS;
 
-    char* indexChar = argv[1];
-    char* faceCascadeName = argv[2];
-    char* faceSizeXChar = argv[3];
-    char* faceSizeYChar = argv[4];
+    const char* indexChar = argv[1];
+    const char* faceCascadeName = argv[2];
+    const char* faceSizeXChar = argv[3];
+    const char* faceSizeYChar = argv[4];
 
     std::istringstream iss(indexChar);
     int index = 0;

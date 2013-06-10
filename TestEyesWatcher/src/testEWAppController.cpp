@@ -52,14 +52,14 @@ SUITE(TestEWAppController)
 {
     TEST_FIXTURE(EWAppControllerFixture, TestGet)
     {
-        ConfigData newData = ConfigStub::getTestData();
+        const ConfigData newData = ConfigStub::getTestData();
         config.save(newData);
         CHECK_EQUAL(newData, ctrl.getConfigData());
     }
 
     TEST_FIXTURE(EWAppControllerFixture, TestSave)
     {
-        ConfigData newData = ConfigStub::getTestData();
+        const ConfigData newData = ConfigStub::getTestData();
 
         CHECK_EQUAL(true, ctrl.saveConfig(newData));
         CHECK_EQUAL(newData, config.getData());

@@ -33,7 +33,6 @@ class TKStateOff;
 class AbstractPresenceHandler;
 class AbstractTimeHandler;
 
-///@todo: cummulative pause alternative
 class TimeKeeper : public AbstractTimeKeeper
 {
     public:

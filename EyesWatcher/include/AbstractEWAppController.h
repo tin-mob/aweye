@@ -32,7 +32,7 @@ class AbstractEWAppController
         virtual const ConfigData& getConfigData() const = 0;
 
         virtual void displayOptionsDialog() = 0;
-        virtual bool canCreateTaskBar() = 0;
+        virtual bool canCreateTaskBar() const = 0;
     protected:
     private:
 };

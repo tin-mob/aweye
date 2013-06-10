@@ -215,7 +215,7 @@ std::string EWPresenter::getIconName()const
     }
     else
     {
-        boost::posix_time::time_duration timeLeft = this->m_TimeKeeper->getWorkTimeLeft();
+        const boost::posix_time::time_duration timeLeft = this->m_TimeKeeper->getWorkTimeLeft();
         if (timeLeft > this->m_RunningLateThreshold)
         {
             return this->m_GreenWebcamIcon;

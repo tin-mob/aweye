@@ -74,7 +74,7 @@ void TKStateAway::initState(TimeKeeper* parent, bool cancelled)
     {
         if (!parent->m_TolerationTime.is_special())
         {
-            boost::posix_time::time_duration interval =
+            const boost::posix_time::time_duration interval =
                 parent->m_StartTimeUpdate - parent->m_TolerationTime;
             parent->m_AwayDur += interval;
             parent->m_HereDur -= interval;
@@ -95,7 +95,7 @@ void TKStateAway::initState(TimeKeeper* parent, bool cancelled)
 boost::posix_time::time_duration TKStateAway::getTimerInterval(const TimeKeeper* parent) const
 {
     boost::posix_time::time_duration timerInterval = parent->m_CheckFreq;
-    boost::posix_time::time_duration remaining = this->getTimeLeft(parent);
+    const boost::posix_time::time_duration remaining = this->getTimeLeft(parent);
 
     if (remaining <= boost::posix_time::seconds(0))
     {

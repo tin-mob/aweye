@@ -41,7 +41,7 @@ class wxConfigImpl : public AbstractConfigImpl
 
         virtual void flush();
 
-        virtual bool fileExists(std::string name);
+        virtual bool fileExists(std::string name) const;
     protected:
     private:
         wxConfigBase* m_Config;

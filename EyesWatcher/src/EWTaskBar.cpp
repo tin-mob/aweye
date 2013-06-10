@@ -102,7 +102,7 @@ void EWTaskBar::setIcon(std::string loc)
 {
     if (loc != "")
     {
-        wxIcon icon(wxString(loc.c_str(), wxConvUTF8), wxBITMAP_TYPE_PNG );
+        const wxIcon icon(wxString(loc.c_str(), wxConvUTF8), wxBITMAP_TYPE_PNG );
         this->SetIcon(icon);
     }
     else

@@ -39,7 +39,7 @@ void EWMainFramePres::doStatusUpdate()
     assert(this->m_View != nullptr);
     if (this->m_View == nullptr) return;
 
-    bool shown = this->m_Presenter->isShown();
+    const bool shown = this->m_Presenter->isShown();
     this->m_View->show(shown);
     if (shown)
     {

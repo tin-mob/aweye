@@ -56,9 +56,9 @@ void WebcamHandlerProc::setFaceSize(unsigned int x, unsigned int y)
 // IsHereCmd in same path than main executable...
 bool WebcamHandlerProc::isHere()
 {
-    ///@todo: test if this works in windows
+    ///@todo: test if this works in windows, safe?
     wxString cmd = wxT("./IsHereCmd '");
-    wxString cascade(this->m_FaceCascadeName.c_str(), wxConvUTF8);
+    const wxString cascade(this->m_FaceCascadeName.c_str(), wxConvUTF8);
 
     cmd << this->m_index << "' '" << cascade << "' '" << this->m_FaceSizeX << "' '" << this->m_FaceSizeY << "'";
     IsHereCmd::ReturnCodes code = (IsHereCmd::ReturnCodes)wxExecute(cmd, wxEXEC_SYNC);

@@ -108,7 +108,7 @@ void EWAppController::displayOptionsDialog()
     }
 }
 
-bool EWAppController::canCreateTaskBar()
+bool EWAppController::canCreateTaskBar() const
 {
     return this->m_CanCreateTaskbar;
 }
