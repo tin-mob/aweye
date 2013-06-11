@@ -117,7 +117,7 @@ SUITE(TestEWBuilder)
 
         CHECK_EQUAL(builder.links.m_TaskBarPres, builder.links.m_TaskBar->presenter);
 
-        CHECK_EQUAL(builder.links.m_OptionsPres, builder.links.m_DisplayOptionsDialogCmd->presenter);
+        CHECK_EQUAL(builder.links.m_OptionsPres, builder.links.m_DisplayOptionsDialogCmd->m_Presenter);
 
         CHECK_EQUAL(builder.links.m_MainFrame, setTop.frame);
 
