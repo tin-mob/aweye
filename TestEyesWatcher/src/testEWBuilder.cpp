@@ -95,16 +95,16 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(data.pauseTol, builder.links.m_TimeKeeper->pauseTol);
         CHECK_EQUAL(data.workTol, builder.links.m_TimeKeeper->workTol);
 
-        CHECK_EQUAL(builder.links.m_MsgHandler, builder.links.m_Presenter->msgHandler);
-        CHECK_EQUAL(builder.links.m_TimeKeeper, builder.links.m_Presenter->keeper);
-        CHECK_EQUAL(builder.links.m_CheckTimer, builder.links.m_Presenter->checkTimer);
-        CHECK_EQUAL(builder.links.m_ClockTimer, builder.links.m_Presenter->clockTimer);
-        CHECK_EQUAL(builder.links.m_TimeHandler, builder.links.m_Presenter->timeHandler);
+        CHECK_EQUAL(builder.links.m_MsgHandler, builder.links.m_Presenter->m_MsgHandler);
+        CHECK_EQUAL(builder.links.m_TimeKeeper, builder.links.m_Presenter->m_Keeper);
+        CHECK_EQUAL(builder.links.m_CheckTimer, builder.links.m_Presenter->m_CheckTimer);
+        CHECK_EQUAL(builder.links.m_ClockTimer, builder.links.m_Presenter->m_ClockTimer);
+        CHECK_EQUAL(builder.links.m_TimeHandler, builder.links.m_Presenter->m_TimeHandler);
 
-        CHECK_EQUAL(data.popupAlarm, builder.links.m_Presenter->popupAlarm);
-        CHECK_EQUAL(data.soundAlarm, builder.links.m_Presenter->soundAlarm);
-        CHECK_EQUAL(data.soundPath, builder.links.m_Presenter->soundPath);
-        CHECK_EQUAL(data.runningLateThreshold, builder.links.m_Presenter->runningLateThreshold);
+        CHECK_EQUAL(data.popupAlarm, builder.links.m_Presenter->m_PopupAlarm);
+        CHECK_EQUAL(data.soundAlarm, builder.links.m_Presenter->m_SoundAlarm);
+        CHECK_EQUAL(data.soundPath, builder.links.m_Presenter->m_SoundPath);
+        CHECK_EQUAL(data.runningLateThreshold, builder.links.m_Presenter->m_RunningLateThreshold);
 
         CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_MainFramePres->m_Presenter);
         CHECK_EQUAL(builder.links.m_AppController, builder.links.m_MainFramePres->m_Controller);

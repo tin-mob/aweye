@@ -127,9 +127,9 @@ SUITE(TestEWMainFramePres)
 
     TEST_FIXTURE(EWMainFramePresFixture, TestFrameQuit)
     {
-        pres.quitted = false;
+        pres.m_Quitted = false;
         framePres.OnViewQuit();
-        CHECK_EQUAL(true, pres.quitted);
+        CHECK_EQUAL(true, pres.m_Quitted);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestFrameAbout)
@@ -145,23 +145,23 @@ SUITE(TestEWMainFramePres)
 
     TEST_FIXTURE(EWMainFramePresFixture, TestFramePlay)
     {
-        pres.started = false;
+        pres.m_Started = false;
         framePres.OnViewStartStop();
-        CHECK_EQUAL(true, pres.started);
+        CHECK_EQUAL(true, pres.m_Started);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestFrameClose)
     {
-        pres.displayValues.shown = true;
+        pres.m_DisplayValues.shown = true;
         framePres.OnViewHideRestore();
-        CHECK_EQUAL(false, pres.displayValues.shown);
+        CHECK_EQUAL(false, pres.m_DisplayValues.shown);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestFramePause)
     {
-        pres.paused = false;
+        pres.m_Paused = false;
         framePres.OnViewPauseResume();
-        CHECK_EQUAL(true, pres.paused);
+        CHECK_EQUAL(true, pres.m_Paused);
     }
 }
 

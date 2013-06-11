@@ -38,36 +38,36 @@ class EWPresenterStub : public AbstractEWPresenter
             AbstractTimeHandler* tH = nullptr, bool pA = false,
             bool sA = false, std::string sP = "",
             boost::posix_time::time_duration rLT = boost::posix_time::seconds(0)) :
-            popupAlarm(pA), soundAlarm(sA), soundPath(sP), runningLateThreshold(rLT),
-            paused(false), started(false), quitted(false),
-            statusUpdated(false), timesUpdated(false), displayValues(),
-            msgHandler(mH), keeper(k), checkTimer(chT), clockTimer(clT), timeHandler(tH) {}
+            m_PopupAlarm(pA), m_SoundAlarm(sA), m_SoundPath(sP), m_RunningLateThreshold(rLT),
+            m_Paused(false), m_Started(false), m_Quitted(false),
+            m_StatusUpdated(false), m_TimesUpdated(false), m_DisplayValues(),
+            m_MsgHandler(mH), m_Keeper(k), m_CheckTimer(chT), m_ClockTimer(clT), m_TimeHandler(tH) {}
         virtual ~EWPresenterStub() {}
 
-        virtual void togglePause() {paused = !paused;}
-        virtual void toggleStart() {started = !started;}
-        virtual void quit() {quitted = true;}
-        virtual void show(bool show) {displayValues.shown = show;}
+        virtual void togglePause() {m_Paused = !m_Paused;}
+        virtual void toggleStart() {m_Started = !m_Started;}
+        virtual void quit() {m_Quitted = true;}
+        virtual void show(bool show) {m_DisplayValues.shown = show;}
 
-        virtual void updateStatus() {statusUpdated = true;}
-        virtual void updateTimes() {timesUpdated = true;}
+        virtual void updateStatus() {m_StatusUpdated = true;}
+        virtual void updateTimes() {m_TimesUpdated = true;}
 
-        virtual std::string getHideButtonLabel() const {return displayValues.hideButtonLabel;}
-        virtual std::string getPauseButtonLabel() const {return displayValues.pauseButtonLabel;}
-        virtual std::string getStartButtonLabel() const {return displayValues.startButtonLabel;}
-        virtual std::string getStatus() const {return displayValues.status;}
-        virtual std::string getTimeOn() const {return displayValues.timeOn;}
-        virtual std::string getTimeOff() const {return displayValues.timeOff;}
-        virtual std::string getTimeRunning() const {return displayValues.timeRunning;}
-        virtual std::string getTimeLeft() const {return displayValues.timeLeft;}
-        virtual bool isShown() const {return displayValues.shown;}
-        virtual std::string getIconName()const {return displayValues.icon;}
+        virtual std::string getHideButtonLabel() const {return m_DisplayValues.hideButtonLabel;}
+        virtual std::string getPauseButtonLabel() const {return m_DisplayValues.pauseButtonLabel;}
+        virtual std::string getStartButtonLabel() const {return m_DisplayValues.startButtonLabel;}
+        virtual std::string getStatus() const {return m_DisplayValues.status;}
+        virtual std::string getTimeOn() const {return m_DisplayValues.timeOn;}
+        virtual std::string getTimeOff() const {return m_DisplayValues.timeOff;}
+        virtual std::string getTimeRunning() const {return m_DisplayValues.timeRunning;}
+        virtual std::string getTimeLeft() const {return m_DisplayValues.timeLeft;}
+        virtual bool isShown() const {return m_DisplayValues.shown;}
+        virtual std::string getIconName()const {return m_DisplayValues.icon;}
 
         virtual void setRunningLateThreshold(
-            boost::posix_time::time_duration val) {runningLateThreshold = val;}
-        virtual void setPopupAlarm(bool val) {popupAlarm = val;}
-        virtual void setSoundAlarm(bool val) {soundAlarm = val;}
-        virtual void setSoundPath(std::string val) {soundPath = val;}
+            boost::posix_time::time_duration val) {m_RunningLateThreshold = val;}
+        virtual void setPopupAlarm(bool val) {m_PopupAlarm = val;}
+        virtual void setSoundAlarm(bool val) {m_SoundAlarm = val;}
+        virtual void setSoundPath(std::string val) {m_SoundPath = val;}
 
         void notifyStatus() {notify(&EWViewObserver::OnStatusUpdate, this);}
         void notifyTime() {notify(&EWViewObserver::OnTimeUpdate, this);}
@@ -100,26 +100,26 @@ class EWPresenterStub : public AbstractEWPresenter
             std::string timeLeft;
             std::string icon;
         };
-        void setDisplayValues(const DisplayValues& v){displayValues = v;}
+        void setDisplayValues(const DisplayValues& v){m_DisplayValues = v;}
 
-        bool popupAlarm;
-        bool soundAlarm;
-        std::string soundPath;
-        boost::posix_time::time_duration runningLateThreshold;
+        bool m_PopupAlarm;
+        bool m_SoundAlarm;
+        std::string m_SoundPath;
+        boost::posix_time::time_duration m_RunningLateThreshold;
 
-        bool paused;
-        bool started;
-        bool quitted;
-        bool statusUpdated;
-        bool timesUpdated;
+        bool m_Paused;
+        bool m_Started;
+        bool m_Quitted;
+        bool m_StatusUpdated;
+        bool m_TimesUpdated;
 
-        DisplayValues displayValues;
+        DisplayValues m_DisplayValues;
 
-        AbstractMsgHandler* msgHandler;
-        AbstractTimeKeeper* keeper;
-        AbstractTimer* checkTimer;
-        AbstractTimer* clockTimer;
-        AbstractTimeHandler* timeHandler;
+        AbstractMsgHandler* m_MsgHandler;
+        AbstractTimeKeeper* m_Keeper;
+        AbstractTimer* m_CheckTimer;
+        AbstractTimer* m_ClockTimer;
+        AbstractTimeHandler* m_TimeHandler;
 
     protected:
     private:

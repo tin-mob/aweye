@@ -76,10 +76,10 @@ SUITE(TestEWAppController)
         CHECK_EQUAL(newData.workLength, timeKeeper.workLength);
         CHECK_EQUAL(newData.cummulPause, timeKeeper.cummulPause);
 
-        CHECK_EQUAL(newData.popupAlarm, presenter.popupAlarm);
-        CHECK_EQUAL(newData.soundAlarm, presenter.soundAlarm);
-        CHECK_EQUAL(newData.soundPath, presenter.soundPath);
-        CHECK_EQUAL(newData.runningLateThreshold, presenter.runningLateThreshold);
+        CHECK_EQUAL(newData.popupAlarm, presenter.m_PopupAlarm);
+        CHECK_EQUAL(newData.soundAlarm, presenter.m_SoundAlarm);
+        CHECK_EQUAL(newData.soundPath, presenter.m_SoundPath);
+        CHECK_EQUAL(newData.runningLateThreshold, presenter.m_RunningLateThreshold);
     }
 
     TEST_FIXTURE(EWAppControllerFixture, TestSaveFail)
