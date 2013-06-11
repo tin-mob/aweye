@@ -67,147 +67,147 @@ SUITE(TestEWPresenter)
 {
     TEST_FIXTURE(EWPresenterFixture, TestStartStop)
     {
-        this->presenter.toggleStart();
-        CHECK_EQUAL(this->keeper.getStatus(), AbstractTimeKeeper::HERE);
-        CHECK_EQUAL(this->checkTimer.running, true);
-        CHECK_EQUAL(this->clockTimer.running, true);
-        CHECK_EQUAL(this->viewObserver.checkStatUpdated(), true);
+        presenter.toggleStart();
+        CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
+        CHECK_EQUAL(checkTimer.running, true);
+        CHECK_EQUAL(clockTimer.running, true);
+        CHECK_EQUAL(viewObserver.checkStatUpdated(), true);
 
-        this->presenter.toggleStart();
-        CHECK_EQUAL(this->keeper.getStatus(), AbstractTimeKeeper::OFF);
-        CHECK_EQUAL(this->checkTimer.running, false);
-        CHECK_EQUAL(this->clockTimer.running, false);
-        CHECK_EQUAL(this->viewObserver.checkStatUpdated(), true);
+        presenter.toggleStart();
+        CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
+        CHECK_EQUAL(checkTimer.running, false);
+        CHECK_EQUAL(clockTimer.running, false);
+        CHECK_EQUAL(viewObserver.checkStatUpdated(), true);
 
-        this->keeper.fail = true;
-        CHECK_EQUAL(this->msgHandler.lastError, "");
-        this->presenter.toggleStart();
-        CHECK_EQUAL(this->keeper.getStatus(), AbstractTimeKeeper::OFF);
-        CHECK_EQUAL(this->checkTimer.running, false);
-        CHECK_EQUAL(this->clockTimer.running, false);
-        CHECK_EQUAL(this->viewObserver.checkStatUpdated(), false);
-        CHECK_EQUAL(this->msgHandler.lastError, "Testing!");
+        keeper.fail = true;
+        CHECK_EQUAL(msgHandler.lastError, "");
+        presenter.toggleStart();
+        CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
+        CHECK_EQUAL(checkTimer.running, false);
+        CHECK_EQUAL(clockTimer.running, false);
+        CHECK_EQUAL(viewObserver.checkStatUpdated(), false);
+        CHECK_EQUAL(msgHandler.lastError, "Testing!");
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestUpdate)
     {
-        CHECK_EQUAL(this->presenter.getStatus(), "Off");
-        CHECK_EQUAL(this->presenter.getTimeOn(), "10:59:00");
-        CHECK_EQUAL(this->presenter.getTimeOff(), "11:31:01");
-        CHECK_EQUAL(this->presenter.getTimeRunning(), "00:00:02");
-        CHECK_EQUAL(this->presenter.getTimeLeft(), "00:03:00");
-        CHECK_EQUAL(this->msgHandler.lastAlert, "");
+        CHECK_EQUAL(presenter.getStatus(), "Off");
+        CHECK_EQUAL(presenter.getTimeOn(), "10:59:00");
+        CHECK_EQUAL(presenter.getTimeOff(), "11:31:01");
+        CHECK_EQUAL(presenter.getTimeRunning(), "00:00:02");
+        CHECK_EQUAL(presenter.getTimeLeft(), "00:03:00");
+        CHECK_EQUAL(msgHandler.lastAlert, "");
 
-        this->presenter.toggleStart();
-        this->keeper.hereStamp = boost::posix_time::not_a_date_time;
-        this->keeper.awayStamp = boost::posix_time::not_a_date_time;
-        this->keeper.interval = boost::posix_time::not_a_date_time;
-        this->keeper.left = boost::posix_time::not_a_date_time;
+        presenter.toggleStart();
+        keeper.hereStamp = boost::posix_time::not_a_date_time;
+        keeper.awayStamp = boost::posix_time::not_a_date_time;
+        keeper.interval = boost::posix_time::not_a_date_time;
+        keeper.left = boost::posix_time::not_a_date_time;
 
-        CHECK_EQUAL(this->presenter.getStatus(), "Here");
-        CHECK_EQUAL(this->presenter.getTimeOn(), "00:00:00");
-        CHECK_EQUAL(this->presenter.getTimeOff(), "00:00:00");
-        CHECK_EQUAL(this->presenter.getTimeRunning(), "00:00:00");
-        CHECK_EQUAL(this->presenter.getTimeLeft(), "00:00:00");
-        CHECK_EQUAL(this->msgHandler.lastAlert, "");
-        CHECK_EQUAL(this->msgHandler.lastSound, "");
+        CHECK_EQUAL(presenter.getStatus(), "Here");
+        CHECK_EQUAL(presenter.getTimeOn(), "00:00:00");
+        CHECK_EQUAL(presenter.getTimeOff(), "00:00:00");
+        CHECK_EQUAL(presenter.getTimeRunning(), "00:00:00");
+        CHECK_EQUAL(presenter.getTimeLeft(), "00:00:00");
+        CHECK_EQUAL(msgHandler.lastAlert, "");
+        CHECK_EQUAL(msgHandler.lastSound, "");
 
-        this->keeper.late = true;
-        this->presenter.togglePause();
-        this->checkTimer.ring();
-        CHECK_EQUAL(this->msgHandler.lastAlert, "");
-        CHECK_EQUAL(this->msgHandler.lastSound, "");
+        keeper.late = true;
+        presenter.togglePause();
+        checkTimer.ring();
+        CHECK_EQUAL(msgHandler.lastAlert, "");
+        CHECK_EQUAL(msgHandler.lastSound, "");
 
-        this->presenter.togglePause();
-        this->checkTimer.ring();
-        CHECK_EQUAL(this->msgHandler.lastAlert, this->presenter.m_LateMsg);
-        CHECK_EQUAL(this->msgHandler.lastSound, data.soundPath);
+        presenter.togglePause();
+        checkTimer.ring();
+        CHECK_EQUAL(msgHandler.lastAlert, presenter.m_LateMsg);
+        CHECK_EQUAL(msgHandler.lastSound, data.soundPath);
 
-        this->keeper.fail = true;
-        CHECK_EQUAL(this->msgHandler.lastError, "");
-        this->checkTimer.ring();
-        CHECK_EQUAL(this->msgHandler.lastError, "Testing!");
+        keeper.fail = true;
+        CHECK_EQUAL(msgHandler.lastError, "");
+        checkTimer.ring();
+        CHECK_EQUAL(msgHandler.lastError, "Testing!");
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestNegatives)
     {
 
-        this->presenter.toggleStart();
-        this->keeper.left = boost::posix_time::hours(-1) +
+        presenter.toggleStart();
+        keeper.left = boost::posix_time::hours(-1) +
             boost::posix_time::minutes(-1) + boost::posix_time::seconds(-1);
 
-        CHECK_EQUAL("-01:01:01", this->presenter.getTimeLeft());
+        CHECK_EQUAL("-01:01:01", presenter.getTimeLeft());
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestQuit)
     {
-        this->presenter.quit();
-        CHECK_EQUAL(this->viewObserver.checkQuitUpdated(), true);
+        presenter.quit();
+        CHECK_EQUAL(viewObserver.checkQuitUpdated(), true);
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestPauseButtonsLabels)
     {
-        CHECK_EQUAL(this->presenter.getPauseButtonLabel(), this->presenter.m_PauseBtnLabel);
-        this->presenter.togglePause();
-        CHECK_EQUAL(this->presenter.getPauseButtonLabel(), this->presenter.m_ResumeBtnLabel);
+        CHECK_EQUAL(presenter.getPauseButtonLabel(), presenter.m_PauseBtnLabel);
+        presenter.togglePause();
+        CHECK_EQUAL(presenter.getPauseButtonLabel(), presenter.m_ResumeBtnLabel);
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestStartButtonsLabels)
     {
-        CHECK_EQUAL(this->presenter.getStartButtonLabel(), this->presenter.m_StartBtnLabel);
-        this->presenter.toggleStart();
-        CHECK_EQUAL(this->presenter.getStartButtonLabel(), this->presenter.m_StopBtnLabel);
+        CHECK_EQUAL(presenter.getStartButtonLabel(), presenter.m_StartBtnLabel);
+        presenter.toggleStart();
+        CHECK_EQUAL(presenter.getStartButtonLabel(), presenter.m_StopBtnLabel);
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestHideButtonsLabels)
     {
-        CHECK_EQUAL(this->presenter.getHideButtonLabel(), this->presenter.m_HideBtnLabel);
-        CHECK_EQUAL(true, this->presenter.isShown());
+        CHECK_EQUAL(presenter.getHideButtonLabel(), presenter.m_HideBtnLabel);
+        CHECK_EQUAL(true, presenter.isShown());
 
-        this->presenter.show(false);
-        CHECK_EQUAL(this->presenter.getHideButtonLabel(), this->presenter.m_RestoreBtnLabel);
-        CHECK_EQUAL(false, this->presenter.isShown());
+        presenter.show(false);
+        CHECK_EQUAL(presenter.getHideButtonLabel(), presenter.m_RestoreBtnLabel);
+        CHECK_EQUAL(false, presenter.isShown());
 
-        this->presenter.show(true);
-        CHECK_EQUAL(this->presenter.getHideButtonLabel(), this->presenter.m_HideBtnLabel);
-        CHECK_EQUAL(true, this->presenter.isShown());
+        presenter.show(true);
+        CHECK_EQUAL(presenter.getHideButtonLabel(), presenter.m_HideBtnLabel);
+        CHECK_EQUAL(true, presenter.isShown());
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestIconName)
     {
-        CHECK_EQUAL(this->presenter.getIconName(), this->presenter.m_StopWebcamIcon);
+        CHECK_EQUAL(presenter.getIconName(), presenter.m_StopWebcamIcon);
 
-        this->presenter.toggleStart();
-        this->keeper.workLeft = boost::posix_time::hours(1);
-        CHECK_EQUAL(this->presenter.getIconName(), this->presenter.m_GreenWebcamIcon);
+        presenter.toggleStart();
+        keeper.workLeft = boost::posix_time::hours(1);
+        CHECK_EQUAL(presenter.getIconName(), presenter.m_GreenWebcamIcon);
 
-        this->keeper.workLeft = boost::posix_time::seconds(1);
-        CHECK_EQUAL(this->presenter.getIconName(), this->presenter.m_YellowWebcamIcon);
+        keeper.workLeft = boost::posix_time::seconds(1);
+        CHECK_EQUAL(presenter.getIconName(), presenter.m_YellowWebcamIcon);
 
-        this->keeper.workLeft = boost::posix_time::seconds(0);
-        CHECK_EQUAL(this->presenter.getIconName(), this->presenter.m_RedWebcamIcon);
+        keeper.workLeft = boost::posix_time::seconds(0);
+        CHECK_EQUAL(presenter.getIconName(), presenter.m_RedWebcamIcon);
 
-        this->keeper.status = AbstractTimeKeeper::AWAY;
-        this->keeper.left = boost::posix_time::seconds(0);
-        CHECK_EQUAL(this->presenter.getIconName(), this->presenter.m_GreenWebcamIcon);
+        keeper.status = AbstractTimeKeeper::AWAY;
+        keeper.left = boost::posix_time::seconds(0);
+        CHECK_EQUAL(presenter.getIconName(), presenter.m_GreenWebcamIcon);
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestUpdateTime)
     {
-        this->presenter.toggleStart();
-        this->clockTimer.ring();
-        CHECK_EQUAL(this->viewObserver.checkTimeUpdated(), true);
-        CHECK_EQUAL(this->keeper.hibernated, false);
+        presenter.toggleStart();
+        clockTimer.ring();
+        CHECK_EQUAL(viewObserver.checkTimeUpdated(), true);
+        CHECK_EQUAL(keeper.hibernated, false);
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestHibernated)
     {
-        this->presenter.toggleStart();
-        this->keeper.status = AbstractTimeKeeper::OFF;
-        this->timeHandler.setTime(this->timeHandler.getTime() + boost::posix_time::minutes(2));
-        this->clockTimer.ring();
-        CHECK_EQUAL(this->viewObserver.checkTimeUpdated(), true);
-        CHECK_EQUAL(this->keeper.hibernated, true);
-        CHECK_EQUAL(this->keeper.status, AbstractTimeKeeper::HERE);
+        presenter.toggleStart();
+        keeper.status = AbstractTimeKeeper::OFF;
+        timeHandler.setTime(timeHandler.getTime() + boost::posix_time::minutes(2));
+        clockTimer.ring();
+        CHECK_EQUAL(viewObserver.checkTimeUpdated(), true);
+        CHECK_EQUAL(keeper.hibernated, true);
+        CHECK_EQUAL(keeper.status, AbstractTimeKeeper::HERE);
     }
 }

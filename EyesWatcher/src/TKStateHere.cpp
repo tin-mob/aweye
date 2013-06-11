@@ -37,7 +37,7 @@ void TKStateHere::updateStatus(TimeKeeper* parent)
 {
     if (!parent->m_PresenceHandler->isHere())
     {
-        if (this->getTimeLeft(parent, true) > boost::posix_time::time_duration(0,0,0,0) ||
+        if (getTimeLeft(parent, true) > boost::posix_time::time_duration(0,0,0,0) ||
             parent->m_NumTolerated != 0)
         {
             if (parent->m_NumTolerated == 0)
@@ -105,7 +105,7 @@ void TKStateHere::initState(TimeKeeper* parent, bool cancelled)
 boost::posix_time::time_duration TKStateHere::getTimerInterval(const TimeKeeper* parent) const
 {
     boost::posix_time::time_duration timerInterval = parent->m_CheckFreq;
-    const boost::posix_time::time_duration remaining = this->getTimeLeft(parent);
+    const boost::posix_time::time_duration remaining = getTimeLeft(parent);
 
     if (remaining <= boost::posix_time::seconds(0))
     {
@@ -145,7 +145,7 @@ boost::posix_time::time_duration TKStateHere::getWorkTimeLeft(const TimeKeeper* 
 {
     if (parent->m_AwayDur < parent->m_PauseLength)
     {
-        return this->getTimeLeft(parent);
+        return getTimeLeft(parent);
     }
     else
     {

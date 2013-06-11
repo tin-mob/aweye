@@ -41,7 +41,7 @@ class AbstractTimeKeeper
         }
         std::string getStatusStr() const
         {
-            return AbstractTimeKeeper::getStatusStr(this->getStatus());
+            return AbstractTimeKeeper::getStatusStr(getStatus());
         }
 
         virtual void start() = 0;

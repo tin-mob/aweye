@@ -51,8 +51,8 @@ EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractTimeKeeper* kee
     assert(clockTimer);
     assert(timeHandler);
 
-    this->m_CheckTimer->attach(this);
-    this->m_ClockTimer->attach(this);
+    m_CheckTimer->attach(this);
+    m_ClockTimer->attach(this);
 }
 
 EWPresenter::~EWPresenter()
@@ -63,79 +63,79 @@ void EWPresenter::start()
 {
     try
     {
-        this->m_TimeKeeper->start();
-        this->updateStatus();
-        this->m_ClockTimer->startTimer(1000, false);
-        this->m_LastTimeUpdate = this->m_TimeHandler->getTime();
+        m_TimeKeeper->start();
+        updateStatus();
+        m_ClockTimer->startTimer(1000, false);
+        m_LastTimeUpdate = m_TimeHandler->getTime();
     }
     catch (BaseException e)
     {
-        this->m_MsgHandler->displayError(e.what());
+        m_MsgHandler->displayError(e.what());
     }
 }
 
 void EWPresenter::stop()
 {
-    this->m_TimeKeeper->stop();
-    this->m_CheckTimer->stopTimer();
-    this->m_ClockTimer->stopTimer();
-    this->notify(&EWViewObserver::OnStatusUpdate, this);
+    m_TimeKeeper->stop();
+    m_CheckTimer->stopTimer();
+    m_ClockTimer->stopTimer();
+    notify(&EWViewObserver::OnStatusUpdate, this);
 }
 
 void EWPresenter::quit()
 {
-    this->notify(&EWViewObserver::OnQuit, this);
+    notify(&EWViewObserver::OnQuit, this);
 }
 
 void EWPresenter::show(bool show)
 {
-    this->m_Shown = show;
-    this->notify(&EWViewObserver::OnStatusUpdate, this);
+    m_Shown = show;
+    notify(&EWViewObserver::OnStatusUpdate, this);
 }
 
 void EWPresenter::updateStatus()
 {
     try
     {
-        this->m_TimeKeeper->updateStatus();
-        this->m_CheckTimer->startTimer(this->m_TimeKeeper->getTimerInterval().total_milliseconds(), true);
-        this->notify(&EWViewObserver::OnStatusUpdate, this);
+        m_TimeKeeper->updateStatus();
+        m_CheckTimer->startTimer(m_TimeKeeper->getTimerInterval().total_milliseconds(), true);
+        notify(&EWViewObserver::OnStatusUpdate, this);
 
-        if (this->m_TimeKeeper->isLate() && this->m_TimeKeeper->getStatus() == AbstractTimeKeeper::HERE)
+        if (m_TimeKeeper->isLate() && m_TimeKeeper->getStatus() == AbstractTimeKeeper::HERE)
         {
-            this->alert();
+            alert();
         }
     }
     catch (BaseException e)
     {
-        this->m_MsgHandler->displayError(e.what());
-        this->m_TimeKeeper->stop();
+        m_MsgHandler->displayError(e.what());
+        m_TimeKeeper->stop();
     }
 }
 
 void EWPresenter::updateTimes()
 {
     // if it has been a long time since last ring and is running, we have hibernated
-    if (this->m_TimeHandler->getTime() - this->m_LastTimeUpdate >
+    if (m_TimeHandler->getTime() - m_LastTimeUpdate >
         boost::posix_time::minutes(1))
     {
-        this->m_TimeKeeper->notifyHibernated();
-        this->updateStatus();
+        m_TimeKeeper->notifyHibernated();
+        updateStatus();
     }
 
-    this->notify(&EWViewObserver::OnTimeUpdate, this);
-    this->m_LastTimeUpdate = this->m_TimeHandler->getTime();
+    notify(&EWViewObserver::OnTimeUpdate, this);
+    m_LastTimeUpdate = m_TimeHandler->getTime();
 }
 
 void EWPresenter::onTimerRing(AbstractTimer* timer)
 {
-    if (timer == this->m_ClockTimer)
+    if (timer == m_ClockTimer)
     {
-        this->updateTimes();
+        updateTimes();
     }
-    else if (timer == this->m_CheckTimer)
+    else if (timer == m_CheckTimer)
     {
-        this->updateStatus();
+        updateStatus();
     }
     else
     {
@@ -146,88 +146,88 @@ void EWPresenter::onTimerRing(AbstractTimer* timer)
 void EWPresenter::togglePause()
 {
     m_Warn = !m_Warn;
-    this->notify(&EWViewObserver::OnStatusUpdate, this);
+    notify(&EWViewObserver::OnStatusUpdate, this);
 }
 
 void EWPresenter::toggleStart()
 {
-    if(this->m_TimeKeeper->getStatus() != AbstractTimeKeeper::OFF)
+    if(m_TimeKeeper->getStatus() != AbstractTimeKeeper::OFF)
     {
-        this->stop();
+        stop();
     }
     else
     {
-        this->start();
+        start();
     }
 }
 
 std::string EWPresenter::getHideButtonLabel() const
 {
-    if (this->m_Shown)
+    if (m_Shown)
     {
-        return this->m_HideBtnLabel;
+        return m_HideBtnLabel;
     }
     else
     {
-        return this->m_RestoreBtnLabel;
+        return m_RestoreBtnLabel;
     }
 }
 
 std::string EWPresenter::getPauseButtonLabel() const
 {
-    if (this->m_Warn)
+    if (m_Warn)
     {
-        return this->m_PauseBtnLabel;
+        return m_PauseBtnLabel;
     }
     else
     {
-        return this->m_ResumeBtnLabel;
+        return m_ResumeBtnLabel;
     }
 }
 
 std::string EWPresenter::getStartButtonLabel() const
 {
-    if (this->m_TimeKeeper->getStatus() != AbstractTimeKeeper::OFF)
+    if (m_TimeKeeper->getStatus() != AbstractTimeKeeper::OFF)
     {
-        return this->m_StopBtnLabel;
+        return m_StopBtnLabel;
     }
     else
     {
-        return this->m_StartBtnLabel;
+        return m_StartBtnLabel;
     }
 }
 
 
 std::string EWPresenter::getStatus() const
 {
-    return this->m_TimeKeeper->getStatusStr();
+    return m_TimeKeeper->getStatusStr();
 }
 
 std::string EWPresenter::getIconName()const
 {
-    if (this->m_TimeKeeper->getStatus() == AbstractTimeKeeper::OFF)
+    if (m_TimeKeeper->getStatus() == AbstractTimeKeeper::OFF)
     {
-        return this->m_StopWebcamIcon;
+        return m_StopWebcamIcon;
     }
-    else if (this->m_TimeKeeper->getStatus() == AbstractTimeKeeper::AWAY &&
-             this->m_TimeKeeper->getTimeLeft() <= boost::posix_time::seconds(0))
+    else if (m_TimeKeeper->getStatus() == AbstractTimeKeeper::AWAY &&
+             m_TimeKeeper->getTimeLeft() <= boost::posix_time::seconds(0))
     {
-        return this->m_GreenWebcamIcon;
+        return m_GreenWebcamIcon;
     }
     else
     {
-        const boost::posix_time::time_duration timeLeft = this->m_TimeKeeper->getWorkTimeLeft();
-        if (timeLeft > this->m_RunningLateThreshold)
+        const boost::posix_time::time_duration timeLeft = m_TimeKeeper->getWorkTimeLeft();
+        if (timeLeft > m_RunningLateThreshold)
         {
-            return this->m_GreenWebcamIcon;
+            return m_GreenWebcamIcon;
         }
         else if (timeLeft > boost::posix_time::seconds(0))
         {
-            return this->m_YellowWebcamIcon;
+            return m_YellowWebcamIcon;
         }
         else
         {
-            return this->m_RedWebcamIcon;
+            return m_RedWebcamIcon;
         }
     }
 }
@@ -252,67 +252,67 @@ std::string EWPresenter::durationToString(boost::posix_time::time_duration durat
 
 std::string EWPresenter::getTimeOn() const
 {
-    const boost::posix_time::time_duration stamp = this->m_TimeKeeper->getHereStamp().time_of_day();
+    const boost::posix_time::time_duration stamp = m_TimeKeeper->getHereStamp().time_of_day();
     return EWPresenter::durationToString(stamp);
 }
 
 std::string EWPresenter::getTimeOff() const
 {
-    const boost::posix_time::time_duration stamp = this->m_TimeKeeper->getAwayStamp().time_of_day();
+    const boost::posix_time::time_duration stamp = m_TimeKeeper->getAwayStamp().time_of_day();
     return EWPresenter::durationToString(stamp);
 }
 
 std::string EWPresenter::getTimeRunning() const
 {
-    const boost::posix_time::time_duration stamp = this->m_TimeKeeper->getInterval();
+    const boost::posix_time::time_duration stamp = m_TimeKeeper->getInterval();
     return EWPresenter::durationToString(stamp);
 }
 
 std::string EWPresenter::getTimeLeft() const
 {
-    const boost::posix_time::time_duration stamp = this->m_TimeKeeper->getTimeLeft();
+    const boost::posix_time::time_duration stamp = m_TimeKeeper->getTimeLeft();
     return EWPresenter::durationToString(stamp);
 }
 
 bool EWPresenter::isShown() const
 {
-    return this->m_Shown;
+    return m_Shown;
 }
 
 void EWPresenter::setRunningLateThreshold(
             boost::posix_time::time_duration runningLateThreshold)
 {
-    this->m_RunningLateThreshold = runningLateThreshold;
+    m_RunningLateThreshold = runningLateThreshold;
 }
 
 void EWPresenter::setPopupAlarm(bool popupAlarm)
 {
-    this->m_PopupAlarm = popupAlarm;
+    m_PopupAlarm = popupAlarm;
 }
 
 void EWPresenter::setSoundAlarm(bool soundAlarm)
 {
-    this->m_SoundAlarm = soundAlarm;
+    m_SoundAlarm = soundAlarm;
 }
 
 void EWPresenter::setSoundPath(std::string soundPath)
 {
-    this->m_SoundPath = soundPath;
+    m_SoundPath = soundPath;
 }
 
 void EWPresenter::alert()
 {
-    if (!this->m_Warn)
+    if (!m_Warn)
     {
         return;
     }
-    if (this->m_PopupAlarm)
+    if (m_PopupAlarm)
     {
-        this->m_MsgHandler->displayAlert(m_LateMsg);
+        m_MsgHandler->displayAlert(m_LateMsg);
     }
 
-    if (this->m_SoundAlarm)
+    if (m_SoundAlarm)
     {
-        this->m_MsgHandler->playSound(this->m_SoundPath);
+        m_MsgHandler->playSound(m_SoundPath);
     }
 }

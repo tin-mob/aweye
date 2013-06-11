@@ -67,7 +67,7 @@ class EWTestBuilder : public EWBuilder<TMsgHandler, TConfigImpl, TConfig, TPrese
                       this->m_PresenceHandler, this->m_TimeHandler, this->m_TimeKeeper,
                       this->m_CheckTimer, this->m_ClockTimer, this->m_AppController,
                       this->m_Presenter, this->m_MainFramePres, this->m_MainFrame,
-                      this->m_TaskBarPres, this->m_TaskBar,this->m_OptionsPres,
+                      this->m_TaskBarPres, this->m_TaskBar, this->m_OptionsPres,
                       this->m_DisplayOptionsDialogCmd}){}
 
         virtual ~EWTestBuilder() {}

@@ -52,7 +52,7 @@ EWApp::EWApp() : m_AppImpl(nullptr)
 
 EWApp::~EWApp()
 {
-    if (this->m_AppImpl != nullptr) delete this->m_AppImpl;
+    if (m_AppImpl != nullptr) delete m_AppImpl;
 }
 
 bool EWApp::OnInit()
@@ -64,9 +64,9 @@ bool EWApp::OnInit()
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
-    	if (this->m_AppImpl == nullptr)
+    	if (m_AppImpl == nullptr)
     	{
-    	    this->m_AppImpl = new EWBuilder<MsgHandler, wxConfigImpl, Config,
+    	    m_AppImpl = new EWBuilder<MsgHandler, wxConfigImpl, Config,
                 WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, EWAppController,
                 EWPresenter, EWMainFramePres, EWMainFrame, EWTaskBarPres,
                 EWTaskBar, OptionsDialogPres, BuilderOptionsDialogPres, DisplayOptionsDialogCmd>

@@ -36,38 +36,38 @@ class EWViewPres : public EWViewObserver, public AbstractEWViewPres<TView>
         {
             assert(presenter);
             assert(controller);
-            this->m_Presenter->attach(this);
+            m_Presenter->attach(this);
         }
 
         virtual ~EWViewPres()
         {
-            this->m_Presenter->detach(this);
+            m_Presenter->detach(this);
         }
 
         virtual void OnStatusUpdate(AbstractEWPresenter*)
         {
-            this->doStatusUpdate();
+            doStatusUpdate();
         }
 
         virtual void OnTimeUpdate(AbstractEWPresenter*)
         {
-            this->doTimeUpdate();
+            doTimeUpdate();
         }
 
         virtual void OnQuit(AbstractEWPresenter*)
         {
-            this->doQuit();
+            doQuit();
         }
 
         virtual void forceUpdate()
         {
-            this->doStatusUpdate();
-            this->doTimeUpdate();
+            doStatusUpdate();
+            doTimeUpdate();
         }
 
         virtual void OnViewQuit()
         {
-            this->m_Presenter->quit();
+            m_Presenter->quit();
         }
 
         virtual void OnViewAbout()
@@ -76,22 +76,22 @@ class EWViewPres : public EWViewObserver, public AbstractEWViewPres<TView>
 
         virtual void OnViewOptionsButtonClick()
         {
-            this->m_Controller->displayOptionsDialog();
+            m_Controller->displayOptionsDialog();
         }
 
         virtual void OnViewStartStop()
         {
-            this->m_Presenter->toggleStart();
+            m_Presenter->toggleStart();
         }
 
         virtual void OnViewPauseResume()
         {
-            this->m_Presenter->togglePause();
+            m_Presenter->togglePause();
         }
 
         virtual void OnViewHideRestore()
         {
-            this->m_Presenter->show(!this->m_Presenter->isShown());
+            m_Presenter->show(!m_Presenter->isShown());
         }
 
     protected:

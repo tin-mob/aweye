@@ -255,7 +255,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, AbstractOptionsDialogPres* presen
 	optionsFlexGridSizer->Fit(this);
 	optionsFlexGridSizer->SetSizeHints(this);
 	//*)
-    this->m_Presenter->init(this);
+    m_Presenter->init(this);
 
 	Connect(wxID_OK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&OptionsDialog::OnOKClick);
 }
@@ -270,62 +270,62 @@ ConfigData OptionsDialog::getData() const
 {
     return {
         boost::posix_time::seconds(
-            this->wrkMinSpinCtrl->GetValue() * 60 + this->wrkSecSpinCtrl->GetValue()),
+            wrkMinSpinCtrl->GetValue() * 60 + wrkSecSpinCtrl->GetValue()),
         boost::posix_time::seconds(
-            this->zzzMinSpinCtrl->GetValue() * 60 + this->zzzSecSpinCtrl->GetValue()),
+            zzzMinSpinCtrl->GetValue() * 60 + zzzSecSpinCtrl->GetValue()),
         boost::posix_time::seconds(
-            this->remMinSpinCtrl->GetValue() * 60 + this->remSecSpinCtrl->GetValue()),
+            remMinSpinCtrl->GetValue() * 60 + remSecSpinCtrl->GetValue()),
         boost::posix_time::seconds(
-            this->chkMinSpinCtrl->GetValue() * 60 + this->chkSecSpinCtrl->GetValue()),
-        this->pauseTolSpinCtrl->GetValue(),
-        this->workTolSpinCtrl->GetValue(),
-        this->soundCheckBox->GetValue(),
-        this->popupCheckBox->GetValue(),
-        this->trayIconCheckBox->GetValue(),
-        this->indexSpinCtrl->GetValue(),
-        this->FaceSizeXSpinCtrl->GetValue(),
-        this->FaceSizeYSpinCtrl->GetValue(),
-        std::string(this->cascadeFilePickerCtrl->GetPath().mb_str()),
-        std::string(this->soundLocFilePickerCtrl->GetPath().mb_str()),
+            chkMinSpinCtrl->GetValue() * 60 + chkSecSpinCtrl->GetValue()),
+        pauseTolSpinCtrl->GetValue(),
+        workTolSpinCtrl->GetValue(),
+        soundCheckBox->GetValue(),
+        popupCheckBox->GetValue(),
+        trayIconCheckBox->GetValue(),
+        indexSpinCtrl->GetValue(),
+        FaceSizeXSpinCtrl->GetValue(),
+        FaceSizeYSpinCtrl->GetValue(),
+        std::string(cascadeFilePickerCtrl->GetPath().mb_str()),
+        std::string(soundLocFilePickerCtrl->GetPath().mb_str()),
         boost::posix_time::seconds(
-            this->runningLateMinSpinCtrl->GetValue() * 60 + this->runningLateSecSpinCtrl->GetValue()),
-        this->cummulCheckBox->GetValue()
+            runningLateMinSpinCtrl->GetValue() * 60 + runningLateSecSpinCtrl->GetValue()),
+        cummulCheckBox->GetValue()
     };
 }
 
 void OptionsDialog::setData(const ConfigData& data)
 {
-	this->soundCheckBox->SetValue(data.soundAlarm);
-    this->pauseTolSpinCtrl->SetValue(data.pauseTol);
-    this->workTolSpinCtrl->SetValue(data.workTol);
-    this->wrkMinSpinCtrl->SetValue(data.workLength.total_seconds() / 60);
-    this->wrkSecSpinCtrl->SetValue(data.workLength.seconds());
-    this->popupCheckBox->SetValue(data.popupAlarm);
-    this->zzzMinSpinCtrl->SetValue(data.pauseLength.total_seconds() / 60);
-    this->zzzSecSpinCtrl->SetValue(data.pauseLength.seconds());
-    this->chkMinSpinCtrl->SetValue(data.checkFreq.total_seconds() / 60);
-    this->chkSecSpinCtrl->SetValue(data.checkFreq.seconds());
-    this->remMinSpinCtrl->SetValue(data.remFreq.total_seconds() / 60);
-    this->remSecSpinCtrl->SetValue(data.remFreq.seconds());
-    this->indexSpinCtrl->SetValue(data.webcamIndex);
-    this->FaceSizeXSpinCtrl->SetValue(data.faceSizeX);
-    this->FaceSizeYSpinCtrl->SetValue(data.faceSizeY);
-    this->cascadeFilePickerCtrl->SetPath(wxString(data.cascadePath.c_str(), wxConvUTF8));
-    this->soundLocFilePickerCtrl->SetPath(wxString(data.soundPath.c_str(), wxConvUTF8));
-    this->runningLateMinSpinCtrl->SetValue(data.runningLateThreshold.total_seconds() / 60);
-    this->runningLateSecSpinCtrl->SetValue(data.runningLateThreshold.seconds());
-    this->trayIconCheckBox->SetValue(data.trayIcon);
-    this->cummulCheckBox->SetValue(data.cummulPause);
+	soundCheckBox->SetValue(data.soundAlarm);
+    pauseTolSpinCtrl->SetValue(data.pauseTol);
+    workTolSpinCtrl->SetValue(data.workTol);
+    wrkMinSpinCtrl->SetValue(data.workLength.total_seconds() / 60);
+    wrkSecSpinCtrl->SetValue(data.workLength.seconds());
+    popupCheckBox->SetValue(data.popupAlarm);
+    zzzMinSpinCtrl->SetValue(data.pauseLength.total_seconds() / 60);
+    zzzSecSpinCtrl->SetValue(data.pauseLength.seconds());
+    chkMinSpinCtrl->SetValue(data.checkFreq.total_seconds() / 60);
+    chkSecSpinCtrl->SetValue(data.checkFreq.seconds());
+    remMinSpinCtrl->SetValue(data.remFreq.total_seconds() / 60);
+    remSecSpinCtrl->SetValue(data.remFreq.seconds());
+    indexSpinCtrl->SetValue(data.webcamIndex);
+    FaceSizeXSpinCtrl->SetValue(data.faceSizeX);
+    FaceSizeYSpinCtrl->SetValue(data.faceSizeY);
+    cascadeFilePickerCtrl->SetPath(wxString(data.cascadePath.c_str(), wxConvUTF8));
+    soundLocFilePickerCtrl->SetPath(wxString(data.soundPath.c_str(), wxConvUTF8));
+    runningLateMinSpinCtrl->SetValue(data.runningLateThreshold.total_seconds() / 60);
+    runningLateSecSpinCtrl->SetValue(data.runningLateThreshold.seconds());
+    trayIconCheckBox->SetValue(data.trayIcon);
+    cummulCheckBox->SetValue(data.cummulPause);
 }
 
 void OptionsDialog::disableTray()
 {
-    this->trayIconCheckBox->Disable();
+    trayIconCheckBox->Disable();
 }
 
 void OptionsDialog::OnOKClick(wxCommandEvent& event)
 {
-    if (this->m_Presenter->saveData(this->getData()))
+    if (m_Presenter->saveData(getData()))
     {
         EndModal(wxID_OK);
     }

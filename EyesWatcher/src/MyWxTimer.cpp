@@ -33,15 +33,15 @@ MyWxTimer::~MyWxTimer()
 
 bool MyWxTimer::startTimer(long total_milliseconds, bool oneShot)
 {
-    return this->Start(total_milliseconds, oneShot);
+    return Start(total_milliseconds, oneShot);
 }
 
 void MyWxTimer::stopTimer()
 {
-    this->Stop();
+    Stop();
 }
 
 void MyWxTimer::Notify()
 {
-    this->notify(&TimerInterface::onTimerRing, this);
+    notify(&TimerInterface::onTimerRing, this);
 }

@@ -43,11 +43,11 @@ bool BuilderOptionsDialogPres::saveData(const ConfigData& data)
 {
     try
     {
-        this->m_Config->save(data);
+        m_Config->save(data);
     }
     catch (BaseException e)
     {
-        this->m_MsgHandler->displayError(e.what());
+        m_MsgHandler->displayError(e.what());
         return false;
     }
     return true;
@@ -55,8 +55,8 @@ bool BuilderOptionsDialogPres::saveData(const ConfigData& data)
 
 void BuilderOptionsDialogPres::init(AbstractOptionsDialog* dialog)
 {
-    dialog->setData(this->m_Config->getData());
-    if (!this->m_CanCreateTaskBar)
+    dialog->setData(m_Config->getData());
+    if (!m_CanCreateTaskBar)
     {
         dialog->disableTray();
     }

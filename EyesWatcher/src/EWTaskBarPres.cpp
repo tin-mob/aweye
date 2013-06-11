@@ -34,45 +34,45 @@ EWTaskBarPres::~EWTaskBarPres()
 
 void EWTaskBarPres::doStatusUpdate()
 {
-    assert(this->m_View != nullptr);
-    if (this->m_View == nullptr) return;
+    assert(m_View != nullptr);
+    if (m_View == nullptr) return;
 
-    this->m_View->setPopupMenuCommands(
-        this->m_Presenter->getHideButtonLabel(),
-        this->m_Presenter->getStartButtonLabel(),
-        this->m_Presenter->getPauseButtonLabel());
+    m_View->setPopupMenuCommands(
+        m_Presenter->getHideButtonLabel(),
+        m_Presenter->getStartButtonLabel(),
+        m_Presenter->getPauseButtonLabel());
 
-    const std::string newIcon = this->m_Presenter->getIconName();
-    if (newIcon != this->m_LastIcon)
+    const std::string newIcon = m_Presenter->getIconName();
+    if (newIcon != m_LastIcon)
     {
-        this->m_LastIcon = newIcon;
-        this->m_View->setIcon(this->m_LastIcon);
+        m_LastIcon = newIcon;
+        m_View->setIcon(m_LastIcon);
     }
 }
 
 void EWTaskBarPres::doTimeUpdate()
 {
-    assert(this->m_View != nullptr);
-    if (this->m_View == nullptr) return;
+    assert(m_View != nullptr);
+    if (m_View == nullptr) return;
 
-    this->m_View->setPopupMenuTimes(
-        "Last Session : " + this->m_Presenter->getTimeOn(),
-        "Last Pause : " + this->m_Presenter->getTimeOff(),
-        "Running : " + this->m_Presenter->getTimeRunning(),
-        "Time Left : " + this->m_Presenter->getTimeLeft());
+    m_View->setPopupMenuTimes(
+        "Last Session : " + m_Presenter->getTimeOn(),
+        "Last Pause : " + m_Presenter->getTimeOff(),
+        "Running : " + m_Presenter->getTimeRunning(),
+        "Time Left : " + m_Presenter->getTimeLeft());
 
-    const std::string newIcon = this->m_Presenter->getIconName();
-    if (newIcon != this->m_LastIcon)
+    const std::string newIcon = m_Presenter->getIconName();
+    if (newIcon != m_LastIcon)
     {
-        this->m_LastIcon = newIcon;
-        this->m_View->setIcon(this->m_LastIcon);
+        m_LastIcon = newIcon;
+        m_View->setIcon(m_LastIcon);
     }
 }
 
 void EWTaskBarPres::doQuit()
 {
-    assert(this->m_View != nullptr);
-    if (this->m_View == nullptr) return;
+    assert(m_View != nullptr);
+    if (m_View == nullptr) return;
 
-    this->m_View->setIcon("");
+    m_View->setIcon("");
 }

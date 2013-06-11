@@ -30,8 +30,8 @@ class AbstractEWViewPres
 
         void attachView(TView* view)
         {
-            this->m_View = view;
-            this->forceUpdate();
+            m_View = view;
+            forceUpdate();
         }
 
         virtual void forceUpdate() = 0;

@@ -37,15 +37,15 @@ class PresenceHandlerStub : public AbstractPresenceHandler
 
         virtual bool isHere()
         {
-            assert (!this->m_results.empty());
-            bool result  = this->m_results.front();
-            this->m_results.pop();
+            assert (!m_results.empty());
+            bool result  = m_results.front();
+            m_results.pop();
             return result;
         }
 
         virtual void pushResult(bool result)
         {
-            this->m_results.push(result);
+            m_results.push(result);
         }
 
         virtual void setCascade(std::string name) {cascadePath = name;}

@@ -29,9 +29,9 @@ class AbstractEWMainFrame
 {
     public:
         AbstractEWMainFrame() {}
-        virtual void setValues( std::string status, std::string onClock,
-                               std::string offClock, std::string runningClock,
-                               std::string leftClock) = 0;
+        virtual void setValues( std::string statusLabel, std::string onClockLabel,
+                               std::string offClockLabel, std::string runningClockLabel,
+                               std::string leftClockLabel) = 0;
         virtual void show(bool show = true) = 0;
         virtual void setPauseButtonLabel(std::string label) = 0;
         virtual void setStartButtonLabel(std::string label) = 0;

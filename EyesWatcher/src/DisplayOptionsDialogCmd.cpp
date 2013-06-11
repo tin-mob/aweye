@@ -35,6 +35,6 @@ DisplayOptionsDialogCmd::~DisplayOptionsDialogCmd()
 
 bool DisplayOptionsDialogCmd::execute()
 {
-    OptionsDialog dialog(nullptr, this->m_Presenter);
+    OptionsDialog dialog(nullptr, m_Presenter);
     return dialog.ShowModal() == wxID_OK;
 }

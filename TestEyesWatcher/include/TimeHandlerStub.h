@@ -33,11 +33,11 @@ class TimeHandlerStub : public AbstractTimeHandler
         virtual ~TimeHandlerStub() {}
         virtual boost::posix_time::ptime getTime() const
         {
-            return this->m_time;
+            return m_time;
         }
         virtual void setTime(boost::posix_time::ptime time)
         {
-            this->m_time = time;
+            m_time = time;
         }
 
     protected:

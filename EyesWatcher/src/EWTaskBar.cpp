@@ -41,60 +41,60 @@ EWTaskBar::EWTaskBar(AbstractEWViewPres<AbstractEWTaskbar>* presenter) :
 
 EWTaskBar::~EWTaskBar()
 {
-    if (this->m_Menu != nullptr)
+    if (m_Menu != nullptr)
     {
-        delete this->m_Menu;
+        delete m_Menu;
     }
-    this->RemoveIcon();
+    RemoveIcon();
 }
 
 void EWTaskBar::setPopupMenuCommands( std::string hideRestoreLabel,
     std::string startStopLabel, std::string pauseResumeLabel)
 {
-    if (this->m_Menu != nullptr)
+    if (m_Menu != nullptr)
     {
-        this->m_Menu->FindItem(EWTaskBar::ID_HIDE_RESTORE)->SetItemLabel(wxString(hideRestoreLabel.c_str(), wxConvUTF8));
-        this->m_Menu->FindItem(EWTaskBar::ID_START_STOP)->SetItemLabel(wxString(startStopLabel.c_str(), wxConvUTF8));
-        this->m_Menu->FindItem(EWTaskBar::ID_PAUSE_RESUME)->SetItemLabel(wxString(pauseResumeLabel.c_str(), wxConvUTF8));
+        m_Menu->FindItem(EWTaskBar::ID_HIDE_RESTORE)->SetItemLabel(wxString(hideRestoreLabel.c_str(), wxConvUTF8));
+        m_Menu->FindItem(EWTaskBar::ID_START_STOP)->SetItemLabel(wxString(startStopLabel.c_str(), wxConvUTF8));
+        m_Menu->FindItem(EWTaskBar::ID_PAUSE_RESUME)->SetItemLabel(wxString(pauseResumeLabel.c_str(), wxConvUTF8));
     }
 }
 
 void EWTaskBar::setPopupMenuTimes( std::string onClock, std::string offClock,
     std::string runningClock, std::string leftClock)
 {
-    if (this->m_Menu != nullptr)
+    if (m_Menu != nullptr)
     {
-        this->m_Menu->FindItem(EWTaskBar::ID_ON_TIME)->SetItemLabel(wxString(onClock.c_str(), wxConvUTF8));
-        this->m_Menu->FindItem(EWTaskBar::ID_OFF_TIME)->SetItemLabel(wxString(offClock.c_str(), wxConvUTF8));
-        this->m_Menu->FindItem(EWTaskBar::ID_RUNNING_TIME)->SetItemLabel(wxString(runningClock.c_str(), wxConvUTF8));
-        this->m_Menu->FindItem(EWTaskBar::ID_LEFT_TIME)->SetItemLabel(wxString(leftClock.c_str(), wxConvUTF8));
+        m_Menu->FindItem(EWTaskBar::ID_ON_TIME)->SetItemLabel(wxString(onClock.c_str(), wxConvUTF8));
+        m_Menu->FindItem(EWTaskBar::ID_OFF_TIME)->SetItemLabel(wxString(offClock.c_str(), wxConvUTF8));
+        m_Menu->FindItem(EWTaskBar::ID_RUNNING_TIME)->SetItemLabel(wxString(runningClock.c_str(), wxConvUTF8));
+        m_Menu->FindItem(EWTaskBar::ID_LEFT_TIME)->SetItemLabel(wxString(leftClock.c_str(), wxConvUTF8));
     }
 }
 
 wxMenu* EWTaskBar::CreatePopupMenu()
 {
     // is this necessary? Investigate.
-    if (this->m_Menu != nullptr)
+    if (m_Menu != nullptr)
     {
-        delete this->m_Menu;
+        delete m_Menu;
     }
-    this->m_Menu = new ObservableWxMenu();
-    this->m_Menu->attach(this);
-    this->m_Menu->Append(EWTaskBar::ID_HIDE_RESTORE, wxT("Hide/Restore"));
-    this->m_Menu->Append(EWTaskBar::ID_EXIT, wxT("Exit"));
-    this->m_Menu->AppendSeparator();
-    this->m_Menu->Append(EWTaskBar::ID_START_STOP, wxT("Start/Stop"));
-    this->m_Menu->Append(EWTaskBar::ID_PAUSE_RESUME, wxT("Pause/Resume"));
-    this->m_Menu->AppendSeparator();
-    this->m_Menu->Append(EWTaskBar::ID_ON_TIME, wxT("Last Session"));
-    this->m_Menu->Append(EWTaskBar::ID_OFF_TIME, wxT("Last Pause"));
-    this->m_Menu->Append(EWTaskBar::ID_RUNNING_TIME, wxT("Running"));
-    this->m_Menu->Append(EWTaskBar::ID_LEFT_TIME, wxT("Time Left"));
+    m_Menu = new ObservableWxMenu();
+    m_Menu->attach(this);
+    m_Menu->Append(EWTaskBar::ID_HIDE_RESTORE, wxT("Hide/Restore"));
+    m_Menu->Append(EWTaskBar::ID_EXIT, wxT("Exit"));
+    m_Menu->AppendSeparator();
+    m_Menu->Append(EWTaskBar::ID_START_STOP, wxT("Start/Stop"));
+    m_Menu->Append(EWTaskBar::ID_PAUSE_RESUME, wxT("Pause/Resume"));
+    m_Menu->AppendSeparator();
+    m_Menu->Append(EWTaskBar::ID_ON_TIME, wxT("Last Session"));
+    m_Menu->Append(EWTaskBar::ID_OFF_TIME, wxT("Last Pause"));
+    m_Menu->Append(EWTaskBar::ID_RUNNING_TIME, wxT("Running"));
+    m_Menu->Append(EWTaskBar::ID_LEFT_TIME, wxT("Time Left"));
 
     // force update
-    this->m_Presenter->forceUpdate();
+    m_Presenter->forceUpdate();
 
-    return this->m_Menu;
+    return m_Menu;
 }
 
 // all icons are png files for now...
@@ -103,7 +103,7 @@ void EWTaskBar::setIcon(std::string loc)
     if (loc != "")
     {
         const wxIcon icon(wxString(loc.c_str(), wxConvUTF8), wxBITMAP_TYPE_PNG );
-        this->SetIcon(icon);
+        SetIcon(icon);
     }
     else
     {
@@ -116,25 +116,25 @@ void EWTaskBar::setIcon(std::string loc)
 // a nice warning...
 void EWTaskBar::onMenuDelete(ObservableWxMenu* menu)
 {
-    this->m_Menu = nullptr;
+    m_Menu = nullptr;
 }
 
 void EWTaskBar::OnMenuHideRestore(wxCommandEvent&)
 {
-    this->m_Presenter->OnViewHideRestore();
+    m_Presenter->OnViewHideRestore();
 }
 
 void EWTaskBar::OnMenuStartStop(wxCommandEvent&)
 {
-    this->m_Presenter->OnViewStartStop();
+    m_Presenter->OnViewStartStop();
 }
 
 void EWTaskBar::OnMenuPauseResume(wxCommandEvent&)
 {
-    this->m_Presenter->OnViewPauseResume();
+    m_Presenter->OnViewPauseResume();
 }
 
 void EWTaskBar::OnMenuExit(wxCommandEvent&)
 {
-    this->m_Presenter->OnViewQuit();
+    m_Presenter->OnViewQuit();
 }

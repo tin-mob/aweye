@@ -183,21 +183,21 @@ EWMainFrame::~EWMainFrame()
     //*)
 }
 
-void EWMainFrame::setValues( std::string status, std::string onClock,
-                            std::string offClock, std::string runningClock,
-                            std::string leftClock)
+void EWMainFrame::setValues( std::string statusLabel, std::string onClockLabel,
+                            std::string offClockLabel, std::string runningClockLabel,
+                            std::string leftClockLabel)
 {
-    this->StatusLabel->SetLabel(wxString(status.c_str(), wxConvUTF8));
-    this->onClock->SetLabel(wxString(onClock.c_str(), wxConvUTF8));
-    this->offClock->SetLabel(wxString(offClock.c_str(), wxConvUTF8));
-    this->runningClock->SetLabel(wxString(runningClock.c_str(), wxConvUTF8));
-    this->leftClock->SetLabel(wxString(leftClock.c_str(), wxConvUTF8));
+    StatusLabel->SetLabel(wxString(statusLabel.c_str(), wxConvUTF8));
+    onClock->SetLabel(wxString(onClockLabel.c_str(), wxConvUTF8));
+    offClock->SetLabel(wxString(offClockLabel.c_str(), wxConvUTF8));
+    runningClock->SetLabel(wxString(runningClockLabel.c_str(), wxConvUTF8));
+    leftClock->SetLabel(wxString(leftClockLabel.c_str(), wxConvUTF8));
 
-    this->StatusLabel->GetParent()->Layout();
-    this->onClock->GetParent()->Layout();
-    this->offClock->GetParent()->Layout();
-    this->runningClock->GetParent()->Layout();
-    this->leftClock->GetParent()->Layout();
+    StatusLabel->GetParent()->Layout();
+    onClock->GetParent()->Layout();
+    offClock->GetParent()->Layout();
+    runningClock->GetParent()->Layout();
+    leftClock->GetParent()->Layout();
 }
 
 void EWMainFrame::show(bool show)
@@ -207,12 +207,12 @@ void EWMainFrame::show(bool show)
 
 void EWMainFrame::setPauseButtonLabel(std::string label)
 {
-    this->DoMenu->SetLabel(this->ID_PAUSEMENUITEM, wxString(label.c_str(), wxConvUTF8));
+    DoMenu->SetLabel(ID_PAUSEMENUITEM, wxString(label.c_str(), wxConvUTF8));
 }
 
 void EWMainFrame::setStartButtonLabel(std::string label)
 {
-    this->DoMenu->SetLabel(this->ID_STARTMENUITEM, wxString(label.c_str(), wxConvUTF8));
+    DoMenu->SetLabel(ID_STARTMENUITEM, wxString(label.c_str(), wxConvUTF8));
 }
 
 void EWMainFrame::close()
@@ -222,7 +222,7 @@ void EWMainFrame::close()
 
 void EWMainFrame::OnQuit(wxCommandEvent& event)
 {
-    this->m_Presenter->OnViewQuit();
+    m_Presenter->OnViewQuit();
 }
 
 void EWMainFrame::OnAbout(wxCommandEvent& event)
@@ -233,26 +233,26 @@ void EWMainFrame::OnAbout(wxCommandEvent& event)
 
 void EWMainFrame::OnOptionsButtonClick(wxCommandEvent& event)
 {
-    this->m_Presenter->OnViewOptionsButtonClick();
+    m_Presenter->OnViewOptionsButtonClick();
 }
 
 void EWMainFrame::OnPlayButtonClick(wxCommandEvent& event)
 {
-    this->m_Presenter->OnViewStartStop();
+    m_Presenter->OnViewStartStop();
 }
 
 void EWMainFrame::OnClose(wxCloseEvent& event)
 {
-    if (!event.CanVeto() || !this->m_TaskbarCreated)
+    if (!event.CanVeto() || !m_TaskbarCreated)
     {
-        this->m_Presenter->OnViewQuit();
+        m_Presenter->OnViewQuit();
         Destroy();
     }
     event.Veto();
-    this->m_Presenter->OnViewHideRestore();
+    m_Presenter->OnViewHideRestore();
 }
 
 void EWMainFrame::OnPauseButtonClick(wxCommandEvent& event)
 {
-    this->m_Presenter->OnViewPauseResume();
+    m_Presenter->OnViewPauseResume();
 }

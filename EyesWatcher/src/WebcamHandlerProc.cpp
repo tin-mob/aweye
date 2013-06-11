@@ -39,18 +39,18 @@ WebcamHandlerProc::~WebcamHandlerProc()
 
 void WebcamHandlerProc::setCascade(std::string name)
 {
-    this->m_FaceCascadeName = name;
+    m_FaceCascadeName = name;
 }
 
 void WebcamHandlerProc::setIndex(int index)
 {
-    this->m_index = index;
+    m_index = index;
 }
 
 void WebcamHandlerProc::setFaceSize(unsigned int x, unsigned int y)
 {
-    this->m_FaceSizeX = x;
-    this->m_FaceSizeY = y;
+    m_FaceSizeX = x;
+    m_FaceSizeY = y;
 }
 
 /// @note IsHereCmd in same path than main executable,
@@ -61,9 +61,9 @@ bool WebcamHandlerProc::isHere()
     ///@todo test if this works in windows
     wxString cmd = wxT("./IsHereCmd '");
 
-    const wxString cascade(this->m_FaceCascadeName.c_str(), wxConvUTF8);
+    const wxString cascade(m_FaceCascadeName.c_str(), wxConvUTF8);
 
-    cmd << this->m_index << "' '" << cascade << "' '" << this->m_FaceSizeX << "' '" << this->m_FaceSizeY << "'";
+    cmd << m_index << "' '" << cascade << "' '" << m_FaceSizeX << "' '" << m_FaceSizeY << "'";
     IsHereCmd::ReturnCodes code = (IsHereCmd::ReturnCodes)wxExecute(cmd, wxEXEC_SYNC);
 
     switch (code)

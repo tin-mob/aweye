@@ -35,13 +35,13 @@ OptionsDialogPres::~OptionsDialogPres()
 
 bool OptionsDialogPres::saveData(const ConfigData& data)
 {
-    return this->m_Controller->saveConfig(data);
+    return m_Controller->saveConfig(data);
 }
 
 void OptionsDialogPres::init(AbstractOptionsDialog* dialog)
 {
-    dialog->setData(this->m_Controller->getConfigData());
-    if (!this->m_Controller->canCreateTaskBar())
+    dialog->setData(m_Controller->getConfigData());
+    if (!m_Controller->canCreateTaskBar())
     {
         dialog->disableTray();
     }

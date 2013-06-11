@@ -36,37 +36,37 @@ EWMainFramePres::~EWMainFramePres()
 
 void EWMainFramePres::doStatusUpdate()
 {
-    assert(this->m_View != nullptr);
-    if (this->m_View == nullptr) return;
+    assert(m_View != nullptr);
+    if (m_View == nullptr) return;
 
-    const bool shown = this->m_Presenter->isShown();
-    this->m_View->show(shown);
+    const bool shown = m_Presenter->isShown();
+    m_View->show(shown);
     if (shown)
     {
-        this->m_View->setPauseButtonLabel(this->m_Presenter->getPauseButtonLabel());
-        this->m_View->setStartButtonLabel(this->m_Presenter->getStartButtonLabel());
+        m_View->setPauseButtonLabel(m_Presenter->getPauseButtonLabel());
+        m_View->setStartButtonLabel(m_Presenter->getStartButtonLabel());
 
         // times could change in a status update (stop)
-        this->m_View->setValues(this->m_Presenter->getStatus(), this->m_Presenter->getTimeOn(),
-            this->m_Presenter->getTimeOff(), this->m_Presenter->getTimeRunning(),
-            this->m_Presenter->getTimeLeft());
+        m_View->setValues(m_Presenter->getStatus(), m_Presenter->getTimeOn(),
+            m_Presenter->getTimeOff(), m_Presenter->getTimeRunning(),
+            m_Presenter->getTimeLeft());
     }
 }
 
 void EWMainFramePres::doTimeUpdate()
 {
-    assert(this->m_View != nullptr);
-    if (this->m_View == nullptr) return;
+    assert(m_View != nullptr);
+    if (m_View == nullptr) return;
 
-    if (this->m_Presenter->isShown())
+    if (m_Presenter->isShown())
     {
-        this->m_View->setValues(this->m_Presenter->getStatus(), this->m_Presenter->getTimeOn(),
-            this->m_Presenter->getTimeOff(), this->m_Presenter->getTimeRunning(),
-            this->m_Presenter->getTimeLeft());
+        m_View->setValues(m_Presenter->getStatus(), m_Presenter->getTimeOn(),
+            m_Presenter->getTimeOff(), m_Presenter->getTimeRunning(),
+            m_Presenter->getTimeLeft());
     }
 }
 
 void EWMainFramePres::doQuit()
 {
-    this->m_View->close();
+    m_View->close();
 }

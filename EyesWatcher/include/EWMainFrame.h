@@ -45,9 +45,9 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
                     bool taskbarCreated = true, wxWindow* parent = nullptr, wxWindowID id = -1);
         virtual ~EWMainFrame();
 
-        virtual void setValues( std::string status, std::string onClock,
-                       std::string offClock, std::string runningClock,
-                       std::string leftClock);
+        virtual void setValues( std::string statusLabel, std::string onClockLabel,
+                       std::string offClockLabel, std::string runningClockLabel,
+                       std::string leftClockLabel);
         virtual void show(bool show = true);
         virtual void setPauseButtonLabel(std::string label);
         virtual void setStartButtonLabel(std::string label);

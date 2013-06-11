@@ -52,40 +52,40 @@ void EWAppController::link(AbstractMsgHandler* msgHandler, AbstractConfig* confi
     assert(presenter);
     assert(displayCmd);
 
-    this->m_MsgHandler = msgHandler;
-    this->m_Config = config;
-    this->m_PresenceHandler = presenceHandler;
-    this->m_TimeKeeper = timeKeeper;
-    this->m_Presenter = presenter;
-    this->m_DisplayCmd = displayCmd;
+    m_MsgHandler = msgHandler;
+    m_Config = config;
+    m_PresenceHandler = presenceHandler;
+    m_TimeKeeper = timeKeeper;
+    m_Presenter = presenter;
+    m_DisplayCmd = displayCmd;
 }
 
 bool EWAppController::saveConfig(const ConfigData& data)
 {
     try
     {
-        this->m_Config->save(data);
+        m_Config->save(data);
 
-        this->m_PresenceHandler->setCascade(data.cascadePath);
-        this->m_PresenceHandler->setFaceSize(data.faceSizeX, data.faceSizeY);
-        this->m_PresenceHandler->setIndex(data.webcamIndex);
+        m_PresenceHandler->setCascade(data.cascadePath);
+        m_PresenceHandler->setFaceSize(data.faceSizeX, data.faceSizeY);
+        m_PresenceHandler->setIndex(data.webcamIndex);
 
-        this->m_TimeKeeper->setCheckFreq(data.checkFreq);
-        this->m_TimeKeeper->setPauseLength(data.pauseLength);
-        this->m_TimeKeeper->setPauseTol(data.pauseTol);
-        this->m_TimeKeeper->setWorkTol(data.workTol);
-        this->m_TimeKeeper->setRemFreq(data.remFreq);
-        this->m_TimeKeeper->setWorkLength(data.workLength);
-        this->m_TimeKeeper->setCummulPause(data.cummulPause);
+        m_TimeKeeper->setCheckFreq(data.checkFreq);
+        m_TimeKeeper->setPauseLength(data.pauseLength);
+        m_TimeKeeper->setPauseTol(data.pauseTol);
+        m_TimeKeeper->setWorkTol(data.workTol);
+        m_TimeKeeper->setRemFreq(data.remFreq);
+        m_TimeKeeper->setWorkLength(data.workLength);
+        m_TimeKeeper->setCummulPause(data.cummulPause);
 
-        this->m_Presenter->setPopupAlarm(data.popupAlarm);
-        this->m_Presenter->setSoundAlarm(data.soundAlarm);
-        this->m_Presenter->setSoundPath(data.soundPath);
-        this->m_Presenter->setRunningLateThreshold(data.runningLateThreshold);
+        m_Presenter->setPopupAlarm(data.popupAlarm);
+        m_Presenter->setSoundAlarm(data.soundAlarm);
+        m_Presenter->setSoundPath(data.soundPath);
+        m_Presenter->setRunningLateThreshold(data.runningLateThreshold);
     }
     catch (BaseException e)
     {
-        this->m_MsgHandler->displayError(e.what());
+        m_MsgHandler->displayError(e.what());
         return false;
     }
     return true;
@@ -93,22 +93,22 @@ bool EWAppController::saveConfig(const ConfigData& data)
 
 const ConfigData& EWAppController::getConfigData() const
 {
-    return this->m_Config->getData();
+    return m_Config->getData();
 }
 
 void EWAppController::displayOptionsDialog()
 {
     try
     {
-        this->m_DisplayCmd->execute();
+        m_DisplayCmd->execute();
     }
     catch (BaseException e)
     {
-        this->m_MsgHandler->displayError(e.what());
+        m_MsgHandler->displayError(e.what());
     }
 }
 
 bool EWAppController::canCreateTaskBar() const
 {
-    return this->m_CanCreateTaskbar;
+    return m_CanCreateTaskbar;
 }

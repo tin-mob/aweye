@@ -34,7 +34,7 @@ WebcamHandler::WebcamHandler(int index, std::string faceCascadeName,
     m_index(index), m_FaceCascadeName(faceCascadeName),
     m_FaceSizeX(faceSizeX), m_FaceSizeY(faceSizeY)
 {
-    if( !this->m_FaceCascade.load(m_FaceCascadeName) ){
+    if( !m_FaceCascade.load(m_FaceCascadeName) ){
         throw MissingCascadeFileException();
     }
 }
@@ -45,29 +45,29 @@ WebcamHandler::~WebcamHandler()
 
 void WebcamHandler::setCascade(std::string name)
 {
-    if (name != this->m_FaceCascadeName)
+    if (name != m_FaceCascadeName)
     {
-        if( !this->m_FaceCascade.load(name) ){
+        if( !m_FaceCascade.load(name) ){
             throw MissingCascadeFileException();
         }
-        this->m_FaceCascadeName = name;
+        m_FaceCascadeName = name;
     }
 }
 
 void WebcamHandler::setIndex(int index)
 {
-    this->m_index = index;
+    m_index = index;
 }
 
 void WebcamHandler::setFaceSize(unsigned int x, unsigned int y)
 {
-    this->m_FaceSizeX = x;
-    this->m_FaceSizeY = y;
+    m_FaceSizeX = x;
+    m_FaceSizeY = y;
 }
 
 bool WebcamHandler::isHere()
 {
-    cv::VideoCapture videoCapture(this->m_index);
+    cv::VideoCapture videoCapture(m_index);
 
     if(!videoCapture.isOpened()) { // check if we have a camera
 		throw InvalidCameraException();
@@ -82,8 +82,8 @@ bool WebcamHandler::isHere()
 	cv::equalizeHist( frame_gray, frame_gray );
 
 	//-- Detect faces
-	this->m_FaceCascade.detectMultiScale( frame_gray, faces,
-        1.1, 2, 0|CV_HAAR_SCALE_IMAGE, cv::Size(this->m_FaceSizeX, this->m_FaceSizeY) );
+	m_FaceCascade.detectMultiScale( frame_gray, faces,
+        1.1, 2, 0|CV_HAAR_SCALE_IMAGE, cv::Size(m_FaceSizeX, m_FaceSizeY) );
 
     // kept for debugging purposes
     /*
