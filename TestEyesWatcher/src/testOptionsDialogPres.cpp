@@ -39,15 +39,15 @@ SUITE(TestOptionsDialogPres)
     {
         const ConfigData newData = {boost::posix_time::not_a_date_time};
         pres.saveData(newData);
-        CHECK_EQUAL(ctrl.data, newData);
+        CHECK_EQUAL(ctrl.m_Data, newData);
     }
 
     TEST_FIXTURE(OptionsDialogPresFixture, TestInit)
     {
         OptionsDialogStub dialog;
-        ctrl.data = {boost::posix_time::not_a_date_time};
+        ctrl.m_Data = {boost::posix_time::not_a_date_time};
         pres.init(&dialog);
-        CHECK_EQUAL(ctrl.data, dialog.getData());
+        CHECK_EQUAL(ctrl.m_Data, dialog.getData());
         CHECK_EQUAL(false, dialog.disabled);
     }
 
@@ -57,9 +57,9 @@ SUITE(TestOptionsDialogPres)
         OptionsDialogPres pres2(&ctrl2);
         OptionsDialogStub dialog;
 
-        ctrl2.data = {boost::posix_time::not_a_date_time};
+        ctrl2.m_Data = {boost::posix_time::not_a_date_time};
         pres2.init(&dialog);
-        CHECK_EQUAL(ctrl2.data, dialog.getData());
+        CHECK_EQUAL(ctrl2.m_Data, dialog.getData());
         CHECK_EQUAL(true, dialog.disabled);
     }
 }

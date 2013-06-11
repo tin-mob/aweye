@@ -121,12 +121,12 @@ SUITE(TestEWBuilder)
 
         CHECK_EQUAL(builder.links.m_MainFrame, setTop.frame);
 
-        CHECK_EQUAL(builder.links.m_MsgHandler, builder.links.m_AppController->msgHandler);
-        CHECK_EQUAL(builder.links.m_Config, builder.links.m_AppController->config);
-        CHECK_EQUAL(builder.links.m_PresenceHandler, builder.links.m_AppController->presenceHandler);
-        CHECK_EQUAL(builder.links.m_TimeKeeper, builder.links.m_AppController->timeKeeper);
-        CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_AppController->presenter);
-        CHECK_EQUAL(builder.links.m_DisplayOptionsDialogCmd, builder.links.m_AppController->displayCmd);
+        CHECK_EQUAL(builder.links.m_MsgHandler, builder.links.m_AppController->m_MsgHandler);
+        CHECK_EQUAL(builder.links.m_Config, builder.links.m_AppController->m_Config);
+        CHECK_EQUAL(builder.links.m_PresenceHandler, builder.links.m_AppController->m_PresenceHandler);
+        CHECK_EQUAL(builder.links.m_TimeKeeper, builder.links.m_AppController->m_TimeKeeper);
+        CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_AppController->m_Presenter);
+        CHECK_EQUAL(builder.links.m_DisplayOptionsDialogCmd, builder.links.m_AppController->m_DisplayCmd);
     }
 
     TEST_FIXTURE(EWBuilderFixture, TestBuildBadConfig)
