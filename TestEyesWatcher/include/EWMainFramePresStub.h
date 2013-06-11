@@ -29,7 +29,7 @@ class EWMainFramePresStub : public AbstractEWViewPres<AbstractEWMainFrame>
 {
     public:
         EWMainFramePresStub(AbstractEWPresenter* p, AbstractEWAppController* c) :
-            presenter(p), controller(c) {}
+            m_Presenter(p), m_Controller(c) {}
         virtual ~EWMainFramePresStub() {}
 
         virtual void forceUpdate() {}
@@ -40,8 +40,8 @@ class EWMainFramePresStub : public AbstractEWViewPres<AbstractEWMainFrame>
         virtual void OnViewPauseResume() {}
         virtual void OnViewHideRestore() {}
 
-        AbstractEWPresenter* presenter;
-        AbstractEWAppController* controller;
+        AbstractEWPresenter* m_Presenter;
+        AbstractEWAppController* m_Controller;
     protected:
     private:
 };

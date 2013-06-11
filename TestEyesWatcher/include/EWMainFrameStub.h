@@ -30,40 +30,40 @@ class EWMainFrameStub : public AbstractEWMainFrame
     public:
         EWMainFrameStub(AbstractEWViewPres<AbstractEWMainFrame>* p = nullptr,
             bool tc = true) :
-            closed(false), shown(false), status(""),
-            onClock(""), offClock(""), runningClock(""), leftClock(""),
-            pauseLabel(""), startLabel(""), presenter(p), taskbarCreated(tc) {}
+            m_Closed(false), m_Shown(false), m_Status(""),
+            m_OnClock(""), m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
+            m_PauseLabel(""), m_StartLabel(""), m_Presenter(p), m_TaskbarCreated(tc) {}
         virtual ~EWMainFrameStub() {}
 
         virtual void setValues( std::string s, std::string onC,
                                std::string offC, std::string r,
                                std::string l)
         {
-            status = s;
-            onClock = onC;
-            offClock = offC;
-            runningClock = r;
-            leftClock = l;
+            m_Status = s;
+            m_OnClock = onC;
+            m_OffClock = offC;
+            m_RunningClock = r;
+            m_LeftClock = l;
         }
 
-        virtual void show(bool show = true) {shown = show;}
+        virtual void show(bool show = true) {m_Shown = show;}
 
-        bool closed;
-        bool shown;
-        std::string status;
-        std::string onClock;
-        std::string offClock;
-        std::string runningClock;
-        std::string leftClock;
-        std::string pauseLabel;
-        std::string startLabel;
+        bool m_Closed;
+        bool m_Shown;
+        std::string m_Status;
+        std::string m_OnClock;
+        std::string m_OffClock;
+        std::string m_RunningClock;
+        std::string m_LeftClock;
+        std::string m_PauseLabel;
+        std::string m_StartLabel;
 
-        AbstractEWViewPres<AbstractEWMainFrame>* presenter;
-        bool taskbarCreated;
+        AbstractEWViewPres<AbstractEWMainFrame>* m_Presenter;
+        bool m_TaskbarCreated;
 
-        virtual void setPauseButtonLabel(std::string label) {pauseLabel = label;}
-        virtual void setStartButtonLabel(std::string label) {startLabel = label;}
-        virtual void close() {closed = true;}
+        virtual void setPauseButtonLabel(std::string label) {m_PauseLabel = label;}
+        virtual void setStartButtonLabel(std::string label) {m_StartLabel = label;}
+        virtual void close() {m_Closed = true;}
 
     protected:
     private:

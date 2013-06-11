@@ -51,35 +51,35 @@ SUITE(TestEWMainFramePres)
         pres.setDisplayValues(values);
         pres.notifyStatus();
 
-        CHECK_EQUAL(false, frame.closed);
-        CHECK_EQUAL(values.pauseButtonLabel, frame.pauseLabel);
-        CHECK_EQUAL(values.startButtonLabel, frame.startLabel);
-        CHECK_EQUAL(values.status, frame.status);
-        CHECK_EQUAL(values.timeOn, frame.onClock);
-        CHECK_EQUAL(values.timeOff, frame.offClock);
-        CHECK_EQUAL(values.timeRunning, frame.runningClock);
-        CHECK_EQUAL(values.timeLeft, frame.leftClock);
-        CHECK_EQUAL(values.shown, frame.shown);
+        CHECK_EQUAL(false, frame.m_Closed);
+        CHECK_EQUAL(values.pauseButtonLabel, frame.m_PauseLabel);
+        CHECK_EQUAL(values.startButtonLabel, frame.m_StartLabel);
+        CHECK_EQUAL(values.status, frame.m_Status);
+        CHECK_EQUAL(values.timeOn, frame.m_OnClock);
+        CHECK_EQUAL(values.timeOff, frame.m_OffClock);
+        CHECK_EQUAL(values.timeRunning, frame.m_RunningClock);
+        CHECK_EQUAL(values.timeLeft, frame.m_LeftClock);
+        CHECK_EQUAL(values.shown, frame.m_Shown);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestStatusUpdateNoShow)
     {
-        frame.shown = true;
+        frame.m_Shown = true;
 
         EWPresenterStub::DisplayValues values =
             EWPresenterStub::DisplayValues::getTestValues(false);
         pres.setDisplayValues(values);
         pres.notifyStatus();
 
-        CHECK_EQUAL(false, frame.closed);
-        CHECK_EQUAL("", frame.pauseLabel);
-        CHECK_EQUAL("", frame.startLabel);
-        CHECK_EQUAL("", frame.status);
-        CHECK_EQUAL("", frame.onClock);
-        CHECK_EQUAL("", frame.offClock);
-        CHECK_EQUAL("", frame.runningClock);
-        CHECK_EQUAL("", frame.leftClock);
-        CHECK_EQUAL(false, frame.shown);
+        CHECK_EQUAL(false, frame.m_Closed);
+        CHECK_EQUAL("", frame.m_PauseLabel);
+        CHECK_EQUAL("", frame.m_StartLabel);
+        CHECK_EQUAL("", frame.m_Status);
+        CHECK_EQUAL("", frame.m_OnClock);
+        CHECK_EQUAL("", frame.m_OffClock);
+        CHECK_EQUAL("", frame.m_RunningClock);
+        CHECK_EQUAL("", frame.m_LeftClock);
+        CHECK_EQUAL(false, frame.m_Shown);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestTimesUpdate)
@@ -89,14 +89,14 @@ SUITE(TestEWMainFramePres)
         pres.setDisplayValues(values);
         pres.notifyTime();
 
-        CHECK_EQUAL(false, frame.closed);
-        CHECK_EQUAL("", frame.pauseLabel);
-        CHECK_EQUAL("", frame.startLabel);
-        CHECK_EQUAL(values.status, frame.status);
-        CHECK_EQUAL(values.timeOn, frame.onClock);
-        CHECK_EQUAL(values.timeOff, frame.offClock);
-        CHECK_EQUAL(values.timeRunning, frame.runningClock);
-        CHECK_EQUAL(values.timeLeft, frame.leftClock);
+        CHECK_EQUAL(false, frame.m_Closed);
+        CHECK_EQUAL("", frame.m_PauseLabel);
+        CHECK_EQUAL("", frame.m_StartLabel);
+        CHECK_EQUAL(values.status, frame.m_Status);
+        CHECK_EQUAL(values.timeOn, frame.m_OnClock);
+        CHECK_EQUAL(values.timeOff, frame.m_OffClock);
+        CHECK_EQUAL(values.timeRunning, frame.m_RunningClock);
+        CHECK_EQUAL(values.timeLeft, frame.m_LeftClock);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestTimesUpdateNoShow)
@@ -106,14 +106,14 @@ SUITE(TestEWMainFramePres)
         pres.setDisplayValues(values);
         pres.notifyTime();
 
-        CHECK_EQUAL(false, frame.closed);
-        CHECK_EQUAL("", frame.pauseLabel);
-        CHECK_EQUAL("", frame.startLabel);
-        CHECK_EQUAL("", frame.status);
-        CHECK_EQUAL("", frame.onClock);
-        CHECK_EQUAL("", frame.offClock);
-        CHECK_EQUAL("", frame.runningClock);
-        CHECK_EQUAL("", frame.leftClock);
+        CHECK_EQUAL(false, frame.m_Closed);
+        CHECK_EQUAL("", frame.m_PauseLabel);
+        CHECK_EQUAL("", frame.m_StartLabel);
+        CHECK_EQUAL("", frame.m_Status);
+        CHECK_EQUAL("", frame.m_OnClock);
+        CHECK_EQUAL("", frame.m_OffClock);
+        CHECK_EQUAL("", frame.m_RunningClock);
+        CHECK_EQUAL("", frame.m_LeftClock);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -122,7 +122,7 @@ SUITE(TestEWMainFramePres)
     TEST_FIXTURE(EWMainFramePresFixture, TestQuitUpdate)
     {
         pres.notifyQuit();
-        CHECK_EQUAL(true, frame.closed);
+        CHECK_EQUAL(true, frame.m_Closed);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestFrameQuit)

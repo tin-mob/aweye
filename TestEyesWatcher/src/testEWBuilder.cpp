@@ -106,11 +106,11 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(data.soundPath, builder.links.m_Presenter->soundPath);
         CHECK_EQUAL(data.runningLateThreshold, builder.links.m_Presenter->runningLateThreshold);
 
-        CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_MainFramePres->presenter);
-        CHECK_EQUAL(builder.links.m_AppController, builder.links.m_MainFramePres->controller);
+        CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_MainFramePres->m_Presenter);
+        CHECK_EQUAL(builder.links.m_AppController, builder.links.m_MainFramePres->m_Controller);
 
-        CHECK_EQUAL(builder.links.m_MainFramePres, builder.links.m_MainFrame->presenter);
-        CHECK_EQUAL(true, builder.links.m_MainFrame->taskbarCreated);
+        CHECK_EQUAL(builder.links.m_MainFramePres, builder.links.m_MainFrame->m_Presenter);
+        CHECK_EQUAL(true, builder.links.m_MainFrame->m_TaskbarCreated);
 
         CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_TaskBarPres->presenter);
         CHECK_EQUAL(builder.links.m_AppController, builder.links.m_TaskBarPres->controller);
