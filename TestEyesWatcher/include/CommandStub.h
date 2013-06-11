@@ -27,15 +27,17 @@
 class CommandStub : public AbstractCommand
 {
     public:
-        CommandStub() : executed(false), fail(false) {}
+        CommandStub(bool s = true, bool t = false) : executed(false), success(s), throws(t) {}
         virtual ~CommandStub() {}
-        virtual void execute()
+        virtual bool execute()
         {
-            if (fail) { throw BaseException("Testing!"); }
+            if (throws) { throw BaseException("Testing!"); }
             executed = true;
+            return success;
         }
         bool executed;
-        bool fail;
+        bool success;
+        bool throws;
     protected:
     private:
 };

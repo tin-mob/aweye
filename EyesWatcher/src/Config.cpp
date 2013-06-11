@@ -17,13 +17,13 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-
+///@todo define strings keys somewhere
 
 #include "Config.h"
 #include "AbstractConfigImpl.h"
 #include "boost/date_time/posix_time/posix_time.hpp"
 
-Config::Config(AbstractConfigImpl* impl) : m_Impl(impl)
+Config::Config(AbstractConfigImpl* impl) : m_Impl(impl), m_HasInvalidData(false)
 {
     assert(impl);
     this->load();
@@ -65,23 +65,18 @@ void Config::load()
         this->m_Impl->read("CummulPause", ConfigData::default_CummulPause)
     };
 
-    // do not validate, to allow to correct it in app
     this->m_data = tempData;
-
-    /*if (this->validateData(tempData))
+    if (!this->validateData(tempData))
     {
-        this->m_data = tempData;
+        this->m_HasInvalidData = true;
     }
-    else
-    {
-        throw InvalidConfigFileException();
-    }*/
 }
 
 void Config::save(const ConfigData& data)
 {
     if (this->validateData(data))
     {
+        this->m_HasInvalidData = false;
         this->m_data = data;
         this->write();
     }
@@ -113,6 +108,12 @@ void Config::write()
     this->m_Impl->flush();
 }
 
+bool Config::hasInvalidData() const
+{
+    return this->m_HasInvalidData;
+}
+
+/// @todo specific error messages
 bool Config::validateData(const ConfigData& data) const
 {
     if (data.workLength.is_special() ||
@@ -124,8 +125,6 @@ bool Config::validateData(const ConfigData& data) const
         data.remFreq.total_seconds() <= 0 ||
         data.checkFreq.total_seconds() <= 0 ||
         data.runningLateThreshold.is_special() ||
-        data.pauseTol < 0 ||
-        data.workTol < 0 ||
         !this->m_Impl->fileExists(data.cascadePath) ||
         !this->m_Impl->fileExists(data.soundPath)
         )

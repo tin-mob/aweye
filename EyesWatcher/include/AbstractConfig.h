@@ -30,6 +30,7 @@ class AbstractConfig
         virtual void load() = 0;
         virtual void save(const ConfigData& data) = 0;
         virtual const ConfigData& getData() const = 0;
+        virtual bool hasInvalidData() const = 0;
 
     protected:
     private:

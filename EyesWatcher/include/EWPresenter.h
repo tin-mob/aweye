@@ -35,9 +35,8 @@ class AbstractPresenceHandler;
 class AbstractTimer;
 class ConfigData;
 
-///@todo: possible improvement : separate all the std::string get*
-/// from the actions using a strategy pattern. would allow for views
-/// with different behaviour (not the case for now)
+///@todo possible improvement : separate all the std::string get*
+/// from the actions. would allow for views with different behaviour
 
 class EWPresenter : public AbstractEWPresenter, public TimerInterface
 {

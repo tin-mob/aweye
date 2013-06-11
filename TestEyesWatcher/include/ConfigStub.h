@@ -30,20 +30,26 @@
 class ConfigStub : public AbstractConfig
 {
     public:
-        ConfigStub(ConfigData data = ConfigData()) : fail(false), impl(nullptr), m_data(data) {}
-        ConfigStub(AbstractConfigImpl* i) : fail(false), impl(i) {}
+        ConfigStub(ConfigData data = ConfigData()) : m_Impl(nullptr), m_Fail(false),
+            m_Invalid(false), m_data(data) {}
+        ConfigStub(AbstractConfigImpl* i, bool invalid = false) :
+            m_Impl(i), m_Fail(false), m_Invalid(invalid) {}
         virtual ~ConfigStub() {}
         virtual void load() {}
         virtual void save(const ConfigData& data)
         {
-            if (fail) { throw BaseException("Testing!"); }
+            if (m_Fail) { throw BaseException("Testing!"); }
             m_data = data;
         }
         virtual const ConfigData& getData() const
         {
             return m_data;
         }
-        bool fail;
+
+        virtual bool hasInvalidData() const
+        {
+            return m_Invalid;
+        }
 
         static ConfigData getTestData()
         {
@@ -67,11 +73,18 @@ class ConfigStub : public AbstractConfig
                 };
         }
 
-        AbstractConfigImpl* impl;
+        AbstractConfigImpl* m_Impl;
+        bool m_Fail;
+        bool m_Invalid;
     protected:
     private:
         ConfigData m_data;
 };
 
+class ConfigStubFail : public ConfigStub
+{
+    public :
+        ConfigStubFail(AbstractConfigImpl* i) : ConfigStub(i, true){}
+};
 
 #endif // CONFIGSTUB_H

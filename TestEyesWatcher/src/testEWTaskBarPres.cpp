@@ -25,7 +25,7 @@
 #include "EWPresenterStub.h"
 #include "EWTaskbarStub.h"
 
-///@todo: sort TaskBar/Taskbar
+///@todo sort TaskBar/Taskbar
 struct EWTaskBarPresFixture
 {
     EWTaskBarPresFixture() : ctrl(true), pres(), barPres(&pres, &ctrl)

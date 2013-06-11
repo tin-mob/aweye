@@ -32,7 +32,7 @@
 
 EWAppController::EWAppController(bool canCreateTaskbar) :
     m_MsgHandler(nullptr), m_Config(nullptr), m_PresenceHandler(nullptr),
-    m_TimeKeeper(nullptr), m_Presenter(nullptr), m_DisplayOptionsDialogCmd(nullptr),
+    m_TimeKeeper(nullptr), m_Presenter(nullptr), m_DisplayCmd(nullptr),
     m_CanCreateTaskbar(canCreateTaskbar)
 {
 }
@@ -57,7 +57,7 @@ void EWAppController::link(AbstractMsgHandler* msgHandler, AbstractConfig* confi
     this->m_PresenceHandler = presenceHandler;
     this->m_TimeKeeper = timeKeeper;
     this->m_Presenter = presenter;
-    this->m_DisplayOptionsDialogCmd = displayCmd;
+    this->m_DisplayCmd = displayCmd;
 }
 
 bool EWAppController::saveConfig(const ConfigData& data)
@@ -100,7 +100,7 @@ void EWAppController::displayOptionsDialog()
 {
     try
     {
-        this->m_DisplayOptionsDialogCmd->execute();
+        this->m_DisplayCmd->execute();
     }
     catch (BaseException e)
     {

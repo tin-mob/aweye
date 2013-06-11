@@ -327,7 +327,7 @@ void OptionsDialog::OnOKClick(wxCommandEvent& event)
 {
     if (this->m_Presenter->saveData(this->getData()))
     {
-        Close();
+        EndModal(wxID_OK);
     }
 }
 

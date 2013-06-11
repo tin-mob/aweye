@@ -26,7 +26,7 @@ class AbstractCommand
 {
     public:
         virtual ~AbstractCommand() {}
-        virtual void execute() = 0;
+        virtual bool execute() = 0;
     protected:
     private:
 };

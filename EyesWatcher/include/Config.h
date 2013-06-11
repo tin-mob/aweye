@@ -32,19 +32,19 @@ class Config : public AbstractConfig
         Config(AbstractConfigImpl* impl);
         virtual ~Config();
 
-        const ConfigData& getData() const;
-
-        void load();
-        void save(const ConfigData& data);
+        virtual void load();
+        virtual void save(const ConfigData& data);
+        virtual const ConfigData& getData() const;
+        virtual bool hasInvalidData() const;
 
         bool validateData(const ConfigData& data) const;
-
     protected:
     private:
         void write();
 
         AbstractConfigImpl* m_Impl;
         ConfigData m_data;
+        bool m_HasInvalidData;
 };
 
 #endif // CONFIG_H

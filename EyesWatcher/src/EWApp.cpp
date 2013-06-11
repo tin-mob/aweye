@@ -39,6 +39,7 @@
 #include "EWMainFramePres.h"
 #include "EWMainFrame.h"
 #include "OptionsDialogPres.h"
+#include "BuilderOptionsDialogPres.h"
 #include "EWTaskBarPres.h"
 #include "EWTaskBar.h"
 #include "DisplayOptionsDialogCmd.h"
@@ -67,13 +68,12 @@ bool EWApp::OnInit()
     	{
     	    this->m_AppImpl = new EWBuilder<MsgHandler, wxConfigImpl, Config,
                 WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, EWAppController,
-                EWPresenter, EWMainFramePres, EWMainFrame, OptionsDialogPres,
-                EWTaskBarPres, EWTaskBar, DisplayOptionsDialogCmd>(this,
-                std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable());
+                EWPresenter, EWMainFramePres, EWMainFrame, EWTaskBarPres,
+                EWTaskBar, OptionsDialogPres, BuilderOptionsDialogPres, DisplayOptionsDialogCmd>
+                (this, std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable());
     	}
     }
     return wxsOK;
-
 }
 
 void EWApp::OnInitCmdLine(wxCmdLineParser& parser)

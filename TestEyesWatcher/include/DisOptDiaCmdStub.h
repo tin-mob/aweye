@@ -27,13 +27,20 @@
 class DisOptDiaCmdStub : public CommandStub
 {
     public:
-        DisOptDiaCmdStub(AbstractOptionsDialogPres* p = nullptr) :
-                         presenter(p) {}
+        DisOptDiaCmdStub(AbstractOptionsDialogPres* p = nullptr, bool s = true) :
+                         CommandStub(s), presenter(p) {}
         virtual ~DisOptDiaCmdStub() {}
 
         AbstractOptionsDialogPres* presenter;
     protected:
     private:
+};
+
+class DisOptDiaCmdStubFail : public DisOptDiaCmdStub
+{
+    public:
+        DisOptDiaCmdStubFail(AbstractOptionsDialogPres* p = nullptr) :
+                         DisOptDiaCmdStub(p, false) {}
 };
 
 #endif // DISOPTDIACMDSTUB_H

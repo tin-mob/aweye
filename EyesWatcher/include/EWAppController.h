@@ -45,7 +45,6 @@ class EWAppController : public AbstractEWAppController
 
         virtual bool saveConfig(const ConfigData& data);
         virtual const ConfigData& getConfigData() const;
-
         virtual void displayOptionsDialog();
         virtual bool canCreateTaskBar() const;
 
@@ -58,7 +57,7 @@ class EWAppController : public AbstractEWAppController
         AbstractPresenceHandler* m_PresenceHandler;
         AbstractTimeKeeper* m_TimeKeeper;
         AbstractEWPresenter* m_Presenter;
-        AbstractCommand* m_DisplayOptionsDialogCmd;
+        AbstractCommand* m_DisplayCmd;
 
         bool m_CanCreateTaskbar;
 

@@ -41,11 +41,11 @@
 #include "SetTopWindowInt.h"
 #include "AbstractCommand.h"
 
-/// @todo: look to remove news
+/// @todo look to remove news
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
-    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWAppController, class TEWPresenter,
-    class TEWMainFramePres, class TEWMainFrame, class TOptionsDialogPres, class TEWTaskbarPres,
-    class TEWTaskbar, class TDisplayOptionsDialogCmd>
+    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWAppController,
+    class TEWPresenter, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
+    class TEWTaskbar, class TOptionsDialogPres, class TBuilderOptionsDialogPres, class TDisplayOptionsDialogCmd>
 class EWBuilder
 {
     public:
@@ -53,8 +53,7 @@ class EWBuilder
             m_MsgHandler(nullptr), m_ConfigImpl(nullptr), m_Config(nullptr), m_PresenceHandler(nullptr),
             m_TimeHandler(nullptr), m_TimeKeeper(nullptr), m_CheckTimer(nullptr), m_ClockTimer(nullptr),
             m_AppController(nullptr), m_Presenter(nullptr), m_MainFramePres(nullptr), m_MainFrame(nullptr),
-            m_OptionsPres(nullptr), m_TaskBarPres(nullptr), m_TaskBar(nullptr),
-            m_DisplayOptionsDialogCmd(nullptr)
+            m_TaskBarPres(nullptr), m_TaskBar(nullptr), m_OptionsPres(nullptr), m_DisplayOptionsDialogCmd(nullptr)
         {
             //ctor
             try
@@ -64,6 +63,17 @@ class EWBuilder
                 {
                     this->m_ConfigImpl = new TConfigImpl(configPath);
                     this->m_Config = new TConfig(m_ConfigImpl);
+                    if (this->m_Config->hasInvalidData())
+                    {
+                        TBuilderOptionsDialogPres pres(m_Config, m_MsgHandler, canCreateTaskbar);
+                        TDisplayOptionsDialogCmd cmd(&pres);
+
+                        // we tried...
+                        if (!cmd.execute())
+                        {
+                            throw InvalidConfigFileException();
+                        }
+                    }
                     ConfigData data = this->m_Config->getData();
 
                     this->m_PresenceHandler = new TPresenceHandler(data.webcamIndex, data.cascadePath,
@@ -93,9 +103,8 @@ class EWBuilder
                     this->m_DisplayOptionsDialogCmd = new TDisplayOptionsDialogCmd(
                         this->m_OptionsPres);
 
-                    tmpAppCtrl->link(m_MsgHandler, m_Config,
-                        m_PresenceHandler, m_TimeKeeper, m_Presenter,
-                        m_DisplayOptionsDialogCmd);
+                    tmpAppCtrl->link(m_MsgHandler, m_Config, m_PresenceHandler,
+                        m_TimeKeeper, m_Presenter, m_DisplayOptionsDialogCmd);
 
                     if (topInt != nullptr)
                     {
@@ -128,9 +137,9 @@ class EWBuilder
         TEWPresenter* m_Presenter;
         TEWMainFramePres* m_MainFramePres;
         TEWMainFrame* m_MainFrame;
-        TOptionsDialogPres* m_OptionsPres;
         TEWTaskbarPres* m_TaskBarPres;
         TEWTaskbar* m_TaskBar;
+        TOptionsDialogPres* m_OptionsPres;
         TDisplayOptionsDialogCmd* m_DisplayOptionsDialogCmd;
     private:
         void deleteFields()
@@ -147,9 +156,9 @@ class EWBuilder
             if (this->m_Presenter != nullptr) delete this->m_Presenter;
             if (this->m_MainFramePres != nullptr) delete this->m_MainFramePres;
             // since m_MainFrame inherits from wxFrame, it is deleted by wx, not by us
-            if (this->m_OptionsPres != nullptr) delete this->m_OptionsPres;
             if (this->m_TaskBarPres != nullptr) delete this->m_TaskBarPres;
             if (this->m_TaskBar != nullptr) delete this->m_TaskBar;
+            if (this->m_OptionsPres != nullptr) delete this->m_OptionsPres;
             if (this->m_DisplayOptionsDialogCmd != nullptr) delete this->m_DisplayOptionsDialogCmd;
         }
 };

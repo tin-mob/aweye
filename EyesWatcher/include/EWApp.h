@@ -27,10 +27,10 @@
 
 class wxCmdLineParser;
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
-    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWAppController, class TEWPresenter,
-    class TEWMainFramePres, class TEWMainFrame, class TOptionsDialogPres, class TEWTaskbarPres,
-    class TEWTaskbar, class TDisplayOptionsDialogCmd>
-class EWBuilder;
+    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWAppController,
+    class TEWPresenter, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
+    class TEWTaskbar, class TOptionsDialogPres, class TBuilderOptionsDialogPres,
+    class TDisplayOptionsDialogCmd> class EWBuilder;
 class AbstractEWMainFrame;
 class MsgHandler;
 class wxConfigImpl;
@@ -43,9 +43,11 @@ class EWAppController;
 class EWPresenter;
 class EWMainFramePres;
 class EWMainFrame;
-class OptionsDialogPres;
 class EWTaskBarPres;
 class EWTaskBar;
+class OptionsDialog;
+class OptionsDialogPres;
+class BuilderOptionsDialogPres;
 class DisplayOptionsDialogCmd;
 class EWApp : public wxApp, public SetTopWindowInt
 {
@@ -58,10 +60,10 @@ class EWApp : public wxApp, public SetTopWindowInt
 
         virtual void setTopWindow(AbstractEWMainFrame* frame);
     private:
-        EWBuilder<MsgHandler, wxConfigImpl, Config,
-            WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, EWAppController,
-            EWPresenter, EWMainFramePres, EWMainFrame, OptionsDialogPres,
-            EWTaskBarPres, EWTaskBar, DisplayOptionsDialogCmd>* m_AppImpl;
+        EWBuilder<MsgHandler, wxConfigImpl, Config, WebcamHandlerProc,
+            TimeHandler, TimeKeeper, MyWxTimer, EWAppController, EWPresenter,
+            EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
+            OptionsDialogPres, BuilderOptionsDialogPres, DisplayOptionsDialogCmd>* m_AppImpl;
         wxString m_ConfigPath;
 };
 

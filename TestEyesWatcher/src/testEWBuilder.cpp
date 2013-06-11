@@ -38,6 +38,7 @@
 #include "DisOptDiaCmdStub.h"
 #include "EWTestBuilder.h"
 #include "SetTopWindowStub.h"
+#include "BuiOptDisPresStub.h"
 
 struct EWBuilderFixture
 {
@@ -50,12 +51,13 @@ struct EWBuilderFixture
 
 SUITE(TestEWBuilder)
 {
-    TEST_FIXTURE(EWBuilderFixture, TestGet)
+    TEST_FIXTURE(EWBuilderFixture, TestBuild)
     {
         const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerStub,
-        TimeHandlerStub, TimeKeeperStub, TimerStub, EWAppControllerStub,
-        EWPresenterStub, EWMainFramePresStub, EWMainFrameStub, OptionsDialogPresStub,
-        EWTaskBarPresStub, EWTaskbarStub, DisOptDiaCmdStub> builder(&setTop, path, true);
+            TimeHandlerStub, TimeKeeperStub, TimerStub, EWAppControllerStub,
+            EWPresenterStub, EWMainFramePresStub, EWMainFrameStub,
+            EWTaskBarPresStub, EWTaskbarStub, OptionsDialogPresStub,
+            BuiOptDisPresStub, DisOptDiaCmdStub> builder(&setTop, path, true);
 
         CHECK_EQUAL(false, builder.links.m_MsgHandler == nullptr);
         CHECK_EQUAL(false, builder.links.m_ConfigImpl == nullptr);
@@ -75,7 +77,7 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(false, builder.links.m_DisplayOptionsDialogCmd == nullptr);
 
         CHECK_EQUAL(path, builder.links.m_ConfigImpl->path);
-        CHECK_EQUAL(builder.links.m_Config->impl, builder.links.m_ConfigImpl);
+        CHECK_EQUAL(builder.links.m_Config->m_Impl, builder.links.m_ConfigImpl);
 
         ConfigData data = builder.links.m_Config->getData();
         CHECK_EQUAL(data.cascadePath, builder.links.m_PresenceHandler->cascadePath);
@@ -125,6 +127,34 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(builder.links.m_TimeKeeper, builder.links.m_AppController->timeKeeper);
         CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_AppController->presenter);
         CHECK_EQUAL(builder.links.m_DisplayOptionsDialogCmd, builder.links.m_AppController->displayCmd);
+    }
+
+    TEST_FIXTURE(EWBuilderFixture, TestBuildBadConfig)
+    {
+        // building it is the test...
+        const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStubFail, PresenceHandlerStub,
+            TimeHandlerStub, TimeKeeperStub, TimerStub, EWAppControllerStub,
+            EWPresenterStub, EWMainFramePresStub, EWMainFrameStub,
+            EWTaskBarPresStub, EWTaskbarStub, OptionsDialogPresStub,
+            BuiOptDisPresStub, DisOptDiaCmdStub> builder(&setTop, path, true);
+    }
+
+    TEST_FIXTURE(EWBuilderFixture, TestBuildBadConfigUnrecovered)
+    {
+        bool trown = false;
+        try
+        {
+            const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStubFail, PresenceHandlerStub,
+                TimeHandlerStub, TimeKeeperStub, TimerStub, EWAppControllerStub,
+                EWPresenterStub, EWMainFramePresStub, EWMainFrameStub,
+                EWTaskBarPresStub, EWTaskbarStub, OptionsDialogPresStub,
+                BuiOptDisPresStubFail, DisOptDiaCmdStubFail> builder(&setTop, path, true);
+        }
+        catch (InvalidConfigFileException)
+        {
+            trown = true;
+        }
+        CHECK_EQUAL(true, trown);
     }
 }
 

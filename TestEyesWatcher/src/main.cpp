@@ -19,14 +19,17 @@
  **************************************************************/
 // see : http://stackoverflow.com/questions/3546054/how-do-i-run-a-single-test-with-unittest
 
+/// @todo if you have a lot of time to lose, correct CHECK_EQUAL expected and actual...
+
 #include <unittest++/UnitTest++.h>
 #include <unittest++/TestReporterStdout.h>
 
 int main()
 {
-    // change if you want to run a single suite
+    // change if you want to run a single suite or test
     std::string suite = "";
-    if( suite != "" )
+    std::string test = "";
+    if( suite != "" || test != "")
     {
         const UnitTest::TestList& allTests( UnitTest::Test::GetTestList() );
         UnitTest::TestList selectedTests;
@@ -35,8 +38,10 @@ int main()
         {
             if(p->m_details.suiteName == suite)
             {
-                selectedTests.Add( p );
-                break;
+                if (test == "" || p->m_details.testName == test)
+                {
+                    selectedTests.Add( p );
+                }
             }
             UnitTest::Test* q = p;
             p = p->next;

@@ -122,5 +122,16 @@ SUITE(TestConfig)
         Config config(&impl);
         CHECK_THROW(config.save(data), InvalidConfigDataException);
     }
+
+    TEST_FIXTURE(ConfigFixture, TestInvalidLoad)
+    {
+        Config config(&impl);
+        config.save({});
+        CHECK_EQUAL(false, config.hasInvalidData());
+
+        impl.failName = impl.read(std::string("CascadePath"), std::string("ShouldNotBeUsed"));
+        Config config2(&impl);
+        CHECK_EQUAL(true, config2.hasInvalidData());
+    }
 }
 

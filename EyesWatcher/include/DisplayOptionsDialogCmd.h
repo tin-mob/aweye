@@ -24,17 +24,15 @@
 
 #include "AbstractCommand.h"
 
-class AbstractEWAppController;
 class AbstractOptionsDialogPres;
 class DisplayOptionsDialogCmd : public AbstractCommand
 {
     public:
         DisplayOptionsDialogCmd(AbstractOptionsDialogPres* presenter);
         virtual ~DisplayOptionsDialogCmd();
-        virtual void execute();
+        virtual bool execute();
     protected:
     private:
-        AbstractEWAppController* m_Controller;
         AbstractOptionsDialogPres* m_Presenter;
 };
 

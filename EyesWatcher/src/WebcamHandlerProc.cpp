@@ -53,11 +53,14 @@ void WebcamHandlerProc::setFaceSize(unsigned int x, unsigned int y)
     this->m_FaceSizeY = y;
 }
 
-// IsHereCmd in same path than main executable...
+/// @note IsHereCmd in same path than main executable,
+///      m_FaceCascadeName is sanitized via Config
+
 bool WebcamHandlerProc::isHere()
 {
-    ///@todo: test if this works in windows, safe?
+    ///@todo test if this works in windows
     wxString cmd = wxT("./IsHereCmd '");
+
     const wxString cascade(this->m_FaceCascadeName.c_str(), wxConvUTF8);
 
     cmd << this->m_index << "' '" << cascade << "' '" << this->m_FaceSizeX << "' '" << this->m_FaceSizeY << "'";

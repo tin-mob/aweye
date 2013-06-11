@@ -18,23 +18,29 @@
 
  **************************************************************/
 
+#ifndef BUILDEROPTIONSDIALOGPRES_H
+#define BUILDEROPTIONSDIALOGPRES_H
 
-#include "DisplayOptionsDialogCmd.h"
 #include "AbstractOptionsDialogPres.h"
-#include "OptionsDialog.h"
 
-DisplayOptionsDialogCmd::DisplayOptionsDialogCmd(
-    AbstractOptionsDialogPres* presenter) : m_Presenter(presenter)
+class AbstractConfig;
+class AbstractMsgHandler;
+class ConfigData;
+class AbstractOptionsDialog;
+class BuilderOptionsDialogPres :  public AbstractOptionsDialogPres
 {
-    assert(presenter);
-}
+    public:
+        BuilderOptionsDialogPres(AbstractConfig* config,
+            AbstractMsgHandler* msgHandler, bool canCreateTaskBar);
+        virtual ~BuilderOptionsDialogPres();
+        virtual bool saveData(const ConfigData& data);
+        virtual void init(AbstractOptionsDialog* dialog);
+    protected:
+    private:
+        AbstractConfig* m_Config;
+        AbstractMsgHandler* m_MsgHandler;
+        bool m_CanCreateTaskBar;
+};
 
-DisplayOptionsDialogCmd::~DisplayOptionsDialogCmd()
-{
-}
 
-bool DisplayOptionsDialogCmd::execute()
-{
-    OptionsDialog dialog(nullptr, this->m_Presenter);
-    return dialog.ShowModal() == wxID_OK;
-}
+#endif // BUILDEROPTIONSDIALOGPRES_H
