@@ -79,10 +79,10 @@ SUITE(TestConfig)
         CHECK_EQUAL(false, config.validateData(data));
         data.runningLateThreshold = ConfigData::default_RunningLateThreshold;
 
-        impl.failName = data.cascadePath;
+        impl.m_FailName = data.cascadePath;
         CHECK_EQUAL(false, config.validateData(data));
 
-        impl.failName = data.soundPath;
+        impl.m_FailName = data.soundPath;
         CHECK_EQUAL(false, config.validateData(data));
     }
 
@@ -129,7 +129,7 @@ SUITE(TestConfig)
         config.save({});
         CHECK_EQUAL(false, config.hasInvalidData());
 
-        impl.failName = impl.read(std::string("CascadePath"), std::string("ShouldNotBeUsed"));
+        impl.m_FailName = impl.read(std::string("CascadePath"), std::string("ShouldNotBeUsed"));
         Config config2(&impl);
         CHECK_EQUAL(true, config2.hasInvalidData());
     }

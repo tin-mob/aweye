@@ -29,13 +29,13 @@
 class ConfigImplStub : public AbstractConfigImpl
 {
     public:
-        ConfigImplStub(std::string p = "") : path(p), failName("") {}
+        ConfigImplStub(std::string path = "") : m_Path(path), m_FailName("") {}
         virtual ~ConfigImplStub() {}
 
         virtual std::string read(std::string key, std::string defaultValue) const
         {
-                std::map<std::string,std::string>::const_iterator itr = stringData.find(key);
-                if (itr == stringData.end())
+                std::map<std::string,std::string>::const_iterator itr = m_StringData.find(key);
+                if (itr == m_StringData.end())
                 {
                     return defaultValue;
                 }
@@ -44,8 +44,8 @@ class ConfigImplStub : public AbstractConfigImpl
 
         virtual long read(std::string key, long defaultValue) const
         {
-                std::map<std::string,long >::const_iterator itr = longData.find(key);
-                if (itr == longData.end())
+                std::map<std::string,long >::const_iterator itr = m_LongData.find(key);
+                if (itr == m_LongData.end())
                 {
                     return defaultValue;
                 }
@@ -54,41 +54,41 @@ class ConfigImplStub : public AbstractConfigImpl
 
         virtual bool read(std::string key, bool defaultValue) const
         {
-                std::map<std::string,bool>::const_iterator itr = boolData.find(key);
-                if (itr == boolData.end())
+                std::map<std::string,bool>::const_iterator itr = m_BoolData.find(key);
+                if (itr == m_BoolData.end())
                 {
                     return defaultValue;
                 }
                 return itr->second;
         }
 
-        virtual void write(std::string key, std::string value) {stringData[key] = value;}
-        virtual void write(std::string key, long value) {longData[key] = value;}
-        virtual void write(std::string key, bool value) {boolData[key] = value;}
+        virtual void write(std::string key, std::string value) {m_StringData[key] = value;}
+        virtual void write(std::string key, long value) {m_LongData[key] = value;}
+        virtual void write(std::string key, bool value) {m_BoolData[key] = value;}
 
-        virtual void flush() {flushed = true;}
+        virtual void flush() {m_Flushed = true;}
 
-        bool getFlushed() {bool t = flushed; flushed = false; return t;}
+        bool getFlushed() {bool t = m_Flushed; m_Flushed = false; return t;}
 
         virtual bool fileExists(std::string name) const
         {
-            if (name == failName)
+            if (name == m_FailName)
             {
                 return false;
             }
             return true;
         }
 
-        std::map<std::string,std::string> stringData;
-        std::map<std::string,long> longData;
-        std::map<std::string,bool> boolData;
+        std::map<std::string,std::string> m_StringData;
+        std::map<std::string,long> m_LongData;
+        std::map<std::string,bool> m_BoolData;
 
-        std::string path;
-        std::string failName;
+        std::string m_Path;
+        std::string m_FailName;
 
     protected:
     private:
-        bool flushed;
+        bool m_Flushed;
 };
 
 #endif // CONFIGIMPLSTUB_H

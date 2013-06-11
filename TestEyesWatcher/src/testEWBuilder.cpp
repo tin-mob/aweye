@@ -76,7 +76,7 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(false, builder.links.m_TaskBar == nullptr);
         CHECK_EQUAL(false, builder.links.m_DisplayOptionsDialogCmd == nullptr);
 
-        CHECK_EQUAL(path, builder.links.m_ConfigImpl->path);
+        CHECK_EQUAL(path, builder.links.m_ConfigImpl->m_Path);
         CHECK_EQUAL(builder.links.m_Config->m_Impl, builder.links.m_ConfigImpl);
 
         ConfigData data = builder.links.m_Config->getData();
