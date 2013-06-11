@@ -92,12 +92,12 @@ SUITE(TestEWAppController)
     TEST_FIXTURE(EWAppControllerFixture, TestDisplay)
     {
         ctrl.displayOptionsDialog();
-        CHECK_EQUAL(true, displayCmd.executed);
+        CHECK_EQUAL(true, displayCmd.m_Executed);
     }
 
     TEST_FIXTURE(EWAppControllerFixture, TestDisplayFail)
     {
-        displayCmd.throws = true;
+        displayCmd.m_Throws = true;
         ctrl.displayOptionsDialog();
         CHECK_EQUAL("Testing!", msgHandler.lastError);
     }
