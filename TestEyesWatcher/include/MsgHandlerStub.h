@@ -30,14 +30,14 @@
 class MsgHandlerStub : public AbstractMsgHandler
 {
     public:
-        MsgHandlerStub() : lastError(""), lastAlert(""), lastSound("") {}
+        MsgHandlerStub() : m_LastError(""), m_LastAlert(""), m_LastSound("") {}
         virtual ~MsgHandlerStub() {}
-        virtual void displayError(std::string msg) {lastError = msg;}
-        virtual void displayAlert(std::string msg) {lastAlert = msg;}
-        virtual void playSound(std::string msg) {lastSound = msg;}
-        std::string lastError;
-        std::string lastAlert;
-        std::string lastSound;
+        virtual void displayError(std::string msg) {m_LastError = msg;}
+        virtual void displayAlert(std::string msg) {m_LastAlert = msg;}
+        virtual void playSound(std::string msg) {m_LastSound = msg;}
+        std::string m_LastError;
+        std::string m_LastAlert;
+        std::string m_LastSound;
     protected:
     private:
 };

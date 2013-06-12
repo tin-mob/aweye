@@ -27,19 +27,19 @@
 class EWViewObserverStub : public EWViewObserver
 {
     public:
-        EWViewObserverStub() : statUpdated(false), timeUpdated(false), quitUpdated(false){}
+        EWViewObserverStub() : m_StatUpdated(false), m_TimeUpdated(false), m_QuitUpdated(false){}
         virtual ~EWViewObserverStub() {}
-        virtual void OnStatusUpdate(AbstractEWPresenter* subject) {statUpdated = true;}
-        virtual void OnTimeUpdate(AbstractEWPresenter* subject) {timeUpdated = true;}
-        virtual void OnQuit(AbstractEWPresenter* subject) {quitUpdated = true;}
-        bool checkStatUpdated() {bool temp = statUpdated; statUpdated = false; return temp;}
-        bool checkTimeUpdated() {bool temp = timeUpdated; timeUpdated = false; return temp;}
-        bool checkQuitUpdated() {bool temp = quitUpdated; quitUpdated = false; return temp;}
+        virtual void OnStatusUpdate(AbstractEWPresenter* subject) {m_StatUpdated = true;}
+        virtual void OnTimeUpdate(AbstractEWPresenter* subject) {m_TimeUpdated = true;}
+        virtual void OnQuit(AbstractEWPresenter* subject) {m_QuitUpdated = true;}
+        bool checkStatUpdated() {bool temp = m_StatUpdated; m_StatUpdated = false; return temp;}
+        bool checkTimeUpdated() {bool temp = m_TimeUpdated; m_TimeUpdated = false; return temp;}
+        bool checkQuitUpdated() {bool temp = m_QuitUpdated; m_QuitUpdated = false; return temp;}
     protected:
     private:
-        bool statUpdated;
-        bool timeUpdated;
-        bool quitUpdated;
+        bool m_StatUpdated;
+        bool m_TimeUpdated;
+        bool m_QuitUpdated;
 };
 
 #endif // OBSERVERSTUB_H

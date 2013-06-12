@@ -54,7 +54,7 @@ SUITE(TestBuilderOptionsDialogPres)
         BuilderOptionsDialogPres pres(&config, &msgHandler, true);
         config.m_Fail = true;
         CHECK_EQUAL(false, pres.saveData(ConfigData()));
-        CHECK_EQUAL("Testing!", msgHandler.lastError);
+        CHECK_EQUAL("Testing!", msgHandler.m_LastError);
     }
 
     TEST_FIXTURE(BuilderOptionsDialogPresFixture, TestInit)

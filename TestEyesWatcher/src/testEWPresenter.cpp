@@ -80,13 +80,13 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(viewObserver.checkStatUpdated(), true);
 
         keeper.fail = true;
-        CHECK_EQUAL(msgHandler.lastError, "");
+        CHECK_EQUAL(msgHandler.m_LastError, "");
         presenter.toggleStart();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
         CHECK_EQUAL(checkTimer.running, false);
         CHECK_EQUAL(clockTimer.running, false);
         CHECK_EQUAL(viewObserver.checkStatUpdated(), false);
-        CHECK_EQUAL(msgHandler.lastError, "Testing!");
+        CHECK_EQUAL(msgHandler.m_LastError, "Testing!");
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestUpdate)
@@ -96,7 +96,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(presenter.getTimeOff(), "11:31:01");
         CHECK_EQUAL(presenter.getTimeRunning(), "00:00:02");
         CHECK_EQUAL(presenter.getTimeLeft(), "00:03:00");
-        CHECK_EQUAL(msgHandler.lastAlert, "");
+        CHECK_EQUAL(msgHandler.m_LastAlert, "");
 
         presenter.toggleStart();
         keeper.hereStamp = boost::posix_time::not_a_date_time;
@@ -109,24 +109,24 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(presenter.getTimeOff(), "00:00:00");
         CHECK_EQUAL(presenter.getTimeRunning(), "00:00:00");
         CHECK_EQUAL(presenter.getTimeLeft(), "00:00:00");
-        CHECK_EQUAL(msgHandler.lastAlert, "");
-        CHECK_EQUAL(msgHandler.lastSound, "");
+        CHECK_EQUAL(msgHandler.m_LastAlert, "");
+        CHECK_EQUAL(msgHandler.m_LastSound, "");
 
         keeper.late = true;
         presenter.togglePause();
         checkTimer.ring();
-        CHECK_EQUAL(msgHandler.lastAlert, "");
-        CHECK_EQUAL(msgHandler.lastSound, "");
+        CHECK_EQUAL(msgHandler.m_LastAlert, "");
+        CHECK_EQUAL(msgHandler.m_LastSound, "");
 
         presenter.togglePause();
         checkTimer.ring();
-        CHECK_EQUAL(msgHandler.lastAlert, presenter.m_LateMsg);
-        CHECK_EQUAL(msgHandler.lastSound, data.soundPath);
+        CHECK_EQUAL(msgHandler.m_LastAlert, presenter.m_LateMsg);
+        CHECK_EQUAL(msgHandler.m_LastSound, data.soundPath);
 
         keeper.fail = true;
-        CHECK_EQUAL(msgHandler.lastError, "");
+        CHECK_EQUAL(msgHandler.m_LastError, "");
         checkTimer.ring();
-        CHECK_EQUAL(msgHandler.lastError, "Testing!");
+        CHECK_EQUAL(msgHandler.m_LastError, "Testing!");
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestNegatives)

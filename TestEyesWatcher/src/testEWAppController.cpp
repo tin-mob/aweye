@@ -86,7 +86,7 @@ SUITE(TestEWAppController)
     {
         config.m_Fail = true;
         CHECK_EQUAL(false, ctrl.saveConfig(ConfigData()));
-        CHECK_EQUAL("Testing!", msgHandler.lastError);
+        CHECK_EQUAL("Testing!", msgHandler.m_LastError);
     }
 
     TEST_FIXTURE(EWAppControllerFixture, TestDisplay)
@@ -99,7 +99,7 @@ SUITE(TestEWAppController)
     {
         displayCmd.m_Throws = true;
         ctrl.displayOptionsDialog();
-        CHECK_EQUAL("Testing!", msgHandler.lastError);
+        CHECK_EQUAL("Testing!", msgHandler.m_LastError);
     }
 
     TEST_FIXTURE(EWAppControllerFixture, TestCanCreate)
