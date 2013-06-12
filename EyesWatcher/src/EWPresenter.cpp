@@ -64,7 +64,9 @@ void EWPresenter::start()
     try
     {
         m_TimeKeeper->start();
-        updateStatus();
+        m_CheckTimer->startTimer(m_TimeKeeper->getTimerInterval().total_milliseconds(), true);
+        notify(&EWViewObserver::OnStatusUpdate, this);
+
         m_ClockTimer->startTimer(1000, false);
         m_LastTimeUpdate = m_TimeHandler->getTime();
     }

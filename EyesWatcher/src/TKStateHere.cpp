@@ -37,19 +37,17 @@ void TKStateHere::updateStatus(TimeKeeper* parent)
 {
     if (!parent->m_PresenceHandler->isHere())
     {
-        if (getTimeLeft(parent, true) > boost::posix_time::time_duration(0,0,0,0) ||
-            parent->m_NumTolerated != 0)
+        if (parent->m_NumTolerated != 0 ||
+            getTimeLeft(parent, true) > boost::posix_time::time_duration(0,0,0,0))
         {
-            if (parent->m_NumTolerated == 0)
+            if (parent->m_WorkTol > 0)
             {
-                parent->m_TolerationTime = parent->m_LastUpdate;
+                if (parent->m_NumTolerated++ == 0)
+                {
+                    parent->m_TolerationTime = parent->m_LastUpdate;
+                }
             }
-
-            if (parent->m_NumTolerated < parent->m_PauseTol)
-            {
-                ++parent->m_NumTolerated;
-            }
-            else
+            if (parent->m_WorkTol == 0 || parent->m_NumTolerated > parent->m_WorkTol)
             {
                 parent->setStatus(AbstractTimeKeeper::AWAY, true);
             }

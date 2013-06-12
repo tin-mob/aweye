@@ -79,11 +79,19 @@ void TimeKeeper::deleteStates()
 
 void TimeKeeper::start()
 {
-    m_StartTimeUpdate = m_TimeHandler->getTime();
-    m_LastUpdate = m_TimeHandler->getTime();
     if (m_CurrentState == TimeKeeper::OFF)
     {
-        setStatus(AbstractTimeKeeper::HERE);
+        m_StartTimeUpdate = m_TimeHandler->getTime();
+        m_LastUpdate = m_TimeHandler->getTime();
+
+        if (m_PresenceHandler->isHere())
+        {
+            setStatus(AbstractTimeKeeper::HERE);
+        }
+        else
+        {
+            setStatus(AbstractTimeKeeper::AWAY);
+        }
     }
 }
 
@@ -182,6 +190,8 @@ void TimeKeeper::setStatus(Status status, bool cancelled)
 
     TKState* state = m_States.find(m_CurrentState)->second;
     return state->initState(this, cancelled);
+
+    m_TolerationTime = boost::posix_time::ptime(boost::posix_time::not_a_date_time);
 }
 
 boost::posix_time::time_duration TimeKeeper::getUpdateOffset() const
