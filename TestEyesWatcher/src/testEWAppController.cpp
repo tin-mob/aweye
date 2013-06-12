@@ -63,10 +63,10 @@ SUITE(TestEWAppController)
 
         CHECK_EQUAL(true, ctrl.saveConfig(newData));
         CHECK_EQUAL(newData, config.getData());
-        CHECK_EQUAL(newData.cascadePath, presenceHandler.cascadePath);
-        CHECK_EQUAL(newData.webcamIndex, presenceHandler.webcamIndex);
-        CHECK_EQUAL(newData.faceSizeX, presenceHandler.faceSizeX);
-        CHECK_EQUAL(newData.faceSizeY, presenceHandler.faceSizeY);
+        CHECK_EQUAL(newData.cascadePath, presenceHandler.m_CascadePath);
+        CHECK_EQUAL(newData.webcamIndex, presenceHandler.m_WebcamIndex);
+        CHECK_EQUAL(newData.faceSizeX, presenceHandler.m_FaceSizeX);
+        CHECK_EQUAL(newData.faceSizeY, presenceHandler.m_FaceSizeY);
 
         CHECK_EQUAL(newData.checkFreq, timeKeeper.checkFreq);
         CHECK_EQUAL(newData.pauseLength, timeKeeper.pauseLength);

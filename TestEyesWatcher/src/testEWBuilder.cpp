@@ -80,10 +80,10 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(builder.links.m_Config->m_Impl, builder.links.m_ConfigImpl);
 
         ConfigData data = builder.links.m_Config->getData();
-        CHECK_EQUAL(data.cascadePath, builder.links.m_PresenceHandler->cascadePath);
-        CHECK_EQUAL(data.webcamIndex, builder.links.m_PresenceHandler->webcamIndex);
-        CHECK_EQUAL(data.faceSizeX, builder.links.m_PresenceHandler->faceSizeX);
-        CHECK_EQUAL(data.faceSizeY, builder.links.m_PresenceHandler->faceSizeY);
+        CHECK_EQUAL(data.cascadePath, builder.links.m_PresenceHandler->m_CascadePath);
+        CHECK_EQUAL(data.webcamIndex, builder.links.m_PresenceHandler->m_WebcamIndex);
+        CHECK_EQUAL(data.faceSizeX, builder.links.m_PresenceHandler->m_FaceSizeX);
+        CHECK_EQUAL(data.faceSizeY, builder.links.m_PresenceHandler->m_FaceSizeY);
 
         CHECK_EQUAL(builder.links.m_TimeHandler, builder.links.m_TimeKeeper->timeHandler);
         CHECK_EQUAL(builder.links.m_PresenceHandler, builder.links.m_TimeKeeper->presenceHandler);

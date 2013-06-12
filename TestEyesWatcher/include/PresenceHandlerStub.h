@@ -32,34 +32,34 @@ class PresenceHandlerStub : public AbstractPresenceHandler
 {
     public:
         PresenceHandlerStub(int i = 1001, std::string fcn = "", int fx = 1010, int fy = 1011) :
-            cascadePath(fcn), webcamIndex(i), faceSizeX(fx), faceSizeY(fy){}
+            m_CascadePath(fcn), m_WebcamIndex(i), m_FaceSizeX(fx), m_FaceSizeY(fy){}
         virtual ~PresenceHandlerStub() {}
 
         virtual bool isHere()
         {
-            assert (!m_results.empty());
-            bool result  = m_results.front();
-            m_results.pop();
+            assert (!m_Results.empty());
+            bool result  = m_Results.front();
+            m_Results.pop();
             return result;
         }
 
         virtual void pushResult(bool result)
         {
-            m_results.push(result);
+            m_Results.push(result);
         }
 
-        virtual void setCascade(std::string name) {cascadePath = name;}
-        virtual void setIndex(int index) {webcamIndex = index;}
-        virtual void setFaceSize(unsigned int x, unsigned int y) {faceSizeX = x; faceSizeY = y;}
+        virtual void setCascade(std::string name) {m_CascadePath = name;}
+        virtual void setIndex(int index) {m_WebcamIndex = index;}
+        virtual void setFaceSize(unsigned int x, unsigned int y) {m_FaceSizeX = x; m_FaceSizeY = y;}
 
-        std::string cascadePath;
-        int webcamIndex;
-        unsigned int faceSizeX;
-        unsigned int faceSizeY;
+        std::string m_CascadePath;
+        int m_WebcamIndex;
+        unsigned int m_FaceSizeX;
+        unsigned int m_FaceSizeY;
 
     protected:
     private:
-        std::queue<bool> m_results;
+        std::queue<bool> m_Results;
 };
 
 #endif // PRESENCEHANDLERSTUB_H
