@@ -4,10 +4,10 @@
 		<icon>webcam.ico</icon>
 		<id_arg>0</id_arg>
 		<handler function="OnClose" entry="EVT_CLOSE" />
-		<object class="wxFlexGridSizer" variable="mainFlexGridSizer" member="no">
+		<object class="wxFlexGridSizer" variable="m_MainFlexGridSizer" member="no">
 			<cols>1</cols>
 			<object class="sizeritem">
-				<object class="wxStaticText" name="ID_STATICTEXT9" variable="StatusLabel" member="yes">
+				<object class="wxStaticText" name="ID_STATICTEXT9" variable="m_StatusLabel" member="yes">
 					<label></label>
 				</object>
 				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -15,7 +15,7 @@
 				<option>1</option>
 			</object>
 			<object class="sizeritem">
-				<object class="wxStaticLine" name="ID_STATICLINE1" variable="StaticLine1" member="yes">
+				<object class="wxStaticLine" name="ID_STATICLINE1" variable="m_StaticLine1" member="yes">
 					<size>10,-1</size>
 				</object>
 				<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -23,10 +23,10 @@
 				<option>1</option>
 			</object>
 			<object class="sizeritem">
-				<object class="wxBoxSizer" variable="onBoxSizer" member="no">
+				<object class="wxBoxSizer" variable="m_OnBoxSizer" member="no">
 					<orient>wxVERTICAL</orient>
 					<object class="sizeritem">
-						<object class="wxStaticText" name="ID_STATICTEXT1" variable="onLabel" member="yes">
+						<object class="wxStaticText" name="ID_STATICTEXT1" variable="m_OnLabel" member="yes">
 							<label>Last Session</label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -34,7 +34,7 @@
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxStaticText" name="ID_STATICTEXT2" variable="onClock" member="yes">
+						<object class="wxStaticText" name="ID_STATICTEXT2" variable="m_OnClock" member="yes">
 							<label></label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -46,7 +46,7 @@
 				<option>1</option>
 			</object>
 			<object class="sizeritem">
-				<object class="wxStaticLine" name="ID_STATICLINE2" variable="StaticLine2" member="yes">
+				<object class="wxStaticLine" name="ID_STATICLINE2" variable="m_StaticLine2" member="yes">
 					<size>10,-1</size>
 				</object>
 				<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -54,10 +54,10 @@
 				<option>1</option>
 			</object>
 			<object class="sizeritem">
-				<object class="wxBoxSizer" variable="offBoxSizer" member="no">
+				<object class="wxBoxSizer" variable="m_OffBoxSizer" member="no">
 					<orient>wxVERTICAL</orient>
 					<object class="sizeritem">
-						<object class="wxStaticText" name="ID_STATICTEXT3" variable="offLabel" member="yes">
+						<object class="wxStaticText" name="ID_STATICTEXT3" variable="m_OffLabel" member="yes">
 							<label>Last Pause</label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -65,7 +65,7 @@
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxStaticText" name="ID_STATICTEXT4" variable="offClock" member="yes">
+						<object class="wxStaticText" name="ID_STATICTEXT4" variable="m_OffClock" member="yes">
 							<label></label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -77,7 +77,7 @@
 				<option>1</option>
 			</object>
 			<object class="sizeritem">
-				<object class="wxStaticLine" name="ID_STATICLINE3" variable="StaticLine3" member="yes">
+				<object class="wxStaticLine" name="ID_STATICLINE3" variable="m_StaticLine3" member="yes">
 					<size>10,-1</size>
 				</object>
 				<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -85,10 +85,10 @@
 				<option>1</option>
 			</object>
 			<object class="sizeritem">
-				<object class="wxBoxSizer" variable="runningBoxSizer" member="no">
+				<object class="wxBoxSizer" variable="m_RunningBoxSizer" member="no">
 					<orient>wxVERTICAL</orient>
 					<object class="sizeritem">
-						<object class="wxStaticText" name="ID_STATICTEXT5" variable="runningLabel" member="yes">
+						<object class="wxStaticText" name="ID_STATICTEXT5" variable="m_RunningLabel" member="yes">
 							<label>Running</label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -96,7 +96,7 @@
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxStaticText" name="ID_STATICTEXT6" variable="runningClock" member="yes">
+						<object class="wxStaticText" name="ID_STATICTEXT6" variable="m_RunningClock" member="yes">
 							<label></label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -108,7 +108,7 @@
 				<option>1</option>
 			</object>
 			<object class="sizeritem">
-				<object class="wxStaticLine" name="ID_STATICLINE4" variable="StaticLine4" member="yes">
+				<object class="wxStaticLine" name="ID_STATICLINE4" variable="m_StaticLine4" member="yes">
 					<size>10,-1</size>
 				</object>
 				<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -116,10 +116,10 @@
 				<option>1</option>
 			</object>
 			<object class="sizeritem">
-				<object class="wxBoxSizer" variable="leftBoxSizer" member="no">
+				<object class="wxBoxSizer" variable="m_LeftBoxSizer" member="no">
 					<orient>wxVERTICAL</orient>
 					<object class="sizeritem">
-						<object class="wxStaticText" name="ID_STATICTEXT7" variable="leftLabel" member="yes">
+						<object class="wxStaticText" name="ID_STATICTEXT7" variable="m_LeftLabel" member="yes">
 							<label>Time Left</label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -127,7 +127,7 @@
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxStaticText" name="ID_STATICTEXT8" variable="leftClock" member="yes">
+						<object class="wxStaticText" name="ID_STATICTEXT8" variable="m_LeftClock" member="yes">
 							<label></label>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -139,26 +139,26 @@
 				<option>1</option>
 			</object>
 		</object>
-		<object class="wxMenuBar" variable="EwMenuBar" member="yes">
-			<object class="wxMenu" variable="DoMenu" member="yes">
+		<object class="wxMenuBar" variable="m_EwMenuBar" member="yes">
+			<object class="wxMenu" variable="m_DoMenu" member="yes">
 				<label>Do</label>
-				<object class="wxMenuItem" name="ID_STARTMENUITEM" variable="StartMenuItem" member="yes">
+				<object class="wxMenuItem" name="ID_STARTMENUITEM" variable="m_StartMenuItem" member="yes">
 					<label>Start</label>
 					<handler function="OnPlayButtonClick" entry="EVT_MENU" />
 				</object>
-				<object class="wxMenuItem" name="ID_PAUSEMENUITEM" variable="PauseMenuItem" member="no">
+				<object class="wxMenuItem" name="ID_PAUSEMENUITEM" variable="m_PauseMenuItem" member="no">
 					<label>Pause</label>
 					<handler function="OnPauseButtonClick" entry="EVT_MENU" />
 				</object>
-				<object class="wxMenuItem" name="ID_OPTIONSMENUITEM" variable="OptionsMenuItem" member="no">
+				<object class="wxMenuItem" name="ID_OPTIONSMENUITEM" variable="m_OptionsMenuItem" member="no">
 					<label>Options</label>
 					<handler function="OnOptionsButtonClick" entry="EVT_MENU" />
 				</object>
-				<object class="wxMenuItem" name="ID_ABOUTMENUITEM" variable="AboutMenuItem" member="no">
+				<object class="wxMenuItem" name="ID_ABOUTMENUITEM" variable="m_AboutMenuItem" member="no">
 					<label>About</label>
 					<handler function="OnAbout" entry="EVT_MENU" />
 				</object>
-				<object class="wxMenuItem" name="ID_EXITMENUITEM" variable="ExitMenuItem" member="no">
+				<object class="wxMenuItem" name="ID_EXITMENUITEM" variable="m_ExitMenuItem" member="no">
 					<label>Exit</label>
 					<handler function="OnQuit" entry="EVT_MENU" />
 				</object>

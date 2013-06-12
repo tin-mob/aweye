@@ -86,22 +86,22 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
         //*)
 
         //(*Declarations(EWMainFrame)
-        wxStaticText* runningClock;
-        wxMenuItem* StartMenuItem;
-        wxStaticLine* StaticLine2;
-        wxStaticText* onClock;
-        wxStaticText* onLabel;
-        wxStaticText* runningLabel;
-        wxMenu* DoMenu;
-        wxMenuBar* EwMenuBar;
-        wxStaticText* leftClock;
-        wxStaticText* offClock;
-        wxStaticLine* StaticLine1;
-        wxStaticLine* StaticLine3;
-        wxStaticText* StatusLabel;
-        wxStaticText* offLabel;
-        wxStaticText* leftLabel;
-        wxStaticLine* StaticLine4;
+        wxStaticText* m_StatusLabel;
+        wxMenuBar* m_EwMenuBar;
+        wxMenu* m_DoMenu;
+        wxStaticText* m_LeftClock;
+        wxStaticLine* m_StaticLine1;
+        wxStaticLine* m_StaticLine2;
+        wxStaticText* m_RunningLabel;
+        wxStaticText* m_OffClock;
+        wxStaticText* m_OffLabel;
+        wxStaticText* m_RunningClock;
+        wxStaticText* m_OnLabel;
+        wxMenuItem* m_StartMenuItem;
+        wxStaticLine* m_StaticLine3;
+        wxStaticLine* m_StaticLine4;
+        wxStaticText* m_OnClock;
+        wxStaticText* m_LeftLabel;
         //*)
 
         AbstractEWViewPres<AbstractEWMainFrame>* m_Presenter;
