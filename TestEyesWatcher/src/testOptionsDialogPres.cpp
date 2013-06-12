@@ -48,7 +48,7 @@ SUITE(TestOptionsDialogPres)
         ctrl.m_Data = {boost::posix_time::not_a_date_time};
         pres.init(&dialog);
         CHECK_EQUAL(ctrl.m_Data, dialog.getData());
-        CHECK_EQUAL(false, dialog.disabled);
+        CHECK_EQUAL(false, dialog.m_Disabled);
     }
 
     TEST_FIXTURE(OptionsDialogPresFixture, TestInitNoTray)
@@ -60,6 +60,6 @@ SUITE(TestOptionsDialogPres)
         ctrl2.m_Data = {boost::posix_time::not_a_date_time};
         pres2.init(&dialog);
         CHECK_EQUAL(ctrl2.m_Data, dialog.getData());
-        CHECK_EQUAL(true, dialog.disabled);
+        CHECK_EQUAL(true, dialog.m_Disabled);
     }
 }

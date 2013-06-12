@@ -27,7 +27,7 @@
 class OptionsDialogStub : public AbstractOptionsDialog
 {
     public:
-        OptionsDialogStub() : disabled(false) {}
+        OptionsDialogStub() : m_Disabled(false) {}
         virtual ~OptionsDialogStub() {}
         virtual ConfigData getData() const
         {
@@ -40,9 +40,9 @@ class OptionsDialogStub : public AbstractOptionsDialog
         }
         virtual void disableTray()
         {
-            disabled = true;
+            m_Disabled = true;
         }
-        bool disabled;
+        bool m_Disabled;
     protected:
     private:
         ConfigData m_Data;

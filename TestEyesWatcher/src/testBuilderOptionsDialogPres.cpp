@@ -65,7 +65,7 @@ SUITE(TestBuilderOptionsDialogPres)
         config.save({boost::posix_time::not_a_date_time});
         pres.init(&dialog);
         CHECK_EQUAL(config.getData(), dialog.getData());
-        CHECK_EQUAL(false, dialog.disabled);
+        CHECK_EQUAL(false, dialog.m_Disabled);
     }
 
     TEST_FIXTURE(BuilderOptionsDialogPresFixture, TestInitNoTray)
@@ -76,7 +76,7 @@ SUITE(TestBuilderOptionsDialogPres)
         config.save({boost::posix_time::not_a_date_time});
         pres.init(&dialog);
         CHECK_EQUAL(config.getData(), dialog.getData());
-        CHECK_EQUAL(true, dialog.disabled);
+        CHECK_EQUAL(true, dialog.m_Disabled);
     }
 }
 
