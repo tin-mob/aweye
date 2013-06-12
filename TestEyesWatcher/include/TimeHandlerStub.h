@@ -29,20 +29,20 @@ class TimeHandlerStub : public AbstractTimeHandler
 {
      public:
         TimeHandlerStub(boost::posix_time::ptime time =
-                        boost::posix_time::second_clock::local_time()) : m_time(time) {}
+                        boost::posix_time::second_clock::local_time()) : m_Time(time) {}
         virtual ~TimeHandlerStub() {}
         virtual boost::posix_time::ptime getTime() const
         {
-            return m_time;
+            return m_Time;
         }
         virtual void setTime(boost::posix_time::ptime time)
         {
-            m_time = time;
+            m_Time = time;
         }
 
     protected:
     private:
-        boost::posix_time::ptime m_time;
+        boost::posix_time::ptime m_Time;
 };
 
 #endif // TIMEHANDLERSTUB_H
