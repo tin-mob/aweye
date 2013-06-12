@@ -69,22 +69,22 @@ SUITE(TestEWPresenter)
     {
         presenter.toggleStart();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
-        CHECK_EQUAL(checkTimer.running, true);
-        CHECK_EQUAL(clockTimer.running, true);
+        CHECK_EQUAL(checkTimer.m_Running, true);
+        CHECK_EQUAL(clockTimer.m_Running, true);
         CHECK_EQUAL(viewObserver.checkStatUpdated(), true);
 
         presenter.toggleStart();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
-        CHECK_EQUAL(checkTimer.running, false);
-        CHECK_EQUAL(clockTimer.running, false);
+        CHECK_EQUAL(checkTimer.m_Running, false);
+        CHECK_EQUAL(clockTimer.m_Running, false);
         CHECK_EQUAL(viewObserver.checkStatUpdated(), true);
 
         keeper.m_Fail = true;
         CHECK_EQUAL(msgHandler.m_LastError, "");
         presenter.toggleStart();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
-        CHECK_EQUAL(checkTimer.running, false);
-        CHECK_EQUAL(clockTimer.running, false);
+        CHECK_EQUAL(checkTimer.m_Running, false);
+        CHECK_EQUAL(clockTimer.m_Running, false);
         CHECK_EQUAL(viewObserver.checkStatUpdated(), false);
         CHECK_EQUAL(msgHandler.m_LastError, "Testing!");
     }

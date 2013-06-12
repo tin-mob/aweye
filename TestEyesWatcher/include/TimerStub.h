@@ -27,23 +27,23 @@
 class TimerStub : public AbstractTimer
 {
     public:
-        TimerStub() : running(false) {}
+        TimerStub() : m_Running(false) {}
         virtual ~TimerStub() {}
         virtual bool startTimer(long total_milliseconds, bool oneShot)
         {
-            running = true;
+            m_Running = true;
             return true;
         }
         virtual void stopTimer()
         {
-            running = false;
+            m_Running = false;
         }
         void ring()
         {
             notify(&TimerInterface::onTimerRing, this);
         }
 
-        bool running;
+        bool m_Running;
     protected:
     private:
 };
