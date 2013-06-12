@@ -52,26 +52,26 @@ SUITE(TestEWTaskBarPres)
         pres.setDisplayValues(values);
         pres.notifyTime();
 
-        CHECK_EQUAL("Last Session : " + values.timeOn, bar.onClock);
-        CHECK_EQUAL("Last Pause : " + values.timeOff, bar.offClock);
-        CHECK_EQUAL("Running : " + values.timeRunning, bar.runningClock);
-        CHECK_EQUAL("Time Left : " + values.timeLeft, bar.leftClock);
-        CHECK_EQUAL(values.icon, bar.loc);
+        CHECK_EQUAL("Last Session : " + values.timeOn, bar.m_OnClock);
+        CHECK_EQUAL("Last Pause : " + values.timeOff, bar.m_OffClock);
+        CHECK_EQUAL("Running : " + values.timeRunning, bar.m_RunningClock);
+        CHECK_EQUAL("Time Left : " + values.timeLeft, bar.m_LeftClock);
+        CHECK_EQUAL(values.icon, bar.m_Loc);
     }
 
     TEST_FIXTURE(EWTaskBarPresFixture, TestTimesUpdateNoIcon)
     {
         EWPresenterStub::DisplayValues values =
             EWPresenterStub::DisplayValues::getTestValues(true, false);
-        bar.loc = "in";
+        bar.m_Loc = "in";
         pres.setDisplayValues(values);
         pres.notifyTime();
 
-        CHECK_EQUAL("Last Session : " + values.timeOn, bar.onClock);
-        CHECK_EQUAL("Last Pause : " + values.timeOff, bar.offClock);
-        CHECK_EQUAL("Running : " + values.timeRunning, bar.runningClock);
-        CHECK_EQUAL("Time Left : " + values.timeLeft, bar.leftClock);
-        CHECK_EQUAL("in", bar.loc);
+        CHECK_EQUAL("Last Session : " + values.timeOn, bar.m_OnClock);
+        CHECK_EQUAL("Last Pause : " + values.timeOff, bar.m_OffClock);
+        CHECK_EQUAL("Running : " + values.timeRunning, bar.m_RunningClock);
+        CHECK_EQUAL("Time Left : " + values.timeLeft, bar.m_LeftClock);
+        CHECK_EQUAL("in", bar.m_Loc);
     }
 
     TEST_FIXTURE(EWTaskBarPresFixture, TestStatusUpdate)
@@ -81,23 +81,23 @@ SUITE(TestEWTaskBarPres)
         pres.setDisplayValues(values);
         pres.notifyStatus();
 
-        CHECK_EQUAL(values.hideButtonLabel, bar.hideRestoreLabel);
-        CHECK_EQUAL(values.startButtonLabel, bar.startStopLabel);
-        CHECK_EQUAL(values.pauseButtonLabel, bar.pauseResumeLabel);
-        CHECK_EQUAL(values.icon, bar.loc);
+        CHECK_EQUAL(values.hideButtonLabel, bar.m_HideRestoreLabel);
+        CHECK_EQUAL(values.startButtonLabel, bar.m_StartStopLabel);
+        CHECK_EQUAL(values.pauseButtonLabel, bar.m_PauseResumeLabel);
+        CHECK_EQUAL(values.icon, bar.m_Loc);
     }
 
     TEST_FIXTURE(EWTaskBarPresFixture, TestStatusUpdateNoIcon)
     {
         EWPresenterStub::DisplayValues values =
             EWPresenterStub::DisplayValues::getTestValues(true, false);
-        bar.loc = "in";
+        bar.m_Loc = "in";
         pres.setDisplayValues(values);
         pres.notifyStatus();
 
-        CHECK_EQUAL(values.hideButtonLabel, bar.hideRestoreLabel);
-        CHECK_EQUAL(values.startButtonLabel, bar.startStopLabel);
-        CHECK_EQUAL(values.pauseButtonLabel, bar.pauseResumeLabel);
-        CHECK_EQUAL("in", bar.loc);
+        CHECK_EQUAL(values.hideButtonLabel, bar.m_HideRestoreLabel);
+        CHECK_EQUAL(values.startButtonLabel, bar.m_StartStopLabel);
+        CHECK_EQUAL(values.pauseButtonLabel, bar.m_PauseResumeLabel);
+        CHECK_EQUAL("in", bar.m_Loc);
     }
 }

@@ -27,44 +27,44 @@
 class EWTaskbarStub : public AbstractEWTaskbar
 {
     public:
-        EWTaskbarStub(AbstractEWViewPres<AbstractEWTaskbar>* p = nullptr) : hideRestoreLabel(""),
-            startStopLabel(""), pauseResumeLabel(""), onClock(""),
-            offClock(""), runningClock(""), leftClock(""),
-            loc(""), presenter(p){}
+        EWTaskbarStub(AbstractEWViewPres<AbstractEWTaskbar>* p = nullptr) : m_HideRestoreLabel(""),
+            m_StartStopLabel(""), m_PauseResumeLabel(""), m_OnClock(""),
+            m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
+            m_Loc(""), m_Presenter(p){}
         virtual ~EWTaskbarStub() {}
 
         virtual void setPopupMenuCommands( std::string hrl,
             std::string ssl, std::string prl)
         {
-            hideRestoreLabel = hrl;
-            startStopLabel = ssl;
-            pauseResumeLabel = prl;
+            m_HideRestoreLabel = hrl;
+            m_StartStopLabel = ssl;
+            m_PauseResumeLabel = prl;
         }
 
         virtual void setPopupMenuTimes( std::string onc, std::string offc,
             std::string rc, std::string lc)
         {
-            onClock = onc;
-            offClock = offc;
-            runningClock = rc;
-            leftClock = lc;
+            m_OnClock = onc;
+            m_OffClock = offc;
+            m_RunningClock = rc;
+            m_LeftClock = lc;
         }
 
         virtual void setIcon(std::string l)
         {
-            loc = l;
+            m_Loc = l;
         }
 
-        std::string hideRestoreLabel;
-        std::string startStopLabel;
-        std::string pauseResumeLabel;
-        std::string onClock;
-        std::string offClock;
-        std::string runningClock;
-        std::string leftClock;
-        std::string loc;
+        std::string m_HideRestoreLabel;
+        std::string m_StartStopLabel;
+        std::string m_PauseResumeLabel;
+        std::string m_OnClock;
+        std::string m_OffClock;
+        std::string m_RunningClock;
+        std::string m_LeftClock;
+        std::string m_Loc;
 
-        AbstractEWViewPres<AbstractEWTaskbar>* presenter;
+        AbstractEWViewPres<AbstractEWTaskbar>* m_Presenter;
     protected:
     private:
 };

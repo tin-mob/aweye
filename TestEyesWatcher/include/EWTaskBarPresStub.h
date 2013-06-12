@@ -29,7 +29,7 @@ class EWTaskBarPresStub : public AbstractEWViewPres<AbstractEWTaskbar>
 {
     public:
         EWTaskBarPresStub(AbstractEWPresenter* p, AbstractEWAppController* c) :
-            presenter(p), controller(c) {}
+            m_Presenter(p), m_Controller(c) {}
         virtual ~EWTaskBarPresStub() {}
 
         virtual void forceUpdate() {}
@@ -40,8 +40,8 @@ class EWTaskBarPresStub : public AbstractEWViewPres<AbstractEWTaskbar>
         virtual void OnViewPauseResume() {}
         virtual void OnViewHideRestore() {}
 
-        AbstractEWPresenter* presenter;
-        AbstractEWAppController* controller;
+        AbstractEWPresenter* m_Presenter;
+        AbstractEWAppController* m_Controller;
     protected:
     private:
 };

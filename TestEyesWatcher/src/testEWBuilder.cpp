@@ -112,10 +112,10 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(builder.links.m_MainFramePres, builder.links.m_MainFrame->m_Presenter);
         CHECK_EQUAL(true, builder.links.m_MainFrame->m_TaskbarCreated);
 
-        CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_TaskBarPres->presenter);
-        CHECK_EQUAL(builder.links.m_AppController, builder.links.m_TaskBarPres->controller);
+        CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_TaskBarPres->m_Presenter);
+        CHECK_EQUAL(builder.links.m_AppController, builder.links.m_TaskBarPres->m_Controller);
 
-        CHECK_EQUAL(builder.links.m_TaskBarPres, builder.links.m_TaskBar->presenter);
+        CHECK_EQUAL(builder.links.m_TaskBarPres, builder.links.m_TaskBar->m_Presenter);
 
         CHECK_EQUAL(builder.links.m_OptionsPres, builder.links.m_DisplayOptionsDialogCmd->m_Presenter);
 
