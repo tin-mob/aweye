@@ -28,11 +28,11 @@ class AbstractEWMainFrame;
 class SetTopWindowStub : public SetTopWindowInt
 {
     public:
-        SetTopWindowStub() : frame(nullptr){}
+        SetTopWindowStub() : m_Frame(nullptr){}
         virtual ~SetTopWindowStub() {}
-        virtual void setTopWindow(AbstractEWMainFrame* f) {frame = f;}
+        virtual void setTopWindow(AbstractEWMainFrame* f) {m_Frame = f;}
 
-        AbstractEWMainFrame* frame;
+        AbstractEWMainFrame* m_Frame;
     protected:
     private:
 };

@@ -119,7 +119,7 @@ SUITE(TestEWBuilder)
 
         CHECK_EQUAL(builder.links.m_OptionsPres, builder.links.m_DisplayOptionsDialogCmd->m_Presenter);
 
-        CHECK_EQUAL(builder.links.m_MainFrame, setTop.frame);
+        CHECK_EQUAL(builder.links.m_MainFrame, setTop.m_Frame);
 
         CHECK_EQUAL(builder.links.m_MsgHandler, builder.links.m_AppController->m_MsgHandler);
         CHECK_EQUAL(builder.links.m_Config, builder.links.m_AppController->m_Config);
