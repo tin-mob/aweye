@@ -44,69 +44,69 @@ class TimeKeeperStub : public AbstractTimeKeeper
                    unsigned int pt = 1000,
                    unsigned int wt = 1000,
                    bool cup = false) :
-            fail(false), late(false), hibernated(false), status(AbstractTimeKeeper::OFF),
-            hereStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(10,59,00))),
-            awayStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(11,31,01))),
-            interval(boost::posix_time::seconds(2)), left(boost::posix_time::minutes(3)),
-            workLeft(boost::posix_time::minutes(1)),
-            workLength(wl), pauseLength(pl), remFreq(rf), checkFreq(cf), pauseTol(pt),
-            workTol(wt), cummulPause(cup), timeHandler(th), presenceHandler(ph)
+            m_Fail(false), m_Late(false), m_Hibernated(false), m_Status(AbstractTimeKeeper::OFF),
+            m_HereStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(10,59,00))),
+            m_AwayStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(11,31,01))),
+            m_Interval(boost::posix_time::seconds(2)), m_Left(boost::posix_time::minutes(3)),
+            m_WorkLeft(boost::posix_time::minutes(1)),
+            m_WorkLength(wl), m_PauseLength(pl), m_RemFreq(rf), m_CheckFreq(cf), m_PauseTol(pt),
+            m_WorkTol(wt), m_CummulPause(cup), m_TimeHandler(th), m_PresenceHandler(ph)
             {}
         virtual ~TimeKeeperStub() {}
 
         virtual void start()
         {
-            if (fail) { throw BaseException("Testing!"); }
-            status = AbstractTimeKeeper::HERE;
+            if (m_Fail) { throw BaseException("Testing!"); }
+            m_Status = AbstractTimeKeeper::HERE;
         }
-        virtual void stop() {status = AbstractTimeKeeper::OFF;}
+        virtual void stop() {m_Status = AbstractTimeKeeper::OFF;}
 
-        virtual void notifyHibernated() {hibernated = true;}
+        virtual void notifyHibernated() {m_Hibernated = true;}
 
         virtual void updateStatus()
-                {
-            if (fail) { throw BaseException("Testing!"); }
-            status = AbstractTimeKeeper::HERE;
+        {
+            if (m_Fail) { throw BaseException("Testing!"); }
+            m_Status = AbstractTimeKeeper::HERE;
         }
 
         virtual boost::posix_time::time_duration getTimerInterval() const {return boost::posix_time::seconds(1);}
-        virtual bool isLate() const {return late;}
+        virtual bool isLate() const {return m_Late;}
 
-        virtual AbstractTimeKeeper::Status getStatus() const {return status;}
-        virtual boost::posix_time::time_duration getInterval() const {return interval;}
-        virtual boost::posix_time::time_duration getTimeLeft() const {return left;}
-        virtual boost::posix_time::ptime getHereStamp() const {return hereStamp;}
-        virtual boost::posix_time::ptime getAwayStamp() const {return awayStamp;}
-        virtual boost::posix_time::time_duration getWorkTimeLeft() const {return workLeft;};
+        virtual AbstractTimeKeeper::Status getStatus() const {return m_Status;}
+        virtual boost::posix_time::time_duration getInterval() const {return m_Interval;}
+        virtual boost::posix_time::time_duration getTimeLeft() const {return m_Left;}
+        virtual boost::posix_time::ptime getHereStamp() const {return m_HereStamp;}
+        virtual boost::posix_time::ptime getAwayStamp() const {return m_AwayStamp;}
+        virtual boost::posix_time::time_duration getWorkTimeLeft() const {return m_WorkLeft;};
 
-        virtual void setWorkLength(boost::posix_time::time_duration wl) {workLength = wl;}
-        virtual void setPauseLength(boost::posix_time::time_duration pl) {pauseLength = pl;}
-        virtual void setRemFreq(boost::posix_time::time_duration rf) {remFreq = rf;}
-        virtual void setCheckFreq(boost::posix_time::time_duration cf) {checkFreq = cf;}
-        virtual void setPauseTol(unsigned int pt) {pauseTol = pt;}
-        virtual void setWorkTol(unsigned int wt) {workTol = wt;}
-        virtual void setCummulPause(bool cup) {cummulPause = cup;}
+        virtual void setWorkLength(boost::posix_time::time_duration wl) {m_WorkLength = wl;}
+        virtual void setPauseLength(boost::posix_time::time_duration pl) {m_PauseLength = pl;}
+        virtual void setRemFreq(boost::posix_time::time_duration rf) {m_RemFreq = rf;}
+        virtual void setCheckFreq(boost::posix_time::time_duration cf) {m_CheckFreq = cf;}
+        virtual void setPauseTol(unsigned int pt) {m_PauseTol = pt;}
+        virtual void setWorkTol(unsigned int wt) {m_WorkTol = wt;}
+        virtual void setCummulPause(bool cup) {m_CummulPause = cup;}
 
-        bool fail;
-        bool late;
-        bool hibernated;
-        AbstractTimeKeeper::Status status;
-        boost::posix_time::ptime hereStamp;
-        boost::posix_time::ptime awayStamp;
-        boost::posix_time::time_duration interval;
-        boost::posix_time::time_duration left;
-        boost::posix_time::time_duration workLeft;
+        bool m_Fail;
+        bool m_Late;
+        bool m_Hibernated;
+        AbstractTimeKeeper::Status m_Status;
+        boost::posix_time::ptime m_HereStamp;
+        boost::posix_time::ptime m_AwayStamp;
+        boost::posix_time::time_duration m_Interval;
+        boost::posix_time::time_duration m_Left;
+        boost::posix_time::time_duration m_WorkLeft;
 
-        boost::posix_time::time_duration workLength;
-        boost::posix_time::time_duration pauseLength;
-        boost::posix_time::time_duration remFreq;
-        boost::posix_time::time_duration checkFreq;
-        unsigned int pauseTol;
-        unsigned int workTol;
-        bool cummulPause;
+        boost::posix_time::time_duration m_WorkLength;
+        boost::posix_time::time_duration m_PauseLength;
+        boost::posix_time::time_duration m_RemFreq;
+        boost::posix_time::time_duration m_CheckFreq;
+        unsigned int m_PauseTol;
+        unsigned int m_WorkTol;
+        bool m_CummulPause;
 
-        AbstractTimeHandler* timeHandler;
-        AbstractPresenceHandler* presenceHandler;
+        AbstractTimeHandler* m_TimeHandler;
+        AbstractPresenceHandler* m_PresenceHandler;
 
     protected:
     private:

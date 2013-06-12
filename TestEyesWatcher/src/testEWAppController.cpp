@@ -68,13 +68,13 @@ SUITE(TestEWAppController)
         CHECK_EQUAL(newData.faceSizeX, presenceHandler.m_FaceSizeX);
         CHECK_EQUAL(newData.faceSizeY, presenceHandler.m_FaceSizeY);
 
-        CHECK_EQUAL(newData.checkFreq, timeKeeper.checkFreq);
-        CHECK_EQUAL(newData.pauseLength, timeKeeper.pauseLength);
-        CHECK_EQUAL(newData.pauseTol, timeKeeper.pauseTol);
-        CHECK_EQUAL(newData.workTol, timeKeeper.workTol);
-        CHECK_EQUAL(newData.remFreq, timeKeeper.remFreq);
-        CHECK_EQUAL(newData.workLength, timeKeeper.workLength);
-        CHECK_EQUAL(newData.cummulPause, timeKeeper.cummulPause);
+        CHECK_EQUAL(newData.checkFreq, timeKeeper.m_CheckFreq);
+        CHECK_EQUAL(newData.pauseLength, timeKeeper.m_PauseLength);
+        CHECK_EQUAL(newData.pauseTol, timeKeeper.m_PauseTol);
+        CHECK_EQUAL(newData.workTol, timeKeeper.m_WorkTol);
+        CHECK_EQUAL(newData.remFreq, timeKeeper.m_RemFreq);
+        CHECK_EQUAL(newData.workLength, timeKeeper.m_WorkLength);
+        CHECK_EQUAL(newData.cummulPause, timeKeeper.m_CummulPause);
 
         CHECK_EQUAL(newData.popupAlarm, presenter.m_PopupAlarm);
         CHECK_EQUAL(newData.soundAlarm, presenter.m_SoundAlarm);

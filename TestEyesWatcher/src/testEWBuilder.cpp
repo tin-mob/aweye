@@ -85,15 +85,15 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(data.faceSizeX, builder.links.m_PresenceHandler->m_FaceSizeX);
         CHECK_EQUAL(data.faceSizeY, builder.links.m_PresenceHandler->m_FaceSizeY);
 
-        CHECK_EQUAL(builder.links.m_TimeHandler, builder.links.m_TimeKeeper->timeHandler);
-        CHECK_EQUAL(builder.links.m_PresenceHandler, builder.links.m_TimeKeeper->presenceHandler);
+        CHECK_EQUAL(builder.links.m_TimeHandler, builder.links.m_TimeKeeper->m_TimeHandler);
+        CHECK_EQUAL(builder.links.m_PresenceHandler, builder.links.m_TimeKeeper->m_PresenceHandler);
 
-        CHECK_EQUAL(data.workLength, builder.links.m_TimeKeeper->workLength);
-        CHECK_EQUAL(data.pauseLength, builder.links.m_TimeKeeper->pauseLength);
-        CHECK_EQUAL(data.remFreq, builder.links.m_TimeKeeper->remFreq);
-        CHECK_EQUAL(data.checkFreq, builder.links.m_TimeKeeper->checkFreq);
-        CHECK_EQUAL(data.pauseTol, builder.links.m_TimeKeeper->pauseTol);
-        CHECK_EQUAL(data.workTol, builder.links.m_TimeKeeper->workTol);
+        CHECK_EQUAL(data.workLength, builder.links.m_TimeKeeper->m_WorkLength);
+        CHECK_EQUAL(data.pauseLength, builder.links.m_TimeKeeper->m_PauseLength);
+        CHECK_EQUAL(data.remFreq, builder.links.m_TimeKeeper->m_RemFreq);
+        CHECK_EQUAL(data.checkFreq, builder.links.m_TimeKeeper->m_CheckFreq);
+        CHECK_EQUAL(data.pauseTol, builder.links.m_TimeKeeper->m_PauseTol);
+        CHECK_EQUAL(data.workTol, builder.links.m_TimeKeeper->m_WorkTol);
 
         CHECK_EQUAL(builder.links.m_MsgHandler, builder.links.m_Presenter->m_MsgHandler);
         CHECK_EQUAL(builder.links.m_TimeKeeper, builder.links.m_Presenter->m_Keeper);

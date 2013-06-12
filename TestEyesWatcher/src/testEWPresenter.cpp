@@ -79,7 +79,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(clockTimer.running, false);
         CHECK_EQUAL(viewObserver.checkStatUpdated(), true);
 
-        keeper.fail = true;
+        keeper.m_Fail = true;
         CHECK_EQUAL(msgHandler.m_LastError, "");
         presenter.toggleStart();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
@@ -99,10 +99,10 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastAlert, "");
 
         presenter.toggleStart();
-        keeper.hereStamp = boost::posix_time::not_a_date_time;
-        keeper.awayStamp = boost::posix_time::not_a_date_time;
-        keeper.interval = boost::posix_time::not_a_date_time;
-        keeper.left = boost::posix_time::not_a_date_time;
+        keeper.m_HereStamp = boost::posix_time::not_a_date_time;
+        keeper.m_AwayStamp = boost::posix_time::not_a_date_time;
+        keeper.m_Interval = boost::posix_time::not_a_date_time;
+        keeper.m_Left = boost::posix_time::not_a_date_time;
 
         CHECK_EQUAL(presenter.getStatus(), "Here");
         CHECK_EQUAL(presenter.getTimeOn(), "00:00:00");
@@ -112,7 +112,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastAlert, "");
         CHECK_EQUAL(msgHandler.m_LastSound, "");
 
-        keeper.late = true;
+        keeper.m_Late = true;
         presenter.togglePause();
         checkTimer.ring();
         CHECK_EQUAL(msgHandler.m_LastAlert, "");
@@ -123,7 +123,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastAlert, presenter.m_LateMsg);
         CHECK_EQUAL(msgHandler.m_LastSound, data.soundPath);
 
-        keeper.fail = true;
+        keeper.m_Fail = true;
         CHECK_EQUAL(msgHandler.m_LastError, "");
         checkTimer.ring();
         CHECK_EQUAL(msgHandler.m_LastError, "Testing!");
@@ -133,7 +133,7 @@ SUITE(TestEWPresenter)
     {
 
         presenter.toggleStart();
-        keeper.left = boost::posix_time::hours(-1) +
+        keeper.m_Left = boost::posix_time::hours(-1) +
             boost::posix_time::minutes(-1) + boost::posix_time::seconds(-1);
 
         CHECK_EQUAL("-01:01:01", presenter.getTimeLeft());
@@ -178,17 +178,17 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(presenter.getIconName(), presenter.m_StopWebcamIcon);
 
         presenter.toggleStart();
-        keeper.workLeft = boost::posix_time::hours(1);
+        keeper.m_WorkLeft = boost::posix_time::hours(1);
         CHECK_EQUAL(presenter.getIconName(), presenter.m_GreenWebcamIcon);
 
-        keeper.workLeft = boost::posix_time::seconds(1);
+        keeper.m_WorkLeft = boost::posix_time::seconds(1);
         CHECK_EQUAL(presenter.getIconName(), presenter.m_YellowWebcamIcon);
 
-        keeper.workLeft = boost::posix_time::seconds(0);
+        keeper.m_WorkLeft = boost::posix_time::seconds(0);
         CHECK_EQUAL(presenter.getIconName(), presenter.m_RedWebcamIcon);
 
-        keeper.status = AbstractTimeKeeper::AWAY;
-        keeper.left = boost::posix_time::seconds(0);
+        keeper.m_Status = AbstractTimeKeeper::AWAY;
+        keeper.m_Left = boost::posix_time::seconds(0);
         CHECK_EQUAL(presenter.getIconName(), presenter.m_GreenWebcamIcon);
     }
 
@@ -197,17 +197,17 @@ SUITE(TestEWPresenter)
         presenter.toggleStart();
         clockTimer.ring();
         CHECK_EQUAL(viewObserver.checkTimeUpdated(), true);
-        CHECK_EQUAL(keeper.hibernated, false);
+        CHECK_EQUAL(keeper.m_Hibernated, false);
     }
 
     TEST_FIXTURE(EWPresenterFixture, TestHibernated)
     {
         presenter.toggleStart();
-        keeper.status = AbstractTimeKeeper::OFF;
+        keeper.m_Status = AbstractTimeKeeper::OFF;
         timeHandler.setTime(timeHandler.getTime() + boost::posix_time::minutes(2));
         clockTimer.ring();
         CHECK_EQUAL(viewObserver.checkTimeUpdated(), true);
-        CHECK_EQUAL(keeper.hibernated, true);
-        CHECK_EQUAL(keeper.status, AbstractTimeKeeper::HERE);
+        CHECK_EQUAL(keeper.m_Hibernated, true);
+        CHECK_EQUAL(keeper.m_Status, AbstractTimeKeeper::HERE);
     }
 }
