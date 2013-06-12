@@ -40,7 +40,7 @@ class AboutDialog: public wxDialog
 		virtual ~AboutDialog();
 
 		//(*Declarations(AboutDialog)
-		wxStaticText* StaticText1;
+		wxStaticText* m_AboutStaticText;
 		//*)
 
 	protected:
