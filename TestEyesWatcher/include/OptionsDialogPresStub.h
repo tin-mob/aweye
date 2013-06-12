@@ -28,14 +28,14 @@ class AbstractEWAppController;
 class OptionsDialogPresStub : public AbstractOptionsDialogPres
 {
     public:
-        OptionsDialogPresStub(AbstractEWAppController* c) : controller(c) {}
+        OptionsDialogPresStub(AbstractEWAppController* c) : m_Controller(c) {}
         virtual ~OptionsDialogPresStub() {}
 
-        virtual bool saveData(const ConfigData& data) {return true;}
+        virtual bool saveData(const ConfigData& m_Data) {return true;}
         virtual void init(AbstractOptionsDialog* dialog) {}
 
-        AbstractEWAppController* controller;
-        ConfigData data;
+        AbstractEWAppController* m_Controller;
+        ConfigData m_Data;
     protected:
     private:
 };
