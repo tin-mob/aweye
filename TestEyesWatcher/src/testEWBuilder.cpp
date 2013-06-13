@@ -20,6 +20,7 @@
 
 
 #include <unittest++/UnitTest++.h>
+#include <memory>
 
 #include "MsgHandlerStub.h"
 #include "ConfigImplStub.h"
@@ -54,10 +55,9 @@ SUITE(TestEWBuilder)
     TEST_FIXTURE(EWBuilderFixture, TestBuild)
     {
         const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerStub,
-            TimeHandlerStub, TimeKeeperStub, TimerStub, EWAppControllerStub,
-            EWPresenterStub, EWMainFramePresStub, EWMainFrameStub,
-            EWTaskBarPresStub, EWTaskbarStub, OptionsDialogPresStub,
-            BuiOptDisPresStub, DisOptDiaCmdStub> builder(&setTop, path, true);
+            TimeHandlerStub, TimeKeeperStub, TimerStub, EWAppControllerStub, EWPresenterStub,
+            EWMainFramePresStub, EWMainFrameStub, EWTaskBarPresStub, EWTaskbarStub,
+            OptionsDialogPresStub, BuiOptDisPresStub, DisOptDiaCmdStub> builder(&setTop, path, true);
 
         CHECK_EQUAL(false, builder.links.m_MsgHandler == nullptr);
         CHECK_EQUAL(false, builder.links.m_ConfigImpl == nullptr);
@@ -133,10 +133,9 @@ SUITE(TestEWBuilder)
     {
         // building it is the test...
         const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStubFail, PresenceHandlerStub,
-            TimeHandlerStub, TimeKeeperStub, TimerStub, EWAppControllerStub,
-            EWPresenterStub, EWMainFramePresStub, EWMainFrameStub,
-            EWTaskBarPresStub, EWTaskbarStub, OptionsDialogPresStub,
-            BuiOptDisPresStub, DisOptDiaCmdStub> builder(&setTop, path, true);
+            TimeHandlerStub, TimeKeeperStub, TimerStub, EWAppControllerStub, EWPresenterStub,
+            EWMainFramePresStub, EWMainFrameStub, EWTaskBarPresStub, EWTaskbarStub,
+            OptionsDialogPresStub, BuiOptDisPresStub, DisOptDiaCmdStub> builder(&setTop, path, true);
     }
 
     TEST_FIXTURE(EWBuilderFixture, TestBuildBadConfigUnrecovered)
@@ -145,10 +144,9 @@ SUITE(TestEWBuilder)
         try
         {
             const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStubFail, PresenceHandlerStub,
-                TimeHandlerStub, TimeKeeperStub, TimerStub, EWAppControllerStub,
-                EWPresenterStub, EWMainFramePresStub, EWMainFrameStub,
-                EWTaskBarPresStub, EWTaskbarStub, OptionsDialogPresStub,
-                BuiOptDisPresStubFail, DisOptDiaCmdStubFail> builder(&setTop, path, true);
+            TimeHandlerStub, TimeKeeperStub, TimerStub, EWAppControllerStub, EWPresenterStub,
+            EWMainFramePresStub, EWMainFrameStub, EWTaskBarPresStub, EWTaskbarStub,
+            OptionsDialogPresStub, BuiOptDisPresStub, DisOptDiaCmdStubFail> builder(&setTop, path, true);
         }
         catch (InvalidConfigFileException)
         {

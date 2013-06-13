@@ -26,6 +26,7 @@
 #include "SetTopWindowInt.h"
 
 class wxCmdLineParser;
+template <class T> class no_delete;
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
     class TTimeHandler, class TTimeKeeper, class TTimer, class TEWAppController,
     class TEWPresenter, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
@@ -49,6 +50,7 @@ class OptionsDialog;
 class OptionsDialogPres;
 class BuilderOptionsDialogPres;
 class DisplayOptionsDialogCmd;
+class AbstractMsgHandler;
 class EWApp : public wxApp, public SetTopWindowInt
 {
     public:
@@ -63,7 +65,9 @@ class EWApp : public wxApp, public SetTopWindowInt
         EWBuilder<MsgHandler, wxConfigImpl, Config, WebcamHandlerProc,
             TimeHandler, TimeKeeper, MyWxTimer, EWAppController, EWPresenter,
             EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
-            OptionsDialogPres, BuilderOptionsDialogPres, DisplayOptionsDialogCmd>* m_AppImpl;
+            OptionsDialogPres, BuilderOptionsDialogPres, DisplayOptionsDialogCmd>
+            * m_AppImpl;
+
         wxString m_ConfigPath;
 };
 

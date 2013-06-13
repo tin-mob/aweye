@@ -44,6 +44,23 @@
 #include "EWTaskBar.h"
 #include "DisplayOptionsDialogCmd.h"
 
+#include <memory>
+
+template <class T> class no_delete
+{
+    public:
+        no_delete() {}
+        void operator()(T* ptr) const {}
+};
+
+// EWMainFrame is managed by wx
+template <>
+struct PtrTraits<EWMainFrame>
+{
+  typedef typename std::unique_ptr<EWMainFrame, no_delete<EWMainFrame>> Ptr;
+};
+
+
 IMPLEMENT_APP(EWApp);
 
 EWApp::EWApp() : m_AppImpl(nullptr)
@@ -66,10 +83,10 @@ bool EWApp::OnInit()
     {
     	if (m_AppImpl == nullptr)
     	{
-    	    m_AppImpl = new EWBuilder<MsgHandler, wxConfigImpl, Config,
-                WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, EWAppController,
-                EWPresenter, EWMainFramePres, EWMainFrame, EWTaskBarPres,
-                EWTaskBar, OptionsDialogPres, BuilderOptionsDialogPres, DisplayOptionsDialogCmd>
+    	    m_AppImpl = new EWBuilder<MsgHandler, wxConfigImpl, Config, WebcamHandlerProc,
+                TimeHandler, TimeKeeper, MyWxTimer, EWAppController, EWPresenter,
+                EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
+                OptionsDialogPres, BuilderOptionsDialogPres, DisplayOptionsDialogCmd>
                 (this, std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable());
     	}
     }

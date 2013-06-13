@@ -43,14 +43,19 @@
 #include "SetTopWindowInt.h"
 #include "AbstractCommand.h"
 
-/// @todo we know that TEWMainFrame is managed by wx;
-/// remove this knowledge
+template <class T>
+struct PtrTraits
+{
+  typedef typename std::unique_ptr<T> Ptr;
+};
+
 
 // for testing
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
     class TTimeHandler, class TTimeKeeper, class TTimer, class TEWAppController,
     class TEWPresenter, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
-    class TEWTaskbar, class TOptionsDialogPres, class TBuilderOptionsDialogPres, class TDisplayOptionsDialogCmd>
+    class TEWTaskbar, class TOptionsDialogPres, class TBuilderOptionsDialogPres,
+    class TDisplayOptionsDialogCmd>
 struct EWBuild
 {
     const TMsgHandler* m_MsgHandler;
@@ -64,7 +69,7 @@ struct EWBuild
     const TEWAppController* m_AppController;
     const TEWPresenter* m_Presenter;
     const TEWMainFramePres* m_MainFramePres;
-    const TEWMainFrame* m_MainFrame; // managed by wx
+    const TEWMainFrame* m_MainFrame;
     const TEWTaskbarPres* m_TaskBarPres;
     const TEWTaskbar* m_TaskBar;
     const TOptionsDialogPres* m_OptionsPres;
@@ -74,7 +79,8 @@ struct EWBuild
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
     class TTimeHandler, class TTimeKeeper, class TTimer, class TEWAppController,
     class TEWPresenter, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
-    class TEWTaskbar, class TOptionsDialogPres, class TBuilderOptionsDialogPres, class TDisplayOptionsDialogCmd>
+    class TEWTaskbar, class TOptionsDialogPres, class TBuilderOptionsDialogPres,
+    class TDisplayOptionsDialogCmd>
 class EWBuilder
 {
     public:
@@ -114,7 +120,7 @@ class EWBuilder
                     data.soundAlarm, data.soundPath, data.runningLateThreshold));
 
                 m_MainFramePres.reset(new TEWMainFramePres(*m_Presenter, *m_AppController));
-                m_MainFrame = new TEWMainFrame(*m_MainFramePres, canCreateTaskbar && data.trayIcon);
+                m_MainFrame.reset(new TEWMainFrame(*m_MainFramePres, canCreateTaskbar && data.trayIcon));
 
                 if (canCreateTaskbar && data.trayIcon)
                 {
@@ -130,7 +136,7 @@ class EWBuilder
 
                 if (topInt != nullptr)
                 {
-                    topInt->setTopWindow(m_MainFrame);
+                    topInt->setTopWindow(&*m_MainFrame);
                 }
             }
             catch (BaseException e)
@@ -149,26 +155,42 @@ class EWBuilder
         {
             return {&*m_MsgHandler, &*m_ConfigImpl, &*m_Config, &*m_PresenceHandler,
                 &*m_TimeHandler, &*m_TimeKeeper, &*m_CheckTimer, &*m_ClockTimer,
-                &*m_AppController, &*m_Presenter, &*m_MainFramePres, m_MainFrame,
+                &*m_AppController, &*m_Presenter, &*m_MainFramePres, &*m_MainFrame,
                 &*m_TaskBarPres, &*m_TaskBar, &*m_OptionsPres, &*m_DisplayOptionsDialogCmd};
         }
     private:
-        std::unique_ptr<TMsgHandler> m_MsgHandler;
-        std::unique_ptr<TConfigImpl> m_ConfigImpl;
-        std::unique_ptr<TConfig> m_Config;
-        std::unique_ptr<TPresenceHandler> m_PresenceHandler;
-        std::unique_ptr<TTimeHandler> m_TimeHandler;
-        std::unique_ptr<TTimeKeeper> m_TimeKeeper;
-        std::unique_ptr<TTimer> m_CheckTimer;
-        std::unique_ptr<TTimer> m_ClockTimer;
-        std::unique_ptr<TEWAppController> m_AppController;
-        std::unique_ptr<TEWPresenter> m_Presenter;
-        std::unique_ptr<TEWMainFramePres> m_MainFramePres;
-        TEWMainFrame* m_MainFrame; // managed by wx
-        std::unique_ptr<TEWTaskbarPres> m_TaskBarPres;
-        std::unique_ptr<TEWTaskbar> m_TaskBar;
-        std::unique_ptr<TOptionsDialogPres> m_OptionsPres;
-        std::unique_ptr<TDisplayOptionsDialogCmd> m_DisplayOptionsDialogCmd;
+        typedef class PtrTraits<TMsgHandler>::Ptr TMsgHandlerPtr;
+        typedef class PtrTraits<TConfigImpl>::Ptr TConfigImplPtr;
+        typedef class PtrTraits<TConfig>::Ptr TConfigPtr;
+        typedef class PtrTraits<TPresenceHandler>::Ptr TPresenceHandlerPtr;
+        typedef class PtrTraits<TTimeHandler>::Ptr TTimeHandlerPtr;
+        typedef class PtrTraits<TTimeKeeper>::Ptr TTimeKeeperPtr;
+        typedef class PtrTraits<TTimer>::Ptr TTimerPtr;
+        typedef class PtrTraits<TEWAppController>::Ptr TEWAppControllerPtr;
+        typedef class PtrTraits<TEWPresenter>::Ptr TEWPresenterPtr;
+        typedef class PtrTraits<TEWMainFramePres>::Ptr TEWMainFramePresPtr;
+        typedef class PtrTraits<TEWMainFrame>::Ptr TEWMainFramePtr;
+        typedef class PtrTraits<TEWTaskbarPres>::Ptr TEWTaskbarPresPtr;
+        typedef class PtrTraits<TEWTaskbar>::Ptr TEWTaskbarPtr;
+        typedef class PtrTraits<TOptionsDialogPres>::Ptr TOptionsDialogPresPtr;
+        typedef class PtrTraits<TDisplayOptionsDialogCmd>::Ptr TDisplayOptionsDialogCmdPtr;
+
+        TMsgHandlerPtr m_MsgHandler;
+        TConfigImplPtr m_ConfigImpl;
+        TConfigPtr m_Config;
+        TPresenceHandlerPtr m_PresenceHandler;
+        TTimeHandlerPtr m_TimeHandler;
+        TTimeKeeperPtr m_TimeKeeper;
+        TTimerPtr m_CheckTimer;
+        TTimerPtr m_ClockTimer;
+        TEWAppControllerPtr m_AppController;
+        TEWPresenterPtr m_Presenter;
+        TEWMainFramePresPtr m_MainFramePres;
+        TEWMainFramePtr m_MainFrame;
+        TEWTaskbarPresPtr m_TaskBarPres;
+        TEWTaskbarPtr m_TaskBar;
+        TOptionsDialogPresPtr m_OptionsPres;
+        TDisplayOptionsDialogCmdPtr m_DisplayOptionsDialogCmd;
 };
 
 #endif // EWBUILDER_H

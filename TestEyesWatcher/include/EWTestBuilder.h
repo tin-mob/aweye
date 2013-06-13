@@ -25,21 +25,23 @@
 #include "EWBuilder.h"
 
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
-    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWAppController, class TEWPresenter,
-    class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
-    class TEWTaskbar, class TOptionsDialogPres, class TBuilderOptionsDialogPres, class TDisplayOptionsDialogCmd>
-class EWTestBuilder : public EWBuilder<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler,
-    TTimeHandler, TTimeKeeper, TTimer, TEWAppController, TEWPresenter, TEWMainFramePres,
-    TEWMainFrame, TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres, TBuilderOptionsDialogPres, TDisplayOptionsDialogCmd>
+    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWAppController,
+    class TEWPresenter, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
+    class TEWTaskbar, class TOptionsDialogPres, class TBuilderOptionsDialogPres,
+    class TDisplayOptionsDialogCmd>
+class EWTestBuilder : public EWBuilder<TMsgHandler, TConfigImpl,
+    TConfig, TPresenceHandler, TTimeHandler, TTimeKeeper, TTimer, TEWAppController,
+    TEWPresenter, TEWMainFramePres, TEWMainFrame, TEWTaskbarPres, TEWTaskbar,
+    TOptionsDialogPres, TBuilderOptionsDialogPres, TDisplayOptionsDialogCmd>
 {
     public:
         EWTestBuilder(SetTopWindowInt* topInt, std::string configPath, bool canCreateTaskbar) :
-            EWBuilder<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler,
-                TTimeHandler, TTimeKeeper, TTimer, TEWAppController, TEWPresenter, TEWMainFramePres,
-                TEWMainFrame, TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres,
-                TBuilderOptionsDialogPres, TDisplayOptionsDialogCmd>
+            EWBuilder<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler, TTimeHandler,
+            TTimeKeeper, TTimer, TEWAppController, TEWPresenter, TEWMainFramePres,
+            TEWMainFrame, TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres,
+            TBuilderOptionsDialogPres, TDisplayOptionsDialogCmd>
                 (topInt, configPath, canCreateTaskbar),
-                links(this->getBuild()){}
+            links(this->getBuild()){}
 
         virtual ~EWTestBuilder() {}
 
