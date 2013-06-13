@@ -23,6 +23,7 @@
 #define TIMEKEEPER_H
 
 #include <map>
+#include <memory>
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 #include "TKState.h"
 #include "AbstractTimeKeeper.h"
@@ -78,11 +79,10 @@ class TimeKeeper : public AbstractTimeKeeper
         friend class TKStateAway;
         friend class TKStateOff;
 
-        void deleteStates();
         void setStatus(Status status, bool cancelled = false);
         boost::posix_time::time_duration getUpdateOffset() const;
 
-        std::map<Status,TKState*> m_States;
+        std::map<Status,std::unique_ptr<TKState>> m_States;
         Status m_CurrentState;
 
         AbstractTimeHandler& m_TimeHandler;

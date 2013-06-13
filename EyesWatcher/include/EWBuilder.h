@@ -145,6 +145,9 @@ class EWBuilder
                 throw;
             }
         }
+        EWBuilder(const EWBuilder&) = delete;
+        EWBuilder& operator=(const EWBuilder&) = delete;
+
         virtual ~EWBuilder() {}
     protected:
         // for testing

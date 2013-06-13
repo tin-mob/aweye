@@ -26,6 +26,7 @@
 #include "AbstractPresenceHandler.h"
 
 #include "boost/date_time/posix_time/posix_time.hpp"
+#include <memory>
 
 TimeKeeper::TimeKeeper(AbstractTimeHandler& timeHandler,
                    AbstractPresenceHandler& presenceHandler,
@@ -36,6 +37,7 @@ TimeKeeper::TimeKeeper(AbstractTimeHandler& timeHandler,
                    unsigned int pauseTol,
                    unsigned int workTol,
                    bool cummulPause):
+    m_CurrentState(TimeKeeper::OFF),
     m_TimeHandler(timeHandler), m_PresenceHandler(presenceHandler),
     m_HereDur(boost::posix_time::seconds(0)),
     m_AwayDur(boost::posix_time::seconds(0)),
@@ -50,29 +52,13 @@ TimeKeeper::TimeKeeper(AbstractTimeHandler& timeHandler,
     m_CheckFreq(checkFreq), m_PauseTol(pauseTol), m_WorkTol(workTol),
     m_CummulPause(cummulPause)
 {
-    try
-    {
-        m_States[AbstractTimeKeeper::OFF] = new TKStateOff();
-        m_States[AbstractTimeKeeper::AWAY] = new TKStateAway();
-        m_States[AbstractTimeKeeper::HERE] = new TKStateHere();
-    }
-    catch (...)
-    {
-       deleteStates();
-       throw; //rethrow. no memory leak
-    }
-    m_CurrentState = TimeKeeper::OFF;
+    m_States[AbstractTimeKeeper::OFF].reset(new TKStateOff());
+    m_States[AbstractTimeKeeper::AWAY].reset(new TKStateAway());
+    m_States[AbstractTimeKeeper::HERE].reset(new TKStateHere());
 }
 
 TimeKeeper::~TimeKeeper()
 {
-    deleteStates();
-}
-
-void TimeKeeper::deleteStates()
-{
-    for (std::map<Status,TKState*>::iterator it = m_States.begin() ; it != m_States.end(); ++it)
-        delete it->second;
 }
 
 void TimeKeeper::start()
@@ -129,24 +115,24 @@ void TimeKeeper::notifyHibernated()
 void TimeKeeper::updateStatus()
 {
     m_StartTimeUpdate = m_TimeHandler.getTime();
-    TKState* state = m_States.find(m_CurrentState)->second;
-    state->updateStatus(*this);
+    TKState& upState = *m_States.find(m_CurrentState)->second;
+    upState.updateStatus(*this);
 
-    state = m_States.find(m_CurrentState)->second;
-    state->addDuration(*this);
+    TKState& durState = *m_States.find(m_CurrentState)->second;
+    durState.addDuration(*this);
     m_LastUpdate = m_StartTimeUpdate;
 }
 
 boost::posix_time::time_duration TimeKeeper::getTimerInterval() const
 {
-    const TKState* state = m_States.find(m_CurrentState)->second;
-    return state->getTimerInterval(*this);
+    const TKState& state = *m_States.find(m_CurrentState)->second;
+    return state.getTimerInterval(*this);
 }
 
 bool TimeKeeper::isLate() const
 {
-    const TKState* state = m_States.find(m_CurrentState)->second;
-    return state->isLate(*this);
+    const TKState& state = *m_States.find(m_CurrentState)->second;
+    return state.isLate(*this);
 }
 
 TimeKeeper::Status TimeKeeper::getStatus() const
@@ -156,14 +142,14 @@ TimeKeeper::Status TimeKeeper::getStatus() const
 
 boost::posix_time::time_duration TimeKeeper::getInterval() const
 {
-    const TKState* state = m_States.find(m_CurrentState)->second;
-    return state->getInterval(*this);
+    const TKState& state = *m_States.find(m_CurrentState)->second;
+    return state.getInterval(*this);
 }
 
 boost::posix_time::time_duration TimeKeeper::getTimeLeft() const
 {
-    const TKState* state = m_States.find(m_CurrentState)->second;
-    return state->getTimeLeft(*this);
+    const TKState& state = *m_States.find(m_CurrentState)->second;
+    return state.getTimeLeft(*this);
 }
 
 boost::posix_time::ptime TimeKeeper::getHereStamp() const
@@ -178,16 +164,16 @@ boost::posix_time::ptime TimeKeeper::getAwayStamp() const
 
 boost::posix_time::time_duration TimeKeeper::getWorkTimeLeft() const
 {
-    const TKState* state = m_States.find(m_CurrentState)->second;
-    return state->getWorkTimeLeft(*this);
+    const TKState& state = *m_States.find(m_CurrentState)->second;
+    return state.getWorkTimeLeft(*this);
 }
 
 void TimeKeeper::setStatus(Status status, bool cancelled)
 {
     m_CurrentState = status;
 
-    TKState* state = m_States.find(m_CurrentState)->second;
-    return state->initState(*this, cancelled);
+    TKState& state = *m_States.find(m_CurrentState)->second;
+    return state.initState(*this, cancelled);
 
     m_TolerationTime = boost::posix_time::ptime(boost::posix_time::not_a_date_time);
 }

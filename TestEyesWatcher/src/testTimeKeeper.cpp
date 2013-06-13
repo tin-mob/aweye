@@ -33,9 +33,9 @@ struct TimeKeeperFixture
             data({boost::posix_time::seconds(5), boost::posix_time::seconds(7),
                 boost::posix_time::seconds(1), boost::posix_time::seconds(2),1,1}),
             timeHandler(TimeHandlerStub()),
-            presenceHandler(), keeper(TimeKeeper(timeHandler, presenceHandler,
+            presenceHandler(), keeper(timeHandler, presenceHandler,
                 data.workLength, data.pauseLength, data.remFreq, data.checkFreq,
-                data.pauseTol, data.workTol, data.cummulPause))
+                data.pauseTol, data.workTol, data.cummulPause)
         {
         }
 
