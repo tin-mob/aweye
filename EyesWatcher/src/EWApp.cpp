@@ -69,7 +69,6 @@ EWApp::EWApp() : m_AppImpl(nullptr)
 
 EWApp::~EWApp()
 {
-    if (m_AppImpl != nullptr) delete m_AppImpl;
 }
 
 bool EWApp::OnInit()
@@ -81,13 +80,13 @@ bool EWApp::OnInit()
     wxInitAllImageHandlers();
     if ( wxsOK )
     {
-    	if (m_AppImpl == nullptr)
+    	if (m_AppImpl.get() == nullptr)
     	{
-    	    m_AppImpl = new EWBuilder<MsgHandler, wxConfigImpl, Config, WebcamHandlerProc,
+    	    m_AppImpl.reset(new EWBuilder<MsgHandler, wxConfigImpl, Config, WebcamHandlerProc,
                 TimeHandler, TimeKeeper, MyWxTimer, EWAppController, EWPresenter,
                 EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
                 OptionsDialogPres, BuilderOptionsDialogPres, DisplayOptionsDialogCmd>
-                (this, std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable());
+                (this, std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable()));
     	}
     }
     return wxsOK;

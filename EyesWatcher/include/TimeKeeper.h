@@ -48,6 +48,9 @@ class TimeKeeper : public AbstractTimeKeeper
                    bool cummulPause);
         virtual ~TimeKeeper();
 
+        TimeKeeper(const TimeKeeper&) = delete;
+        TimeKeeper& operator=(const TimeKeeper&) = delete;
+
         virtual void start();
         virtual void stop();
         virtual void notifyHibernated();

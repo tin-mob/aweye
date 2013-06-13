@@ -22,6 +22,7 @@
 #ifndef EWAPP_H
 #define EWAPP_H
 
+#include <memory>
 #include <wx/app.h>
 #include "SetTopWindowInt.h"
 
@@ -55,18 +56,22 @@ class EWApp : public wxApp, public SetTopWindowInt
 {
     public:
         EWApp();
-       ~EWApp();
+        ~EWApp();
+
+        EWApp(const EWApp&) = delete;
+        EWApp& operator=(const EWApp&) = delete;
+
         virtual bool OnInit();
         virtual void OnInitCmdLine(wxCmdLineParser& parser);
         virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
 
         virtual void setTopWindow(AbstractEWMainFrame* frame);
     private:
-        EWBuilder<MsgHandler, wxConfigImpl, Config, WebcamHandlerProc,
+        std::unique_ptr<EWBuilder<MsgHandler, wxConfigImpl, Config, WebcamHandlerProc,
             TimeHandler, TimeKeeper, MyWxTimer, EWAppController, EWPresenter,
             EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
-            OptionsDialogPres, BuilderOptionsDialogPres, DisplayOptionsDialogCmd>
-            * m_AppImpl;
+            OptionsDialogPres, BuilderOptionsDialogPres, DisplayOptionsDialogCmd>>
+            m_AppImpl;
 
         wxString m_ConfigPath;
 };
