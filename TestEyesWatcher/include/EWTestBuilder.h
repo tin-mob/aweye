@@ -43,7 +43,7 @@ class EWTestBuilder : public EWBuilder<TMsgHandler, TConfigImpl, TConfig, TPrese
 
         virtual ~EWTestBuilder() {}
 
-        EWBuild<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler,
+        const EWBuild<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler,
                 TTimeHandler, TTimeKeeper, TTimer, TEWAppController, TEWPresenter, TEWMainFramePres,
                 TEWMainFrame, TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres,
                 TBuilderOptionsDialogPres, TDisplayOptionsDialogCmd> links;

@@ -142,7 +142,7 @@ class EWBuilder
         virtual ~EWBuilder() {}
     protected:
         // for testing
-        EWBuild<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler,
+        const EWBuild<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler,
                 TTimeHandler, TTimeKeeper, TTimer, TEWAppController, TEWPresenter, TEWMainFramePres,
                 TEWMainFrame, TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres,
                 TBuilderOptionsDialogPres, TDisplayOptionsDialogCmd> getBuild()
