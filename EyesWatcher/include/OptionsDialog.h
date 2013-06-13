@@ -45,7 +45,7 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 {
 	public:
 
-		OptionsDialog(wxWindow* parent, AbstractOptionsDialogPres* presenter, wxWindowID id=wxID_ANY);
+		OptionsDialog(wxWindow* parent, AbstractOptionsDialogPres& presenter, wxWindowID id=wxID_ANY);
 		virtual ~OptionsDialog();
 
         virtual ConfigData getData() const;
@@ -136,7 +136,7 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 		//*)
 		void OnOKClick(wxCommandEvent& event);
 
-		AbstractOptionsDialogPres* m_Presenter;
+		AbstractOptionsDialogPres& m_Presenter;
 
 		DECLARE_EVENT_TABLE()
 };

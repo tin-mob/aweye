@@ -41,7 +41,7 @@ class AbstractOptionsDialogPres;
 class EWMainFrame: public wxFrame, public AbstractEWMainFrame
 {
     public:
-        EWMainFrame(AbstractEWViewPres<AbstractEWMainFrame>* presenter,
+        EWMainFrame(AbstractEWViewPres<AbstractEWMainFrame>& presenter,
                     bool taskbarCreated = true, wxWindow* parent = nullptr, wxWindowID id = -1);
         virtual ~EWMainFrame();
 
@@ -104,7 +104,7 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
         wxStaticText* m_LeftLabel;
         //*)
 
-        AbstractEWViewPres<AbstractEWMainFrame>* m_Presenter;
+        AbstractEWViewPres<AbstractEWMainFrame>& m_Presenter;
         bool m_TaskbarCreated;
 
         DECLARE_EVENT_TABLE()

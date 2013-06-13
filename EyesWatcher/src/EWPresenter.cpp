@@ -34,9 +34,9 @@
 #include <stdlib.h>
 
 /// @todo EWPresenter to EWTimeKeeperPresenter,
-EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractTimeKeeper* keeper,
-                         AbstractTimer* checkTimer, AbstractTimer* clockTimer,
-                         AbstractTimeHandler* timeHandler,
+EWPresenter::EWPresenter(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& keeper,
+                         AbstractTimer& checkTimer, AbstractTimer& clockTimer,
+                         AbstractTimeHandler& timeHandler,
                          bool popupAlarm, bool soundAlarm, std::string soundPath,
                          boost::posix_time::time_duration runningLateThreshold)
     : m_Warn(true), m_Shown(true), m_TimeKeeper(keeper), m_MsgHandler(msgHandler),
@@ -45,14 +45,8 @@ EWPresenter::EWPresenter(AbstractMsgHandler* msgHandler, AbstractTimeKeeper* kee
     m_RunningLateThreshold(runningLateThreshold),
     m_LastTimeUpdate(boost::posix_time::not_a_date_time)
 {
-    assert(msgHandler);
-    assert(keeper);
-    assert(checkTimer);
-    assert(clockTimer);
-    assert(timeHandler);
-
-    m_CheckTimer->attach(this);
-    m_ClockTimer->attach(this);
+    m_CheckTimer.attach(this);
+    m_ClockTimer.attach(this);
 }
 
 EWPresenter::~EWPresenter()
@@ -63,24 +57,24 @@ void EWPresenter::start()
 {
     try
     {
-        m_TimeKeeper->start();
-        m_CheckTimer->startTimer(m_TimeKeeper->getTimerInterval().total_milliseconds(), true);
+        m_TimeKeeper.start();
+        m_CheckTimer.startTimer(m_TimeKeeper.getTimerInterval().total_milliseconds(), true);
         notify(&EWViewObserver::OnStatusUpdate, this);
 
-        m_ClockTimer->startTimer(1000, false);
-        m_LastTimeUpdate = m_TimeHandler->getTime();
+        m_ClockTimer.startTimer(1000, false);
+        m_LastTimeUpdate = m_TimeHandler.getTime();
     }
     catch (BaseException e)
     {
-        m_MsgHandler->displayError(e.what());
+        m_MsgHandler.displayError(e.what());
     }
 }
 
 void EWPresenter::stop()
 {
-    m_TimeKeeper->stop();
-    m_CheckTimer->stopTimer();
-    m_ClockTimer->stopTimer();
+    m_TimeKeeper.stop();
+    m_CheckTimer.stopTimer();
+    m_ClockTimer.stopTimer();
     notify(&EWViewObserver::OnStatusUpdate, this);
 }
 
@@ -99,43 +93,43 @@ void EWPresenter::updateStatus()
 {
     try
     {
-        m_TimeKeeper->updateStatus();
-        m_CheckTimer->startTimer(m_TimeKeeper->getTimerInterval().total_milliseconds(), true);
+        m_TimeKeeper.updateStatus();
+        m_CheckTimer.startTimer(m_TimeKeeper.getTimerInterval().total_milliseconds(), true);
         notify(&EWViewObserver::OnStatusUpdate, this);
 
-        if (m_TimeKeeper->isLate() && m_TimeKeeper->getStatus() == AbstractTimeKeeper::HERE)
+        if (m_TimeKeeper.isLate() && m_TimeKeeper.getStatus() == AbstractTimeKeeper::HERE)
         {
             alert();
         }
     }
     catch (BaseException e)
     {
-        m_MsgHandler->displayError(e.what());
-        m_TimeKeeper->stop();
+        m_MsgHandler.displayError(e.what());
+        m_TimeKeeper.stop();
     }
 }
 
 void EWPresenter::updateTimes()
 {
     // if it has been a long time since last ring and is running, we have hibernated
-    if (m_TimeHandler->getTime() - m_LastTimeUpdate >
+    if (m_TimeHandler.getTime() - m_LastTimeUpdate >
         boost::posix_time::minutes(1))
     {
-        m_TimeKeeper->notifyHibernated();
+        m_TimeKeeper.notifyHibernated();
         updateStatus();
     }
 
     notify(&EWViewObserver::OnTimeUpdate, this);
-    m_LastTimeUpdate = m_TimeHandler->getTime();
+    m_LastTimeUpdate = m_TimeHandler.getTime();
 }
 
 void EWPresenter::onTimerRing(AbstractTimer* timer)
 {
-    if (timer == m_ClockTimer)
+    if (timer == &m_ClockTimer)
     {
         updateTimes();
     }
-    else if (timer == m_CheckTimer)
+    else if (timer == &m_CheckTimer)
     {
         updateStatus();
     }
@@ -153,7 +147,7 @@ void EWPresenter::togglePause()
 
 void EWPresenter::toggleStart()
 {
-    if(m_TimeKeeper->getStatus() != AbstractTimeKeeper::OFF)
+    if(m_TimeKeeper.getStatus() != AbstractTimeKeeper::OFF)
     {
         stop();
     }
@@ -189,7 +183,7 @@ std::string EWPresenter::getPauseButtonLabel() const
 
 std::string EWPresenter::getStartButtonLabel() const
 {
-    if (m_TimeKeeper->getStatus() != AbstractTimeKeeper::OFF)
+    if (m_TimeKeeper.getStatus() != AbstractTimeKeeper::OFF)
     {
         return m_StopBtnLabel;
     }
@@ -202,23 +196,23 @@ std::string EWPresenter::getStartButtonLabel() const
 
 std::string EWPresenter::getStatus() const
 {
-    return m_TimeKeeper->getStatusStr();
+    return m_TimeKeeper.getStatusStr();
 }
 
 std::string EWPresenter::getIconName()const
 {
-    if (m_TimeKeeper->getStatus() == AbstractTimeKeeper::OFF)
+    if (m_TimeKeeper.getStatus() == AbstractTimeKeeper::OFF)
     {
         return m_StopWebcamIcon;
     }
-    else if (m_TimeKeeper->getStatus() == AbstractTimeKeeper::AWAY &&
-             m_TimeKeeper->getTimeLeft() <= boost::posix_time::seconds(0))
+    else if (m_TimeKeeper.getStatus() == AbstractTimeKeeper::AWAY &&
+             m_TimeKeeper.getTimeLeft() <= boost::posix_time::seconds(0))
     {
         return m_GreenWebcamIcon;
     }
     else
     {
-        const boost::posix_time::time_duration timeLeft = m_TimeKeeper->getWorkTimeLeft();
+        const boost::posix_time::time_duration timeLeft = m_TimeKeeper.getWorkTimeLeft();
         if (timeLeft > m_RunningLateThreshold)
         {
             return m_GreenWebcamIcon;
@@ -254,25 +248,25 @@ std::string EWPresenter::durationToString(boost::posix_time::time_duration durat
 
 std::string EWPresenter::getTimeOn() const
 {
-    const boost::posix_time::time_duration stamp = m_TimeKeeper->getHereStamp().time_of_day();
+    const boost::posix_time::time_duration stamp = m_TimeKeeper.getHereStamp().time_of_day();
     return EWPresenter::durationToString(stamp);
 }
 
 std::string EWPresenter::getTimeOff() const
 {
-    const boost::posix_time::time_duration stamp = m_TimeKeeper->getAwayStamp().time_of_day();
+    const boost::posix_time::time_duration stamp = m_TimeKeeper.getAwayStamp().time_of_day();
     return EWPresenter::durationToString(stamp);
 }
 
 std::string EWPresenter::getTimeRunning() const
 {
-    const boost::posix_time::time_duration stamp = m_TimeKeeper->getInterval();
+    const boost::posix_time::time_duration stamp = m_TimeKeeper.getInterval();
     return EWPresenter::durationToString(stamp);
 }
 
 std::string EWPresenter::getTimeLeft() const
 {
-    const boost::posix_time::time_duration stamp = m_TimeKeeper->getTimeLeft();
+    const boost::posix_time::time_duration stamp = m_TimeKeeper.getTimeLeft();
     return EWPresenter::durationToString(stamp);
 }
 
@@ -310,11 +304,11 @@ void EWPresenter::alert()
     }
     if (m_PopupAlarm)
     {
-        m_MsgHandler->displayAlert(m_LateMsg);
+        m_MsgHandler.displayAlert(m_LateMsg);
     }
 
     if (m_SoundAlarm)
     {
-        m_MsgHandler->playSound(m_SoundPath);
+        m_MsgHandler.playSound(m_SoundPath);
     }
 }

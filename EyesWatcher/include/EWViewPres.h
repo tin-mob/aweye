@@ -31,17 +31,15 @@ template <class TView>
 class EWViewPres : public EWViewObserver, public AbstractEWViewPres<TView>
 {
     public:
-        EWViewPres(AbstractEWPresenter* presenter, AbstractEWAppController* controller) :
+        EWViewPres(AbstractEWPresenter& presenter, AbstractEWAppController& controller) :
             m_Presenter(presenter), m_Controller(controller)
         {
-            assert(presenter);
-            assert(controller);
-            m_Presenter->attach(this);
+            m_Presenter.attach(this);
         }
 
         virtual ~EWViewPres()
         {
-            m_Presenter->detach(this);
+            m_Presenter.detach(this);
         }
 
         virtual void OnStatusUpdate(AbstractEWPresenter*)
@@ -67,7 +65,7 @@ class EWViewPres : public EWViewObserver, public AbstractEWViewPres<TView>
 
         virtual void OnViewQuit()
         {
-            m_Presenter->quit();
+            m_Presenter.quit();
         }
 
         virtual void OnViewAbout()
@@ -76,22 +74,22 @@ class EWViewPres : public EWViewObserver, public AbstractEWViewPres<TView>
 
         virtual void OnViewOptionsButtonClick()
         {
-            m_Controller->displayOptionsDialog();
+            m_Controller.displayOptionsDialog();
         }
 
         virtual void OnViewStartStop()
         {
-            m_Presenter->toggleStart();
+            m_Presenter.toggleStart();
         }
 
         virtual void OnViewPauseResume()
         {
-            m_Presenter->togglePause();
+            m_Presenter.togglePause();
         }
 
         virtual void OnViewHideRestore()
         {
-            m_Presenter->show(!m_Presenter->isShown());
+            m_Presenter.show(!m_Presenter.isShown());
         }
 
     protected:
@@ -99,8 +97,8 @@ class EWViewPres : public EWViewObserver, public AbstractEWViewPres<TView>
         virtual void doTimeUpdate() = 0;
         virtual void doQuit() = 0;
 
-        AbstractEWPresenter* m_Presenter;
-        AbstractEWAppController* m_Controller;
+        AbstractEWPresenter& m_Presenter;
+        AbstractEWAppController& m_Controller;
     private:
 };
 

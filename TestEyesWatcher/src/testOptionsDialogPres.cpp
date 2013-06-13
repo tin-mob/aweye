@@ -26,7 +26,7 @@
 
 struct OptionsDialogPresFixture
 {
-    OptionsDialogPresFixture() : ctrl(true), pres(&ctrl){}
+    OptionsDialogPresFixture() : ctrl(true), pres(ctrl){}
     ~OptionsDialogPresFixture() {}
 
     EWAppControllerStub ctrl;
@@ -46,7 +46,7 @@ SUITE(TestOptionsDialogPres)
     {
         OptionsDialogStub dialog;
         ctrl.m_Data = {boost::posix_time::not_a_date_time};
-        pres.init(&dialog);
+        pres.init(dialog);
         CHECK_EQUAL(ctrl.m_Data, dialog.getData());
         CHECK_EQUAL(false, dialog.m_Disabled);
     }
@@ -54,11 +54,11 @@ SUITE(TestOptionsDialogPres)
     TEST_FIXTURE(OptionsDialogPresFixture, TestInitNoTray)
     {
         EWAppControllerStub ctrl2(false);
-        OptionsDialogPres pres2(&ctrl2);
+        OptionsDialogPres pres2(ctrl2);
         OptionsDialogStub dialog;
 
         ctrl2.m_Data = {boost::posix_time::not_a_date_time};
-        pres2.init(&dialog);
+        pres2.init(dialog);
         CHECK_EQUAL(ctrl2.m_Data, dialog.getData());
         CHECK_EQUAL(true, dialog.m_Disabled);
     }

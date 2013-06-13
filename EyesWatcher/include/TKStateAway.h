@@ -30,14 +30,14 @@ class TKStateAway : public TKState
         TKStateAway();
         virtual ~TKStateAway();
 
-        virtual void updateStatus(TimeKeeper* parent);
-        virtual void initState(TimeKeeper* parent, bool cancelled);
-        virtual boost::posix_time::time_duration getTimerInterval(const TimeKeeper* parent) const;
-        virtual bool isLate(const TimeKeeper* parent) const;
-        virtual boost::posix_time::time_duration getInterval(const TimeKeeper* parent) const;
-        virtual boost::posix_time::time_duration getTimeLeft(const TimeKeeper* parent, bool isUpdate = false) const;
-        virtual boost::posix_time::time_duration getWorkTimeLeft(const TimeKeeper* parent) const;
-        virtual void addDuration(TimeKeeper* parent);
+        virtual void updateStatus(TimeKeeper& parent);
+        virtual void initState(TimeKeeper& parent, bool cancelled);
+        virtual boost::posix_time::time_duration getTimerInterval(const TimeKeeper& parent) const;
+        virtual bool isLate(const TimeKeeper& parent) const;
+        virtual boost::posix_time::time_duration getInterval(const TimeKeeper& parent) const;
+        virtual boost::posix_time::time_duration getTimeLeft(const TimeKeeper& parent, bool isUpdate = false) const;
+        virtual boost::posix_time::time_duration getWorkTimeLeft(const TimeKeeper& parent) const;
+        virtual void addDuration(TimeKeeper& parent);
     protected:
     private:
 };

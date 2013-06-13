@@ -24,9 +24,8 @@
 #include "OptionsDialog.h"
 
 DisplayOptionsDialogCmd::DisplayOptionsDialogCmd(
-    AbstractOptionsDialogPres* presenter) : m_Presenter(presenter)
+    AbstractOptionsDialogPres& presenter) : m_Presenter(presenter)
 {
-    assert(presenter);
 }
 
 DisplayOptionsDialogCmd::~DisplayOptionsDialogCmd()

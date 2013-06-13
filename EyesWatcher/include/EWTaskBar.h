@@ -34,7 +34,7 @@ class AbstractEWViewPres;
 class EWTaskBar : public AbstractEWTaskbar, public wxTaskBarIcon, public ObservableWxMenuObserver
 {
     public:
-        EWTaskBar(AbstractEWViewPres<AbstractEWTaskbar>* presenter);
+        EWTaskBar(AbstractEWViewPres<AbstractEWTaskbar>& presenter);
         virtual ~EWTaskBar();
         virtual void setPopupMenuCommands( std::string hideRestoreLabel,
             std::string startStopLabel, std::string pauseResumeLabel);
@@ -52,7 +52,7 @@ class EWTaskBar : public AbstractEWTaskbar, public wxTaskBarIcon, public Observa
 
         virtual wxMenu* CreatePopupMenu();
 
-        AbstractEWViewPres<AbstractEWTaskbar>* m_Presenter;
+        AbstractEWViewPres<AbstractEWTaskbar>& m_Presenter;
         ObservableWxMenu* m_Menu;
 
         enum Menu_IDS

@@ -28,8 +28,8 @@
 class EWMainFramePresStub : public AbstractEWViewPres<AbstractEWMainFrame>
 {
     public:
-        EWMainFramePresStub(AbstractEWPresenter* p, AbstractEWAppController* c) :
-            m_Presenter(p), m_Controller(c) {}
+        EWMainFramePresStub(AbstractEWPresenter& p, AbstractEWAppController& c) :
+            m_Presenter(&p), m_Controller(&c) {}
         virtual ~EWMainFramePresStub() {}
 
         virtual void forceUpdate() {}

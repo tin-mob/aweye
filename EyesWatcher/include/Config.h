@@ -29,7 +29,7 @@ class AbstractConfigImpl;
 class Config : public AbstractConfig
 {
     public:
-        Config(AbstractConfigImpl* impl);
+        Config(AbstractConfigImpl& impl);
         virtual ~Config();
 
         virtual void load();
@@ -42,7 +42,7 @@ class Config : public AbstractConfig
     private:
         void write();
 
-        AbstractConfigImpl* m_Impl;
+        AbstractConfigImpl& m_Impl;
         ConfigData m_data;
         bool m_HasInvalidData;
 };

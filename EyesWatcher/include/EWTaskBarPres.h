@@ -31,7 +31,7 @@ class AbstractEWTaskbar;
 class EWTaskBarPres : public EWViewPres<AbstractEWTaskbar>
 {
     public:
-        EWTaskBarPres(AbstractEWPresenter* pres, AbstractEWAppController* controller);
+        EWTaskBarPres(AbstractEWPresenter& pres, AbstractEWAppController& controller);
         virtual ~EWTaskBarPres();
     protected:
     private:
@@ -39,7 +39,6 @@ class EWTaskBarPres : public EWViewPres<AbstractEWTaskbar>
         virtual void doTimeUpdate();
         virtual void doQuit();
 
-        AbstractEWTaskbar* m_TaskBar;
         std::string m_LastIcon;
 };
 

@@ -30,15 +30,15 @@ class AbstractOptionsDialog;
 class BuilderOptionsDialogPres :  public AbstractOptionsDialogPres
 {
     public:
-        BuilderOptionsDialogPres(AbstractConfig* config,
-            AbstractMsgHandler* msgHandler, bool canCreateTaskBar);
+        BuilderOptionsDialogPres(AbstractConfig& config,
+            AbstractMsgHandler& msgHandler, bool canCreateTaskBar);
         virtual ~BuilderOptionsDialogPres();
         virtual bool saveData(const ConfigData& data);
-        virtual void init(AbstractOptionsDialog* dialog);
+        virtual void init(AbstractOptionsDialog& dialog);
     protected:
     private:
-        AbstractConfig* m_Config;
-        AbstractMsgHandler* m_MsgHandler;
+        AbstractConfig& m_Config;
+        AbstractMsgHandler& m_MsgHandler;
         bool m_CanCreateTaskBar;
 };
 

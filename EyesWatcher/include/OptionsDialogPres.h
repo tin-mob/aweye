@@ -30,13 +30,13 @@ class AbstractOptionsDialog;
 class OptionsDialogPres :  public AbstractOptionsDialogPres
 {
     public:
-        OptionsDialogPres(AbstractEWAppController* controller);
+        OptionsDialogPres(AbstractEWAppController& controller);
         virtual ~OptionsDialogPres();
         virtual bool saveData(const ConfigData& data);
-        virtual void init(AbstractOptionsDialog* dialog);
+        virtual void init(AbstractOptionsDialog& dialog);
     protected:
     private:
-        AbstractEWAppController* m_Controller;
+        AbstractEWAppController& m_Controller;
 };
 
 #endif // OPTIONSDIALOGPRES_H

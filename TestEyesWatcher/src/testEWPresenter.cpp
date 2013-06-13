@@ -39,8 +39,8 @@ struct EWPresenterFixture
                 boost::posix_time::seconds(1), boost::posix_time::seconds(2)}),
             msgHandler(), timeHandler(), keeper(), checkTimer(), clockTimer(),
             dialog(), viewObserver(),
-            presenter(EWPresenter(&msgHandler, &keeper, &checkTimer,
-                &clockTimer, &timeHandler, data.popupAlarm, true, data.soundPath))
+            presenter(EWPresenter(msgHandler, keeper, checkTimer,
+                clockTimer, timeHandler, data.popupAlarm, true, data.soundPath))
         {
             data.soundAlarm = true;
             presenter.attach(&viewObserver);

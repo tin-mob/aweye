@@ -78,10 +78,9 @@ BEGIN_EVENT_TABLE(OptionsDialog,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-OptionsDialog::OptionsDialog(wxWindow* parent, AbstractOptionsDialogPres* presenter, wxWindowID id) :
+OptionsDialog::OptionsDialog(wxWindow* parent, AbstractOptionsDialogPres& presenter, wxWindowID id) :
                              m_Presenter(presenter)
 {
-    assert(presenter);
 	//(*Initialize(OptionsDialog)
 	wxFlexGridSizer* runningLateFlexGridSizer;
 	wxFlexGridSizer* wrkFlexGridSizer;
@@ -255,7 +254,7 @@ OptionsDialog::OptionsDialog(wxWindow* parent, AbstractOptionsDialogPres* presen
 	optionsFlexGridSizer->Fit(this);
 	optionsFlexGridSizer->SetSizeHints(this);
 	//*)
-    m_Presenter->init(this);
+    m_Presenter.init(*this);
 
 	Connect(wxID_OK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&OptionsDialog::OnOKClick);
 }
@@ -325,7 +324,7 @@ void OptionsDialog::disableTray()
 
 void OptionsDialog::OnOKClick(wxCommandEvent& event)
 {
-    if (m_Presenter->saveData(getData()))
+    if (m_Presenter.saveData(getData()))
     {
         EndModal(wxID_OK);
     }

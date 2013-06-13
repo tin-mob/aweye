@@ -42,6 +42,17 @@ class EWPresenterStub : public AbstractEWPresenter
             m_Paused(false), m_Started(false), m_Quitted(false),
             m_StatusUpdated(false), m_TimesUpdated(false), m_DisplayValues(),
             m_MsgHandler(mH), m_Keeper(k), m_CheckTimer(chT), m_ClockTimer(clT), m_TimeHandler(tH) {}
+
+        EWPresenterStub(AbstractMsgHandler& mH, AbstractTimeKeeper& k,
+            AbstractTimer& chT, AbstractTimer& clT,
+            AbstractTimeHandler& tH, bool pA,
+            bool sA, std::string sP,
+            boost::posix_time::time_duration rLT) :
+            m_PopupAlarm(pA), m_SoundAlarm(sA), m_SoundPath(sP), m_RunningLateThreshold(rLT),
+            m_Paused(false), m_Started(false), m_Quitted(false),
+            m_StatusUpdated(false), m_TimesUpdated(false), m_DisplayValues(),
+            m_MsgHandler(&mH), m_Keeper(&k), m_CheckTimer(&chT), m_ClockTimer(&clT), m_TimeHandler(&tH) {}
+
         virtual ~EWPresenterStub() {}
 
         virtual void togglePause() {m_Paused = !m_Paused;}

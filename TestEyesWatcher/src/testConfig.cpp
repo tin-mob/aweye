@@ -39,7 +39,7 @@ SUITE(TestConfig)
     TEST_FIXTURE(ConfigFixture, TestValidation)
     {
         ConfigData data;
-        const Config config(&impl);
+        const Config config(impl);
 
         CHECK_EQUAL(true, config.validateData(data));
 
@@ -88,7 +88,7 @@ SUITE(TestConfig)
 
     TEST_FIXTURE(ConfigFixture, TestEmptyConstruction)
     {
-        const Config config(&impl);
+        const Config config(impl);
 
         ConfigData data = config.getData();
         CHECK_EQUAL(ConfigData(), data);
@@ -99,8 +99,8 @@ SUITE(TestConfig)
         ConfigData data;
         const ConfigData srcData = ConfigStub::getTestData();
 
-        Config config(&impl);
-        Config config2(&impl);
+        Config config(impl);
+        Config config2(impl);
         config.save(srcData);
 
         config2.load();
@@ -108,7 +108,7 @@ SUITE(TestConfig)
 
         CHECK_EQUAL(srcData, data);
 
-        Config config3(&impl);
+        Config config3(impl);
         config3.load();
         data = config3.getData();
 
@@ -119,18 +119,18 @@ SUITE(TestConfig)
     TEST_FIXTURE(ConfigFixture, TestInvalidSave)
     {
         const ConfigData data = {boost::posix_time::neg_infin};
-        Config config(&impl);
+        Config config(impl);
         CHECK_THROW(config.save(data), InvalidConfigDataException);
     }
 
     TEST_FIXTURE(ConfigFixture, TestInvalidLoad)
     {
-        Config config(&impl);
+        Config config(impl);
         config.save({});
         CHECK_EQUAL(false, config.hasInvalidData());
 
         impl.m_FailName = impl.read(std::string("CascadePath"), std::string("ShouldNotBeUsed"));
-        Config config2(&impl);
+        Config config2(impl);
         CHECK_EQUAL(true, config2.hasInvalidData());
     }
 }

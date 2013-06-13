@@ -29,7 +29,7 @@ class AbstractOptionsDialogPres
     public:
         virtual ~AbstractOptionsDialogPres() {}
         virtual bool saveData(const ConfigData& data) = 0;
-        virtual void init(AbstractOptionsDialog* dialog) = 0;
+        virtual void init(AbstractOptionsDialog& dialog) = 0;
     protected:
     private:
 };

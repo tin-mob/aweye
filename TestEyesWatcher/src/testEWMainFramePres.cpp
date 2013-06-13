@@ -27,7 +27,7 @@
 
 struct EWMainFramePresFixture
 {
-    EWMainFramePresFixture() : ctrl(true), pres(), framePres(&pres, &ctrl)
+    EWMainFramePresFixture() : ctrl(true), pres(), framePres(pres, ctrl)
     {
         framePres.attachView(&frame);
     }

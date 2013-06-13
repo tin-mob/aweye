@@ -18,6 +18,7 @@
 
  **************************************************************/
 
+/// @todo use a visitor maybe?
 
 #include "EWAppController.h"
 #include "ConfigData.h"

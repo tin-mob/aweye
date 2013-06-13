@@ -27,12 +27,10 @@
 #include "AbstractOptionsDialog.h"
 #include "BaseException.h"
 
-BuilderOptionsDialogPres::BuilderOptionsDialogPres(AbstractConfig* config,
-    AbstractMsgHandler* msgHandler, bool canCreateTaskBar) :
+BuilderOptionsDialogPres::BuilderOptionsDialogPres(AbstractConfig& config,
+    AbstractMsgHandler& msgHandler, bool canCreateTaskBar) :
     m_Config(config), m_MsgHandler(msgHandler), m_CanCreateTaskBar(canCreateTaskBar)
 {
-    assert(config);
-    assert(msgHandler);
 }
 
 BuilderOptionsDialogPres::~BuilderOptionsDialogPres()
@@ -43,21 +41,21 @@ bool BuilderOptionsDialogPres::saveData(const ConfigData& data)
 {
     try
     {
-        m_Config->save(data);
+        m_Config.save(data);
     }
     catch (BaseException e)
     {
-        m_MsgHandler->displayError(e.what());
+        m_MsgHandler.displayError(e.what());
         return false;
     }
     return true;
 }
 
-void BuilderOptionsDialogPres::init(AbstractOptionsDialog* dialog)
+void BuilderOptionsDialogPres::init(AbstractOptionsDialog& dialog)
 {
-    dialog->setData(m_Config->getData());
+    dialog.setData(m_Config.getData());
     if (!m_CanCreateTaskBar)
     {
-        dialog->disableTray();
+        dialog.disableTray();
     }
 }

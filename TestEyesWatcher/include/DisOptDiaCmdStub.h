@@ -27,8 +27,8 @@
 class DisOptDiaCmdStub : public CommandStub
 {
     public:
-        DisOptDiaCmdStub(AbstractOptionsDialogPres* pres = nullptr, bool s = true) :
-                         CommandStub(s), m_Presenter(pres) {}
+        DisOptDiaCmdStub(AbstractOptionsDialogPres& pres, bool s = true) :
+                         CommandStub(s), m_Presenter(&pres) {}
         virtual ~DisOptDiaCmdStub() {}
 
         AbstractOptionsDialogPres* m_Presenter;
@@ -39,7 +39,7 @@ class DisOptDiaCmdStub : public CommandStub
 class DisOptDiaCmdStubFail : public DisOptDiaCmdStub
 {
     public:
-        DisOptDiaCmdStubFail(AbstractOptionsDialogPres* pres = nullptr) :
+        DisOptDiaCmdStubFail(AbstractOptionsDialogPres& pres) :
                          DisOptDiaCmdStub(pres, false) {}
 };
 

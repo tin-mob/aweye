@@ -30,15 +30,13 @@ class AbstractEWMainFrame;
 class EWMainFramePres : public EWViewPres<AbstractEWMainFrame>
 {
     public:
-        EWMainFramePres(AbstractEWPresenter* pres, AbstractEWAppController* controller);
+        EWMainFramePres(AbstractEWPresenter& pres, AbstractEWAppController& controller);
         virtual ~EWMainFramePres();
     protected:
         virtual void doStatusUpdate();
         virtual void doTimeUpdate();
         virtual void doQuit();
     private:
-
-        AbstractEWMainFrame* m_Frame;
 };
 
 #endif // EWMAINFRAMEPRES_H

@@ -52,6 +52,23 @@ class TimeKeeperStub : public AbstractTimeKeeper
             m_WorkLength(wl), m_PauseLength(pl), m_RemFreq(rf), m_CheckFreq(cf), m_PauseTol(pt),
             m_WorkTol(wt), m_CummulPause(cup), m_TimeHandler(th), m_PresenceHandler(ph)
             {}
+        TimeKeeperStub(AbstractTimeHandler& th,
+                   AbstractPresenceHandler& ph,
+                   boost::posix_time::time_duration wl = boost::posix_time::time_duration(00,00,00),
+                   boost::posix_time::time_duration pl = boost::posix_time::time_duration(00,00,01),
+                   boost::posix_time::time_duration rf = boost::posix_time::time_duration(00,00,10),
+                   boost::posix_time::time_duration cf = boost::posix_time::time_duration(00,00,11),
+                   unsigned int pt = 1000,
+                   unsigned int wt = 1000,
+                   bool cup = false) :
+            m_Fail(false), m_Late(false), m_Hibernated(false), m_Status(AbstractTimeKeeper::OFF),
+            m_HereStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(10,59,00))),
+            m_AwayStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(11,31,01))),
+            m_Interval(boost::posix_time::seconds(2)), m_Left(boost::posix_time::minutes(3)),
+            m_WorkLeft(boost::posix_time::minutes(1)),
+            m_WorkLength(wl), m_PauseLength(pl), m_RemFreq(rf), m_CheckFreq(cf), m_PauseTol(pt),
+            m_WorkTol(wt), m_CummulPause(cup), m_TimeHandler(&th), m_PresenceHandler(&ph)
+            {}
         virtual ~TimeKeeperStub() {}
 
         virtual void start()

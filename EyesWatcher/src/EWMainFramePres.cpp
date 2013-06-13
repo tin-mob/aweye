@@ -25,7 +25,7 @@
 #include "BaseException.h"
 #include "AbstractEWAppController.h"
 
-EWMainFramePres::EWMainFramePres(AbstractEWPresenter* pres, AbstractEWAppController* controller) :
+EWMainFramePres::EWMainFramePres(AbstractEWPresenter& pres, AbstractEWAppController& controller) :
     EWViewPres(pres, controller)
 {
 }
@@ -39,17 +39,17 @@ void EWMainFramePres::doStatusUpdate()
     assert(m_View != nullptr);
     if (m_View == nullptr) return;
 
-    const bool shown = m_Presenter->isShown();
+    const bool shown = m_Presenter.isShown();
     m_View->show(shown);
     if (shown)
     {
-        m_View->setPauseButtonLabel(m_Presenter->getPauseButtonLabel());
-        m_View->setStartButtonLabel(m_Presenter->getStartButtonLabel());
+        m_View->setPauseButtonLabel(m_Presenter.getPauseButtonLabel());
+        m_View->setStartButtonLabel(m_Presenter.getStartButtonLabel());
 
         // times could change in a status update (stop)
-        m_View->setValues(m_Presenter->getStatus(), m_Presenter->getTimeOn(),
-            m_Presenter->getTimeOff(), m_Presenter->getTimeRunning(),
-            m_Presenter->getTimeLeft());
+        m_View->setValues(m_Presenter.getStatus(), m_Presenter.getTimeOn(),
+            m_Presenter.getTimeOff(), m_Presenter.getTimeRunning(),
+            m_Presenter.getTimeLeft());
     }
 }
 
@@ -58,11 +58,11 @@ void EWMainFramePres::doTimeUpdate()
     assert(m_View != nullptr);
     if (m_View == nullptr) return;
 
-    if (m_Presenter->isShown())
+    if (m_Presenter.isShown())
     {
-        m_View->setValues(m_Presenter->getStatus(), m_Presenter->getTimeOn(),
-            m_Presenter->getTimeOff(), m_Presenter->getTimeRunning(),
-            m_Presenter->getTimeLeft());
+        m_View->setValues(m_Presenter.getStatus(), m_Presenter.getTimeOn(),
+            m_Presenter.getTimeOff(), m_Presenter.getTimeRunning(),
+            m_Presenter.getTimeLeft());
     }
 }
 

@@ -22,6 +22,8 @@
 #ifndef ABSTRACTEWVIEWPRES_H
 #define ABSTRACTEWVIEWPRES_H
 
+/// @todo better way to go would use normal functions in a namespace...
+
 template <class TView>
 class AbstractEWViewPres
 {

@@ -33,109 +33,109 @@ TKStateAway::~TKStateAway()
 {
 }
 
-void TKStateAway::updateStatus(TimeKeeper* parent)
+void TKStateAway::updateStatus(TimeKeeper& parent)
 {
-    if (parent->m_PresenceHandler->isHere())
+    if (parent.m_PresenceHandler.isHere())
     {
-        if (parent->m_NumTolerated != 0 ||
+        if (parent.m_NumTolerated != 0 ||
             getTimeLeft(parent, true) > boost::posix_time::time_duration(0,0,0,0))
         {
-            if (parent->m_PauseTol > 0)
+            if (parent.m_PauseTol > 0)
             {
-                if (parent->m_NumTolerated++ == 0)
+                if (parent.m_NumTolerated++ == 0)
                 {
-                    parent->m_TolerationTime = parent->m_LastUpdate;
+                    parent.m_TolerationTime = parent.m_LastUpdate;
                 }
             }
-            if (parent->m_PauseTol == 0 || parent->m_NumTolerated > parent->m_PauseTol)
+            if (parent.m_PauseTol == 0 || parent.m_NumTolerated > parent.m_PauseTol)
             {
-                parent->setStatus(AbstractTimeKeeper::HERE, true);
+                parent.setStatus(AbstractTimeKeeper::HERE, true);
             }
         }
         else
         {
-            parent->setStatus(AbstractTimeKeeper::HERE);
+            parent.setStatus(AbstractTimeKeeper::HERE);
         }
     }
     else
     {
-        parent->m_NumTolerated = 0;
+        parent.m_NumTolerated = 0;
     }
 }
 
-void TKStateAway::initState(TimeKeeper* parent, bool cancelled)
+void TKStateAway::initState(TimeKeeper& parent, bool cancelled)
 {
-    parent->m_NumTolerated = 0;
-    parent->m_LastAwayStamp = parent->m_AwayStamp;
+    parent.m_NumTolerated = 0;
+    parent.m_LastAwayStamp = parent.m_AwayStamp;
 
     if (cancelled)
     {
-        if (!parent->m_TolerationTime.is_special())
+        if (!parent.m_TolerationTime.is_special())
         {
             const boost::posix_time::time_duration interval =
-                parent->m_StartTimeUpdate - parent->m_TolerationTime;
-            parent->m_AwayDur += interval;
-            parent->m_HereDur -= interval;
-            parent->m_AwayStamp = parent->m_TolerationTime;
+                parent.m_StartTimeUpdate - parent.m_TolerationTime;
+            parent.m_AwayDur += interval;
+            parent.m_HereDur -= interval;
+            parent.m_AwayStamp = parent.m_TolerationTime;
         }
         else
         {
-            parent->m_AwayStamp = parent->m_LastUpdate;
+            parent.m_AwayStamp = parent.m_LastUpdate;
         }
     }
     else
     {
-        parent->m_AwayDur = boost::posix_time::seconds(0);
-        parent->m_AwayStamp = parent->m_LastUpdate;
+        parent.m_AwayDur = boost::posix_time::seconds(0);
+        parent.m_AwayStamp = parent.m_LastUpdate;
     }
 }
 
-boost::posix_time::time_duration TKStateAway::getTimerInterval(const TimeKeeper* parent) const
+boost::posix_time::time_duration TKStateAway::getTimerInterval(const TimeKeeper& parent) const
 {
-    boost::posix_time::time_duration timerInterval = parent->m_CheckFreq;
+    boost::posix_time::time_duration timerInterval = parent.m_CheckFreq;
     const boost::posix_time::time_duration remaining = getTimeLeft(parent);
 
     if (remaining <= boost::posix_time::seconds(0))
     {
-        timerInterval = parent->m_CheckFreq;
+        timerInterval = parent.m_CheckFreq;
     }
-    else if (remaining < parent->m_CheckFreq)
+    else if (remaining < parent.m_CheckFreq)
     {
         timerInterval = remaining;
     }
-    return timerInterval - parent->getUpdateOffset();
+    return timerInterval - parent.getUpdateOffset();
 }
 
-bool TKStateAway::isLate(const TimeKeeper* parent) const
+bool TKStateAway::isLate(const TimeKeeper& parent) const
 {
-    return parent->m_WorkLength <= parent->m_HereDur &&
-        parent->m_AwayDur < parent->m_PauseLength;
+    return parent.m_WorkLength <= parent.m_HereDur &&
+        parent.m_AwayDur < parent.m_PauseLength;
 }
 
-boost::posix_time::time_duration TKStateAway::getInterval(const TimeKeeper* parent) const
+boost::posix_time::time_duration TKStateAway::getInterval(const TimeKeeper& parent) const
 {
-    return parent->m_AwayDur + (parent->m_TimeHandler->getTime() - parent->m_LastUpdate);
+    return parent.m_AwayDur + (parent.m_TimeHandler.getTime() - parent.m_LastUpdate);
 }
 
-boost::posix_time::time_duration TKStateAway::getTimeLeft(const TimeKeeper* parent, bool isUpdate) const
+boost::posix_time::time_duration TKStateAway::getTimeLeft(const TimeKeeper& parent, bool isUpdate) const
 {
-    return parent->m_PauseLength - parent->m_AwayDur -
-        ((isUpdate ? parent->m_StartTimeUpdate : parent->m_TimeHandler->getTime()) - parent->m_LastUpdate);
+    return parent.m_PauseLength - parent.m_AwayDur -
+        ((isUpdate ? parent.m_StartTimeUpdate : parent.m_TimeHandler.getTime()) - parent.m_LastUpdate);
 }
 
-boost::posix_time::time_duration TKStateAway::getWorkTimeLeft(const TimeKeeper* parent) const
+boost::posix_time::time_duration TKStateAway::getWorkTimeLeft(const TimeKeeper& parent) const
 {
-    if (parent->m_AwayDur < parent->m_PauseLength)
+    if (parent.m_AwayDur < parent.m_PauseLength)
     {
-        return parent->m_WorkLength - parent->m_HereDur;
+        return parent.m_WorkLength - parent.m_HereDur;
     }
     else
     {
-        return parent->m_WorkLength;
+        return parent.m_WorkLength;
     }
 }
 
-void TKStateAway::addDuration(TimeKeeper* parent)
+void TKStateAway::addDuration(TimeKeeper& parent)
 {
-    parent->m_AwayDur += (parent->m_StartTimeUpdate - parent->m_LastUpdate);
+    parent.m_AwayDur += (parent.m_StartTimeUpdate - parent.m_LastUpdate);
 }

@@ -23,7 +23,7 @@
 #include "AbstractEWPresenter.h"
 #include "AbstractEWTaskbar.h"
 
-EWTaskBarPres::EWTaskBarPres(AbstractEWPresenter* presenter, AbstractEWAppController* controller) :
+EWTaskBarPres::EWTaskBarPres(AbstractEWPresenter& presenter, AbstractEWAppController& controller) :
     EWViewPres(presenter, controller), m_LastIcon("")
 {
 }
@@ -38,11 +38,11 @@ void EWTaskBarPres::doStatusUpdate()
     if (m_View == nullptr) return;
 
     m_View->setPopupMenuCommands(
-        m_Presenter->getHideButtonLabel(),
-        m_Presenter->getStartButtonLabel(),
-        m_Presenter->getPauseButtonLabel());
+        m_Presenter.getHideButtonLabel(),
+        m_Presenter.getStartButtonLabel(),
+        m_Presenter.getPauseButtonLabel());
 
-    const std::string newIcon = m_Presenter->getIconName();
+    const std::string newIcon = m_Presenter.getIconName();
     if (newIcon != m_LastIcon)
     {
         m_LastIcon = newIcon;
@@ -56,12 +56,12 @@ void EWTaskBarPres::doTimeUpdate()
     if (m_View == nullptr) return;
 
     m_View->setPopupMenuTimes(
-        "Last Session : " + m_Presenter->getTimeOn(),
-        "Last Pause : " + m_Presenter->getTimeOff(),
-        "Running : " + m_Presenter->getTimeRunning(),
-        "Time Left : " + m_Presenter->getTimeLeft());
+        "Last Session : " + m_Presenter.getTimeOn(),
+        "Last Pause : " + m_Presenter.getTimeOff(),
+        "Running : " + m_Presenter.getTimeRunning(),
+        "Time Left : " + m_Presenter.getTimeLeft());
 
-    const std::string newIcon = m_Presenter->getIconName();
+    const std::string newIcon = m_Presenter.getIconName();
     if (newIcon != m_LastIcon)
     {
         m_LastIcon = newIcon;

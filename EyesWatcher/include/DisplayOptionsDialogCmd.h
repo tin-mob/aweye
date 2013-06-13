@@ -28,12 +28,12 @@ class AbstractOptionsDialogPres;
 class DisplayOptionsDialogCmd : public AbstractCommand
 {
     public:
-        DisplayOptionsDialogCmd(AbstractOptionsDialogPres* presenter);
+        DisplayOptionsDialogCmd(AbstractOptionsDialogPres& presenter);
         virtual ~DisplayOptionsDialogCmd();
         virtual bool execute();
     protected:
     private:
-        AbstractOptionsDialogPres* m_Presenter;
+        AbstractOptionsDialogPres& m_Presenter;
 };
 
 #endif // DISPLAYOPTIONSDIALOGCMD_H

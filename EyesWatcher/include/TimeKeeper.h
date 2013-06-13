@@ -36,8 +36,8 @@ class AbstractTimeHandler;
 class TimeKeeper : public AbstractTimeKeeper
 {
     public:
-        TimeKeeper(AbstractTimeHandler* timeHandler,
-                   AbstractPresenceHandler* presenceHandler,
+        TimeKeeper(AbstractTimeHandler& timeHandler,
+                   AbstractPresenceHandler& presenceHandler,
                    boost::posix_time::time_duration workLength,
                    boost::posix_time::time_duration pauseLength,
                    boost::posix_time::time_duration remFreq,
@@ -85,8 +85,8 @@ class TimeKeeper : public AbstractTimeKeeper
         std::map<Status,TKState*> m_States;
         Status m_CurrentState;
 
-        AbstractTimeHandler* m_TimeHandler;
-        AbstractPresenceHandler* m_PresenceHandler;
+        AbstractTimeHandler& m_TimeHandler;
+        AbstractPresenceHandler& m_PresenceHandler;
 
         boost::posix_time::time_duration m_HereDur;
         boost::posix_time::time_duration m_AwayDur;

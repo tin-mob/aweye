@@ -32,8 +32,8 @@ class ConfigStub : public AbstractConfig
     public:
         ConfigStub(ConfigData data = ConfigData()) : m_Impl(nullptr), m_Fail(false),
             m_Invalid(false), m_data(data) {}
-        ConfigStub(AbstractConfigImpl* i, bool invalid = false) :
-            m_Impl(i), m_Fail(false), m_Invalid(invalid) {}
+        ConfigStub(AbstractConfigImpl& i, bool invalid = false) :
+            m_Impl(&i), m_Fail(false), m_Invalid(invalid) {}
         virtual ~ConfigStub() {}
         virtual void load() {}
         virtual void save(const ConfigData& data)
@@ -84,7 +84,7 @@ class ConfigStub : public AbstractConfig
 class ConfigStubFail : public ConfigStub
 {
     public :
-        ConfigStubFail(AbstractConfigImpl* i) : ConfigStub(i, true){}
+        ConfigStubFail(AbstractConfigImpl& i) : ConfigStub(i, true){}
 };
 
 #endif // CONFIGSTUB_H

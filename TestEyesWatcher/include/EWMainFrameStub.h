@@ -33,6 +33,13 @@ class EWMainFrameStub : public AbstractEWMainFrame
             m_Closed(false), m_Shown(false), m_Status(""),
             m_OnClock(""), m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
             m_PauseLabel(""), m_StartLabel(""), m_Presenter(p), m_TaskbarCreated(tc) {}
+
+        EWMainFrameStub(AbstractEWViewPres<AbstractEWMainFrame>& p,
+            bool tc = true) :
+            m_Closed(false), m_Shown(false), m_Status(""),
+            m_OnClock(""), m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
+            m_PauseLabel(""), m_StartLabel(""), m_Presenter(&p), m_TaskbarCreated(tc) {}
+
         virtual ~EWMainFrameStub() {}
 
         virtual void setValues( std::string s, std::string onC,

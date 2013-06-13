@@ -28,8 +28,8 @@
 class EWTaskBarPresStub : public AbstractEWViewPres<AbstractEWTaskbar>
 {
     public:
-        EWTaskBarPresStub(AbstractEWPresenter* p, AbstractEWAppController* c) :
-            m_Presenter(p), m_Controller(c) {}
+        EWTaskBarPresStub(AbstractEWPresenter& p, AbstractEWAppController& c) :
+            m_Presenter(&p), m_Controller(&c) {}
         virtual ~EWTaskBarPresStub() {}
 
         virtual void forceUpdate() {}

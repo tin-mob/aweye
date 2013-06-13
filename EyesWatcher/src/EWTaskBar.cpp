@@ -32,11 +32,10 @@ BEGIN_EVENT_TABLE(EWTaskBar,wxTaskBarIcon)
     EVT_MENU(ID_EXIT,EWTaskBar::OnMenuExit)
 END_EVENT_TABLE()
 
-EWTaskBar::EWTaskBar(AbstractEWViewPres<AbstractEWTaskbar>* presenter) :
+EWTaskBar::EWTaskBar(AbstractEWViewPres<AbstractEWTaskbar>& presenter) :
     m_Presenter(presenter), m_Menu(nullptr)
 {
-    assert(presenter);
-    m_Presenter->attachView(this);
+    m_Presenter.attachView(this);
 }
 
 EWTaskBar::~EWTaskBar()
@@ -92,7 +91,7 @@ wxMenu* EWTaskBar::CreatePopupMenu()
     m_Menu->Append(EWTaskBar::ID_LEFT_TIME, wxT("Time Left"));
 
     // force update
-    m_Presenter->forceUpdate();
+    m_Presenter.forceUpdate();
 
     return m_Menu;
 }
@@ -121,20 +120,20 @@ void EWTaskBar::onMenuDelete(ObservableWxMenu* menu)
 
 void EWTaskBar::OnMenuHideRestore(wxCommandEvent&)
 {
-    m_Presenter->OnViewHideRestore();
+    m_Presenter.OnViewHideRestore();
 }
 
 void EWTaskBar::OnMenuStartStop(wxCommandEvent&)
 {
-    m_Presenter->OnViewStartStop();
+    m_Presenter.OnViewStartStop();
 }
 
 void EWTaskBar::OnMenuPauseResume(wxCommandEvent&)
 {
-    m_Presenter->OnViewPauseResume();
+    m_Presenter.OnViewPauseResume();
 }
 
 void EWTaskBar::OnMenuExit(wxCommandEvent&)
 {
-    m_Presenter->OnViewQuit();
+    m_Presenter.OnViewQuit();
 }

@@ -29,14 +29,14 @@ class AbstractMsgHandler;
 class BuiOptDisPresStub : public AbstractOptionsDialogPres
 {
     public:
-        BuiOptDisPresStub(AbstractConfig* config, AbstractMsgHandler* msgHandler,
+        BuiOptDisPresStub(AbstractConfig& config, AbstractMsgHandler& msgHandler,
             bool canCreateTaskBar, bool fail = false) :
-            m_Config(config), m_MsgHandler(msgHandler),
+            m_Config(&config), m_MsgHandler(&msgHandler),
             m_CanCreateTaskBar(canCreateTaskBar), m_Fail(fail) {}
         virtual ~BuiOptDisPresStub() {}
 
         virtual bool saveData(const ConfigData& data) {return m_Fail;}
-        virtual void init(AbstractOptionsDialog* dialog) {}
+        virtual void init(AbstractOptionsDialog& dialog) {}
 
         AbstractConfig* m_Config;
         AbstractMsgHandler* m_MsgHandler;
@@ -50,7 +50,7 @@ class BuiOptDisPresStub : public AbstractOptionsDialogPres
 class BuiOptDisPresStubFail : public BuiOptDisPresStub
 {
     public:
-        BuiOptDisPresStubFail(AbstractConfig* config, AbstractMsgHandler* msgHandler,
+        BuiOptDisPresStubFail(AbstractConfig& config, AbstractMsgHandler& msgHandler,
             bool canCreateTaskBar) :
             BuiOptDisPresStub(config, msgHandler, canCreateTaskBar, true) {}
 };

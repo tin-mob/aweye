@@ -91,11 +91,10 @@ BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
     //*)
 END_EVENT_TABLE()
 
-EWMainFrame::EWMainFrame(AbstractEWViewPres<AbstractEWMainFrame>* presenter,
+EWMainFrame::EWMainFrame(AbstractEWViewPres<AbstractEWMainFrame>& presenter,
                          bool taskbarCreated, wxWindow* parent, wxWindowID id) :
                          m_Presenter(presenter), m_TaskbarCreated(taskbarCreated)
 {
-    assert(presenter);
     //(*Initialize(EWMainFrame)
     wxMenuItem* m_ExitMenuItem;
     wxBoxSizer* m_LeftBoxSizer;
@@ -174,7 +173,7 @@ EWMainFrame::EWMainFrame(AbstractEWViewPres<AbstractEWMainFrame>* presenter,
     Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&EWMainFrame::OnClose);
     //*)
 
-    m_Presenter->attachView(this);
+    m_Presenter.attachView(this);
 }
 
 EWMainFrame::~EWMainFrame()
@@ -222,7 +221,7 @@ void EWMainFrame::close()
 
 void EWMainFrame::OnQuit(wxCommandEvent& event)
 {
-    m_Presenter->OnViewQuit();
+    m_Presenter.OnViewQuit();
 }
 
 void EWMainFrame::OnAbout(wxCommandEvent& event)
@@ -233,26 +232,26 @@ void EWMainFrame::OnAbout(wxCommandEvent& event)
 
 void EWMainFrame::OnOptionsButtonClick(wxCommandEvent& event)
 {
-    m_Presenter->OnViewOptionsButtonClick();
+    m_Presenter.OnViewOptionsButtonClick();
 }
 
 void EWMainFrame::OnPlayButtonClick(wxCommandEvent& event)
 {
-    m_Presenter->OnViewStartStop();
+    m_Presenter.OnViewStartStop();
 }
 
 void EWMainFrame::OnClose(wxCloseEvent& event)
 {
     if (!event.CanVeto() || !m_TaskbarCreated)
     {
-        m_Presenter->OnViewQuit();
+        m_Presenter.OnViewQuit();
         Destroy();
     }
     event.Veto();
-    m_Presenter->OnViewHideRestore();
+    m_Presenter.OnViewHideRestore();
 }
 
 void EWMainFrame::OnPauseButtonClick(wxCommandEvent& event)
 {
-    m_Presenter->OnViewPauseResume();
+    m_Presenter.OnViewPauseResume();
 }

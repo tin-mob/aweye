@@ -41,8 +41,8 @@ class ConfigData;
 class EWPresenter : public AbstractEWPresenter, public TimerInterface
 {
     public:
-        EWPresenter(AbstractMsgHandler* msgHandler, AbstractTimeKeeper* keeper,
-                    AbstractTimer* checkTimer, AbstractTimer* clockTimer, AbstractTimeHandler* timeHandler,
+        EWPresenter(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& keeper,
+                    AbstractTimer& checkTimer, AbstractTimer& clockTimer, AbstractTimeHandler& timeHandler,
                     bool popupAlarm = true, bool soundAlarm = false, std::string soundPath = "",
                     boost::posix_time::time_duration runningLateThreshold = boost::posix_time::minutes(4));
         virtual ~EWPresenter();
@@ -84,11 +84,11 @@ class EWPresenter : public AbstractEWPresenter, public TimerInterface
         bool m_Warn;
         bool m_Shown;
 
-        AbstractTimeKeeper* m_TimeKeeper;
-        AbstractMsgHandler* m_MsgHandler;
-        AbstractTimer* m_CheckTimer;
-        AbstractTimer* m_ClockTimer;
-        AbstractTimeHandler* m_TimeHandler;
+        AbstractTimeKeeper& m_TimeKeeper;
+        AbstractMsgHandler& m_MsgHandler;
+        AbstractTimer& m_CheckTimer;
+        AbstractTimer& m_ClockTimer;
+        AbstractTimeHandler& m_TimeHandler;
 
         bool m_PopupAlarm;
         bool m_SoundAlarm;

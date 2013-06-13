@@ -31,6 +31,12 @@ class EWTaskbarStub : public AbstractEWTaskbar
             m_StartStopLabel(""), m_PauseResumeLabel(""), m_OnClock(""),
             m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
             m_Loc(""), m_Presenter(p){}
+
+        EWTaskbarStub(AbstractEWViewPres<AbstractEWTaskbar>& p) : m_HideRestoreLabel(""),
+            m_StartStopLabel(""), m_PauseResumeLabel(""), m_OnClock(""),
+            m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
+            m_Loc(""), m_Presenter(&p){}
+
         virtual ~EWTaskbarStub() {}
 
         virtual void setPopupMenuCommands( std::string hrl,
