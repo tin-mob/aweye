@@ -27,8 +27,8 @@
 int main()
 {
     // change if you want to run a single suite or test
-    std::string suite = "";
-    std::string test = "";
+    std::string suite = "TestEWPresenter";
+    std::string test = "TestHibernated";
     if( suite != "" || test != "")
     {
         const UnitTest::TestList& allTests( UnitTest::Test::GetTestList() );

@@ -116,7 +116,14 @@ void EWPresenter::updateTimes()
         boost::posix_time::minutes(1))
     {
         m_TimeKeeper.notifyHibernated();
-        updateStatus();
+
+        m_CheckTimer.startTimer(m_TimeKeeper.getTimerInterval().total_milliseconds(), true);
+        notify(&EWViewObserver::OnStatusUpdate, this);
+
+        if (m_TimeKeeper.isLate() && m_TimeKeeper.getStatus() == AbstractTimeKeeper::HERE)
+        {
+            alert();
+        }
     }
 
     notify(&EWViewObserver::OnTimeUpdate, this);

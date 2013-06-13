@@ -205,9 +205,10 @@ SUITE(TestEWPresenter)
         presenter.toggleStart();
         keeper.m_Status = AbstractTimeKeeper::OFF;
         timeHandler.setTime(timeHandler.getTime() + boost::posix_time::minutes(2));
+        checkTimer.m_Running = 0;
         clockTimer.ring();
         CHECK_EQUAL(viewObserver.checkTimeUpdated(), true);
         CHECK_EQUAL(keeper.m_Hibernated, true);
-        CHECK_EQUAL(keeper.m_Status, AbstractTimeKeeper::HERE);
+        CHECK_EQUAL(keeper.getTimerInterval().total_milliseconds(), checkTimer.m_Running);
     }
 }
