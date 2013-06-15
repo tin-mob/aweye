@@ -51,6 +51,8 @@ EWPresenter::EWPresenter(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& kee
 
 EWPresenter::~EWPresenter()
 {
+    m_CheckTimer.detach(this);
+    m_ClockTimer.detach(this);
 }
 
 void EWPresenter::start()
