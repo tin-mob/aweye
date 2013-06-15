@@ -34,7 +34,6 @@
 #include "AbstractTimeHandler.h"
 #include "AbstractTimeKeeper.h"
 #include "AbstractTimer.h"
-#include "AbstractEWAppController.h"
 #include "AbstractEWPresenter.h"
 #include "AbstractEWViewPres.h"
 #include "AbstractEWMainFrame.h"
@@ -49,13 +48,12 @@ struct PtrTraits
   typedef typename std::unique_ptr<T> Ptr;
 };
 
-
 // for testing
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
-    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWAppController,
-    class TEWPresenter, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
-    class TEWTaskbar, class TOptionsDialogPres, class TBuilderOptionsDialogPres,
-    class TDisplayOptionsDialogCmd>
+    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWPresenter,
+    class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
+    class TEWTaskbar, class TOptionsDialogPres, class TDisplayOptionsDialogCmd,
+    class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
 struct EWBuild
 {
     const TMsgHandler* m_MsgHandler;
@@ -66,7 +64,6 @@ struct EWBuild
     const TTimeKeeper* m_TimeKeeper;
     const TTimer* m_CheckTimer;
     const TTimer* m_ClockTimer;
-    const TEWAppController* m_AppController;
     const TEWPresenter* m_Presenter;
     const TEWMainFramePres* m_MainFramePres;
     const TEWMainFrame* m_MainFrame;
@@ -74,13 +71,16 @@ struct EWBuild
     const TEWTaskbar* m_TaskBar;
     const TOptionsDialogPres* m_OptionsPres;
     const TDisplayOptionsDialogCmd* m_DisplayOptionsDialogCmd;
+    const TTKConfigObserver* m_TKConfigObserver;
+    const TPresHdlrConfigObserver* m_PresHdlrConfigObserver;
+    const TEWPresConfigObserver* m_EWPresConfigObserver;
 };
 
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
-    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWAppController,
-    class TEWPresenter, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
-    class TEWTaskbar, class TOptionsDialogPres, class TBuilderOptionsDialogPres,
-    class TDisplayOptionsDialogCmd>
+    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWPresenter,
+    class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
+    class TEWTaskbar, class TOptionsDialogPres, class TDisplayOptionsDialogCmd,
+    class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
 class EWBuilder
 {
     public:
@@ -92,13 +92,13 @@ class EWBuilder
             {
                 m_ConfigImpl.reset(new TConfigImpl(configPath));
                 m_Config.reset(new TConfig(*m_ConfigImpl));
+                m_OptionsPres.reset(new TOptionsDialogPres(*m_MsgHandler, *m_Config, canCreateTaskbar));
+                m_DisplayOptionsDialogCmd.reset(new TDisplayOptionsDialogCmd(*m_OptionsPres));
+
                 if (m_Config->hasInvalidData())
                 {
-                    TBuilderOptionsDialogPres pres(*m_Config, *m_MsgHandler, canCreateTaskbar);
-                    TDisplayOptionsDialogCmd cmd(pres);
-
                     // we tried...
-                    if (!cmd.execute())
+                    if (!m_DisplayOptionsDialogCmd->execute())
                     {
                         throw InvalidConfigFileException();
                     }
@@ -114,25 +114,22 @@ class EWBuilder
 
                 m_CheckTimer.reset(new TTimer());
                 m_ClockTimer.reset(new TTimer());
-                m_AppController.reset(new TEWAppController(canCreateTaskbar));
                 m_Presenter.reset(new TEWPresenter(*m_MsgHandler,
                     *m_TimeKeeper, *m_CheckTimer, *m_ClockTimer, *m_TimeHandler, data.popupAlarm,
                     data.soundAlarm, data.soundPath, data.runningLateThreshold));
 
-                m_MainFramePres.reset(new TEWMainFramePres(*m_Presenter, *m_AppController));
+                m_MainFramePres.reset(new TEWMainFramePres(*m_MsgHandler, *m_Presenter, *m_DisplayOptionsDialogCmd));
                 m_MainFrame.reset(new TEWMainFrame(*m_MainFramePres, canCreateTaskbar && data.trayIcon));
 
                 if (canCreateTaskbar && data.trayIcon)
                 {
-                    m_TaskBarPres.reset(new TEWTaskbarPres(*m_Presenter, *m_AppController));
+                    m_TaskBarPres.reset(new TEWTaskbarPres(*m_MsgHandler, *m_Presenter, *m_DisplayOptionsDialogCmd));
                     m_TaskBar.reset(new TEWTaskbar(*m_TaskBarPres));
                 }
-                m_OptionsPres.reset(new TOptionsDialogPres(*m_AppController));
-                m_DisplayOptionsDialogCmd.reset(new TDisplayOptionsDialogCmd(
-                    *m_OptionsPres));
 
-                m_AppController->link(&*m_MsgHandler, &*m_Config, &*m_PresenceHandler,
-                    &*m_TimeKeeper, &*m_Presenter, &*m_DisplayOptionsDialogCmd);
+                m_TKConfigObserver.reset(new TTKConfigObserver(*m_Config, *m_TimeKeeper));
+                m_PresHdlrConfigObserver.reset(new TPresHdlrConfigObserver(*m_Config, *m_PresenceHandler));
+                m_EWPresConfigObserver.reset(new TEWPresConfigObserver(*m_Config, *m_Presenter));
 
                 if (topInt != nullptr)
                 {
@@ -152,15 +149,18 @@ class EWBuilder
     protected:
         // for testing
         const EWBuild<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler,
-                TTimeHandler, TTimeKeeper, TTimer, TEWAppController, TEWPresenter, TEWMainFramePres,
-                TEWMainFrame, TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres,
-                TBuilderOptionsDialogPres, TDisplayOptionsDialogCmd> getBuild()
+                TTimeHandler, TTimeKeeper, TTimer, TEWPresenter,
+                TEWMainFramePres, TEWMainFrame, TEWTaskbarPres, TEWTaskbar,
+                TOptionsDialogPres, TDisplayOptionsDialogCmd, TTKConfigObserver,
+                TPresHdlrConfigObserver, TEWPresConfigObserver> getBuild()
         {
             return {&*m_MsgHandler, &*m_ConfigImpl, &*m_Config, &*m_PresenceHandler,
                 &*m_TimeHandler, &*m_TimeKeeper, &*m_CheckTimer, &*m_ClockTimer,
-                &*m_AppController, &*m_Presenter, &*m_MainFramePres, &*m_MainFrame,
-                &*m_TaskBarPres, &*m_TaskBar, &*m_OptionsPres, &*m_DisplayOptionsDialogCmd};
+                &*m_Presenter, &*m_MainFramePres, &*m_MainFrame, &*m_TaskBarPres,
+                &*m_TaskBar, &*m_OptionsPres, &*m_DisplayOptionsDialogCmd,
+                &*m_TKConfigObserver, &*m_PresHdlrConfigObserver, &*m_EWPresConfigObserver};
         }
+
     private:
         typedef class PtrTraits<TMsgHandler>::Ptr TMsgHandlerPtr;
         typedef class PtrTraits<TConfigImpl>::Ptr TConfigImplPtr;
@@ -169,7 +169,6 @@ class EWBuilder
         typedef class PtrTraits<TTimeHandler>::Ptr TTimeHandlerPtr;
         typedef class PtrTraits<TTimeKeeper>::Ptr TTimeKeeperPtr;
         typedef class PtrTraits<TTimer>::Ptr TTimerPtr;
-        typedef class PtrTraits<TEWAppController>::Ptr TEWAppControllerPtr;
         typedef class PtrTraits<TEWPresenter>::Ptr TEWPresenterPtr;
         typedef class PtrTraits<TEWMainFramePres>::Ptr TEWMainFramePresPtr;
         typedef class PtrTraits<TEWMainFrame>::Ptr TEWMainFramePtr;
@@ -177,6 +176,9 @@ class EWBuilder
         typedef class PtrTraits<TEWTaskbar>::Ptr TEWTaskbarPtr;
         typedef class PtrTraits<TOptionsDialogPres>::Ptr TOptionsDialogPresPtr;
         typedef class PtrTraits<TDisplayOptionsDialogCmd>::Ptr TDisplayOptionsDialogCmdPtr;
+        typedef class PtrTraits<TTKConfigObserver>::Ptr TTKConfigObserverPtr;
+        typedef class PtrTraits<TPresHdlrConfigObserver>::Ptr TPresHdlrConfigObserverPtr;
+        typedef class PtrTraits<TEWPresConfigObserver>::Ptr TEWPresConfigObserverPtr;
 
         TMsgHandlerPtr m_MsgHandler;
         TConfigImplPtr m_ConfigImpl;
@@ -186,7 +188,6 @@ class EWBuilder
         TTimeKeeperPtr m_TimeKeeper;
         TTimerPtr m_CheckTimer;
         TTimerPtr m_ClockTimer;
-        TEWAppControllerPtr m_AppController;
         TEWPresenterPtr m_Presenter;
         TEWMainFramePresPtr m_MainFramePres;
         TEWMainFramePtr m_MainFrame;
@@ -194,6 +195,9 @@ class EWBuilder
         TEWTaskbarPtr m_TaskBar;
         TOptionsDialogPresPtr m_OptionsPres;
         TDisplayOptionsDialogCmdPtr m_DisplayOptionsDialogCmd;
+        TTKConfigObserverPtr m_TKConfigObserver;
+        TPresHdlrConfigObserverPtr m_PresHdlrConfigObserver;
+        TEWPresConfigObserverPtr m_EWPresConfigObserver;
 };
 
 #endif // EWBUILDER_H

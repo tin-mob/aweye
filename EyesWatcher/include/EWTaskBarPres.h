@@ -26,12 +26,12 @@
 #include <string>
 
 class AbstractEWPresenter;
-class AbstractEWAppController;
 class AbstractEWTaskbar;
+class AbstractMsgHandler;
 class EWTaskBarPres : public EWViewPres<AbstractEWTaskbar>
 {
     public:
-        EWTaskBarPres(AbstractEWPresenter& pres, AbstractEWAppController& controller);
+        EWTaskBarPres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter, AbstractCommand& dispCmd);
         virtual ~EWTaskBarPres();
     protected:
     private:

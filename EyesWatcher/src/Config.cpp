@@ -78,6 +78,8 @@ void Config::save(const ConfigData& data)
         m_HasInvalidData = false;
         m_data = data;
         write();
+
+        notify(&ConfigObserver::update, m_data);
     }
     else
     {

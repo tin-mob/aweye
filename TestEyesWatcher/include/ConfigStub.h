@@ -51,6 +51,11 @@ class ConfigStub : public AbstractConfig
             return m_Invalid;
         }
 
+        void notifyUpdate()
+        {
+            notify(&ConfigObserver::update, m_data);
+        }
+
         static ConfigData getTestData()
         {
             return {

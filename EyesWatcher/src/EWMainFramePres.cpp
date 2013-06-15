@@ -18,15 +18,13 @@
 
  **************************************************************/
 
-
-#include "EWMainFramePres.h"
 #include "AbstractEWMainFrame.h"
 #include "AbstractEWPresenter.h"
 #include "BaseException.h"
-#include "AbstractEWAppController.h"
+#include "EWMainFramePres.h"
 
-EWMainFramePres::EWMainFramePres(AbstractEWPresenter& pres, AbstractEWAppController& controller) :
-    EWViewPres(pres, controller)
+EWMainFramePres::EWMainFramePres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter,
+    AbstractCommand& dispCmd) : EWViewPres(msgHandler, presenter, dispCmd)
 {
 }
 

@@ -20,22 +20,24 @@
 
 
 #include <unittest++/UnitTest++.h>
+#include "CommandStub.h"
 #include "EWTaskBarPres.h"
-#include "EWAppControllerStub.h"
-#include "EWPresenterStub.h"
 #include "EWTaskbarStub.h"
+#include "EWPresenterStub.h"
+#include "MsgHandlerStub.h"
 
 ///@todo sort TaskBar/Taskbar
 struct EWTaskBarPresFixture
 {
-    EWTaskBarPresFixture() : ctrl(true), pres(), barPres(pres, ctrl)
+    EWTaskBarPresFixture() : msgHandler(), pres(), displayCmd(), barPres(msgHandler, pres, displayCmd)
     {
         barPres.attachView(&bar);
     }
     ~EWTaskBarPresFixture() {}
 
-    EWAppControllerStub ctrl;
+    MsgHandlerStub msgHandler;
     EWPresenterStub pres;
+    CommandStub displayCmd;
     EWTaskBarPres barPres;
     EWTaskbarStub bar;
 };

@@ -24,15 +24,10 @@
 
 #include <memory>
 #include <wx/app.h>
+#include "EWBuilder.h"
 #include "SetTopWindowInt.h"
 
 class wxCmdLineParser;
-template <class T> class no_delete;
-template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
-    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWAppController,
-    class TEWPresenter, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
-    class TEWTaskbar, class TOptionsDialogPres, class TBuilderOptionsDialogPres,
-    class TDisplayOptionsDialogCmd> class EWBuilder;
 class AbstractEWMainFrame;
 class MsgHandler;
 class wxConfigImpl;
@@ -41,7 +36,6 @@ class WebcamHandlerProc;
 class TimeHandler;
 class TimeKeeper;
 class MyWxTimer;
-class EWAppController;
 class EWPresenter;
 class EWMainFramePres;
 class EWMainFrame;
@@ -49,9 +43,11 @@ class EWTaskBarPres;
 class EWTaskBar;
 class OptionsDialog;
 class OptionsDialogPres;
-class BuilderOptionsDialogPres;
 class DisplayOptionsDialogCmd;
 class AbstractMsgHandler;
+class TKConfigObserver;
+class PresHdlrConfigObserver;
+class EWPresConfigObserver;
 class EWApp : public wxApp, public SetTopWindowInt
 {
     public:
@@ -67,10 +63,11 @@ class EWApp : public wxApp, public SetTopWindowInt
 
         virtual void setTopWindow(AbstractEWMainFrame* frame);
     private:
-        std::unique_ptr<EWBuilder<MsgHandler, wxConfigImpl, Config, WebcamHandlerProc,
-            TimeHandler, TimeKeeper, MyWxTimer, EWAppController, EWPresenter,
-            EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
-            OptionsDialogPres, BuilderOptionsDialogPres, DisplayOptionsDialogCmd>>
+        std::unique_ptr<EWBuilder<MsgHandler, wxConfigImpl, Config,
+                WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, EWPresenter,
+                EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
+                OptionsDialogPres, DisplayOptionsDialogCmd, TKConfigObserver,
+                PresHdlrConfigObserver, EWPresConfigObserver>>
             m_AppImpl;
 
         wxString m_ConfigPath;

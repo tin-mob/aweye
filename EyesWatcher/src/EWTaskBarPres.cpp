@@ -23,8 +23,8 @@
 #include "AbstractEWPresenter.h"
 #include "AbstractEWTaskbar.h"
 
-EWTaskBarPres::EWTaskBarPres(AbstractEWPresenter& presenter, AbstractEWAppController& controller) :
-    EWViewPres(presenter, controller), m_LastIcon("")
+EWTaskBarPres::EWTaskBarPres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter,
+    AbstractCommand& dispCmd) : EWViewPres(msgHandler, presenter, dispCmd), m_LastIcon("")
 {
 }
 

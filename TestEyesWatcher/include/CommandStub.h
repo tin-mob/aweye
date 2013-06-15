@@ -23,6 +23,7 @@
 #define COMMANDSTUB_H
 
 #include "AbstractCommand.h"
+#include "BaseException.h"
 
 class CommandStub : public AbstractCommand
 {

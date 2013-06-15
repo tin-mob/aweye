@@ -18,6 +18,7 @@
 
  **************************************************************/
 
+/// @todo same as EWTaskBarPresStub...
 
 #ifndef EWMAINFRAMEPRESSTUB_H
 #define EWMAINFRAMEPRESSTUB_H
@@ -25,11 +26,15 @@
 #include "AbstractEWViewPres.h"
 #include "AbstractEWMainFrame.h"
 
+class AbstractCommand;
+class AbstractEWPresenter;
+class AbstractMsgHandler;
 class EWMainFramePresStub : public AbstractEWViewPres<AbstractEWMainFrame>
 {
     public:
-        EWMainFramePresStub(AbstractEWPresenter& p, AbstractEWAppController& c) :
-            m_Presenter(&p), m_Controller(&c) {}
+        EWMainFramePresStub(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter,
+            AbstractCommand& dispCmd) :
+            m_MsgHandler(&msgHandler), m_Presenter(&presenter), m_DispCmd(&dispCmd) {}
         virtual ~EWMainFramePresStub() {}
 
         virtual void forceUpdate() {}
@@ -40,8 +45,9 @@ class EWMainFramePresStub : public AbstractEWViewPres<AbstractEWMainFrame>
         virtual void OnViewPauseResume() {}
         virtual void OnViewHideRestore() {}
 
+        AbstractMsgHandler* m_MsgHandler;
         AbstractEWPresenter* m_Presenter;
-        AbstractEWAppController* m_Controller;
+        AbstractCommand* m_DispCmd;
     protected:
     private:
 };

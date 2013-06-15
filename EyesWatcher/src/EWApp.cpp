@@ -34,15 +34,14 @@
 #include "TimeHandler.h"
 #include "TimeKeeper.h"
 #include "MyWxTimer.h"
-#include "EWAppController.h"
 #include "EWPresenter.h"
 #include "EWMainFramePres.h"
 #include "EWMainFrame.h"
 #include "OptionsDialogPres.h"
-#include "BuilderOptionsDialogPres.h"
 #include "EWTaskBarPres.h"
 #include "EWTaskBar.h"
 #include "DisplayOptionsDialogCmd.h"
+#include "ConfigObservers.h"
 
 #include <memory>
 
@@ -82,10 +81,11 @@ bool EWApp::OnInit()
     {
     	if (m_AppImpl.get() == nullptr)
     	{
-    	    m_AppImpl.reset(new EWBuilder<MsgHandler, wxConfigImpl, Config, WebcamHandlerProc,
-                TimeHandler, TimeKeeper, MyWxTimer, EWAppController, EWPresenter,
+    	    m_AppImpl.reset(new EWBuilder<MsgHandler, wxConfigImpl, Config,
+                WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, EWPresenter,
                 EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
-                OptionsDialogPres, BuilderOptionsDialogPres, DisplayOptionsDialogCmd>
+                OptionsDialogPres, DisplayOptionsDialogCmd, TKConfigObserver,
+                PresHdlrConfigObserver, EWPresConfigObserver>
                 (this, std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable()));
     	}
     }

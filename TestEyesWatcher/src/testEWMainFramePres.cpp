@@ -20,21 +20,24 @@
 
 
 #include <unittest++/UnitTest++.h>
+#include "CommandStub.h"
 #include "EWMainFramePres.h"
-#include "EWAppControllerStub.h"
-#include "EWPresenterStub.h"
 #include "EWMainFrameStub.h"
+#include "EWPresenterStub.h"
+#include "MsgHandlerStub.h"
+
 
 struct EWMainFramePresFixture
 {
-    EWMainFramePresFixture() : ctrl(true), pres(), framePres(pres, ctrl)
+    EWMainFramePresFixture() : msgHandler(), pres(), displayCmd(), framePres(msgHandler, pres, displayCmd)
     {
         framePres.attachView(&frame);
     }
     ~EWMainFramePresFixture() {}
 
-    EWAppControllerStub ctrl;
+    MsgHandlerStub msgHandler;
     EWPresenterStub pres;
+    CommandStub displayCmd;
     EWMainFramePres framePres;
     EWMainFrameStub frame;
 };
@@ -137,10 +140,17 @@ SUITE(TestEWMainFramePres)
         framePres.OnViewAbout();
     }
 
-    TEST_FIXTURE(EWMainFramePresFixture, TestFrameOptions)
+    TEST_FIXTURE(EWMainFramePresFixture, TestDisplay)
     {
         framePres.OnViewOptionsButtonClick();
-        CHECK_EQUAL(true, ctrl.checkDisplayedDialog());
+        CHECK_EQUAL(true, displayCmd.m_Executed);
+    }
+
+    TEST_FIXTURE(EWMainFramePresFixture, TestDisplayFail)
+    {
+        displayCmd.m_Throws = true;
+        framePres.OnViewOptionsButtonClick();
+        CHECK_EQUAL("Testing!", msgHandler.m_LastError);
     }
 
     TEST_FIXTURE(EWMainFramePresFixture, TestFramePlay)

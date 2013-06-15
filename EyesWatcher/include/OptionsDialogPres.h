@@ -24,19 +24,22 @@
 
 #include "AbstractOptionsDialogPres.h"
 
-class AbstractEWAppController;
+class AbstractMsgHandler;
+class AbstractConfig;
 class ConfigData;
 class AbstractOptionsDialog;
 class OptionsDialogPres :  public AbstractOptionsDialogPres
 {
     public:
-        OptionsDialogPres(AbstractEWAppController& controller);
+        OptionsDialogPres(AbstractMsgHandler& msgHandler, AbstractConfig& config, bool canCreateTaskBar);
         virtual ~OptionsDialogPres();
         virtual bool saveData(const ConfigData& data);
         virtual void init(AbstractOptionsDialog& dialog);
     protected:
     private:
-        AbstractEWAppController& m_Controller;
+        AbstractMsgHandler& m_MsgHandler;
+        AbstractConfig& m_Config;
+        bool m_CanCreateTaskBar;
 };
 
 #endif // OPTIONSDIALOGPRES_H

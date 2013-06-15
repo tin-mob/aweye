@@ -18,48 +18,63 @@
 
  **************************************************************/
 
-
 #include <unittest++/UnitTest++.h>
+#include "ConfigData.h"
+#include "ConfigStub.h"
+#include "MsgHandlerStub.h"
 #include "OptionsDialogPres.h"
-#include "EWAppControllerStub.h"
 #include "OptionsDialogStub.h"
 
 struct OptionsDialogPresFixture
 {
-    OptionsDialogPresFixture() : ctrl(true), pres(ctrl){}
+    OptionsDialogPresFixture()
+    {
+    }
     ~OptionsDialogPresFixture() {}
 
-    EWAppControllerStub ctrl;
-    OptionsDialogPres pres;
+    MsgHandlerStub msgHandler;
+    ConfigData data;
+    ConfigStub config;
 };
 
-SUITE(TestOptionsDialogPres)
+SUITE(TestBuilderOptionsDialogPres)
 {
     TEST_FIXTURE(OptionsDialogPresFixture, TestSave)
     {
-        const ConfigData newData = {boost::posix_time::not_a_date_time};
-        pres.saveData(newData);
-        CHECK_EQUAL(ctrl.m_Data, newData);
+        OptionsDialogPres pres(msgHandler, config, true);
+        const ConfigData newData = ConfigStub::getTestData();
+
+        CHECK_EQUAL(true, pres.saveData(newData));
+        CHECK_EQUAL(newData, config.getData());
+    }
+
+    TEST_FIXTURE(OptionsDialogPresFixture, TestSaveFail)
+    {
+        OptionsDialogPres pres(msgHandler, config, true);
+        config.m_Fail = true;
+        CHECK_EQUAL(false, pres.saveData(ConfigData()));
+        CHECK_EQUAL("Testing!", msgHandler.m_LastError);
     }
 
     TEST_FIXTURE(OptionsDialogPresFixture, TestInit)
     {
+        OptionsDialogPres pres(msgHandler, config, true);
         OptionsDialogStub dialog;
-        ctrl.m_Data = {boost::posix_time::not_a_date_time};
+
+        config.save({boost::posix_time::not_a_date_time});
         pres.init(dialog);
-        CHECK_EQUAL(ctrl.m_Data, dialog.getData());
+        CHECK_EQUAL(config.getData(), dialog.getData());
         CHECK_EQUAL(false, dialog.m_Disabled);
     }
 
     TEST_FIXTURE(OptionsDialogPresFixture, TestInitNoTray)
     {
-        EWAppControllerStub ctrl2(false);
-        OptionsDialogPres pres2(ctrl2);
+        OptionsDialogPres pres(msgHandler, config, false);
         OptionsDialogStub dialog;
 
-        ctrl2.m_Data = {boost::posix_time::not_a_date_time};
-        pres2.init(dialog);
-        CHECK_EQUAL(ctrl2.m_Data, dialog.getData());
+        config.save({boost::posix_time::not_a_date_time});
+        pres.init(dialog);
+        CHECK_EQUAL(config.getData(), dialog.getData());
         CHECK_EQUAL(true, dialog.m_Disabled);
     }
 }

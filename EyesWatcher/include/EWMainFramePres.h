@@ -24,13 +24,13 @@
 
 #include "EWViewPres.h"
 
+class AbstractMsgHandler;
 class AbstractEWPresenter;
-class AbstractEWAppController;
 class AbstractEWMainFrame;
 class EWMainFramePres : public EWViewPres<AbstractEWMainFrame>
 {
     public:
-        EWMainFramePres(AbstractEWPresenter& pres, AbstractEWAppController& controller);
+        EWMainFramePres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter, AbstractCommand& dispCmd);
         virtual ~EWMainFramePres();
     protected:
         virtual void doStatusUpdate();

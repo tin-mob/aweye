@@ -18,13 +18,15 @@
 
  **************************************************************/
 
-
-#include "OptionsDialogPres.h"
-#include "AbstractEWAppController.h"
-#include "ConfigData.h"
+#include "AbstractConfig.h"
+#include "AbstractMsgHandler.h"
 #include "AbstractOptionsDialog.h"
+#include "BaseException.h"
+#include "ConfigData.h"
+#include "OptionsDialogPres.h"
 
-OptionsDialogPres::OptionsDialogPres(AbstractEWAppController& controller) :m_Controller(controller)
+OptionsDialogPres::OptionsDialogPres(AbstractMsgHandler& msgHandler, AbstractConfig& config, bool canCreateTaskBar) :
+    m_MsgHandler(msgHandler), m_Config(config), m_CanCreateTaskBar(canCreateTaskBar)
 {
 }
 
@@ -34,13 +36,22 @@ OptionsDialogPres::~OptionsDialogPres()
 
 bool OptionsDialogPres::saveData(const ConfigData& data)
 {
-    return m_Controller.saveConfig(data);
+    try
+    {
+        m_Config.save(data);
+    }
+    catch (BaseException e)
+    {
+        m_MsgHandler.displayError(e.what());
+        return false;
+    }
+    return true;
 }
 
 void OptionsDialogPres::init(AbstractOptionsDialog& dialog)
 {
-    dialog.setData(m_Controller.getConfigData());
-    if (!m_Controller.canCreateTaskBar())
+    dialog.setData(m_Config.getData());
+    if (!m_CanCreateTaskBar)
     {
         dialog.disableTray();
     }

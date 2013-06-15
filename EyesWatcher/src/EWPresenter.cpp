@@ -33,7 +33,7 @@
 #include <iomanip>
 #include <stdlib.h>
 
-/// @todo EWPresenter to EWTimeKeeperPresenter,
+/// @todo EWPresenter to EWTimeKeeperController,
 EWPresenter::EWPresenter(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& keeper,
                          AbstractTimer& checkTimer, AbstractTimer& clockTimer,
                          AbstractTimeHandler& timeHandler,

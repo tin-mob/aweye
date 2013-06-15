@@ -22,22 +22,38 @@
 #ifndef OPTIONSDIALOGPRESSTUB_H
 #define OPTIONSDIALOGPRESSTUB_H
 
+#include "AbstractConfig.h"
+#include "AbstractMsgHandler.h"
 #include "AbstractOptionsDialogPres.h"
 
-class AbstractEWAppController;
 class OptionsDialogPresStub : public AbstractOptionsDialogPres
 {
     public:
-        OptionsDialogPresStub(AbstractEWAppController& c) : m_Controller(&c) {}
+        OptionsDialogPresStub(AbstractMsgHandler& msgHandler, AbstractConfig& config,
+            bool canCreateTaskBar, bool fail = false) :
+            m_MsgHandler(&msgHandler), m_Config(&config),
+            m_CanCreateTaskBar(canCreateTaskBar), m_Fail(fail) {}
         virtual ~OptionsDialogPresStub() {}
 
-        virtual bool saveData(const ConfigData& m_Data) {return true;}
+        virtual bool saveData(const ConfigData& data) {return m_Fail;}
         virtual void init(AbstractOptionsDialog& dialog) {}
 
-        AbstractEWAppController* m_Controller;
-        ConfigData m_Data;
+        AbstractMsgHandler* m_MsgHandler;
+        AbstractConfig* m_Config;
+        bool m_CanCreateTaskBar;
+        bool m_Fail;
+
     protected:
     private:
 };
+
+class OptionsDialogPresStubFail : public OptionsDialogPresStub
+{
+    public:
+        OptionsDialogPresStubFail(AbstractMsgHandler& msgHandler, AbstractConfig& config,
+            bool canCreateTaskBar) :
+            OptionsDialogPresStub(msgHandler, config, canCreateTaskBar, true) {}
+};
+
 
 #endif // OPTIONSDIALOGPRESSTUB_H

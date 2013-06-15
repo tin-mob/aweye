@@ -22,8 +22,11 @@
 #ifndef ABSTRACTCONFIG_H
 #define ABSTRACTCONFIG_H
 
+#include "Subject.h"
+
 struct ConfigData;
-class AbstractConfig
+class ConfigObserver;
+class AbstractConfig : public Subject<ConfigObserver, const ConfigData&>
 {
     public:
         virtual ~AbstractConfig() {}
@@ -35,5 +38,23 @@ class AbstractConfig
     protected:
     private:
 };
+
+class ConfigObserver
+{
+    public:
+        ConfigObserver(AbstractConfig& config) : m_Config(config)
+        {
+            m_Config.attach(this);
+        }
+        virtual ~ConfigObserver()
+        {
+            m_Config.detach(this);
+        }
+
+        virtual void update(const ConfigData& data) = 0;
+    private:
+        AbstractConfig& m_Config;
+};
+
 
 #endif // ABSTRACTCONFIG_H

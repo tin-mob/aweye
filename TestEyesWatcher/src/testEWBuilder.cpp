@@ -29,7 +29,6 @@
 #include "TimeHandlerStub.h"
 #include "TimeKeeperStub.h"
 #include "TimerStub.h"
-#include "EWAppControllerStub.h"
 #include "EWPresenterStub.h"
 #include "EWMainFramePresStub.h"
 #include "EWMainFrameStub.h"
@@ -39,7 +38,7 @@
 #include "DisOptDiaCmdStub.h"
 #include "EWTestBuilder.h"
 #include "SetTopWindowStub.h"
-#include "BuiOptDisPresStub.h"
+#include "ConfigObserverStubs.h"
 
 struct EWBuilderFixture
 {
@@ -55,9 +54,10 @@ SUITE(TestEWBuilder)
     TEST_FIXTURE(EWBuilderFixture, TestBuild)
     {
         const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerStub,
-            TimeHandlerStub, TimeKeeperStub, TimerStub, EWAppControllerStub, EWPresenterStub,
+            TimeHandlerStub, TimeKeeperStub, TimerStub, EWPresenterStub,
             EWMainFramePresStub, EWMainFrameStub, EWTaskBarPresStub, EWTaskbarStub,
-            OptionsDialogPresStub, BuiOptDisPresStub, DisOptDiaCmdStub> builder(&setTop, path, true);
+            OptionsDialogPresStub, DisOptDiaCmdStub, TKConfigObserverStub,
+            PresHdlrConfigObserverStub, EWPresConfigObserverStub> builder(&setTop, path, true);
 
         CHECK_EQUAL(false, builder.links.m_MsgHandler == nullptr);
         CHECK_EQUAL(false, builder.links.m_ConfigImpl == nullptr);
@@ -67,7 +67,6 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(false, builder.links.m_TimeKeeper == nullptr);
         CHECK_EQUAL(false, builder.links.m_CheckTimer == nullptr);
         CHECK_EQUAL(false, builder.links.m_ClockTimer == nullptr);
-        CHECK_EQUAL(false, builder.links.m_AppController == nullptr);
         CHECK_EQUAL(false, builder.links.m_Presenter == nullptr);
         CHECK_EQUAL(false, builder.links.m_MainFramePres == nullptr);
         CHECK_EQUAL(false, builder.links.m_MainFrame == nullptr);
@@ -107,13 +106,11 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(data.runningLateThreshold, builder.links.m_Presenter->m_RunningLateThreshold);
 
         CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_MainFramePres->m_Presenter);
-        CHECK_EQUAL(builder.links.m_AppController, builder.links.m_MainFramePres->m_Controller);
 
         CHECK_EQUAL(builder.links.m_MainFramePres, builder.links.m_MainFrame->m_Presenter);
         CHECK_EQUAL(true, builder.links.m_MainFrame->m_TaskbarCreated);
 
         CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_TaskBarPres->m_Presenter);
-        CHECK_EQUAL(builder.links.m_AppController, builder.links.m_TaskBarPres->m_Controller);
 
         CHECK_EQUAL(builder.links.m_TaskBarPres, builder.links.m_TaskBar->m_Presenter);
 
@@ -121,21 +118,19 @@ SUITE(TestEWBuilder)
 
         CHECK_EQUAL(builder.links.m_MainFrame, setTop.m_Frame);
 
-        CHECK_EQUAL(builder.links.m_MsgHandler, builder.links.m_AppController->m_MsgHandler);
-        CHECK_EQUAL(builder.links.m_Config, builder.links.m_AppController->m_Config);
-        CHECK_EQUAL(builder.links.m_PresenceHandler, builder.links.m_AppController->m_PresenceHandler);
-        CHECK_EQUAL(builder.links.m_TimeKeeper, builder.links.m_AppController->m_TimeKeeper);
-        CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_AppController->m_Presenter);
-        CHECK_EQUAL(builder.links.m_DisplayOptionsDialogCmd, builder.links.m_AppController->m_DisplayCmd);
+        CHECK_EQUAL(builder.links.m_PresenceHandler, &builder.links.m_PresHdlrConfigObserver->m_PresenceHandler);
+        CHECK_EQUAL(builder.links.m_TimeKeeper, &builder.links.m_TKConfigObserver->m_TimeKeeper);
+        CHECK_EQUAL(builder.links.m_Presenter, &builder.links.m_EWPresConfigObserver->m_Presenter);
     }
 
     TEST_FIXTURE(EWBuilderFixture, TestBuildBadConfig)
     {
         // building it is the test...
         const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStubFail, PresenceHandlerStub,
-            TimeHandlerStub, TimeKeeperStub, TimerStub, EWAppControllerStub, EWPresenterStub,
+            TimeHandlerStub, TimeKeeperStub, TimerStub, EWPresenterStub,
             EWMainFramePresStub, EWMainFrameStub, EWTaskBarPresStub, EWTaskbarStub,
-            OptionsDialogPresStub, BuiOptDisPresStub, DisOptDiaCmdStub> builder(&setTop, path, true);
+            OptionsDialogPresStub, DisOptDiaCmdStub, TKConfigObserverStub,
+            PresHdlrConfigObserverStub, EWPresConfigObserverStub> builder(&setTop, path, true);
     }
 
     TEST_FIXTURE(EWBuilderFixture, TestBuildBadConfigUnrecovered)
@@ -144,9 +139,10 @@ SUITE(TestEWBuilder)
         try
         {
             const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStubFail, PresenceHandlerStub,
-            TimeHandlerStub, TimeKeeperStub, TimerStub, EWAppControllerStub, EWPresenterStub,
+            TimeHandlerStub, TimeKeeperStub, TimerStub, EWPresenterStub,
             EWMainFramePresStub, EWMainFrameStub, EWTaskBarPresStub, EWTaskbarStub,
-            OptionsDialogPresStub, BuiOptDisPresStub, DisOptDiaCmdStubFail> builder(&setTop, path, true);
+            OptionsDialogPresStub, DisOptDiaCmdStubFail, TKConfigObserverStub,
+            PresHdlrConfigObserverStub, EWPresConfigObserverStub> builder(&setTop, path, true);
         }
         catch (InvalidConfigFileException)
         {

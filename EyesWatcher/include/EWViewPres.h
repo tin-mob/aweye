@@ -18,21 +18,24 @@
 
  **************************************************************/
 
+/// @todo not certain about current inheritance structure...
 
 #ifndef EWVIEWPRES_H
 #define EWVIEWPRES_H
 
-#include "EWViewObserver.h"
-#include "AbstractEWViewPres.h"
+#include "AbstractCommand.h"
 #include "AbstractEWPresenter.h"
-#include "AbstractEWAppController.h"
+#include "AbstractEWViewPres.h"
+#include "AbstractMsgHandler.h"
+#include "BaseException.h"
+#include "EWViewObserver.h"
 
 template <class TView>
 class EWViewPres : public EWViewObserver, public AbstractEWViewPres<TView>
 {
     public:
-        EWViewPres(AbstractEWPresenter& presenter, AbstractEWAppController& controller) :
-            m_Presenter(presenter), m_Controller(controller)
+        EWViewPres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter, AbstractCommand& dispCmd) :
+            m_MsgHandler(msgHandler), m_Presenter(presenter), m_DisplayOptionsDialog(dispCmd)
         {
             m_Presenter.attach(this);
         }
@@ -74,7 +77,14 @@ class EWViewPres : public EWViewObserver, public AbstractEWViewPres<TView>
 
         virtual void OnViewOptionsButtonClick()
         {
-            m_Controller.displayOptionsDialog();
+            try
+            {
+                m_DisplayOptionsDialog.execute();
+            }
+            catch (BaseException e)
+            {
+                m_MsgHandler.displayError(e.what());
+            }
         }
 
         virtual void OnViewStartStop()
@@ -97,8 +107,9 @@ class EWViewPres : public EWViewObserver, public AbstractEWViewPres<TView>
         virtual void doTimeUpdate() = 0;
         virtual void doQuit() = 0;
 
+        AbstractMsgHandler& m_MsgHandler;
         AbstractEWPresenter& m_Presenter;
-        AbstractEWAppController& m_Controller;
+        AbstractCommand& m_DisplayOptionsDialog;
     private:
 };
 

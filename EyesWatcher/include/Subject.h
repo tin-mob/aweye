@@ -28,6 +28,7 @@
 // Edit: more complicated to use an interface with it...
 // http://stackoverflow.com/questions/2997732/how-to-convert-an-existing-callback-interface-to-use-boost-signals-slots
 
+///@todo use refs?
 template <class TObserver, class... TParams>
 class Subject
 {
