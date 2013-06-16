@@ -24,8 +24,14 @@
 
 #include <memory>
 #include <wx/app.h>
-#include "EWBuilder.h"
 #include "SetTopWindowInt.h"
+
+template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
+    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWPresenter,
+    class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
+    class TEWTaskbar, class TOptionsDialogPres, class TOptionsDialog,
+    class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
+class EWBuilder;
 
 class wxCmdLineParser;
 class AbstractEWMainFrame;
@@ -43,7 +49,6 @@ class EWTaskBarPres;
 class EWTaskBar;
 class OptionsDialog;
 class OptionsDialogPres;
-class DisplayOptionsDialogCmd;
 class AbstractMsgHandler;
 class TKConfigObserver;
 class PresHdlrConfigObserver;
@@ -66,7 +71,7 @@ class EWApp : public wxApp, public SetTopWindowInt
         std::unique_ptr<EWBuilder<MsgHandler, wxConfigImpl, Config,
                 WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, EWPresenter,
                 EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
-                OptionsDialogPres, DisplayOptionsDialogCmd, TKConfigObserver,
+                OptionsDialogPres, OptionsDialog, TKConfigObserver,
                 PresHdlrConfigObserver, EWPresConfigObserver>>
             m_AppImpl;
 

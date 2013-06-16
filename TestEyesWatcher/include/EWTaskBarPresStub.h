@@ -29,7 +29,7 @@ class EWTaskBarPresStub : public AbstractEWViewPres<AbstractEWTaskbar>
 {
     public:
         EWTaskBarPresStub(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter,
-            AbstractCommand& dispCmd) :
+            std::function<bool()>& dispCmd) :
             m_MsgHandler(&msgHandler), m_Presenter(&presenter), m_DispCmd(&dispCmd) {}
         virtual ~EWTaskBarPresStub() {}
 
@@ -43,7 +43,7 @@ class EWTaskBarPresStub : public AbstractEWViewPres<AbstractEWTaskbar>
 
         AbstractMsgHandler* m_MsgHandler;
         AbstractEWPresenter* m_Presenter;
-        AbstractCommand* m_DispCmd;
+        std::function<bool()>* m_DispCmd;
     protected:
     private:
 };

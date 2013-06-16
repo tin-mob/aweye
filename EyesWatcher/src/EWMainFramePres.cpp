@@ -24,7 +24,7 @@
 #include "EWMainFramePres.h"
 
 EWMainFramePres::EWMainFramePres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter,
-    AbstractCommand& dispCmd) : EWViewPres(msgHandler, presenter, dispCmd)
+    std::function<bool()>& dispCmd) : EWViewPres(msgHandler, presenter, dispCmd)
 {
 }
 

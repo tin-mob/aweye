@@ -40,7 +40,6 @@
 #include "AbstractOptionsDialogPres.h"
 #include "AbstractEWTaskbar.h"
 #include "SetTopWindowInt.h"
-#include "AbstractCommand.h"
 
 template <class T>
 struct PtrTraits
@@ -52,7 +51,7 @@ struct PtrTraits
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
     class TTimeHandler, class TTimeKeeper, class TTimer, class TEWPresenter,
     class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
-    class TEWTaskbar, class TOptionsDialogPres, class TDisplayOptionsDialogCmd,
+    class TEWTaskbar, class TOptionsDialogPres, class TOptionsDialog,
     class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
 struct EWBuild
 {
@@ -69,7 +68,7 @@ struct EWBuild
     const TEWTaskbarPres* m_TaskBarPres;
     const TEWTaskbar* m_TaskBar;
     const TOptionsDialogPres* m_OptionsPres;
-    const TDisplayOptionsDialogCmd* m_DisplayOptionsDialogCmd;
+    const std::function<bool()>* m_DisplayOptionsDialogCmd;
     const TTKConfigObserver* m_TKConfigObserver;
     const TPresHdlrConfigObserver* m_PresHdlrConfigObserver;
     const TEWPresConfigObserver* m_EWPresConfigObserver;
@@ -78,12 +77,12 @@ struct EWBuild
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
     class TTimeHandler, class TTimeKeeper, class TTimer, class TEWPresenter,
     class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
-    class TEWTaskbar, class TOptionsDialogPres, class TDisplayOptionsDialogCmd,
+    class TEWTaskbar, class TOptionsDialogPres, class TOptionsDialog,
     class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
 class EWBuilder
 {
     public:
-        EWBuilder(SetTopWindowInt* topInt, std::string configPath, bool canCreateTaskbar) :
+        EWBuilder(SetTopWindowInt* topInt, std::string configPath, bool canCreateTaskbar, int idOk) :
             m_MainFrame(nullptr)
         {
             m_MsgHandler.reset(new TMsgHandler());
@@ -92,12 +91,17 @@ class EWBuilder
                 m_ConfigImpl.reset(new TConfigImpl(configPath));
                 m_Config.reset(new TConfig(*m_ConfigImpl));
                 m_OptionsPres.reset(new TOptionsDialogPres(*m_MsgHandler, *m_Config, canCreateTaskbar));
-                m_DisplayOptionsDialogCmd.reset(new TDisplayOptionsDialogCmd(*m_OptionsPres));
+
+                m_DisplayOptionsDialogCmd = [&] ()
+                {
+                    TOptionsDialog dialog(nullptr, *m_OptionsPres);
+                    return dialog.ShowModal() == idOk;
+                };
 
                 if (m_Config->hasInvalidData())
                 {
                     // we tried...
-                    if (!m_DisplayOptionsDialogCmd->execute())
+                    if (!m_DisplayOptionsDialogCmd())
                     {
                         throw InvalidConfigFileException();
                     }
@@ -116,12 +120,12 @@ class EWBuilder
                     *m_TimeKeeper, *m_ClockTimer, *m_TimeHandler, data.popupAlarm,
                     data.soundAlarm, data.soundPath, data.runningLateThreshold));
 
-                m_MainFramePres.reset(new TEWMainFramePres(*m_MsgHandler, *m_Presenter, *m_DisplayOptionsDialogCmd));
+                m_MainFramePres.reset(new TEWMainFramePres(*m_MsgHandler, *m_Presenter, m_DisplayOptionsDialogCmd));
                 m_MainFrame.reset(new TEWMainFrame(*m_MainFramePres, canCreateTaskbar && data.trayIcon));
 
                 if (canCreateTaskbar && data.trayIcon)
                 {
-                    m_TaskBarPres.reset(new TEWTaskbarPres(*m_MsgHandler, *m_Presenter, *m_DisplayOptionsDialogCmd));
+                    m_TaskBarPres.reset(new TEWTaskbarPres(*m_MsgHandler, *m_Presenter, m_DisplayOptionsDialogCmd));
                     m_TaskBar.reset(new TEWTaskbar(*m_TaskBarPres));
                 }
 
@@ -149,13 +153,13 @@ class EWBuilder
         const EWBuild<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler,
                 TTimeHandler, TTimeKeeper, TTimer, TEWPresenter,
                 TEWMainFramePres, TEWMainFrame, TEWTaskbarPres, TEWTaskbar,
-                TOptionsDialogPres, TDisplayOptionsDialogCmd, TTKConfigObserver,
+                TOptionsDialogPres, TOptionsDialog, TTKConfigObserver,
                 TPresHdlrConfigObserver, TEWPresConfigObserver> getBuild()
         {
             return {&*m_MsgHandler, &*m_ConfigImpl, &*m_Config, &*m_PresenceHandler,
                 &*m_TimeHandler, &*m_TimeKeeper, &*m_ClockTimer,
                 &*m_Presenter, &*m_MainFramePres, &*m_MainFrame, &*m_TaskBarPres,
-                &*m_TaskBar, &*m_OptionsPres, &*m_DisplayOptionsDialogCmd,
+                &*m_TaskBar, &*m_OptionsPres, &m_DisplayOptionsDialogCmd,
                 &*m_TKConfigObserver, &*m_PresHdlrConfigObserver, &*m_EWPresConfigObserver};
         }
 
@@ -173,7 +177,6 @@ class EWBuilder
         typedef class PtrTraits<TEWTaskbarPres>::Ptr TEWTaskbarPresPtr;
         typedef class PtrTraits<TEWTaskbar>::Ptr TEWTaskbarPtr;
         typedef class PtrTraits<TOptionsDialogPres>::Ptr TOptionsDialogPresPtr;
-        typedef class PtrTraits<TDisplayOptionsDialogCmd>::Ptr TDisplayOptionsDialogCmdPtr;
         typedef class PtrTraits<TTKConfigObserver>::Ptr TTKConfigObserverPtr;
         typedef class PtrTraits<TPresHdlrConfigObserver>::Ptr TPresHdlrConfigObserverPtr;
         typedef class PtrTraits<TEWPresConfigObserver>::Ptr TEWPresConfigObserverPtr;
@@ -191,7 +194,7 @@ class EWBuilder
         TEWTaskbarPresPtr m_TaskBarPres;
         TEWTaskbarPtr m_TaskBar;
         TOptionsDialogPresPtr m_OptionsPres;
-        TDisplayOptionsDialogCmdPtr m_DisplayOptionsDialogCmd;
+        std::function<bool()> m_DisplayOptionsDialogCmd;
         TTKConfigObserverPtr m_TKConfigObserver;
         TPresHdlrConfigObserverPtr m_PresHdlrConfigObserver;
         TEWPresConfigObserverPtr m_EWPresConfigObserver;

@@ -26,14 +26,13 @@
 #include "AbstractEWViewPres.h"
 #include "AbstractEWMainFrame.h"
 
-class AbstractCommand;
 class AbstractEWPresenter;
 class AbstractMsgHandler;
 class EWMainFramePresStub : public AbstractEWViewPres<AbstractEWMainFrame>
 {
     public:
         EWMainFramePresStub(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter,
-            AbstractCommand& dispCmd) :
+            std::function<bool()>& dispCmd) :
             m_MsgHandler(&msgHandler), m_Presenter(&presenter), m_DispCmd(&dispCmd) {}
         virtual ~EWMainFramePresStub() {}
 
@@ -47,7 +46,7 @@ class EWMainFramePresStub : public AbstractEWViewPres<AbstractEWMainFrame>
 
         AbstractMsgHandler* m_MsgHandler;
         AbstractEWPresenter* m_Presenter;
-        AbstractCommand* m_DispCmd;
+        std::function<bool()>* m_DispCmd;
     protected:
     private:
 };

@@ -31,7 +31,7 @@ class AbstractMsgHandler;
 class EWTaskBarPres : public EWViewPres<AbstractEWTaskbar>
 {
     public:
-        EWTaskBarPres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter, AbstractCommand& dispCmd);
+        EWTaskBarPres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter, std::function<bool()>& dispCmd);
         virtual ~EWTaskBarPres();
     protected:
     private:

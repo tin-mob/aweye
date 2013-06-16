@@ -32,16 +32,18 @@ class OptionsDialogPresStub : public AbstractOptionsDialogPres
         OptionsDialogPresStub(AbstractMsgHandler& msgHandler, AbstractConfig& config,
             bool canCreateTaskBar, bool fail = false) :
             m_MsgHandler(&msgHandler), m_Config(&config),
-            m_CanCreateTaskBar(canCreateTaskBar), m_Fail(fail) {}
+            m_CanCreateTaskBar(canCreateTaskBar), m_Fail(fail), m_Displayed(false) {}
         virtual ~OptionsDialogPresStub() {}
 
         virtual bool saveData(const ConfigData& data) {return m_Fail;}
         virtual void init(AbstractOptionsDialog& dialog) {}
+        void display() {m_Displayed = true;}
 
         AbstractMsgHandler* m_MsgHandler;
         AbstractConfig* m_Config;
         bool m_CanCreateTaskBar;
         bool m_Fail;
+        bool m_Displayed;
 
     protected:
     private:

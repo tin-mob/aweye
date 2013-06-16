@@ -29,7 +29,7 @@
 
 struct EWMainFramePresFixture
 {
-    EWMainFramePresFixture() : msgHandler(), pres(), displayCmd(), framePres(msgHandler, pres, displayCmd)
+    EWMainFramePresFixture() : msgHandler(), pres(), displayCmd(), framePres(msgHandler, pres, displayCmd.m_Command)
     {
         framePres.attachView(&frame);
     }

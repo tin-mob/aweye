@@ -24,7 +24,7 @@
 #include "AbstractEWTaskbar.h"
 
 EWTaskBarPres::EWTaskBarPres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter,
-    AbstractCommand& dispCmd) : EWViewPres(msgHandler, presenter, dispCmd), m_LastIcon("")
+    std::function<bool()>& dispCmd) : EWViewPres(msgHandler, presenter, dispCmd), m_LastIcon("")
 {
 }
 

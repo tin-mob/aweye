@@ -23,11 +23,15 @@
 #define CONFIGDIALOGSTUB_H
 
 #include "AbstractOptionsDialog.h"
+#include "OptionsDialogPresStub.h"
 
 class OptionsDialogStub : public AbstractOptionsDialog
 {
     public:
-        OptionsDialogStub() : m_Disabled(false) {}
+        OptionsDialogStub(std::nullptr_t, OptionsDialogPresStub& pres) :
+            m_Disabled(false), m_Presenter(&pres){}
+        OptionsDialogStub() :
+            m_Disabled(false), m_Presenter(nullptr){}
         virtual ~OptionsDialogStub() {}
         virtual ConfigData getData() const
         {
@@ -42,7 +46,16 @@ class OptionsDialogStub : public AbstractOptionsDialog
         {
             m_Disabled = true;
         }
+        int ShowModal()
+        {
+            m_Presenter->display();
+            return IdOK;
+        }
+
         bool m_Disabled;
+
+        OptionsDialogPresStub* m_Presenter;
+        static const int IdOK = 1;
     protected:
     private:
         ConfigData m_Data;

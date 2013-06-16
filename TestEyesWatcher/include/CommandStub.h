@@ -22,23 +22,26 @@
 #ifndef COMMANDSTUB_H
 #define COMMANDSTUB_H
 
-#include "AbstractCommand.h"
 #include "BaseException.h"
+#include <functional>
 
-class CommandStub : public AbstractCommand
+class CommandStub
 {
     public:
-        CommandStub(bool success = true, bool throws = false) : m_Executed(false), m_Success(success), m_Throws(throws) {}
+        CommandStub(bool success = true, bool throws = false) : m_Executed(false), m_Success(success),
+        m_Throws(throws), m_Command(
+            std::bind([&] (CommandStub* cmd)
+            {
+                if (cmd->m_Throws) { throw BaseException("Testing!"); }
+                cmd->m_Executed = true;
+                return cmd->m_Success;
+            }, this)) {}
         virtual ~CommandStub() {}
-        virtual bool execute()
-        {
-            if (m_Throws) { throw BaseException("Testing!"); }
-            m_Executed = true;
-            return m_Success;
-        }
+
         bool m_Executed;
         bool m_Success;
         bool m_Throws;
+        std::function<bool()> m_Command;
     protected:
     private:
 };

@@ -23,18 +23,19 @@
 #ifndef EWVIEWPRES_H
 #define EWVIEWPRES_H
 
-#include "AbstractCommand.h"
 #include "AbstractEWPresenter.h"
 #include "AbstractEWViewPres.h"
 #include "AbstractMsgHandler.h"
 #include "BaseException.h"
 #include "EWViewObserver.h"
 
+#include <functional>
+
 template <class TView>
 class EWViewPres : public EWViewObserver, public AbstractEWViewPres<TView>
 {
     public:
-        EWViewPres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter, AbstractCommand& dispCmd) :
+        EWViewPres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter, std::function<bool()>& dispCmd) :
             m_MsgHandler(msgHandler), m_Presenter(presenter), m_DisplayOptionsDialog(dispCmd)
         {
             m_Presenter.attach(this);
@@ -79,7 +80,7 @@ class EWViewPres : public EWViewObserver, public AbstractEWViewPres<TView>
         {
             try
             {
-                m_DisplayOptionsDialog.execute();
+                m_DisplayOptionsDialog();
             }
             catch (BaseException e)
             {
@@ -109,7 +110,7 @@ class EWViewPres : public EWViewObserver, public AbstractEWViewPres<TView>
 
         AbstractMsgHandler& m_MsgHandler;
         AbstractEWPresenter& m_Presenter;
-        AbstractCommand& m_DisplayOptionsDialog;
+        std::function<bool()>& m_DisplayOptionsDialog;
     private:
 };
 

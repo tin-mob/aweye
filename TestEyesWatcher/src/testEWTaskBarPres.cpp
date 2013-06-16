@@ -29,7 +29,7 @@
 ///@todo sort TaskBar/Taskbar
 struct EWTaskBarPresFixture
 {
-    EWTaskBarPresFixture() : msgHandler(), pres(), displayCmd(), barPres(msgHandler, pres, displayCmd)
+    EWTaskBarPresFixture() : msgHandler(), pres(), displayCmd(), barPres(msgHandler, pres, displayCmd.m_Command)
     {
         barPres.attachView(&bar);
     }

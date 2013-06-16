@@ -30,7 +30,7 @@ class AbstractEWMainFrame;
 class EWMainFramePres : public EWViewPres<AbstractEWMainFrame>
 {
     public:
-        EWMainFramePres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter, AbstractCommand& dispCmd);
+        EWMainFramePres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter, std::function<bool()>& dispCmd);
         virtual ~EWMainFramePres();
     protected:
         virtual void doStatusUpdate();

@@ -22,6 +22,7 @@
 #include "WebcamHandlerProc.h"
 #include "WebcamHandler.h"
 #include "IsHereCmd.h"
+#include <wx/filename.h>
 #include <wx/stdpaths.h>
 
 WebcamHandlerProc::WebcamHandlerProc(int index, std::string faceCascadeName,
@@ -54,10 +55,26 @@ void WebcamHandlerProc::setFaceSize(unsigned int x, unsigned int y)
 }
 
 /// @note IsHereCmd in same path than main executable,
-///      m_FaceCascadeName is sanitized via Config
+
+///@todo copy pasted from wxConfigImpl
+bool fileExists(std::string name)
+{
+    const wxFileName fileName(wxString(name.c_str(), wxConvUTF8));
+    if(fileName.IsOk())
+    {
+        return wxFileName::FileExists(fileName. GetFullPath());
+    }
+    return false;
+}
 
 bool WebcamHandlerProc::isHere()
 {
+    // validate m_FaceCascadeName (and prevent injection)
+    if (!fileExists(m_FaceCascadeName))
+    {
+        assert(false);
+        throw GenericPresenceHandlerException();
+    }
     ///@todo test if this works in windows
     wxString cmd = wxT("./IsHereCmd '");
 

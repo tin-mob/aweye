@@ -27,28 +27,28 @@
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
     class TTimeHandler, class TTimeKeeper, class TTimer, class TEWPresenter,
     class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
-    class TEWTaskbar, class TOptionsDialogPres, class TDisplayOptionsDialogCmd,
+    class TEWTaskbar, class TOptionsDialogPres, class TOptionsDialog,
     class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
 class EWTestBuilder : public EWBuilder<TMsgHandler, TConfigImpl,
     TConfig, TPresenceHandler, TTimeHandler, TTimeKeeper, TTimer,
     TEWPresenter, TEWMainFramePres, TEWMainFrame, TEWTaskbarPres, TEWTaskbar,
-    TOptionsDialogPres, TDisplayOptionsDialogCmd,
+    TOptionsDialogPres, TOptionsDialog,
     TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver>
 {
     public:
-        EWTestBuilder(SetTopWindowInt* topInt, std::string configPath, bool canCreateTaskbar) :
+        EWTestBuilder(SetTopWindowInt* topInt, std::string configPath, bool canCreateTaskbar, int idOk) :
             EWBuilder<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler, TTimeHandler,
             TTimeKeeper, TTimer, TEWPresenter, TEWMainFramePres, TEWMainFrame,
-            TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres, TDisplayOptionsDialogCmd,
+            TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres, TOptionsDialog,
             TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver>
-            (topInt, configPath, canCreateTaskbar),
+            (topInt, configPath, canCreateTaskbar, idOk),
             links(this->getBuild()){}
 
         virtual ~EWTestBuilder() {}
 
         const EWBuild<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler, TTimeHandler,
             TTimeKeeper, TTimer, TEWPresenter, TEWMainFramePres, TEWMainFrame,
-            TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres, TDisplayOptionsDialogCmd,
+            TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres, TOptionsDialog,
             TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver> links;
     protected:
     private:
