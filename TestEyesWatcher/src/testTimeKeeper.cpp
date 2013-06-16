@@ -30,9 +30,7 @@ struct TimeKeeperFixture
 {
     public:
         TimeKeeperFixture() :
-            data({boost::posix_time::seconds(5), boost::posix_time::seconds(7),
-                boost::posix_time::seconds(1), boost::posix_time::seconds(2),1,1}),
-            timeHandler(TimeHandlerStub()),
+            data(), timeHandler(TimeHandlerStub()),
             presenceHandler(), keeper(timeHandler, presenceHandler,
                 data.workLength, data.pauseLength, data.remFreq, data.checkFreq,
                 data.pauseTol, data.workTol, data.cummulPause)
@@ -56,7 +54,6 @@ SUITE(TestTimeKeeper)
     TEST_FIXTURE(TimeKeeperFixture, TestInit)
     {
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
-        CHECK_EQUAL(keeper.getTimerInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(keeper.isLate(), false);
         CHECK_EQUAL(keeper.getInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(keeper.getTimeLeft(), boost::posix_time::seconds(0));
@@ -70,7 +67,6 @@ SUITE(TestTimeKeeper)
         presenceHandler.pushResult(true);
         keeper.start();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
         CHECK_EQUAL(keeper.isLate(), false);
         CHECK_EQUAL(keeper.getInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(keeper.getTimeLeft(), data.workLength);
@@ -85,7 +81,6 @@ SUITE(TestTimeKeeper)
         keeper.start();
         keeper.stop();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
-        CHECK_EQUAL(keeper.getTimerInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(keeper.isLate(), false);
         CHECK_EQUAL(keeper.getInterval(), boost::posix_time::seconds(0));
         CHECK_EQUAL(keeper.getTimeLeft(), boost::posix_time::seconds(0));
@@ -97,129 +92,178 @@ SUITE(TestTimeKeeper)
     TEST_FIXTURE(TimeKeeperFixture, TestUpdate)
     {
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = data.checkFreq;
 
         presenceHandler.pushResult(true);
         keeper.start();
-        timeHandler.setTime(timeHandler.getTime() + interval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), interval);
-        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - interval);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - data.checkFreq);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
         CHECK_EQUAL(keeper.getAwayStamp(), boost::posix_time::not_a_date_time);
-        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - interval);
+        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - data.checkFreq);
     }
 
-    TEST_FIXTURE(TimeKeeperFixture, TestNearWorkEnd)
+    TEST_FIXTURE(TimeKeeperFixture, TestWork)
     {
+        data.checkFreq = boost::posix_time::seconds(2);
+        data.workLength = boost::posix_time::seconds(3);
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = data.workLength - boost::posix_time::seconds(1);
 
         presenceHandler.pushResult(true);
         keeper.start();
-        timeHandler.setTime(timeHandler.getTime() + interval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
-        CHECK_EQUAL(keeper.getTimerInterval(), boost::posix_time::seconds(1));
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), interval);
-        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - interval);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - data.checkFreq);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
         CHECK_EQUAL(keeper.getAwayStamp(), boost::posix_time::not_a_date_time);
-        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - interval);
+        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - data.checkFreq);
+    }
+
+    TEST_FIXTURE(TimeKeeperFixture, TestWorkSmallSteps)
+    {
+        data.checkFreq = boost::posix_time::seconds(2);
+        data.workLength = boost::posix_time::seconds(3);
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+
+        presenceHandler.pushResult(true);
+        keeper.start();
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq/2);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(false, keeper.checkUpdate());
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq/2);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestWorkEnd)
     {
+        data.workLength = boost::posix_time::seconds(2);
+        data.checkFreq = boost::posix_time::seconds(2);
+        data.remFreq = boost::posix_time::seconds(1);
+        keeper.setRemFreq(data.remFreq);
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = data.workLength;
 
         presenceHandler.pushResult(true);
         keeper.start();
-        timeHandler.setTime(timeHandler.getTime() + interval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.remFreq);
         CHECK_EQUAL(keeper.isLate(), true);
-        CHECK_EQUAL(keeper.getInterval(), interval);
-        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - interval);
+        CHECK_EQUAL(keeper.getInterval(), data.workLength);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - data.checkFreq);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
         CHECK_EQUAL(keeper.getAwayStamp(), boost::posix_time::not_a_date_time);
-        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - interval);
+        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - data.checkFreq);
+
+        timeHandler.setTime(timeHandler.getTime() + data.remFreq);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestWorkEndCheckShortest)
     {
+        data.workLength = boost::posix_time::seconds(1);
         data.checkFreq = boost::posix_time::seconds(1);
         data.remFreq = boost::posix_time::seconds(2);
-        keeper.setCheckFreq(data.checkFreq);
         keeper.setRemFreq(data.remFreq);
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = data.workLength;
 
         presenceHandler.pushResult(true);
         keeper.start();
-        timeHandler.setTime(timeHandler.getTime() + interval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
         CHECK_EQUAL(keeper.isLate(), true);
-        CHECK_EQUAL(keeper.getInterval(), interval);
-        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - interval);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - data.checkFreq);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
         CHECK_EQUAL(keeper.getAwayStamp(), boost::posix_time::not_a_date_time);
-        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - interval);
+        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - data.checkFreq);
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestWorkTolerance)
     {
+        data.checkFreq = boost::posix_time::seconds(2);
+        data.workLength = boost::posix_time::seconds(3);
+        data.workTol = 1;
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+        keeper.setWorkTol(data.workTol);
+
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
 
         presenceHandler.pushResult(true);
         keeper.start();
 
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(false);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), boost::posix_time::seconds(0));
-        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - data.checkFreq);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
         CHECK_EQUAL(keeper.getAwayStamp(), boost::posix_time::not_a_date_time);
-        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength);
+        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - data.checkFreq);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestStartPause)
     {
+        data.checkFreq = boost::posix_time::seconds(1);
+        data.workLength = boost::posix_time::seconds(4);
+        data.pauseLength = boost::posix_time::seconds(3);
+        data.workTol = 1;
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+        keeper.setPauseLength(data.pauseLength);
+        keeper.setWorkTol(data.workTol);
+
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
 
         presenceHandler.pushResult(true);
         keeper.start();
 
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(false);
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(false);
-        keeper.updateStatus();
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::AWAY);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), boost::posix_time::seconds(0));
-        CHECK_EQUAL(keeper.getTimeLeft(), data.pauseLength);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq * 2);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.pauseLength- data.checkFreq * 2);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
         CHECK_EQUAL(keeper.getAwayStamp(), startingTime);
         CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength);
@@ -227,370 +271,427 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestNearPauseEnd)
     {
+        data.checkFreq = boost::posix_time::seconds(1);
+        data.workLength = boost::posix_time::seconds(4);
+        data.pauseLength = boost::posix_time::seconds(2);
+        data.workTol = 0;
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+        keeper.setPauseLength(data.pauseLength);
+        keeper.setWorkTol(data.workTol);
+
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = data.checkFreq;
-        const boost::posix_time::ptime pauseTime = startingTime + interval;
-        const boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(1);
-        const boost::posix_time::time_duration pauseInterval = data.pauseLength - pauseLeft;
 
         presenceHandler.pushResult(true);
         keeper.start();
-        timeHandler.setTime(pauseTime);
-        presenceHandler.pushResult(true);
-        keeper.updateStatus();
 
-        timeHandler.setTime(pauseTime + pauseInterval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(false);
-        presenceHandler.pushResult(false);
-        keeper.updateStatus();
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::AWAY);
-        CHECK_EQUAL(keeper.getTimerInterval(), pauseLeft);
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), pauseInterval);
-        CHECK_EQUAL(keeper.getTimeLeft(), pauseLeft);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.pauseLength - data.checkFreq);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
-        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - interval);
+        CHECK_EQUAL(keeper.getAwayStamp(), startingTime + data.checkFreq);
+        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - data.checkFreq);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestPauseEnd)
     {
+        data.checkFreq = boost::posix_time::seconds(1);
+        data.workLength = boost::posix_time::seconds(4);
+        data.pauseLength = boost::posix_time::seconds(1);
+        data.workTol = 0;
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+        keeper.setPauseLength(data.pauseLength);
+        keeper.setWorkTol(data.workTol);
+
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = data.checkFreq;
-        const boost::posix_time::ptime pauseTime = startingTime + interval;
-        const boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(0);
-        const boost::posix_time::time_duration pauseInterval = data.pauseLength - pauseLeft;
 
         presenceHandler.pushResult(true);
         keeper.start();
-        timeHandler.setTime(pauseTime);
-        presenceHandler.pushResult(true);
-        keeper.updateStatus();
 
-        timeHandler.setTime(pauseTime + pauseInterval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(false);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::AWAY);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), pauseInterval);
-        CHECK_EQUAL(keeper.getTimeLeft(), pauseLeft);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.pauseLength - data.checkFreq);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+        CHECK_EQUAL(keeper.getAwayStamp(), startingTime + data.checkFreq);
         CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestPauseWork)
     {
-        const boost::posix_time::ptime pauseTime = timeHandler.getTime() + data.checkFreq;
+        data.checkFreq = boost::posix_time::seconds(1);
+        data.workLength = boost::posix_time::seconds(4);
+        data.pauseLength = boost::posix_time::seconds(1);
+        data.workTol = 0;
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+        keeper.setPauseLength(data.pauseLength);
+        keeper.setWorkTol(data.workTol);
+
+        const boost::posix_time::ptime startingTime = timeHandler.getTime();
 
         presenceHandler.pushResult(true);
         keeper.start();
-        timeHandler.setTime(pauseTime);
-        presenceHandler.pushResult(true);
-        keeper.updateStatus();
 
-        timeHandler.setTime(pauseTime + data.pauseLength);
-        presenceHandler.pushResult(false);
-        presenceHandler.pushResult(false);
-        keeper.updateStatus();
-        keeper.updateStatus();
-
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(false);
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), boost::posix_time::seconds(0));
-        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength);
-        CHECK_EQUAL(keeper.getHereStamp(), timeHandler.getTime());
-        CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
-        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq * 2);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - data.checkFreq * 2);
+        CHECK_EQUAL(keeper.getHereStamp(), startingTime + data.checkFreq * 2);
+        CHECK_EQUAL(keeper.getAwayStamp(), startingTime + data.checkFreq);
+        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - data.checkFreq * 2);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestPauseTolerance)
     {
+        data.checkFreq = boost::posix_time::seconds(1);
+        data.workLength = boost::posix_time::seconds(4);
+        data.pauseLength = boost::posix_time::seconds(3);
+        data.workTol = 0;
+        data.pauseTol = 1;
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+        keeper.setPauseLength(data.pauseLength);
+        keeper.setWorkTol(data.workTol);
+        keeper.setPauseTol(data.pauseTol);
+
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = data.checkFreq;
-        const boost::posix_time::ptime pauseTime = startingTime + interval;
-        const boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(1);
-        const boost::posix_time::time_duration pauseInterval = data.pauseLength - pauseLeft;
 
         presenceHandler.pushResult(true);
         keeper.start();
-        timeHandler.setTime(pauseTime);
-        presenceHandler.pushResult(true);
-        keeper.updateStatus();
 
-        timeHandler.setTime(pauseTime + pauseInterval);
-        presenceHandler.pushResult(false);
-        presenceHandler.pushResult(false);
-        keeper.updateStatus();
-        keeper.updateStatus();
-
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(false);
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::AWAY);
-        CHECK_EQUAL(keeper.getTimerInterval(), pauseLeft);
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), pauseInterval);
-        CHECK_EQUAL(keeper.getTimeLeft(), pauseLeft);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq * 2);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.pauseLength - data.checkFreq * 2);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
-        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - interval);
+        CHECK_EQUAL(keeper.getAwayStamp(), startingTime + data.checkFreq);
+        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - data.checkFreq);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestCancelledPause)
     {
+        data.checkFreq = boost::posix_time::seconds(1);
+        data.workLength = boost::posix_time::seconds(5);
+        data.pauseLength = boost::posix_time::seconds(4);
+        data.workTol = 0;
+        data.pauseTol = 1;
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+        keeper.setPauseLength(data.pauseLength);
+        keeper.setWorkTol(data.workTol);
+        keeper.setPauseTol(data.pauseTol);
+
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
 
         presenceHandler.pushResult(true);
         keeper.start();
-        timeHandler.setTime(startingTime + interval);
-        presenceHandler.pushResult(true);
-        keeper.updateStatus();
 
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(false);
-        presenceHandler.pushResult(false);
-        keeper.updateStatus();
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
-        timeHandler.setTime(timeHandler.getTime() + interval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
-        timeHandler.setTime(timeHandler.getTime() + interval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.updateStatus();
-
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), interval * 3);
-        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - interval * 3);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq * 4);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - data.checkFreq * 4);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
         CHECK_EQUAL(keeper.getAwayStamp(), boost::posix_time::not_a_date_time);
-        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - interval * 3);
+        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - data.checkFreq * 4);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestCancelledPauseCummul)
     {
         keeper.setCummulPause(true);
+
+        data.checkFreq = boost::posix_time::seconds(1);
+        data.workLength = boost::posix_time::seconds(5);
+        data.pauseLength = boost::posix_time::seconds(4);
+        data.workTol = 0;
+        data.pauseTol = 1;
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+        keeper.setPauseLength(data.pauseLength);
+        keeper.setWorkTol(data.workTol);
+        keeper.setPauseTol(data.pauseTol);
+
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
 
         presenceHandler.pushResult(true);
         keeper.start();
-        timeHandler.setTime(startingTime + interval);
-        presenceHandler.pushResult(true);
-        keeper.updateStatus();
 
-        timeHandler.setTime(timeHandler.getTime() + interval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(false);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
-        timeHandler.setTime(timeHandler.getTime() + interval);
-        presenceHandler.pushResult(false);
-        keeper.updateStatus();
-
-        timeHandler.setTime(timeHandler.getTime() + interval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
-        timeHandler.setTime(timeHandler.getTime() + interval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.updateStatus();
-
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), interval * 3);
-        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - interval * 3);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq * 3);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - data.checkFreq * 3);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(keeper.getAwayStamp(), startingTime + interval);
-        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - interval * 3);
+        CHECK_EQUAL(keeper.getAwayStamp(), startingTime + data.checkFreq);
+        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - data.checkFreq * 3);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestRestoredPause)
     {
+        data.checkFreq = boost::posix_time::seconds(1);
+        data.workLength = boost::posix_time::seconds(5);
+        data.pauseLength = boost::posix_time::seconds(4);
+        data.workTol = 0;
+        data.pauseTol = 1;
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+        keeper.setPauseLength(data.pauseLength);
+        keeper.setWorkTol(data.workTol);
+        keeper.setPauseTol(data.pauseTol);
+
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
-        const boost::posix_time::ptime pauseTime = startingTime + interval;
 
         presenceHandler.pushResult(true);
         keeper.start();
-        timeHandler.setTime(pauseTime);
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(false);
-        presenceHandler.pushResult(false);
-        keeper.updateStatus();
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
-        timeHandler.setTime(pauseTime + interval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
-        timeHandler.setTime(timeHandler.getTime() + interval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(false);
-        keeper.updateStatus();
-
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::AWAY);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), interval * 2);
-        CHECK_EQUAL(keeper.getTimeLeft(), data.pauseLength - interval * 2);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq * 3);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.pauseLength - data.checkFreq * 3);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
-        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - (pauseTime - startingTime));
+        CHECK_EQUAL(keeper.getAwayStamp(), startingTime + data.checkFreq);
+        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - data.checkFreq);
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestSmallHibernation)
     {
+        data.checkFreq = boost::posix_time::seconds(1);
+        data.workLength = boost::posix_time::seconds(5);
+        data.pauseLength = boost::posix_time::seconds(4);
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+        keeper.setPauseLength(data.pauseLength);
+
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = data.checkFreq;
-        const boost::posix_time::ptime pauseTime = startingTime + interval;
-        const boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(2);
-        const boost::posix_time::time_duration pauseInterval = data.pauseLength - pauseLeft;
 
         presenceHandler.pushResult(true);
         keeper.start();
-        timeHandler.setTime(pauseTime);
-        presenceHandler.pushResult(true);
-        keeper.updateStatus();
 
-        timeHandler.setTime(pauseTime + pauseInterval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.notifyHibernated();
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq * 3);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::AWAY);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), pauseInterval);
-        CHECK_EQUAL(keeper.getTimeLeft(), data.pauseLength - pauseInterval);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq * 3);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.pauseLength - data.checkFreq * 3);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
-        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - (pauseTime - startingTime));
+        CHECK_EQUAL(keeper.getAwayStamp(), startingTime + data.checkFreq);
+        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - data.checkFreq);
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestLongHibernation)
     {
+        data.checkFreq = boost::posix_time::seconds(1);
+        data.workLength = boost::posix_time::seconds(5);
+        data.pauseLength = boost::posix_time::seconds(4);
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+        keeper.setPauseLength(data.pauseLength);
+
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = data.checkFreq;
-        const boost::posix_time::ptime pauseTime = startingTime + interval;
-        const boost::posix_time::time_duration pauseLeft = boost::posix_time::seconds(0);
-        const boost::posix_time::time_duration pauseInterval = data.pauseLength - pauseLeft;
 
         presenceHandler.pushResult(true);
         keeper.start();
-        timeHandler.setTime(pauseTime);
-        presenceHandler.pushResult(true);
-        keeper.updateStatus();
 
-        timeHandler.setTime(pauseTime + pauseInterval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.notifyHibernated();
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq * 4);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::AWAY);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), pauseInterval);
-        CHECK_EQUAL(keeper.getTimeLeft(), data.pauseLength - pauseInterval);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq * 4);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.pauseLength - data.checkFreq * 4);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
+        CHECK_EQUAL(keeper.getAwayStamp(), startingTime + data.checkFreq);
         CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength);
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestTolAndHibernate)
     {
+        data.checkFreq = boost::posix_time::seconds(1);
+        data.workLength = boost::posix_time::seconds(5);
+        data.pauseLength = boost::posix_time::seconds(4);
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+        keeper.setPauseLength(data.pauseLength);
+
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
-        const boost::posix_time::ptime pauseTime = startingTime + interval;
 
         presenceHandler.pushResult(true);
         keeper.start();
-        timeHandler.setTime(pauseTime);
-        presenceHandler.pushResult(true);
-        keeper.updateStatus();
 
-        timeHandler.setTime(pauseTime + interval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(false);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
-        timeHandler.setTime(pauseTime + interval * 2);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq * 3);
         presenceHandler.pushResult(true);
-        keeper.notifyHibernated();
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::AWAY);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), interval * 2);
-        CHECK_EQUAL(keeper.getTimeLeft(), data.pauseLength - interval * 2);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq * 4);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.pauseLength - data.checkFreq * 4);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(keeper.getAwayStamp(), pauseTime);
-        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - interval);
-    }
-
-    TEST_FIXTURE(TimeKeeperFixture, TestIntolerantPause)
-    {
-        const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = data.checkFreq;
-        const boost::posix_time::ptime pauseTime = startingTime + interval;
-        keeper.setWorkTol(0);
-
-        presenceHandler.pushResult(true);
-        keeper.start();
-        timeHandler.setTime(pauseTime);
-        presenceHandler.pushResult(false);
-        keeper.updateStatus();
-
-        CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::AWAY);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
-        CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), interval);
-        CHECK_EQUAL(keeper.getTimeLeft(), data.pauseLength - interval);
-        CHECK_EQUAL(keeper.getHereStamp(), startingTime);
-        CHECK_EQUAL(keeper.getAwayStamp(), startingTime);
+        CHECK_EQUAL(keeper.getAwayStamp(), startingTime + data.checkFreq);
         CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength);
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
     }
 
     TEST_FIXTURE(TimeKeeperFixture, TestIntolerantCancelledPause)
     {
+        data.checkFreq = boost::posix_time::seconds(1);
+        data.workLength = boost::posix_time::seconds(5);
+        data.pauseLength = boost::posix_time::seconds(4);
+        data.workTol = 0;
+        data.pauseTol = 0;
+        keeper.setCheckFreq(data.checkFreq);
+        keeper.setWorkLength(data.workLength);
+        keeper.setPauseLength(data.pauseLength);
+        keeper.setWorkTol(data.workTol);
+        keeper.setPauseTol(data.pauseTol);
+
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-        const boost::posix_time::time_duration interval = boost::posix_time::seconds(1);
-        keeper.setPauseTol(0);
 
         presenceHandler.pushResult(true);
         keeper.start();
 
-        timeHandler.setTime(startingTime + interval);
-        presenceHandler.pushResult(false);
-        presenceHandler.pushResult(false);
-        keeper.updateStatus();
-        keeper.updateStatus();
-
-        timeHandler.setTime(timeHandler.getTime() + interval);
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
-        keeper.updateStatus();
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(false);
+        CHECK_EQUAL(true, keeper.checkUpdate());
+
+        timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
+        presenceHandler.pushResult(true);
+        CHECK_EQUAL(true, keeper.checkUpdate());
 
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
-        CHECK_EQUAL(keeper.getTimerInterval(), data.checkFreq);
         CHECK_EQUAL(keeper.isLate(), false);
-        CHECK_EQUAL(keeper.getInterval(), interval * 2);
-        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - interval * 2);
+        CHECK_EQUAL(keeper.getInterval(), data.checkFreq * 3);
+        CHECK_EQUAL(keeper.getTimeLeft(), data.workLength - data.checkFreq * 3);
         CHECK_EQUAL(keeper.getHereStamp(), startingTime);
         CHECK_EQUAL(keeper.getAwayStamp(), boost::posix_time::not_a_date_time);
-        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - interval * 2);
+        CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength - data.checkFreq * 3);
     }
 }
 

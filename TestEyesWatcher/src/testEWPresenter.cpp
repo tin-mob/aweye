@@ -37,9 +37,9 @@ struct EWPresenterFixture
         EWPresenterFixture() :
             data({boost::posix_time::seconds(5), boost::posix_time::seconds(3),
                 boost::posix_time::seconds(1), boost::posix_time::seconds(2)}),
-            msgHandler(), timeHandler(), keeper(), checkTimer(), clockTimer(),
+            msgHandler(), timeHandler(), keeper(), clockTimer(),
             dialog(), viewObserver(),
-            presenter(EWPresenter(msgHandler, keeper, checkTimer,
+            presenter(EWPresenter(msgHandler, keeper,
                 clockTimer, timeHandler, data.popupAlarm, true, data.soundPath))
         {
             data.soundAlarm = true;
@@ -53,7 +53,6 @@ struct EWPresenterFixture
         MsgHandlerStub msgHandler;
         TimeHandlerStub timeHandler;
         TimeKeeperStub keeper;
-        TimerStub checkTimer;
         TimerStub clockTimer;
         OptionsDialogStub dialog;
         EWViewObserverStub viewObserver;
@@ -69,13 +68,11 @@ SUITE(TestEWPresenter)
     {
         presenter.toggleStart();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
-        CHECK_EQUAL(keeper.getTimerInterval().total_milliseconds(), checkTimer.m_Running);
         CHECK_EQUAL(1000, clockTimer.m_Running);
         CHECK_EQUAL(viewObserver.checkStatUpdated(), true);
 
         presenter.toggleStart();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
-        CHECK_EQUAL(checkTimer.m_Running, 0);
         CHECK_EQUAL(clockTimer.m_Running, 0);
         CHECK_EQUAL(viewObserver.checkStatUpdated(), true);
 
@@ -83,7 +80,6 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastError, "");
         presenter.toggleStart();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
-        CHECK_EQUAL(checkTimer.m_Running, 0);
         CHECK_EQUAL(clockTimer.m_Running, 0);
         CHECK_EQUAL(viewObserver.checkStatUpdated(), false);
         CHECK_EQUAL(msgHandler.m_LastError, "Testing!");
@@ -112,20 +108,21 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastAlert, "");
         CHECK_EQUAL(msgHandler.m_LastSound, "");
 
+        keeper.m_Updated = true;
         keeper.m_Late = true;
         presenter.togglePause();
-        checkTimer.ring();
+        presenter.onTimerRing(&clockTimer);
         CHECK_EQUAL(msgHandler.m_LastAlert, "");
         CHECK_EQUAL(msgHandler.m_LastSound, "");
 
         presenter.togglePause();
-        checkTimer.ring();
+        presenter.onTimerRing(&clockTimer);
         CHECK_EQUAL(msgHandler.m_LastAlert, presenter.m_LateMsg);
         CHECK_EQUAL(msgHandler.m_LastSound, data.soundPath);
 
         keeper.m_Fail = true;
         CHECK_EQUAL(msgHandler.m_LastError, "");
-        checkTimer.ring();
+        presenter.onTimerRing(&clockTimer);
         CHECK_EQUAL(msgHandler.m_LastError, "Testing!");
     }
 
@@ -197,18 +194,5 @@ SUITE(TestEWPresenter)
         presenter.toggleStart();
         clockTimer.ring();
         CHECK_EQUAL(viewObserver.checkTimeUpdated(), true);
-        CHECK_EQUAL(keeper.m_Hibernated, false);
-    }
-
-    TEST_FIXTURE(EWPresenterFixture, TestHibernated)
-    {
-        presenter.toggleStart();
-        keeper.m_Status = AbstractTimeKeeper::OFF;
-        timeHandler.setTime(timeHandler.getTime() + boost::posix_time::minutes(2));
-        checkTimer.m_Running = 0;
-        clockTimer.ring();
-        CHECK_EQUAL(viewObserver.checkTimeUpdated(), true);
-        CHECK_EQUAL(keeper.m_Hibernated, true);
-        CHECK_EQUAL(keeper.getTimerInterval().total_milliseconds(), checkTimer.m_Running);
     }
 }

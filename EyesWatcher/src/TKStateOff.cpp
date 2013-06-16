@@ -42,11 +42,13 @@ void TKStateOff::initState(TimeKeeper& parent, bool cancelled)
     parent.m_AwayStamp = boost::posix_time::ptime(boost::posix_time::not_a_date_time);
     parent.m_HereDur = boost::posix_time::seconds(0);
     parent.m_AwayDur = boost::posix_time::seconds(0);
+    parent.m_LastUpdate = boost::posix_time::not_a_date_time;
+    parent.m_NextCheck = boost::posix_time::not_a_date_time;
 }
 
-boost::posix_time::time_duration TKStateOff::getTimerInterval(const TimeKeeper&) const
+boost::posix_time::ptime TKStateOff::getNextUpdate(const TimeKeeper&) const
 {
-    return boost::posix_time::time_duration(0,0,0,0);
+    return boost::posix_time::not_a_date_time;
 }
 
 bool TKStateOff::isLate(const TimeKeeper&) const

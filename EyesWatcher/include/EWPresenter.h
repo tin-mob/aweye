@@ -42,7 +42,7 @@ class EWPresenter : public AbstractEWPresenter, public TimerInterface
 {
     public:
         EWPresenter(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& keeper,
-                    AbstractTimer& checkTimer, AbstractTimer& clockTimer, AbstractTimeHandler& timeHandler,
+                    AbstractTimer& clockTimer, AbstractTimeHandler& timeHandler,
                     bool popupAlarm = true, bool soundAlarm = false, std::string soundPath = "",
                     boost::posix_time::time_duration runningLateThreshold = boost::posix_time::minutes(4));
         virtual ~EWPresenter();
@@ -53,8 +53,6 @@ class EWPresenter : public AbstractEWPresenter, public TimerInterface
         virtual void show(bool show);
 
         virtual void onTimerRing(AbstractTimer* timer);
-        virtual void updateStatus();
-        virtual void updateTimes();
 
         virtual std::string getHideButtonLabel() const;
         virtual std::string getPauseButtonLabel() const;
@@ -86,7 +84,6 @@ class EWPresenter : public AbstractEWPresenter, public TimerInterface
 
         AbstractTimeKeeper& m_TimeKeeper;
         AbstractMsgHandler& m_MsgHandler;
-        AbstractTimer& m_CheckTimer;
         AbstractTimer& m_ClockTimer;
         AbstractTimeHandler& m_TimeHandler;
 
@@ -94,7 +91,6 @@ class EWPresenter : public AbstractEWPresenter, public TimerInterface
         bool m_SoundAlarm;
         std::string m_SoundPath;
         boost::posix_time::time_duration m_RunningLateThreshold;
-        boost::posix_time::ptime m_LastTimeUpdate;
 };
 
 #endif // EWPRESENTER_H

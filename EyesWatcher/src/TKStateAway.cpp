@@ -73,7 +73,7 @@ void TKStateAway::initState(TimeKeeper& parent, bool cancelled)
         if (!parent.m_TolerationTime.is_special())
         {
             const boost::posix_time::time_duration interval =
-                parent.m_StartTimeUpdate - parent.m_TolerationTime;
+                parent.m_LastUpdate - parent.m_TolerationTime;
             parent.m_AwayDur += interval;
             parent.m_HereDur -= interval;
             parent.m_AwayStamp = parent.m_TolerationTime;
@@ -90,10 +90,11 @@ void TKStateAway::initState(TimeKeeper& parent, bool cancelled)
     }
 }
 
-boost::posix_time::time_duration TKStateAway::getTimerInterval(const TimeKeeper& parent) const
+///@todo almost the same as TKStateAway...
+boost::posix_time::ptime TKStateAway::getNextUpdate(const TimeKeeper& parent) const
 {
     boost::posix_time::time_duration timerInterval = parent.m_CheckFreq;
-    const boost::posix_time::time_duration remaining = getTimeLeft(parent);
+    const boost::posix_time::time_duration remaining = getTimeLeft(parent, true);
 
     if (remaining <= boost::posix_time::seconds(0))
     {
@@ -103,7 +104,7 @@ boost::posix_time::time_duration TKStateAway::getTimerInterval(const TimeKeeper&
     {
         timerInterval = remaining;
     }
-    return timerInterval - parent.getUpdateOffset();
+    return parent.m_HereStamp + parent.m_HereDur + parent.m_AwayDur + timerInterval;
 }
 
 bool TKStateAway::isLate(const TimeKeeper& parent) const

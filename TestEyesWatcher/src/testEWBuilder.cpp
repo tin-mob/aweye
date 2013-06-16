@@ -65,7 +65,6 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(false, builder.links.m_PresenceHandler == nullptr);
         CHECK_EQUAL(false, builder.links.m_TimeHandler == nullptr);
         CHECK_EQUAL(false, builder.links.m_TimeKeeper == nullptr);
-        CHECK_EQUAL(false, builder.links.m_CheckTimer == nullptr);
         CHECK_EQUAL(false, builder.links.m_ClockTimer == nullptr);
         CHECK_EQUAL(false, builder.links.m_Presenter == nullptr);
         CHECK_EQUAL(false, builder.links.m_MainFramePres == nullptr);
@@ -96,7 +95,6 @@ SUITE(TestEWBuilder)
 
         CHECK_EQUAL(builder.links.m_MsgHandler, builder.links.m_Presenter->m_MsgHandler);
         CHECK_EQUAL(builder.links.m_TimeKeeper, builder.links.m_Presenter->m_Keeper);
-        CHECK_EQUAL(builder.links.m_CheckTimer, builder.links.m_Presenter->m_CheckTimer);
         CHECK_EQUAL(builder.links.m_ClockTimer, builder.links.m_Presenter->m_ClockTimer);
         CHECK_EQUAL(builder.links.m_TimeHandler, builder.links.m_Presenter->m_TimeHandler);
 

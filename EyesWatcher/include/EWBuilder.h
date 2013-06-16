@@ -62,7 +62,6 @@ struct EWBuild
     const TPresenceHandler* m_PresenceHandler;
     const TTimeHandler* m_TimeHandler;
     const TTimeKeeper* m_TimeKeeper;
-    const TTimer* m_CheckTimer;
     const TTimer* m_ClockTimer;
     const TEWPresenter* m_Presenter;
     const TEWMainFramePres* m_MainFramePres;
@@ -112,10 +111,9 @@ class EWBuilder
                     *m_PresenceHandler, data.workLength, data.pauseLength, data.remFreq,
                     data.checkFreq, data.pauseTol, data.workTol, data.cummulPause));
 
-                m_CheckTimer.reset(new TTimer());
                 m_ClockTimer.reset(new TTimer());
                 m_Presenter.reset(new TEWPresenter(*m_MsgHandler,
-                    *m_TimeKeeper, *m_CheckTimer, *m_ClockTimer, *m_TimeHandler, data.popupAlarm,
+                    *m_TimeKeeper, *m_ClockTimer, *m_TimeHandler, data.popupAlarm,
                     data.soundAlarm, data.soundPath, data.runningLateThreshold));
 
                 m_MainFramePres.reset(new TEWMainFramePres(*m_MsgHandler, *m_Presenter, *m_DisplayOptionsDialogCmd));
@@ -155,7 +153,7 @@ class EWBuilder
                 TPresHdlrConfigObserver, TEWPresConfigObserver> getBuild()
         {
             return {&*m_MsgHandler, &*m_ConfigImpl, &*m_Config, &*m_PresenceHandler,
-                &*m_TimeHandler, &*m_TimeKeeper, &*m_CheckTimer, &*m_ClockTimer,
+                &*m_TimeHandler, &*m_TimeKeeper, &*m_ClockTimer,
                 &*m_Presenter, &*m_MainFramePres, &*m_MainFrame, &*m_TaskBarPres,
                 &*m_TaskBar, &*m_OptionsPres, &*m_DisplayOptionsDialogCmd,
                 &*m_TKConfigObserver, &*m_PresHdlrConfigObserver, &*m_EWPresConfigObserver};
@@ -186,7 +184,6 @@ class EWBuilder
         TPresenceHandlerPtr m_PresenceHandler;
         TTimeHandlerPtr m_TimeHandler;
         TTimeKeeperPtr m_TimeKeeper;
-        TTimerPtr m_CheckTimer;
         TTimerPtr m_ClockTimer;
         TEWPresenterPtr m_Presenter;
         TEWMainFramePresPtr m_MainFramePres;

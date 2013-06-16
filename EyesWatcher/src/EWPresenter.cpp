@@ -35,23 +35,18 @@
 
 /// @todo EWPresenter to EWTimeKeeperController,
 EWPresenter::EWPresenter(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& keeper,
-                         AbstractTimer& checkTimer, AbstractTimer& clockTimer,
-                         AbstractTimeHandler& timeHandler,
+                         AbstractTimer& clockTimer, AbstractTimeHandler& timeHandler,
                          bool popupAlarm, bool soundAlarm, std::string soundPath,
                          boost::posix_time::time_duration runningLateThreshold)
     : m_Warn(true), m_Shown(true), m_TimeKeeper(keeper), m_MsgHandler(msgHandler),
-    m_CheckTimer(checkTimer), m_ClockTimer(clockTimer), m_TimeHandler(timeHandler),
-    m_PopupAlarm(popupAlarm), m_SoundAlarm(soundAlarm), m_SoundPath(soundPath),
-    m_RunningLateThreshold(runningLateThreshold),
-    m_LastTimeUpdate(boost::posix_time::not_a_date_time)
+    m_ClockTimer(clockTimer), m_TimeHandler(timeHandler), m_PopupAlarm(popupAlarm),
+    m_SoundAlarm(soundAlarm), m_SoundPath(soundPath), m_RunningLateThreshold(runningLateThreshold)
 {
-    m_CheckTimer.attach(this);
     m_ClockTimer.attach(this);
 }
 
 EWPresenter::~EWPresenter()
 {
-    m_CheckTimer.detach(this);
     m_ClockTimer.detach(this);
 }
 
@@ -60,11 +55,8 @@ void EWPresenter::start()
     try
     {
         m_TimeKeeper.start();
-        m_CheckTimer.startTimer(m_TimeKeeper.getTimerInterval().total_milliseconds(), true);
         notify(&EWViewObserver::OnStatusUpdate, this);
-
         m_ClockTimer.startTimer(1000, false);
-        m_LastTimeUpdate = m_TimeHandler.getTime();
     }
     catch (BaseException e)
     {
@@ -75,7 +67,6 @@ void EWPresenter::start()
 void EWPresenter::stop()
 {
     m_TimeKeeper.stop();
-    m_CheckTimer.stopTimer();
     m_ClockTimer.stopTimer();
     notify(&EWViewObserver::OnStatusUpdate, this);
 }
@@ -91,60 +82,27 @@ void EWPresenter::show(bool show)
     notify(&EWViewObserver::OnStatusUpdate, this);
 }
 
-void EWPresenter::updateStatus()
+void EWPresenter::onTimerRing(AbstractTimer*)
 {
     try
     {
-        m_TimeKeeper.updateStatus();
-        m_CheckTimer.startTimer(m_TimeKeeper.getTimerInterval().total_milliseconds(), true);
-        notify(&EWViewObserver::OnStatusUpdate, this);
-
-        if (m_TimeKeeper.isLate() && m_TimeKeeper.getStatus() == AbstractTimeKeeper::HERE)
+        if(m_TimeKeeper.checkUpdate())
         {
-            alert();
+            notify(&EWViewObserver::OnStatusUpdate, this);
+            if (m_TimeKeeper.isLate() && m_TimeKeeper.getStatus() == AbstractTimeKeeper::HERE)
+            {
+                alert();
+            }
+        }
+        else
+        {
+            notify(&EWViewObserver::OnTimeUpdate, this);
         }
     }
     catch (BaseException e)
     {
         m_MsgHandler.displayError(e.what());
         m_TimeKeeper.stop();
-    }
-}
-
-void EWPresenter::updateTimes()
-{
-    // if it has been a long time since last ring and is running, we have hibernated
-    if (m_TimeHandler.getTime() - m_LastTimeUpdate >
-        boost::posix_time::minutes(1))
-    {
-        m_TimeKeeper.notifyHibernated();
-
-        m_CheckTimer.startTimer(m_TimeKeeper.getTimerInterval().total_milliseconds(), true);
-        notify(&EWViewObserver::OnStatusUpdate, this);
-
-        if (m_TimeKeeper.isLate() && m_TimeKeeper.getStatus() == AbstractTimeKeeper::HERE)
-        {
-            alert();
-        }
-    }
-
-    notify(&EWViewObserver::OnTimeUpdate, this);
-    m_LastTimeUpdate = m_TimeHandler.getTime();
-}
-
-void EWPresenter::onTimerRing(AbstractTimer* timer)
-{
-    if (timer == &m_ClockTimer)
-    {
-        updateTimes();
-    }
-    else if (timer == &m_CheckTimer)
-    {
-        updateStatus();
-    }
-    else
-    {
-        assert(0);
     }
 }
 

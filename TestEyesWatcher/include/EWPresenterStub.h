@@ -34,24 +34,21 @@ class EWPresenterStub : public AbstractEWPresenter
 {
     public:
         EWPresenterStub(AbstractMsgHandler* mH = nullptr, AbstractTimeKeeper* k = nullptr,
-            AbstractTimer* chT = nullptr, AbstractTimer* clT = nullptr,
-            AbstractTimeHandler* tH = nullptr, bool pA = false,
+            AbstractTimer* clT = nullptr, AbstractTimeHandler* tH = nullptr, bool pA = false,
             bool sA = false, std::string sP = "",
             boost::posix_time::time_duration rLT = boost::posix_time::seconds(0)) :
             m_PopupAlarm(pA), m_SoundAlarm(sA), m_SoundPath(sP), m_RunningLateThreshold(rLT),
             m_Paused(false), m_Started(false), m_Quitted(false),
             m_StatusUpdated(false), m_TimesUpdated(false), m_DisplayValues(),
-            m_MsgHandler(mH), m_Keeper(k), m_CheckTimer(chT), m_ClockTimer(clT), m_TimeHandler(tH) {}
+            m_MsgHandler(mH), m_Keeper(k), m_ClockTimer(clT), m_TimeHandler(tH) {}
 
         EWPresenterStub(AbstractMsgHandler& mH, AbstractTimeKeeper& k,
-            AbstractTimer& chT, AbstractTimer& clT,
-            AbstractTimeHandler& tH, bool pA,
-            bool sA, std::string sP,
-            boost::posix_time::time_duration rLT) :
+            AbstractTimer& clT, AbstractTimeHandler& tH, bool pA, bool sA,
+            std::string sP, boost::posix_time::time_duration rLT) :
             m_PopupAlarm(pA), m_SoundAlarm(sA), m_SoundPath(sP), m_RunningLateThreshold(rLT),
             m_Paused(false), m_Started(false), m_Quitted(false),
             m_StatusUpdated(false), m_TimesUpdated(false), m_DisplayValues(),
-            m_MsgHandler(&mH), m_Keeper(&k), m_CheckTimer(&chT), m_ClockTimer(&clT), m_TimeHandler(&tH) {}
+            m_MsgHandler(&mH), m_Keeper(&k), m_ClockTimer(&clT), m_TimeHandler(&tH) {}
 
         virtual ~EWPresenterStub() {}
 
@@ -128,7 +125,6 @@ class EWPresenterStub : public AbstractEWPresenter
 
         AbstractMsgHandler* m_MsgHandler;
         AbstractTimeKeeper* m_Keeper;
-        AbstractTimer* m_CheckTimer;
         AbstractTimer* m_ClockTimer;
         AbstractTimeHandler* m_TimeHandler;
 

@@ -44,7 +44,7 @@ class TimeKeeperStub : public AbstractTimeKeeper
                    unsigned int pt = 1000,
                    unsigned int wt = 1000,
                    bool cup = false) :
-            m_Fail(false), m_Late(false), m_Hibernated(false), m_Status(AbstractTimeKeeper::OFF),
+            m_Fail(false), m_Late(false), m_Updated(false), m_Status(AbstractTimeKeeper::OFF),
             m_HereStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(10,59,00))),
             m_AwayStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(11,31,01))),
             m_Interval(boost::posix_time::seconds(2)), m_Left(boost::posix_time::minutes(3)),
@@ -61,7 +61,7 @@ class TimeKeeperStub : public AbstractTimeKeeper
                    unsigned int pt = 1000,
                    unsigned int wt = 1000,
                    bool cup = false) :
-            m_Fail(false), m_Late(false), m_Hibernated(false), m_Status(AbstractTimeKeeper::OFF),
+            m_Fail(false), m_Late(false), m_Updated(false), m_Status(AbstractTimeKeeper::OFF),
             m_HereStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(10,59,00))),
             m_AwayStamp(boost::posix_time::ptime(boost::gregorian::date(2078,boost::date_time::Jan,10), boost::posix_time::time_duration(11,31,01))),
             m_Interval(boost::posix_time::seconds(2)), m_Left(boost::posix_time::minutes(3)),
@@ -78,12 +78,10 @@ class TimeKeeperStub : public AbstractTimeKeeper
         }
         virtual void stop() {m_Status = AbstractTimeKeeper::OFF;}
 
-        virtual void notifyHibernated() {m_Hibernated = true;}
-
-        virtual void updateStatus()
+        virtual bool checkUpdate()
         {
             if (m_Fail) { throw BaseException("Testing!"); }
-            m_Status = AbstractTimeKeeper::HERE;
+            return m_Updated;
         }
 
         virtual boost::posix_time::time_duration getTimerInterval() const {return boost::posix_time::seconds(1);}
@@ -106,7 +104,7 @@ class TimeKeeperStub : public AbstractTimeKeeper
 
         bool m_Fail;
         bool m_Late;
-        bool m_Hibernated;
+        bool m_Updated;
         AbstractTimeKeeper::Status m_Status;
         boost::posix_time::ptime m_HereStamp;
         boost::posix_time::ptime m_AwayStamp;

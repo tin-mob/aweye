@@ -67,7 +67,7 @@ void TKStateHere::initState(TimeKeeper& parent, bool cancelled)
     if (!cancelled)
     {
         parent.m_HereStamp = parent.m_TolerationTime.is_special() ?
-            parent.m_StartTimeUpdate : parent.m_TolerationTime;
+            parent.m_LastUpdate : parent.m_TolerationTime;
         parent.m_HereDur = boost::posix_time::seconds(0);
     }
     if (!parent.m_CummulPause)
@@ -86,7 +86,7 @@ void TKStateHere::initState(TimeKeeper& parent, bool cancelled)
             if (!parent.m_TolerationTime.is_special())
             {
                 const boost::posix_time::time_duration interval =
-                    parent.m_StartTimeUpdate - parent.m_TolerationTime;
+                    parent.m_LastUpdate - parent.m_TolerationTime;
                 parent.m_HereDur += interval;
                 parent.m_AwayDur -= interval;
             }
@@ -100,10 +100,10 @@ void TKStateHere::initState(TimeKeeper& parent, bool cancelled)
     parent.m_NumTolerated = 0;
 }
 
-boost::posix_time::time_duration TKStateHere::getTimerInterval(const TimeKeeper& parent) const
+boost::posix_time::ptime TKStateHere::getNextUpdate(const TimeKeeper& parent) const
 {
     boost::posix_time::time_duration timerInterval = parent.m_CheckFreq;
-    const boost::posix_time::time_duration remaining = getTimeLeft(parent);
+    const boost::posix_time::time_duration remaining = getTimeLeft(parent, true);
 
     if (remaining <= boost::posix_time::seconds(0))
     {
@@ -120,7 +120,7 @@ boost::posix_time::time_duration TKStateHere::getTimerInterval(const TimeKeeper&
     {
         timerInterval =  remaining;
     }
-    return timerInterval - parent.getUpdateOffset();
+    return parent.m_HereStamp + parent.m_HereDur + parent.m_AwayDur + timerInterval;
 }
 
 bool TKStateHere::isLate(const TimeKeeper& parent) const

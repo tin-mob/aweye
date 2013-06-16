@@ -45,9 +45,6 @@ class AbstractEWPresenter : public Subject<EWViewObserver, AbstractEWPresenter*>
         virtual void quit() = 0;
         virtual void show(bool show) = 0;
 
-        virtual void updateStatus() = 0;
-        virtual void updateTimes() = 0;
-
         virtual std::string getHideButtonLabel() const = 0;
         virtual std::string getPauseButtonLabel() const = 0;
         virtual std::string getStartButtonLabel() const = 0;

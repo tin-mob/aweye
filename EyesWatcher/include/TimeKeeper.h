@@ -53,10 +53,8 @@ class TimeKeeper : public AbstractTimeKeeper
 
         virtual void start();
         virtual void stop();
-        virtual void notifyHibernated();
 
-        virtual void updateStatus();
-        virtual boost::posix_time::time_duration getTimerInterval() const;
+        virtual bool checkUpdate();
         virtual bool isLate() const;
 
         virtual AbstractTimeKeeper::Status getStatus() const;
@@ -82,6 +80,8 @@ class TimeKeeper : public AbstractTimeKeeper
         friend class TKStateAway;
         friend class TKStateOff;
 
+        void notifyHibernated();
+        void updateStatus();
         void setStatus(Status status, bool cancelled = false);
         boost::posix_time::time_duration getUpdateOffset() const;
 
@@ -94,6 +94,7 @@ class TimeKeeper : public AbstractTimeKeeper
         boost::posix_time::time_duration m_HereDur;
         boost::posix_time::time_duration m_AwayDur;
         boost::posix_time::ptime m_LastUpdate;
+        boost::posix_time::ptime m_NextCheck;
         boost::posix_time::ptime m_StartTimeUpdate;
         boost::posix_time::ptime m_TolerationTime;
         unsigned int m_NumTolerated;
