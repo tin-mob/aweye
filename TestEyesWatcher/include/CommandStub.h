@@ -30,12 +30,12 @@ class CommandStub
     public:
         CommandStub(bool success = true, bool throws = false) : m_Executed(false), m_Success(success),
         m_Throws(throws), m_Command(
-            std::bind([&] (CommandStub* cmd)
+            [this] ()
             {
-                if (cmd->m_Throws) { throw BaseException("Testing!"); }
-                cmd->m_Executed = true;
-                return cmd->m_Success;
-            }, this)) {}
+                if (m_Throws) { throw BaseException("Testing!"); }
+                m_Executed = true;
+                return m_Success;
+            }) {}
         virtual ~CommandStub() {}
 
         bool m_Executed;

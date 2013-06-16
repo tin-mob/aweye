@@ -57,9 +57,9 @@ void WebcamHandlerProc::setFaceSize(unsigned int x, unsigned int y)
 /// @note IsHereCmd in same path than main executable,
 
 ///@todo copy pasted from wxConfigImpl
-bool fileExists(std::string name)
+bool fileExists(wxString name)
 {
-    const wxFileName fileName(wxString(name.c_str(), wxConvUTF8));
+    const wxFileName fileName(name);
     if(fileName.IsOk())
     {
         return wxFileName::FileExists(fileName. GetFullPath());
@@ -69,16 +69,16 @@ bool fileExists(std::string name)
 
 bool WebcamHandlerProc::isHere()
 {
-    // validate m_FaceCascadeName (and prevent injection)
-    if (!fileExists(m_FaceCascadeName))
-    {
-        assert(false);
-        throw GenericPresenceHandlerException();
-    }
     ///@todo test if this works in windows
     wxString cmd = wxT("./IsHereCmd '");
 
     const wxString cascade(m_FaceCascadeName.c_str(), wxConvUTF8);
+    // validate m_FaceCascadeName (and prevent injection)
+    if (!fileExists(cascade))
+    {
+        assert(false);
+        throw MissingCascadeFileException();
+    }
 
     cmd << m_index << "' '" << cascade << "' '" << m_FaceSizeX << "' '" << m_FaceSizeY << "'";
     IsHereCmd::ReturnCodes code = (IsHereCmd::ReturnCodes)wxExecute(cmd, wxEXEC_SYNC);
