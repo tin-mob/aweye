@@ -22,20 +22,17 @@
 #ifndef ISHERECMD_H_INCLUDED
 #define ISHERECMD_H_INCLUDED
 
-struct IsHereCmd
+enum class IsHereCmdRetCode
 {
-    enum ReturnCodes
-    {
-        AWAY,
-        HERE,
-        INVALID_NB_ARGS,
-        INVALID_INDEX,
-        INVALID_FACEX,
-        INVALID_FACEY,
-        INVALID_CASCADE,
-        INVALID_CAMERA,
-        OTHER_ERROR
-    };
+    AWAY,
+    HERE,
+    INVALID_NB_ARGS,
+    INVALID_INDEX,
+    INVALID_FACEX,
+    INVALID_FACEY,
+    INVALID_CASCADE,
+    INVALID_CAMERA,
+    OTHER_ERROR
 };
 
 

@@ -23,6 +23,7 @@
 #define ABSTRACTPRESENCEHANDLER_H
 
 #include "BaseException.h"
+#include <functional>
 
 class GenericPresenceHandlerException : public BaseException
 {
@@ -30,12 +31,25 @@ class GenericPresenceHandlerException : public BaseException
           GenericPresenceHandlerException() :  BaseException("Error while establishing presence.") { }
 };
 
+class MissingCascadeFileException : public BaseException
+{
+    public:
+          MissingCascadeFileException() :  BaseException("Cascade file not found.") { }
+};
 
+class InvalidCameraException : public BaseException
+{
+    public:
+          InvalidCameraException() :  BaseException("Error using the camera.") { }
+};
+
+
+// isHere takes a callback rather than returning to allow async execution
 class AbstractPresenceHandler
 {
     public:
         virtual ~AbstractPresenceHandler() {}
-        virtual bool isHere() = 0;
+        virtual void isHere(std::function<void (bool)> callBack) = 0;
         virtual void setCascade(std::string name) = 0;
         virtual void setIndex(int index) = 0;
         virtual void setFaceSize(unsigned int x, unsigned int y) = 0;

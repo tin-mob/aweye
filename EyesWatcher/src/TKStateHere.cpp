@@ -33,9 +33,9 @@ TKStateHere::~TKStateHere()
 {
 }
 
-void TKStateHere::updateStatus(TimeKeeper& parent)
+void TKStateHere::updateStatus(TimeKeeper& parent, bool isHere)
 {
-    if (!parent.m_PresenceHandler.isHere())
+    if (!isHere)
     {
         if (parent.m_NumTolerated != 0 ||
             getTimeLeft(parent, true) > boost::posix_time::time_duration(0,0,0,0))

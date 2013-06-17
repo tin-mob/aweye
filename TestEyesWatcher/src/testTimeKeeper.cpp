@@ -64,7 +64,6 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestStart)
     {
-        presenceHandler.pushResult(true);
         keeper.start();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
         CHECK_EQUAL(keeper.isLate(), false);
@@ -77,7 +76,6 @@ SUITE(TestTimeKeeper)
 
     TEST_FIXTURE(TimeKeeperFixture, TestStartStop)
     {
-        presenceHandler.pushResult(true);
         keeper.start();
         keeper.stop();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
@@ -92,9 +90,8 @@ SUITE(TestTimeKeeper)
     TEST_FIXTURE(TimeKeeperFixture, TestUpdate)
     {
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
+
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
         CHECK_EQUAL(true, keeper.checkUpdate());
@@ -116,9 +113,8 @@ SUITE(TestTimeKeeper)
         keeper.setWorkLength(data.workLength);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
+
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
         CHECK_EQUAL(true, keeper.checkUpdate());
@@ -159,9 +155,8 @@ SUITE(TestTimeKeeper)
         keeper.setWorkLength(data.workLength);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
+
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
         CHECK_EQUAL(true, keeper.checkUpdate());
@@ -189,9 +184,8 @@ SUITE(TestTimeKeeper)
         keeper.setWorkLength(data.workLength);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
+
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
         presenceHandler.pushResult(true);
         CHECK_EQUAL(true, keeper.checkUpdate());
@@ -219,8 +213,6 @@ SUITE(TestTimeKeeper)
         keeper.setWorkTol(data.workTol);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
 
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
@@ -248,8 +240,6 @@ SUITE(TestTimeKeeper)
         keeper.setWorkTol(data.workTol);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
 
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
@@ -281,8 +271,6 @@ SUITE(TestTimeKeeper)
         keeper.setWorkTol(data.workTol);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
 
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
@@ -314,8 +302,6 @@ SUITE(TestTimeKeeper)
         keeper.setWorkTol(data.workTol);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
 
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
@@ -347,8 +333,6 @@ SUITE(TestTimeKeeper)
         keeper.setWorkTol(data.workTol);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
 
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
@@ -390,8 +374,6 @@ SUITE(TestTimeKeeper)
         keeper.setPauseTol(data.pauseTol);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
 
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
@@ -429,8 +411,6 @@ SUITE(TestTimeKeeper)
         keeper.setPauseTol(data.pauseTol);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
 
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
@@ -474,8 +454,6 @@ SUITE(TestTimeKeeper)
         keeper.setPauseTol(data.pauseTol);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
 
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
@@ -517,8 +495,6 @@ SUITE(TestTimeKeeper)
         keeper.setPauseTol(data.pauseTol);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
 
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
@@ -556,8 +532,6 @@ SUITE(TestTimeKeeper)
         keeper.setPauseLength(data.pauseLength);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
 
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
@@ -591,8 +565,6 @@ SUITE(TestTimeKeeper)
         keeper.setPauseLength(data.pauseLength);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
 
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
@@ -626,8 +598,6 @@ SUITE(TestTimeKeeper)
         keeper.setPauseLength(data.pauseLength);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
 
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);
@@ -669,8 +639,6 @@ SUITE(TestTimeKeeper)
         keeper.setPauseTol(data.pauseTol);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
-
-        presenceHandler.pushResult(true);
         keeper.start();
 
         timeHandler.setTime(timeHandler.getTime() + data.checkFreq);

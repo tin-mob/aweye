@@ -25,19 +25,7 @@
 #include "AbstractPresenceHandler.h"
 #include "opencv2/opencv.hpp"
 
-#include "BaseException.h"
-
-class MissingCascadeFileException : public BaseException
-{
-    public:
-          MissingCascadeFileException() :  BaseException("Cascade file not found.") { }
-};
-
-class InvalidCameraException : public BaseException
-{
-    public:
-          InvalidCameraException() :  BaseException("Error using the camera.") { }
-};
+#include <functional>
 
 class AbstractMsgHandler;
 class AbstractConfig;
@@ -49,9 +37,10 @@ class WebcamHandler : public AbstractPresenceHandler
         ~WebcamHandler();
 
         bool isHere();
-        void setCascade(std::string name);
-        void setIndex(int index);
-        void setFaceSize(unsigned int x, unsigned int y);
+        virtual void isHere(std::function<void (bool)> callBack);
+        virtual void setCascade(std::string name);
+        virtual void setIndex(int index);
+        virtual void setFaceSize(unsigned int x, unsigned int y);
     protected:
     private:
         int m_index;

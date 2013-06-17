@@ -22,6 +22,7 @@
 #include "WebcamHandlerProc.h"
 #include "WebcamHandler.h"
 #include "IsHereCmd.h"
+#include <functional>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 
@@ -67,13 +68,15 @@ bool fileExists(wxString name)
     return false;
 }
 
-bool WebcamHandlerProc::isHere()
+///@todo test if this works in windows
+void WebcamHandlerProc::isHere(std::function<void (bool)> callBack)
 {
-    ///@todo test if this works in windows
+    WebcamHdlrProcess* process = WebcamHdlrProcess::create(callBack);
+
     wxString cmd = wxT("./IsHereCmd '");
 
-    const wxString cascade(m_FaceCascadeName.c_str(), wxConvUTF8);
     // validate m_FaceCascadeName (and prevent injection)
+    const wxString cascade(m_FaceCascadeName.c_str(), wxConvUTF8);
     if (!fileExists(cascade))
     {
         assert(false);
@@ -81,27 +84,5 @@ bool WebcamHandlerProc::isHere()
     }
 
     cmd << m_index << "' '" << cascade << "' '" << m_FaceSizeX << "' '" << m_FaceSizeY << "'";
-    IsHereCmd::ReturnCodes code = (IsHereCmd::ReturnCodes)wxExecute(cmd, wxEXEC_SYNC);
-
-    switch (code)
-    {
-        case IsHereCmd::HERE:
-            return true;
-        case IsHereCmd::AWAY:
-            return false;
-        case IsHereCmd::INVALID_CAMERA:
-            throw InvalidCameraException();
-        case IsHereCmd::INVALID_CASCADE:
-            throw MissingCascadeFileException();
-        case IsHereCmd::INVALID_FACEX:
-        case IsHereCmd::INVALID_FACEY:
-        case IsHereCmd::INVALID_INDEX:
-        case IsHereCmd::INVALID_NB_ARGS:
-        case IsHereCmd::OTHER_ERROR:
-        default:
-            assert(false);
-            throw GenericPresenceHandlerException();
-    }
-
-    return false;
+    wxExecute(cmd, wxEXEC_ASYNC, process);
 }

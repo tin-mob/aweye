@@ -26,7 +26,7 @@
 int main(int argc, char* argv[])
 {
     assert(argc == 5);
-    if (argc != 5) return IsHereCmd::INVALID_NB_ARGS;
+    if (argc != 5) return (int)IsHereCmdRetCode::INVALID_NB_ARGS;
 
     const char* indexChar = argv[1];
     const char* faceCascadeName = argv[2];
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
     if (!iss >> index)
     {
         assert(0);
-        return IsHereCmd::INVALID_INDEX;
+        return (int)IsHereCmdRetCode::INVALID_INDEX;
     }
 
     iss.str(faceSizeXChar);
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
     if (!iss >> faceSizeX)
     {
         assert(0);
-        return IsHereCmd::INVALID_FACEX;
+        return (int)IsHereCmdRetCode::INVALID_FACEX;
     }
 
     iss.str(faceSizeYChar);
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
     if (!iss >> faceSizeY)
     {
         assert(0);
-        return IsHereCmd::INVALID_FACEY;
+        return (int)IsHereCmdRetCode::INVALID_FACEY;
     }
 
     try
@@ -65,23 +65,23 @@ int main(int argc, char* argv[])
         WebcamHandler handler(index, faceCascadeName, faceSizeX, faceSizeY);
         if(handler.isHere())
         {
-            return IsHereCmd::HERE;
+            return (int)IsHereCmdRetCode::HERE;
         }
         else
         {
-            return IsHereCmd::AWAY;
+            return (int)IsHereCmdRetCode::AWAY;
         }
     }
     catch (MissingCascadeFileException)
     {
-        return IsHereCmd::INVALID_CASCADE;
+        return (int)IsHereCmdRetCode::INVALID_CASCADE;
     }
     catch (InvalidCameraException)
     {
-        return IsHereCmd::INVALID_CAMERA;
+        return (int)IsHereCmdRetCode::INVALID_CAMERA;
     }
     catch (...)
     {
-        return IsHereCmd::OTHER_ERROR;
+        return (int)IsHereCmdRetCode::OTHER_ERROR;
     }
 }

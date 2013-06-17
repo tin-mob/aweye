@@ -45,7 +45,7 @@ TimeKeeper::TimeKeeper(AbstractTimeHandler& timeHandler,
     m_NextCheck(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_StartTimeUpdate(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_TolerationTime(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
-    m_NumTolerated(0),
+    m_NumTolerated(0), m_StartedCheck(false), m_CompletedCheck(false),
     m_HereStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_AwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
     m_LastAwayStamp(boost::posix_time::ptime(boost::posix_time::not_a_date_time)),
@@ -68,23 +68,16 @@ void TimeKeeper::start()
     {
         m_StartTimeUpdate = m_TimeHandler.getTime();
         m_LastUpdate = m_StartTimeUpdate;
+        setStatus(AbstractTimeKeeper::HERE);
 
-        if (m_PresenceHandler.isHere())
-        {
-            setStatus(AbstractTimeKeeper::HERE);
-        }
-        else
-        {
-            setStatus(AbstractTimeKeeper::AWAY);
-        }
-
-        TKState& state = *m_States.find(m_CurrentState)->second;
-        m_NextCheck = state.getNextUpdate(*this);
+        setNextUpdate();
     }
 }
 
 void TimeKeeper::stop()
 {
+    m_StartedCheck = false;
+    m_CompletedCheck = false;
     if (m_CurrentState != TimeKeeper::OFF)
     {
         setStatus(AbstractTimeKeeper::OFF);
@@ -109,46 +102,72 @@ void TimeKeeper::notifyHibernated()
         m_AwayStamp = m_LastUpdate;
     }
 
-
     m_AwayDur += m_StartTimeUpdate - m_LastUpdate;
     m_CurrentState = AbstractTimeKeeper::AWAY;
 
-    TKState& state = *m_States.find(m_CurrentState)->second;
-    m_NextCheck = state.getNextUpdate(*this);
+    setNextUpdate();
 }
 
 bool TimeKeeper::checkUpdate()
 {
-    m_StartTimeUpdate = m_TimeHandler.getTime();
     bool updated = false;
+    if (m_StartedCheck)
+    {
+        if (!m_CompletedCheck)
+            updated = false;
+        else
+        {
+            m_StartedCheck = false;
+            m_CompletedCheck = false;
 
-    if (m_NextCheck + m_CheckFreq <= m_StartTimeUpdate)
-    {
-        notifyHibernated();
-        updated = true;
+            setNextUpdate();
+            updated = true;
+        }
     }
-    else if (m_NextCheck <= m_StartTimeUpdate)
+    else
     {
-        updateStatus();
-        updated = true;
-    }
-    if (updated)
-    {
-        m_LastUpdate = m_StartTimeUpdate;
-    }
-    TKState& state = *m_States.find(m_CurrentState)->second;
-    m_NextCheck = state.getNextUpdate(*this);
+        m_StartTimeUpdate = m_TimeHandler.getTime();
+        if (m_NextCheck + m_CheckFreq <= m_StartTimeUpdate)
+        {
+            notifyHibernated();
+            updated = true;
+        }
+        else if (m_NextCheck <= m_StartTimeUpdate)
+        {
+            updateStatus();
 
+            if (m_CompletedCheck)
+            {
+                m_StartedCheck = false;
+                m_CompletedCheck = false;
+
+                setNextUpdate();
+                updated = true;
+            }
+        }
+    }
     return updated;
 }
 
 void TimeKeeper::updateStatus()
 {
+    auto callBack = [this] (bool isHere)
+    {
+        updateCallback(isHere);
+    };
+    m_StartedCheck = true;
+    this->m_PresenceHandler.isHere(callBack);
+}
+
+void TimeKeeper::updateCallback(bool isHere)
+{
     TKState& upState = *m_States.find(m_CurrentState)->second;
-    upState.updateStatus(*this);
+    upState.updateStatus(*this, isHere);
 
     TKState& durState = *m_States.find(m_CurrentState)->second;
     durState.addDuration(*this);
+
+    m_CompletedCheck = true;
 }
 
 bool TimeKeeper::isLate() const
@@ -188,6 +207,13 @@ boost::posix_time::time_duration TimeKeeper::getWorkTimeLeft() const
 {
     const TKState& state = *m_States.find(m_CurrentState)->second;
     return state.getWorkTimeLeft(*this);
+}
+
+void TimeKeeper::setNextUpdate()
+{
+    TKState& state = *m_States.find(m_CurrentState)->second;
+    m_NextCheck = state.getNextUpdate(*this);
+    m_LastUpdate = m_StartTimeUpdate;
 }
 
 void TimeKeeper::setStatus(Status status, bool cancelled)

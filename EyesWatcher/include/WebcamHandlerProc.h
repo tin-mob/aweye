@@ -23,7 +23,11 @@
 #define WEBCAMHANDLERPROC_H
 
 #include "AbstractPresenceHandler.h"
+#include "IsHereCmd.h"
+#include <functional>
+#include <wx/process.h>
 
+/// @todo becoming big for untestable (without wx) code...
 class WebcamHandlerProc : public AbstractPresenceHandler
 {
     public:
@@ -31,12 +35,56 @@ class WebcamHandlerProc : public AbstractPresenceHandler
                       int faceSizeX, int faceSizeY);
         ~WebcamHandlerProc();
 
-        bool isHere();
-        void setCascade(std::string name);
-        void setIndex(int index);
-        void setFaceSize(unsigned int x, unsigned int y);
+        virtual void isHere(std::function<void (bool)> callBack);
+        virtual void setCascade(std::string name);
+        virtual void setIndex(int index);
+        virtual void setFaceSize(unsigned int x, unsigned int y);
     protected:
     private:
+        // delete itself after usage
+        class WebcamHdlrProcess : public wxProcess
+        {
+            public:
+                static WebcamHdlrProcess* create(std::function<void (bool)> callBack)
+                {
+                    return new WebcamHdlrProcess(callBack);
+                }
+
+                virtual void OnTerminate(int pid, int status)
+                {
+                    auto callBack = m_CallBack;
+
+                    // cannot use this after this
+                    delete this;
+
+                    IsHereCmdRetCode code = (IsHereCmdRetCode)status;
+                    switch (code)
+                    {
+                        case IsHereCmdRetCode::INVALID_CAMERA:
+                            throw InvalidCameraException();
+                        case IsHereCmdRetCode::INVALID_CASCADE:
+                            throw MissingCascadeFileException();
+                        case IsHereCmdRetCode::INVALID_FACEX:
+                        case IsHereCmdRetCode::INVALID_FACEY:
+                        case IsHereCmdRetCode::INVALID_INDEX:
+                        case IsHereCmdRetCode::INVALID_NB_ARGS:
+                        case IsHereCmdRetCode::OTHER_ERROR:
+                            assert(false);
+                            throw GenericPresenceHandlerException();
+                        default:
+                            break;
+                    }
+
+                    callBack(code == IsHereCmdRetCode::HERE);
+                }
+            private:
+                WebcamHdlrProcess(std::function<void (bool)> callBack) :
+                    m_CallBack(callBack) {}
+                virtual ~WebcamHdlrProcess() {}
+
+                std::function<void (bool)> m_CallBack;
+        };
+
         int m_index;
         std::string m_FaceCascadeName;
         int m_FaceSizeX;

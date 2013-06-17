@@ -35,12 +35,12 @@ class PresenceHandlerStub : public AbstractPresenceHandler
             m_CascadePath(fcn), m_WebcamIndex(i), m_FaceSizeX(fx), m_FaceSizeY(fy){}
         virtual ~PresenceHandlerStub() {}
 
-        virtual bool isHere()
+        virtual void isHere(std::function<void (bool)> callBack)
         {
             assert (!m_Results.empty());
             bool result  = m_Results.front();
             m_Results.pop();
-            return result;
+            callBack(result);
         }
 
         virtual void pushResult(bool result)

@@ -96,3 +96,8 @@ bool WebcamHandler::isHere()
 
     return !faces.empty();
 }
+
+void WebcamHandler::isHere(std::function<void (bool)> callBack)
+{
+    callBack(isHere());
+}

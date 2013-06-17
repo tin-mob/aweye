@@ -32,7 +32,7 @@ TKStateOff::~TKStateOff()
 }
 
 
-void TKStateOff::updateStatus(TimeKeeper& parent)
+void TKStateOff::updateStatus(TimeKeeper& parent, bool)
 {
 }
 

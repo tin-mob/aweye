@@ -55,6 +55,7 @@ class TimeKeeper : public AbstractTimeKeeper
         virtual void stop();
 
         virtual bool checkUpdate();
+        void updateCallback(bool isHere);
         virtual bool isLate() const;
 
         virtual AbstractTimeKeeper::Status getStatus() const;
@@ -82,6 +83,7 @@ class TimeKeeper : public AbstractTimeKeeper
 
         void notifyHibernated();
         void updateStatus();
+        void setNextUpdate();
         void setStatus(Status status, bool cancelled = false);
         boost::posix_time::time_duration getUpdateOffset() const;
 
@@ -98,6 +100,8 @@ class TimeKeeper : public AbstractTimeKeeper
         boost::posix_time::ptime m_StartTimeUpdate;
         boost::posix_time::ptime m_TolerationTime;
         unsigned int m_NumTolerated;
+        bool m_StartedCheck;
+        bool m_CompletedCheck;
 
         boost::posix_time::ptime m_HereStamp;
         boost::posix_time::ptime m_AwayStamp;

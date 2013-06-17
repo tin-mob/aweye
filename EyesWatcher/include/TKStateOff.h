@@ -30,7 +30,7 @@ class TKStateOff : public TKState
         TKStateOff();
         virtual ~TKStateOff();
 
-        virtual void updateStatus(TimeKeeper& parent);
+        virtual void updateStatus(TimeKeeper& parent, bool isHere);
         virtual void initState(TimeKeeper& parent, bool cancelled);
         virtual boost::posix_time::ptime getNextUpdate(const TimeKeeper& parent) const;
         virtual bool isLate(const TimeKeeper& parent) const;

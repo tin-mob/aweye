@@ -30,7 +30,7 @@ class TKState
     public:
         virtual ~TKState() {}
 
-        virtual void updateStatus(TimeKeeper& parent) = 0;
+        virtual void updateStatus(TimeKeeper& parent, bool isHere) = 0;
         virtual void initState(TimeKeeper& parent, bool cancelled) = 0;
         virtual boost::posix_time::ptime getNextUpdate(const TimeKeeper& parent) const = 0;
         virtual bool isLate(const TimeKeeper& parent) const = 0;
