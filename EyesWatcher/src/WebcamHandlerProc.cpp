@@ -20,7 +20,7 @@
 
 
 #include "WebcamHandlerProc.h"
-#include "WebcamHandler.h"
+#include "IsHereProcess.h"
 #include "IsHereCmd.h"
 #include <functional>
 #include <wx/filename.h>
@@ -55,8 +55,6 @@ void WebcamHandlerProc::setFaceSize(unsigned int x, unsigned int y)
     m_FaceSizeY = y;
 }
 
-/// @note IsHereCmd in same path than main executable,
-
 ///@todo copy pasted from wxConfigImpl
 bool fileExists(wxString name)
 {
@@ -68,13 +66,10 @@ bool fileExists(wxString name)
     return false;
 }
 
+///@note IsHereCmd in same path than main executable,
 ///@todo test if this works in windows
 void WebcamHandlerProc::isHere(std::function<void (bool)> callBack)
 {
-    WebcamHdlrProcess* process = WebcamHdlrProcess::create(callBack);
-
-    wxString cmd = wxT("./IsHereCmd '");
-
     // validate m_FaceCascadeName (and prevent injection)
     const wxString cascade(m_FaceCascadeName.c_str(), wxConvUTF8);
     if (!fileExists(cascade))
@@ -82,7 +77,8 @@ void WebcamHandlerProc::isHere(std::function<void (bool)> callBack)
         assert(false);
         throw MissingCascadeFileException();
     }
-
+    wxString cmd = wxT("./IsHereCmd '");
     cmd << m_index << "' '" << cascade << "' '" << m_FaceSizeX << "' '" << m_FaceSizeY << "'";
-    wxExecute(cmd, wxEXEC_ASYNC, process);
+
+    IsHereProcess::run(callBack, cmd);
 }
