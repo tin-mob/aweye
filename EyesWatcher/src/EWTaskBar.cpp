@@ -18,12 +18,12 @@
 
  **************************************************************/
 
-
+#include "AbstractEventHandler.h"
 #include "EWTaskBar.h"
-#include "AbstractEWViewPres.h"
+#include "ObservableWxMenu.h"
+
 #include "wx_pch.h"
 #include <wx/menu.h>
-#include "ObservableWxMenu.h"
 
 BEGIN_EVENT_TABLE(EWTaskBar,wxTaskBarIcon)
     EVT_MENU(ID_HIDE_RESTORE, EWTaskBar::OnMenuHideRestore)
@@ -32,10 +32,9 @@ BEGIN_EVENT_TABLE(EWTaskBar,wxTaskBarIcon)
     EVT_MENU(ID_EXIT,EWTaskBar::OnMenuExit)
 END_EVENT_TABLE()
 
-EWTaskBar::EWTaskBar(AbstractEWViewPres<AbstractEWTaskbar>& presenter) :
-    m_Presenter(presenter), m_Menu(nullptr)
+EWTaskBar::EWTaskBar(AbstractEventHandler& hdlr) :
+    m_EventHandler(hdlr), m_Menu(nullptr)
 {
-    m_Presenter.attachView(this);
 }
 
 EWTaskBar::~EWTaskBar()
@@ -90,9 +89,7 @@ wxMenu* EWTaskBar::CreatePopupMenu()
     m_Menu->Append(EWTaskBar::ID_RUNNING_TIME, wxT("Running"));
     m_Menu->Append(EWTaskBar::ID_LEFT_TIME, wxT("Time Left"));
 
-    // force update
-    m_Presenter.forceUpdate();
-
+    m_EventHandler.forceUpdate();
     return m_Menu;
 }
 
@@ -120,20 +117,20 @@ void EWTaskBar::onMenuDelete(ObservableWxMenu* menu)
 
 void EWTaskBar::OnMenuHideRestore(wxCommandEvent&)
 {
-    m_Presenter.OnViewHideRestore();
+    m_EventHandler.OnViewHideRestore();
 }
 
 void EWTaskBar::OnMenuStartStop(wxCommandEvent&)
 {
-    m_Presenter.OnViewStartStop();
+    m_EventHandler.OnViewStartStop();
 }
 
 void EWTaskBar::OnMenuPauseResume(wxCommandEvent&)
 {
-    m_Presenter.OnViewPauseResume();
+    m_EventHandler.OnViewPauseResume();
 }
 
 void EWTaskBar::OnMenuExit(wxCommandEvent&)
 {
-    m_Presenter.OnViewQuit();
+    m_EventHandler.OnViewQuit();
 }

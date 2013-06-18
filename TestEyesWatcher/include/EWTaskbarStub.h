@@ -27,15 +27,15 @@
 class EWTaskbarStub : public AbstractEWTaskbar
 {
     public:
-        EWTaskbarStub(AbstractEWViewPres<AbstractEWTaskbar>* p = nullptr) : m_HideRestoreLabel(""),
+        EWTaskbarStub(AbstractEventHandler* hdlr = nullptr) : m_HideRestoreLabel(""),
             m_StartStopLabel(""), m_PauseResumeLabel(""), m_OnClock(""),
             m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
-            m_Loc(""), m_Presenter(p){}
+            m_Loc(""), m_EventHandler(hdlr){}
 
-        EWTaskbarStub(AbstractEWViewPres<AbstractEWTaskbar>& p) : m_HideRestoreLabel(""),
+        EWTaskbarStub(AbstractEventHandler& hdlr) : m_HideRestoreLabel(""),
             m_StartStopLabel(""), m_PauseResumeLabel(""), m_OnClock(""),
             m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
-            m_Loc(""), m_Presenter(&p){}
+            m_Loc(""), m_EventHandler(&hdlr){}
 
         virtual ~EWTaskbarStub() {}
 
@@ -70,7 +70,7 @@ class EWTaskbarStub : public AbstractEWTaskbar
         std::string m_LeftClock;
         std::string m_Loc;
 
-        AbstractEWViewPres<AbstractEWTaskbar>* m_Presenter;
+        AbstractEventHandler* m_EventHandler;
     protected:
     private:
 };

@@ -18,61 +18,63 @@
 
  **************************************************************/
 
-
 #include "EWTaskBarPres.h"
+#include "AbstractEventHandler.h"
 #include "AbstractEWPresenter.h"
 #include "AbstractEWTaskbar.h"
 
-EWTaskBarPres::EWTaskBarPres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter,
-    std::function<bool()>& dispCmd) : EWViewPres(msgHandler, presenter, dispCmd), m_LastIcon("")
+EWTaskBarPres::EWTaskBarPres(AbstractEWTaskbar& taskBar, AbstractEWPresenter& presenter,
+                             AbstractEventHandler& hdlr) :
+    m_TaskBar(taskBar), m_Presenter(presenter), m_EventHandler(hdlr), m_LastIcon("")
 {
+    m_Presenter.attach(this);
+    m_EventHandler.attach(this);
+
+    refresh();
 }
 
 EWTaskBarPres::~EWTaskBarPres()
 {
+    m_Presenter.detach(this);
+    m_EventHandler.detach(this);
 }
 
-void EWTaskBarPres::doStatusUpdate()
+void EWTaskBarPres::OnStatusUpdate()
 {
-    assert(m_View != nullptr);
-    if (m_View == nullptr) return;
-
-    m_View->setPopupMenuCommands(
+    m_TaskBar.setPopupMenuCommands(
         m_Presenter.getHideButtonLabel(),
         m_Presenter.getStartButtonLabel(),
         m_Presenter.getPauseButtonLabel());
-
-    const std::string newIcon = m_Presenter.getIconName();
-    if (newIcon != m_LastIcon)
-    {
-        m_LastIcon = newIcon;
-        m_View->setIcon(m_LastIcon);
-    }
+    setIcon();
 }
 
-void EWTaskBarPres::doTimeUpdate()
+void EWTaskBarPres::OnTimeUpdate()
 {
-    assert(m_View != nullptr);
-    if (m_View == nullptr) return;
-
-    m_View->setPopupMenuTimes(
+    m_TaskBar.setPopupMenuTimes(
         "Last Session : " + m_Presenter.getTimeOn(),
         "Last Pause : " + m_Presenter.getTimeOff(),
         "Running : " + m_Presenter.getTimeRunning(),
         "Time Left : " + m_Presenter.getTimeLeft());
+    setIcon();
+}
 
+void EWTaskBarPres::OnQuit()
+{
+    m_TaskBar.setIcon("");
+}
+
+void EWTaskBarPres::setIcon()
+{
     const std::string newIcon = m_Presenter.getIconName();
     if (newIcon != m_LastIcon)
     {
         m_LastIcon = newIcon;
-        m_View->setIcon(m_LastIcon);
+        m_TaskBar.setIcon(m_LastIcon);
     }
 }
 
-void EWTaskBarPres::doQuit()
+void EWTaskBarPres::refresh()
 {
-    assert(m_View != nullptr);
-    if (m_View == nullptr) return;
-
-    m_View->setIcon("");
+    OnStatusUpdate();
+    OnTimeUpdate();
 }

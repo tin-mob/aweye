@@ -22,14 +22,15 @@
 #ifndef EWVIEWOBSERVER_H
 #define EWVIEWOBSERVER_H
 
+///@todo change to TKObserver
 class AbstractEWPresenter;
 class EWViewObserver
 {
     public:
         virtual ~EWViewObserver() {}
-        virtual void OnStatusUpdate(AbstractEWPresenter* subject) = 0;
-        virtual void OnTimeUpdate(AbstractEWPresenter* subject) = 0;
-        virtual void OnQuit(AbstractEWPresenter* subject) = 0;
+        virtual void OnStatusUpdate() = 0;
+        virtual void OnTimeUpdate() = 0;
+        virtual void OnQuit() = 0;
     protected:
     private:
 };

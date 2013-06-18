@@ -18,37 +18,34 @@
 
  **************************************************************/
 
-/// @todo same as EWTaskBarPresStub...
 
-#ifndef EWMAINFRAMEPRESSTUB_H
-#define EWMAINFRAMEPRESSTUB_H
+#ifndef EVENTHANDLER_H
+#define EVENTHANDLER_H
 
-#include "AbstractEWViewPres.h"
-#include "AbstractEWMainFrame.h"
+#include "AbstractEventHandler.h"
+#include <functional>
 
 class AbstractEWPresenter;
 class AbstractMsgHandler;
-class EWMainFramePresStub : public AbstractEWViewPres<AbstractEWMainFrame>
+class EventHandler : public AbstractEventHandler
 {
     public:
-        EWMainFramePresStub(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter,
-            std::function<bool()>& dispCmd) :
-            m_MsgHandler(&msgHandler), m_Presenter(&presenter), m_DispCmd(&dispCmd) {}
-        virtual ~EWMainFramePresStub() {}
+        EventHandler(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter,
+                     std::function<bool()>& dispCmd);
+        virtual ~EventHandler();
 
-        virtual void forceUpdate() {}
-        virtual void OnViewQuit() {}
-        virtual void OnViewAbout() {}
-        virtual void OnViewOptionsButtonClick() {}
-        virtual void OnViewStartStop() {}
-        virtual void OnViewPauseResume() {}
-        virtual void OnViewHideRestore() {}
-
-        AbstractMsgHandler* m_MsgHandler;
-        AbstractEWPresenter* m_Presenter;
-        std::function<bool()>* m_DispCmd;
+        virtual void forceUpdate();
+        virtual void OnViewQuit();
+        virtual void OnViewAbout();
+        virtual void OnViewOptionsButtonClick();
+        virtual void OnViewStartStop();
+        virtual void OnViewPauseResume();
+        virtual void OnViewHideRestore();
     protected:
     private:
+        AbstractMsgHandler& m_MsgHandler;
+        AbstractEWPresenter& m_Presenter;
+        std::function<bool()>& m_DisplayOptionsDialog;
 };
 
-#endif // EWMAINFRAMEPRESSTUB_H
+#endif // EVENTHANDLER_H

@@ -22,21 +22,28 @@
 #ifndef EWMAINFRAMEPRES_H
 #define EWMAINFRAMEPRES_H
 
-#include "EWViewPres.h"
+#include "AbstractEventHandler.h"
+#include "EWViewObserver.h"
 
-class AbstractMsgHandler;
-class AbstractEWPresenter;
+class AbstractEventHandler;
 class AbstractEWMainFrame;
-class EWMainFramePres : public EWViewPres<AbstractEWMainFrame>
+class AbstractEWPresenter;
+class EWMainFramePres : public EWViewObserver, public EventHandlerObserver
 {
     public:
-        EWMainFramePres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter, std::function<bool()>& dispCmd);
+        EWMainFramePres(AbstractEWMainFrame& frame, AbstractEWPresenter& presenter,
+                        AbstractEventHandler& hdlr);
         virtual ~EWMainFramePres();
+
+        virtual void OnStatusUpdate();
+        virtual void OnTimeUpdate();
+        virtual void OnQuit();
+        virtual void refresh();
     protected:
-        virtual void doStatusUpdate();
-        virtual void doTimeUpdate();
-        virtual void doQuit();
     private:
+        AbstractEWMainFrame& m_Frame;
+        AbstractEWPresenter& m_Presenter;
+        AbstractEventHandler& m_EventHandler;
 };
 
 #endif // EWMAINFRAMEPRES_H

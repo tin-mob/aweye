@@ -23,22 +23,22 @@
 #define EWMAINFRAMESTUB_H
 
 #include "AbstractEWMainFrame.h"
-#include "AbstractEWViewPres.h"
 
+class AbstractEventHandler;
 class EWMainFrameStub : public AbstractEWMainFrame
 {
     public:
-        EWMainFrameStub(AbstractEWViewPres<AbstractEWMainFrame>* p = nullptr,
+        EWMainFrameStub(AbstractEventHandler* hdlr = nullptr,
             bool tc = true) :
             m_Closed(false), m_Shown(false), m_Status(""),
             m_OnClock(""), m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
-            m_PauseLabel(""), m_StartLabel(""), m_Presenter(p), m_TaskbarCreated(tc) {}
+            m_PauseLabel(""), m_StartLabel(""), m_EventHandler(hdlr), m_TaskbarCreated(tc) {}
 
-        EWMainFrameStub(AbstractEWViewPres<AbstractEWMainFrame>& p,
+        EWMainFrameStub(AbstractEventHandler& hdlr,
             bool tc = true) :
             m_Closed(false), m_Shown(false), m_Status(""),
             m_OnClock(""), m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
-            m_PauseLabel(""), m_StartLabel(""), m_Presenter(&p), m_TaskbarCreated(tc) {}
+            m_PauseLabel(""), m_StartLabel(""), m_EventHandler(&hdlr), m_TaskbarCreated(tc) {}
 
         virtual ~EWMainFrameStub() {}
 
@@ -65,7 +65,7 @@ class EWMainFrameStub : public AbstractEWMainFrame
         std::string m_PauseLabel;
         std::string m_StartLabel;
 
-        AbstractEWViewPres<AbstractEWMainFrame>* m_Presenter;
+        AbstractEventHandler* m_EventHandler;
         bool m_TaskbarCreated;
 
         virtual void setPauseButtonLabel(std::string label) {m_PauseLabel = label;}

@@ -18,53 +18,60 @@
 
  **************************************************************/
 
+#include "AbstractEventHandler.h"
 #include "AbstractEWMainFrame.h"
 #include "AbstractEWPresenter.h"
 #include "BaseException.h"
 #include "EWMainFramePres.h"
 
-EWMainFramePres::EWMainFramePres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter,
-    std::function<bool()>& dispCmd) : EWViewPres(msgHandler, presenter, dispCmd)
+EWMainFramePres::EWMainFramePres(AbstractEWMainFrame& frame, AbstractEWPresenter& presenter,
+                                 AbstractEventHandler& hdlr) :
+    m_Frame(frame), m_Presenter(presenter), m_EventHandler(hdlr)
 {
+    m_Presenter.attach(this);
+    m_EventHandler.attach(this);
+
+    refresh();
 }
 
 EWMainFramePres::~EWMainFramePres()
 {
+    m_Presenter.detach(this);
+    m_EventHandler.detach(this);
 }
 
-void EWMainFramePres::doStatusUpdate()
+void EWMainFramePres::OnStatusUpdate()
 {
-    assert(m_View != nullptr);
-    if (m_View == nullptr) return;
-
     const bool shown = m_Presenter.isShown();
-    m_View->show(shown);
+    m_Frame.show(shown);
     if (shown)
     {
-        m_View->setPauseButtonLabel(m_Presenter.getPauseButtonLabel());
-        m_View->setStartButtonLabel(m_Presenter.getStartButtonLabel());
+        m_Frame.setPauseButtonLabel(m_Presenter.getPauseButtonLabel());
+        m_Frame.setStartButtonLabel(m_Presenter.getStartButtonLabel());
 
         // times could change in a status update (stop)
-        m_View->setValues(m_Presenter.getStatus(), m_Presenter.getTimeOn(),
+        m_Frame.setValues(m_Presenter.getStatus(), m_Presenter.getTimeOn(),
             m_Presenter.getTimeOff(), m_Presenter.getTimeRunning(),
             m_Presenter.getTimeLeft());
     }
 }
 
-void EWMainFramePres::doTimeUpdate()
+void EWMainFramePres::OnTimeUpdate()
 {
-    assert(m_View != nullptr);
-    if (m_View == nullptr) return;
-
     if (m_Presenter.isShown())
     {
-        m_View->setValues(m_Presenter.getStatus(), m_Presenter.getTimeOn(),
+        m_Frame.setValues(m_Presenter.getStatus(), m_Presenter.getTimeOn(),
             m_Presenter.getTimeOff(), m_Presenter.getTimeRunning(),
             m_Presenter.getTimeLeft());
     }
 }
 
-void EWMainFramePres::doQuit()
+void EWMainFramePres::OnQuit()
 {
-    m_View->close();
+    m_Frame.close();
+}
+
+void EWMainFramePres::refresh()
+{
+    OnStatusUpdate();
 }

@@ -34,14 +34,12 @@
 
 #include "AbstractEWMainFrame.h"
 
-template <class TView>
-class AbstractEWViewPres;
-class EWPresenter;
+class AbstractEventHandler;
 class AbstractOptionsDialogPres;
 class EWMainFrame: public wxFrame, public AbstractEWMainFrame
 {
     public:
-        EWMainFrame(AbstractEWViewPres<AbstractEWMainFrame>& presenter,
+        EWMainFrame(AbstractEventHandler& hdlr,
                     bool taskbarCreated = true, wxWindow* parent = nullptr, wxWindowID id = -1);
         virtual ~EWMainFrame();
 
@@ -104,7 +102,7 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
         wxStaticText* m_LeftLabel;
         //*)
 
-        AbstractEWViewPres<AbstractEWMainFrame>& m_Presenter;
+        AbstractEventHandler& m_EventHandler;
         bool m_TaskbarCreated;
 
         DECLARE_EVENT_TABLE()

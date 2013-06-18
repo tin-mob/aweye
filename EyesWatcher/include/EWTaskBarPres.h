@@ -22,23 +22,31 @@
 #ifndef EWTASKBARPRES_H
 #define EWTASKBARPRES_H
 
-#include "EWViewPres.h"
+#include "AbstractEventHandler.h"
+#include "EWViewObserver.h"
 #include <string>
 
+class AbstractEventHandler;
 class AbstractEWPresenter;
 class AbstractEWTaskbar;
-class AbstractMsgHandler;
-class EWTaskBarPres : public EWViewPres<AbstractEWTaskbar>
+class EWTaskBarPres : public EWViewObserver, public EventHandlerObserver
 {
     public:
-        EWTaskBarPres(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter, std::function<bool()>& dispCmd);
+        EWTaskBarPres(AbstractEWTaskbar& taskBar, AbstractEWPresenter& presenter,
+                      AbstractEventHandler& hdlr);
         virtual ~EWTaskBarPres();
+
+        virtual void OnStatusUpdate();
+        virtual void OnTimeUpdate();
+        virtual void OnQuit();
+        virtual void refresh();
     protected:
     private:
-        virtual void doStatusUpdate();
-        virtual void doTimeUpdate();
-        virtual void doQuit();
+        void setIcon();
 
+        AbstractEWTaskbar& m_TaskBar;
+        AbstractEWPresenter& m_Presenter;
+        AbstractEventHandler& m_EventHandler;
         std::string m_LastIcon;
 };
 

@@ -17,19 +17,17 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-
+///@todo clean includes...
 
 #include "wx_pch.h"
-#include "EWMainFrame.h"
-#include "OptionsDialog.h"
+#include "AbstractEventHandler.h"
 #include "AboutDialog.h"
+#include "EWMainFrame.h"
+
 #include <wx/msgdlg.h>
 #include <wx/valgen.h>
 #include <wx/utils.h>
 #include <wx/notifmsg.h>
-#include "BaseException.h"
-#include "EWMainFramePres.h"
-#include "EWPresenter.h"
 
 //(*InternalHeaders(EWMainFrame)
 #include <wx/string.h>
@@ -91,9 +89,9 @@ BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
     //*)
 END_EVENT_TABLE()
 
-EWMainFrame::EWMainFrame(AbstractEWViewPres<AbstractEWMainFrame>& presenter,
+EWMainFrame::EWMainFrame(AbstractEventHandler& hdlr,
                          bool taskbarCreated, wxWindow* parent, wxWindowID id) :
-                         m_Presenter(presenter), m_TaskbarCreated(taskbarCreated)
+                         m_EventHandler(hdlr), m_TaskbarCreated(taskbarCreated)
 {
     //(*Initialize(EWMainFrame)
     wxMenuItem* m_ExitMenuItem;
@@ -172,8 +170,6 @@ EWMainFrame::EWMainFrame(AbstractEWViewPres<AbstractEWMainFrame>& presenter,
     Connect(ID_EXITMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&EWMainFrame::OnQuit);
     Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&EWMainFrame::OnClose);
     //*)
-
-    m_Presenter.attachView(this);
 }
 
 EWMainFrame::~EWMainFrame()
@@ -221,7 +217,7 @@ void EWMainFrame::close()
 
 void EWMainFrame::OnQuit(wxCommandEvent& event)
 {
-    m_Presenter.OnViewQuit();
+    m_EventHandler.OnViewQuit();
 }
 
 void EWMainFrame::OnAbout(wxCommandEvent& event)
@@ -232,26 +228,26 @@ void EWMainFrame::OnAbout(wxCommandEvent& event)
 
 void EWMainFrame::OnOptionsButtonClick(wxCommandEvent& event)
 {
-    m_Presenter.OnViewOptionsButtonClick();
+    m_EventHandler.OnViewOptionsButtonClick();
 }
 
 void EWMainFrame::OnPlayButtonClick(wxCommandEvent& event)
 {
-    m_Presenter.OnViewStartStop();
+    m_EventHandler.OnViewStartStop();
 }
 
 void EWMainFrame::OnClose(wxCloseEvent& event)
 {
     if (!event.CanVeto() || !m_TaskbarCreated)
     {
-        m_Presenter.OnViewQuit();
+        m_EventHandler.OnViewQuit();
         Destroy();
     }
     event.Veto();
-    m_Presenter.OnViewHideRestore();
+    m_EventHandler.OnViewHideRestore();
 }
 
 void EWMainFrame::OnPauseButtonClick(wxCommandEvent& event)
 {
-    m_Presenter.OnViewPauseResume();
+    m_EventHandler.OnViewPauseResume();
 }

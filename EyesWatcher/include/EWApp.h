@@ -28,7 +28,7 @@
 
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
     class TTimeHandler, class TTimeKeeper, class TTimer, class TEWPresenter,
-    class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
+    class TEventHandler, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
     class TEWTaskbar, class TOptionsDialogPres, class TOptionsDialog,
     class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
 class EWBuilder;
@@ -42,6 +42,7 @@ class WebcamHandlerProc;
 class TimeHandler;
 class TimeKeeper;
 class MyWxTimer;
+class EventHandler;
 class EWPresenter;
 class EWMainFramePres;
 class EWMainFrame;
@@ -70,7 +71,7 @@ class EWApp : public wxApp, public SetTopWindowInt
     private:
         std::unique_ptr<EWBuilder<MsgHandler, wxConfigImpl, Config,
                 WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, EWPresenter,
-                EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
+                EventHandler, EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
                 OptionsDialogPres, OptionsDialog, TKConfigObserver,
                 PresHdlrConfigObserver, EWPresConfigObserver>>
             m_AppImpl;

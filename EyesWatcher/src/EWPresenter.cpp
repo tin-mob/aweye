@@ -55,7 +55,7 @@ void EWPresenter::start()
     try
     {
         m_TimeKeeper.start();
-        notify(&EWViewObserver::OnStatusUpdate, this);
+        notify(&EWViewObserver::OnStatusUpdate);
         m_ClockTimer.startTimer(1000, false);
     }
     catch (BaseException e)
@@ -68,18 +68,18 @@ void EWPresenter::stop()
 {
     m_TimeKeeper.stop();
     m_ClockTimer.stopTimer();
-    notify(&EWViewObserver::OnStatusUpdate, this);
+    notify(&EWViewObserver::OnStatusUpdate);
 }
 
 void EWPresenter::quit()
 {
-    notify(&EWViewObserver::OnQuit, this);
+    notify(&EWViewObserver::OnQuit);
 }
 
 void EWPresenter::show(bool show)
 {
     m_Shown = show;
-    notify(&EWViewObserver::OnStatusUpdate, this);
+    notify(&EWViewObserver::OnStatusUpdate);
 }
 
 void EWPresenter::onTimerRing(AbstractTimer*)
@@ -88,7 +88,7 @@ void EWPresenter::onTimerRing(AbstractTimer*)
     {
         if(m_TimeKeeper.checkUpdate())
         {
-            notify(&EWViewObserver::OnStatusUpdate, this);
+            notify(&EWViewObserver::OnStatusUpdate);
             if (m_TimeKeeper.isLate() && m_TimeKeeper.getStatus() == AbstractTimeKeeper::HERE)
             {
                 alert();
@@ -96,7 +96,7 @@ void EWPresenter::onTimerRing(AbstractTimer*)
         }
         else
         {
-            notify(&EWViewObserver::OnTimeUpdate, this);
+            notify(&EWViewObserver::OnTimeUpdate);
         }
     }
     catch (BaseException e)
@@ -109,7 +109,7 @@ void EWPresenter::onTimerRing(AbstractTimer*)
 void EWPresenter::togglePause()
 {
     m_Warn = !m_Warn;
-    notify(&EWViewObserver::OnStatusUpdate, this);
+    notify(&EWViewObserver::OnStatusUpdate);
 }
 
 void EWPresenter::toggleStart()

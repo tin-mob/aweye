@@ -77,9 +77,9 @@ class EWPresenterStub : public AbstractEWPresenter
         virtual void setSoundAlarm(bool val) {m_SoundAlarm = val;}
         virtual void setSoundPath(std::string val) {m_SoundPath = val;}
 
-        void notifyStatus() {notify(&EWViewObserver::OnStatusUpdate, this);}
-        void notifyTime() {notify(&EWViewObserver::OnTimeUpdate, this);}
-        void notifyQuit() {notify(&EWViewObserver::OnQuit, this);}
+        void notifyStatus() {notify(&EWViewObserver::OnStatusUpdate);}
+        void notifyTime() {notify(&EWViewObserver::OnTimeUpdate);}
+        void notifyQuit() {notify(&EWViewObserver::OnQuit);}
 
 
         struct DisplayValues

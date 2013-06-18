@@ -34,6 +34,7 @@
 #include "TimeHandler.h"
 #include "TimeKeeper.h"
 #include "MyWxTimer.h"
+#include "EventHandler.h"
 #include "EWBuilder.h"
 #include "EWPresenter.h"
 #include "EWMainFramePres.h"
@@ -84,7 +85,7 @@ bool EWApp::OnInit()
     	{
     	    m_AppImpl.reset(new EWBuilder<MsgHandler, wxConfigImpl, Config,
                 WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, EWPresenter,
-                EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
+                EventHandler, EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
                 OptionsDialogPres, OptionsDialog, TKConfigObserver,
                 PresHdlrConfigObserver, EWPresConfigObserver>
                 (this, std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable(), wxID_OK));

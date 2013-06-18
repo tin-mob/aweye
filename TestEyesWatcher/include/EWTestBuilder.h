@@ -26,20 +26,20 @@
 
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
     class TTimeHandler, class TTimeKeeper, class TTimer, class TEWPresenter,
-    class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
+    class TEventHandler, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
     class TEWTaskbar, class TOptionsDialogPres, class TOptionsDialog,
     class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
 class EWTestBuilder : public EWBuilder<TMsgHandler, TConfigImpl,
     TConfig, TPresenceHandler, TTimeHandler, TTimeKeeper, TTimer,
-    TEWPresenter, TEWMainFramePres, TEWMainFrame, TEWTaskbarPres, TEWTaskbar,
-    TOptionsDialogPres, TOptionsDialog,
+    TEWPresenter, TEventHandler, TEWMainFramePres, TEWMainFrame, TEWTaskbarPres,
+    TEWTaskbar, TOptionsDialogPres, TOptionsDialog,
     TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver>
 {
     public:
         EWTestBuilder(SetTopWindowInt* topInt, std::string configPath, bool canCreateTaskbar, int idOk) :
             EWBuilder<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler, TTimeHandler,
-            TTimeKeeper, TTimer, TEWPresenter, TEWMainFramePres, TEWMainFrame,
-            TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres, TOptionsDialog,
+            TTimeKeeper, TTimer, TEWPresenter, TEventHandler, TEWMainFramePres,
+            TEWMainFrame, TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres, TOptionsDialog,
             TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver>
             (topInt, configPath, canCreateTaskbar, idOk),
             links(this->getBuild()){}
@@ -47,8 +47,8 @@ class EWTestBuilder : public EWBuilder<TMsgHandler, TConfigImpl,
         virtual ~EWTestBuilder() {}
 
         const EWBuild<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler, TTimeHandler,
-            TTimeKeeper, TTimer, TEWPresenter, TEWMainFramePres, TEWMainFrame,
-            TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres, TOptionsDialog,
+            TTimeKeeper, TTimer, TEWPresenter, TEventHandler, TEWMainFramePres,
+            TEWMainFrame, TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres, TOptionsDialog,
             TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver> links;
     protected:
     private:

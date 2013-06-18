@@ -19,23 +19,22 @@
  **************************************************************/
 
 
-#ifndef ABSTRACTEWVIEWPRES_H
-#define ABSTRACTEWVIEWPRES_H
+#ifndef ABSTRACTEVENTHANDLER_H
+#define ABSTRACTEVENTHANDLER_H
 
-/// @todo better way to go would use normal functions in a namespace...
+#include "Subject.h"
 
-template <class TView>
-class AbstractEWViewPres
+class EventHandlerObserver
 {
     public:
-        virtual ~AbstractEWViewPres() {}
+        virtual ~EventHandlerObserver() {}
+        virtual void refresh() = 0;
+};
 
-        void attachView(TView* view)
-        {
-            m_View = view;
-            forceUpdate();
-        }
-
+class AbstractEventHandler : public Subject<EventHandlerObserver>
+{
+    public:
+        virtual ~AbstractEventHandler() {}
         virtual void forceUpdate() = 0;
         virtual void OnViewQuit() = 0;
         virtual void OnViewAbout() = 0;
@@ -44,9 +43,7 @@ class AbstractEWViewPres
         virtual void OnViewPauseResume() = 0;
         virtual void OnViewHideRestore() = 0;
     protected:
-        TView* m_View;
-        AbstractEWViewPres() : m_View(nullptr) {}
     private:
 };
 
-#endif // ABSTRACTEWVIEWPRES_H
+#endif // ABSTRACTEVENTHANDLER_H

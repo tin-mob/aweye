@@ -20,33 +20,26 @@
 
 
 #include <unittest++/UnitTest++.h>
-#include "CommandStub.h"
 #include "EWMainFramePres.h"
 #include "EWMainFrameStub.h"
 #include "EWPresenterStub.h"
-#include "MsgHandlerStub.h"
-
+#include "EventHandlerStub.h"
 
 struct EWMainFramePresFixture
 {
-    EWMainFramePresFixture() : msgHandler(), pres(), displayCmd(), framePres(msgHandler, pres, displayCmd.m_Command)
+    EWMainFramePresFixture() : frame(), pres(), handler(), framePres(frame, pres, handler)
     {
-        framePres.attachView(&frame);
     }
     ~EWMainFramePresFixture() {}
 
-    MsgHandlerStub msgHandler;
-    EWPresenterStub pres;
-    CommandStub displayCmd;
-    EWMainFramePres framePres;
     EWMainFrameStub frame;
+    EWPresenterStub pres;
+    EventHandlerStub handler;
+    EWMainFramePres framePres;
 };
 
 SUITE(TestEWMainFramePres)
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Specific
-    ///////////////////////////////////////////////////////////////////////////
     TEST_FIXTURE(EWMainFramePresFixture, TestStatusUpdate)
     {
         EWPresenterStub::DisplayValues values =
@@ -119,59 +112,22 @@ SUITE(TestEWMainFramePres)
         CHECK_EQUAL("", frame.m_LeftClock);
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Common
-    ///////////////////////////////////////////////////////////////////////////
-    TEST_FIXTURE(EWMainFramePresFixture, TestQuitUpdate)
+    TEST_FIXTURE(EWMainFramePresFixture, TestForceUpdate)
     {
-        pres.notifyQuit();
-        CHECK_EQUAL(true, frame.m_Closed);
-    }
+        EWPresenterStub::DisplayValues values =
+            EWPresenterStub::DisplayValues::getTestValues();
+        pres.setDisplayValues(values);
+        handler.forceUpdate();
 
-    TEST_FIXTURE(EWMainFramePresFixture, TestFrameQuit)
-    {
-        pres.m_Quitted = false;
-        framePres.OnViewQuit();
-        CHECK_EQUAL(true, pres.m_Quitted);
-    }
-
-    TEST_FIXTURE(EWMainFramePresFixture, TestFrameAbout)
-    {
-        framePres.OnViewAbout();
-    }
-
-    TEST_FIXTURE(EWMainFramePresFixture, TestDisplay)
-    {
-        framePres.OnViewOptionsButtonClick();
-        CHECK_EQUAL(true, displayCmd.m_Executed);
-    }
-
-    TEST_FIXTURE(EWMainFramePresFixture, TestDisplayFail)
-    {
-        displayCmd.m_Throws = true;
-        framePres.OnViewOptionsButtonClick();
-        CHECK_EQUAL("Testing!", msgHandler.m_LastError);
-    }
-
-    TEST_FIXTURE(EWMainFramePresFixture, TestFramePlay)
-    {
-        pres.m_Started = false;
-        framePres.OnViewStartStop();
-        CHECK_EQUAL(true, pres.m_Started);
-    }
-
-    TEST_FIXTURE(EWMainFramePresFixture, TestFrameClose)
-    {
-        pres.m_DisplayValues.shown = true;
-        framePres.OnViewHideRestore();
-        CHECK_EQUAL(false, pres.m_DisplayValues.shown);
-    }
-
-    TEST_FIXTURE(EWMainFramePresFixture, TestFramePause)
-    {
-        pres.m_Paused = false;
-        framePres.OnViewPauseResume();
-        CHECK_EQUAL(true, pres.m_Paused);
+        CHECK_EQUAL(false, frame.m_Closed);
+        CHECK_EQUAL(values.pauseButtonLabel, frame.m_PauseLabel);
+        CHECK_EQUAL(values.startButtonLabel, frame.m_StartLabel);
+        CHECK_EQUAL(values.status, frame.m_Status);
+        CHECK_EQUAL(values.timeOn, frame.m_OnClock);
+        CHECK_EQUAL(values.timeOff, frame.m_OffClock);
+        CHECK_EQUAL(values.timeRunning, frame.m_RunningClock);
+        CHECK_EQUAL(values.timeLeft, frame.m_LeftClock);
+        CHECK_EQUAL(values.shown, frame.m_Shown);
     }
 }
 

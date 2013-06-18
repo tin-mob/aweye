@@ -18,35 +18,28 @@
 
  **************************************************************/
 
-
 #include <unittest++/UnitTest++.h>
-#include "CommandStub.h"
 #include "EWTaskBarPres.h"
 #include "EWTaskbarStub.h"
 #include "EWPresenterStub.h"
-#include "MsgHandlerStub.h"
+#include "EventHandlerStub.h"
 
 ///@todo sort TaskBar/Taskbar
 struct EWTaskBarPresFixture
 {
-    EWTaskBarPresFixture() : msgHandler(), pres(), displayCmd(), barPres(msgHandler, pres, displayCmd.m_Command)
+    EWTaskBarPresFixture() : bar(), pres(), handler(), barPres(bar, pres, handler)
     {
-        barPres.attachView(&bar);
     }
     ~EWTaskBarPresFixture() {}
 
-    MsgHandlerStub msgHandler;
-    EWPresenterStub pres;
-    CommandStub displayCmd;
-    EWTaskBarPres barPres;
     EWTaskbarStub bar;
+    EWPresenterStub pres;
+    EventHandlerStub handler;
+    EWTaskBarPres barPres;
 };
 
 SUITE(TestEWTaskBarPres)
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Specific
-    ///////////////////////////////////////////////////////////////////////////
     TEST_FIXTURE(EWTaskBarPresFixture, TestTimesUpdate)
     {
         EWPresenterStub::DisplayValues values =
@@ -101,5 +94,22 @@ SUITE(TestEWTaskBarPres)
         CHECK_EQUAL(values.startButtonLabel, bar.m_StartStopLabel);
         CHECK_EQUAL(values.pauseButtonLabel, bar.m_PauseResumeLabel);
         CHECK_EQUAL("in", bar.m_Loc);
+    }
+
+    TEST_FIXTURE(EWTaskBarPresFixture, TestForceUpdate)
+    {
+        EWPresenterStub::DisplayValues values =
+            EWPresenterStub::DisplayValues::getTestValues();
+        pres.setDisplayValues(values);
+        handler.forceUpdate();
+
+        CHECK_EQUAL("Last Session : " + values.timeOn, bar.m_OnClock);
+        CHECK_EQUAL("Last Pause : " + values.timeOff, bar.m_OffClock);
+        CHECK_EQUAL("Running : " + values.timeRunning, bar.m_RunningClock);
+        CHECK_EQUAL("Time Left : " + values.timeLeft, bar.m_LeftClock);
+        CHECK_EQUAL(values.hideButtonLabel, bar.m_HideRestoreLabel);
+        CHECK_EQUAL(values.startButtonLabel, bar.m_StartStopLabel);
+        CHECK_EQUAL(values.pauseButtonLabel, bar.m_PauseResumeLabel);
+        CHECK_EQUAL(values.icon, bar.m_Loc);
     }
 }
