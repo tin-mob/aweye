@@ -27,7 +27,7 @@
 int main()
 {
     // change if you want to run a single suite or test
-    std::string suite = "TestEWPresenter";
+    std::string suite = "";
     std::string test = "";
     if( suite != "" || test != "")
     {

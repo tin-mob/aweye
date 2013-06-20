@@ -129,6 +129,17 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(false, builder.links.m_OptionsPres->m_Displayed);
     }
 
+    TEST_FIXTURE(EWBuilderFixture, TestBuildNoTaskBar)
+    {
+        const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerStub,
+            TimeHandlerStub, TimeKeeperStub, TimerStub, EWPresenterStub, EventHandlerStub,
+            EWViewPresStub<AbstractEWMainFrame>, EWMainFrameStub, EWViewPresStub<AbstractEWTaskbar>,
+            EWTaskbarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
+            PresHdlrConfigObserverStub, EWPresConfigObserverStub> builder(&setTop, path, false, OptionsDialogStub::IdOK);
+        CHECK_EQUAL(true, builder.links.m_TaskBarPres == nullptr);
+        CHECK_EQUAL(true, builder.links.m_TaskBar == nullptr);
+    }
+
     TEST_FIXTURE(EWBuilderFixture, TestBuildBadConfig)
     {
         const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStubFail, PresenceHandlerStub,
