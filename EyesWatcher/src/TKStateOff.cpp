@@ -23,6 +23,9 @@
 #include "TimeKeeper.h"
 #include "boost/date_time/posix_time/posix_time.hpp"
 
+namespace EW
+{
+
 TKStateOff::TKStateOff()
 {
 }
@@ -75,4 +78,5 @@ boost::posix_time::time_duration TKStateOff::getWorkTimeLeft(const TimeKeeper& p
 
 void TKStateOff::addDuration(TimeKeeper& parent)
 {
+}
 }

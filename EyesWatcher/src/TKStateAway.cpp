@@ -25,6 +25,9 @@
 #include "AbstractTimeHandler.h"
 #include "boost/date_time/posix_time/posix_time.hpp"
 
+namespace EW
+{
+
 TKStateAway::TKStateAway()
 {
 }
@@ -141,4 +144,5 @@ boost::posix_time::time_duration TKStateAway::getWorkTimeLeft(const TimeKeeper& 
 void TKStateAway::addDuration(TimeKeeper& parent)
 {
     parent.m_AwayDur += (parent.m_StartTimeUpdate - parent.m_LastUpdate);
+}
 }

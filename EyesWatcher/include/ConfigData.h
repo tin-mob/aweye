@@ -26,6 +26,8 @@
 #include <iostream>
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 
+namespace EW
+{
 struct ConfigData
 {
     ConfigData(boost::posix_time::time_duration wl = default_WorkLength,
@@ -81,7 +83,7 @@ struct ConfigData
     static const std::string default_SoundPath;
     static const boost::posix_time::time_duration default_RunningLateThreshold;
     static const bool default_CummulPause;
+};
 }
-;
 
 #endif // CONFIGDATA_H

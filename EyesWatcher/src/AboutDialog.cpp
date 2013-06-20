@@ -32,6 +32,9 @@
 #include <wx/button.h>
 //*)
 
+namespace EW
+{
+
 //(*IdInit(AboutDialog)
 const long AboutDialog::ID_STATICTEXT1 = wxNewId();
 //*)
@@ -67,3 +70,4 @@ AboutDialog::~AboutDialog()
 	//*)
 }
 
+}

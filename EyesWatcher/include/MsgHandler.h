@@ -25,6 +25,8 @@
 #include "AbstractMsgHandler.h"
 #include <string>
 
+namespace EW
+{
 class MsgHandler : public AbstractMsgHandler
 {
     public:
@@ -36,5 +38,6 @@ class MsgHandler : public AbstractMsgHandler
     protected:
     private:
 };
+}
 
 #endif // MSGHANDLER_H

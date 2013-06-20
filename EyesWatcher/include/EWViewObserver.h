@@ -22,6 +22,8 @@
 #ifndef EWVIEWOBSERVER_H
 #define EWVIEWOBSERVER_H
 
+namespace EW
+{
 ///@todo change to TKObserver
 class AbstractEWPresenter;
 class EWViewObserver
@@ -34,5 +36,6 @@ class EWViewObserver
     protected:
     private:
 };
+}
 
 #endif // EWVIEWOBSERVER_H

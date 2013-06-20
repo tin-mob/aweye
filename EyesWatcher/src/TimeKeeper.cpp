@@ -28,6 +28,9 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include <memory>
 
+namespace EW
+{
+
 TimeKeeper::TimeKeeper(AbstractTimeHandler& timeHandler,
                    AbstractPresenceHandler& presenceHandler,
                    boost::posix_time::time_duration workLength,
@@ -275,4 +278,4 @@ void TimeKeeper::setCummulPause(bool cummulPause)
 {
     m_CummulPause = cummulPause;
 }
-
+}

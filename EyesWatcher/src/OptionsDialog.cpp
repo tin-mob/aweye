@@ -35,6 +35,9 @@
 #include <wx/button.h>
 //*)
 
+namespace EW
+{
+
 //(*IdInit(OptionsDialog)
 const long OptionsDialog::ID_STATICTEXT1 = wxNewId();
 const long OptionsDialog::ID_SPINCTRL2 = wxNewId();
@@ -329,4 +332,4 @@ void OptionsDialog::OnOKClick(wxCommandEvent& event)
         EndModal(wxID_OK);
     }
 }
-
+}

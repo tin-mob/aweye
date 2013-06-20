@@ -23,6 +23,8 @@
 #include "AbstractMsgHandler.h"
 #include "BaseException.h"
 
+namespace EW
+{
 EventHandler::EventHandler(AbstractMsgHandler& msgHandler,
     AbstractEWPresenter& presenter, std::function<bool()>& dispCmd) :
     m_MsgHandler(msgHandler), m_Presenter(presenter), m_DisplayOptionsDialog(dispCmd)
@@ -74,4 +76,5 @@ void EventHandler::OnViewPauseResume()
 void EventHandler::OnViewHideRestore()
 {
     m_Presenter.show(!m_Presenter.isShown());
+}
 }

@@ -47,6 +47,10 @@
 
 #include <memory>
 
+IMPLEMENT_APP(EW::EWApp);
+
+namespace EW
+{
 template <class T> class no_delete
 {
     public:
@@ -60,9 +64,6 @@ struct PtrTraits<EWMainFrame>
 {
   typedef typename std::unique_ptr<EWMainFrame, no_delete<EWMainFrame>> Ptr;
 };
-
-
-IMPLEMENT_APP(EWApp);
 
 EWApp::EWApp() : m_AppImpl(nullptr)
 {
@@ -117,4 +118,5 @@ void EWApp::setTopWindow(AbstractEWMainFrame* frame)
     {
         SetTopWindow(castedFrame);
     }
+}
 }

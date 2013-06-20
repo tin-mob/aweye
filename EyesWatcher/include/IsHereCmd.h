@@ -22,6 +22,8 @@
 #ifndef ISHERECMD_H_INCLUDED
 #define ISHERECMD_H_INCLUDED
 
+namespace EW
+{
 enum class IsHereCmdRetCode
 {
     AWAY,
@@ -34,6 +36,6 @@ enum class IsHereCmdRetCode
     INVALID_CAMERA,
     OTHER_ERROR
 };
-
+}
 
 #endif // ISHERECMD_H_INCLUDED

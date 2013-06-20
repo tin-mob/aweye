@@ -24,6 +24,8 @@
 
 #include "AbstractEWMainFrame.h"
 
+namespace EW
+{
 class AbstractEventHandler;
 class EWMainFrameStub : public AbstractEWMainFrame
 {
@@ -75,5 +77,6 @@ class EWMainFrameStub : public AbstractEWMainFrame
     protected:
     private:
 };
+}
 
 #endif // EWMAINFRAMESTUB_H

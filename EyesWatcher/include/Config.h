@@ -25,6 +25,8 @@
 #include "ConfigData.h"
 #include "AbstractConfig.h"
 
+namespace EW
+{
 class AbstractConfigImpl;
 class Config : public AbstractConfig
 {
@@ -46,5 +48,6 @@ class Config : public AbstractConfig
         ConfigData m_data;
         bool m_HasInvalidData;
 };
+}
 
 #endif // CONFIG_H

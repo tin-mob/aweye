@@ -24,6 +24,8 @@
 
 #include "Subject.h"
 
+namespace EW
+{
 class EventHandlerObserver
 {
     public:
@@ -45,5 +47,6 @@ class AbstractEventHandler : public Subject<EventHandlerObserver>
     protected:
     private:
 };
+}
 
 #endif // ABSTRACTEVENTHANDLER_H

@@ -26,6 +26,9 @@
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 
+namespace EW
+{
+
 WebcamHandlerProc::WebcamHandlerProc(int index, std::string faceCascadeName,
                              int faceSizeX, int faceSizeY) :
     m_index(index), m_FaceCascadeName(faceCascadeName),
@@ -81,4 +84,5 @@ void WebcamHandlerProc::isHere(std::function<void (bool)> callBack)
     cmd << m_index << "' '" << cascade << "' '" << m_FaceSizeX << "' '" << m_FaceSizeY << "'";
 
     IsHereProcess::run(callBack, cmd);
+}
 }

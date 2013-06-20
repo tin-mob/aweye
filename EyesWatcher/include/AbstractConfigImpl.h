@@ -25,6 +25,8 @@
 #include <string>
 #include "BaseException.h"
 
+namespace EW
+{
 class InvalidConfigFileException : public BaseException
 {
     public:
@@ -55,6 +57,6 @@ class AbstractConfigImpl
     protected:
     private:
 };
-
+}
 
 #endif // ABSTRACTCONFIGIMPL_H

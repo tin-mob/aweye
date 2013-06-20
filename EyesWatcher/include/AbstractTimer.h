@@ -24,6 +24,8 @@
 
 #include "Subject.h"
 
+namespace EW
+{
 class AbstractTimer;
 class TimerInterface
 {
@@ -41,5 +43,6 @@ class AbstractTimer : public Subject<TimerInterface, AbstractTimer*>
     protected:
     private:
 };
+}
 
 #endif // ABSTRACTTIMER_H

@@ -21,6 +21,9 @@
 
 #include "MyWxTimer.h"
 
+namespace EW
+{
+
 MyWxTimer::MyWxTimer()
 {
     //ctor
@@ -44,4 +47,5 @@ void MyWxTimer::stopTimer()
 void MyWxTimer::Notify()
 {
     notify(&TimerInterface::onTimerRing, this);
+}
 }

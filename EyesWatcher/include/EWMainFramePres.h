@@ -25,6 +25,8 @@
 #include "AbstractEventHandler.h"
 #include "EWViewObserver.h"
 
+namespace EW
+{
 class AbstractEventHandler;
 class AbstractEWMainFrame;
 class AbstractEWPresenter;
@@ -45,5 +47,6 @@ class EWMainFramePres : public EWViewObserver, public EventHandlerObserver
         AbstractEWPresenter& m_Presenter;
         AbstractEventHandler& m_EventHandler;
 };
+}
 
 #endif // EWMAINFRAMEPRES_H

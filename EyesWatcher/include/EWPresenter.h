@@ -27,6 +27,8 @@
 #include "AbstractEWPresenter.h"
 #include "AbstractTimer.h"
 
+namespace EW
+{
 class AbstractConfig;
 class AbstractMsgHandler;
 class AbstractTimeHandler;
@@ -93,5 +95,6 @@ class EWPresenter : public AbstractEWPresenter, public TimerInterface
         boost::posix_time::time_duration m_RunningLateThreshold;
         boost::posix_time::ptime m_LastAlert;
 };
+}
 
 #endif // EWPRESENTER_H

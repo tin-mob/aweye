@@ -18,12 +18,13 @@
 
  **************************************************************/
 
-
 #include <unittest++/UnitTest++.h>
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include <string>
 #include "ConfigData.h"
 
+namespace EW
+{
 struct ConfigDataFixture
 {
     ConfigDataFixture() {}
@@ -101,4 +102,5 @@ SUITE(TestConfigData)
         mod.cummulPause = !ConfigData::default_CummulPause;
         CHECK_EQUAL(false, mod == src);
     }
+}
 }

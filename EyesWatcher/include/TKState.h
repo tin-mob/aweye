@@ -24,6 +24,8 @@
 
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 
+namespace EW
+{
 class TimeKeeper;
 class TKState
 {
@@ -42,5 +44,6 @@ class TKState
     protected:
     private:
 };
+}
 
 #endif // TKSTATE_H

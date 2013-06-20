@@ -24,6 +24,8 @@
 #include "EWPresenterStub.h"
 #include "EventHandlerStub.h"
 
+namespace EW
+{
 ///@todo sort TaskBar/Taskbar
 struct EWTaskBarPresFixture
 {
@@ -112,4 +114,5 @@ SUITE(TestEWTaskBarPres)
         CHECK_EQUAL(values.pauseButtonLabel, bar.m_PauseResumeLabel);
         CHECK_EQUAL(values.icon, bar.m_Loc);
     }
+}
 }

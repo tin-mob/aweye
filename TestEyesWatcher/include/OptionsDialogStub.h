@@ -25,6 +25,8 @@
 #include "AbstractOptionsDialog.h"
 #include "OptionsDialogPresStub.h"
 
+namespace EW
+{
 class OptionsDialogStub : public AbstractOptionsDialog
 {
     public:
@@ -60,5 +62,6 @@ class OptionsDialogStub : public AbstractOptionsDialog
     private:
         ConfigData m_Data;
 };
+}
 
 #endif // CONFIGDIALOGSTUB_H

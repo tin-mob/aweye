@@ -25,6 +25,8 @@
 #include "OptionsDialogPres.h"
 #include "OptionsDialogStub.h"
 
+namespace EW
+{
 struct OptionsDialogPresFixture
 {
     OptionsDialogPresFixture()
@@ -77,4 +79,5 @@ SUITE(TestBuilderOptionsDialogPres)
         CHECK_EQUAL(config.getData(), dialog.getData());
         CHECK_EQUAL(true, dialog.m_Disabled);
     }
+}
 }

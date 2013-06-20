@@ -26,6 +26,8 @@
 #include "EWViewObserver.h"
 #include <string>
 
+namespace EW
+{
 class AbstractEventHandler;
 class AbstractEWPresenter;
 class AbstractEWTaskbar;
@@ -49,5 +51,6 @@ class EWTaskBarPres : public EWViewObserver, public EventHandlerObserver
         AbstractEventHandler& m_EventHandler;
         std::string m_LastIcon;
 };
+}
 
 #endif // EWTASKBARPRES_H

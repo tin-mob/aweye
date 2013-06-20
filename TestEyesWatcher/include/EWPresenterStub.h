@@ -29,7 +29,8 @@
 #include "AbstractTimer.h"
 #include <string>
 
-// That's a big stub...
+namespace EW
+{
 class EWPresenterStub : public AbstractEWPresenter
 {
     public:
@@ -131,5 +132,6 @@ class EWPresenterStub : public AbstractEWPresenter
     protected:
     private:
 };
+}
 
 #endif // EWPRESENTERSTUB_H

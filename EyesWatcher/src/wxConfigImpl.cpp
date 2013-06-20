@@ -23,6 +23,9 @@
 #include <wx/config.h>
 #include <wx/filename.h>
 
+namespace EW
+{
+
 wxConfigImpl::wxConfigImpl(std::string configPath)
 {
     if (configPath != "")
@@ -93,4 +96,5 @@ bool wxConfigImpl::fileExists(std::string name) const
         return wxFileName::FileExists(fileName. GetFullPath());
     }
     return false;
+}
 }

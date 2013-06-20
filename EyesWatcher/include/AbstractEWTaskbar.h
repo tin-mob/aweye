@@ -24,6 +24,8 @@
 
 #include <string>
 
+namespace EW
+{
 class AbstractEWTaskbar
 {
     public:
@@ -36,5 +38,6 @@ class AbstractEWTaskbar
     protected:
     private:
 };
+}
 
 #endif // ABSTRACTEWTASKBAR_H

@@ -22,16 +22,16 @@
 #ifndef TIMEKEEPERSTUB_H
 #define TIMEKEEPERSTUB_H
 
-
 #include "AbstractTimeKeeper.h"
 #include "BaseException.h"
 #include "AbstractTimeHandler.h"
 #include "AbstractPresenceHandler.h"
-
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/date_defs.hpp>
 #include <boost/date_time/gregorian/greg_date.hpp>
 
+namespace EW
+{
 class TimeKeeperStub : public AbstractTimeKeeper
 {
     public:
@@ -130,5 +130,6 @@ class TimeKeeperStub : public AbstractTimeKeeper
     protected:
     private:
 };
+}
 
 #endif // TIMEKEEPERSTUB_H

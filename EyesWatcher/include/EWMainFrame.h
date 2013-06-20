@@ -34,6 +34,8 @@
 
 #include "AbstractEWMainFrame.h"
 
+namespace EW
+{
 class AbstractEventHandler;
 class AbstractOptionsDialogPres;
 class EWMainFrame: public wxFrame, public AbstractEWMainFrame
@@ -107,5 +109,6 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
 
         DECLARE_EVENT_TABLE()
 };
+}
 
 #endif // EWMAINFRAME_H

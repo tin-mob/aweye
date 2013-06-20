@@ -37,6 +37,9 @@
 #include <wx/image.h>
 //*)
 
+namespace EW
+{
+
 //helper functions
 enum wxbuildinfoformat {
     short_f, long_f };
@@ -250,4 +253,5 @@ void EWMainFrame::OnClose(wxCloseEvent& event)
 void EWMainFrame::OnPauseButtonClick(wxCommandEvent& event)
 {
     m_EventHandler.OnViewPauseResume();
+}
 }

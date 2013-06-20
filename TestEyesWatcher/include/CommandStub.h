@@ -25,6 +25,8 @@
 #include "BaseException.h"
 #include <functional>
 
+namespace EW
+{
 class CommandStub
 {
     public:
@@ -45,5 +47,6 @@ class CommandStub
     protected:
     private:
 };
+}
 
 #endif // COMMANDSTUB_H

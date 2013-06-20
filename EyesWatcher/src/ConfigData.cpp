@@ -22,6 +22,9 @@
 #include "ConfigData.h"
 #include <iostream>
 
+namespace EW
+{
+
 const boost::posix_time::time_duration ConfigData::default_WorkLength(0,50,0,0);
 const boost::posix_time::time_duration ConfigData::default_PauseLength(0,10,0,0);
 const boost::posix_time::time_duration ConfigData::default_RemFreq(0,2,0,0);
@@ -86,4 +89,4 @@ std::ostream& operator<<(std::ostream& os, const ConfigData& cd)
        << cd.runningLateThreshold << "; " << cd.cummulPause;
     return os;
 }
-
+}

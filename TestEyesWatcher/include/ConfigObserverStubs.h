@@ -25,6 +25,8 @@
 #include "AbstractTimeKeeper.h"
 #include "AbstractPresenceHandler.h"
 
+namespace EW
+{
 class TKConfigObserverStub : public ConfigObserver
 {
     public:
@@ -60,5 +62,6 @@ class EWPresConfigObserverStub : public ConfigObserver
 
         AbstractEWPresenter& m_Presenter;
 };
+}
 
 #endif // CONFIGOBSERVERSTUBS_INCLUDED

@@ -24,6 +24,8 @@
 #include "BaseException.h"
 #include "EWMainFramePres.h"
 
+namespace EW
+{
 EWMainFramePres::EWMainFramePres(AbstractEWMainFrame& frame, AbstractEWPresenter& presenter,
                                  AbstractEventHandler& hdlr) :
     m_Frame(frame), m_Presenter(presenter), m_EventHandler(hdlr)
@@ -74,4 +76,5 @@ void EWMainFramePres::OnQuit()
 void EWMainFramePres::refresh()
 {
     OnStatusUpdate();
+}
 }

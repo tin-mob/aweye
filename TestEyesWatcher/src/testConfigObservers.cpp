@@ -30,6 +30,8 @@
 #include "PresenceHandlerStub.h"
 #include "TimeKeeperStub.h"
 
+namespace EW
+{
 struct ConfigObserversFixture
 {
     ConfigObserversFixture() : keeperObserver(config, timeKeeper),
@@ -72,4 +74,5 @@ SUITE(TestEWAppController)
         CHECK_EQUAL(newData.soundPath, presenter.m_SoundPath);
         CHECK_EQUAL(newData.runningLateThreshold, presenter.m_RunningLateThreshold);
     }
+}
 }

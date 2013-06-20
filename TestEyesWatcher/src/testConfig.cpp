@@ -26,6 +26,8 @@
 #include "ConfigImplStub.h"
 #include "ConfigStub.h"
 
+namespace EW
+{
 struct ConfigFixture
 {
     ConfigFixture() {}
@@ -134,4 +136,4 @@ SUITE(TestConfig)
         CHECK_EQUAL(true, config2.hasInvalidData());
     }
 }
-
+}

@@ -27,6 +27,8 @@
 #include "BaseException.h"
 #include "AbstractConfigImpl.h"
 
+namespace EW
+{
 class ConfigStub : public AbstractConfig
 {
     public:
@@ -91,5 +93,6 @@ class ConfigStubFail : public ConfigStub
     public :
         ConfigStubFail(AbstractConfigImpl& i) : ConfigStub(i, true){}
 };
+}
 
 #endif // CONFIGSTUB_H

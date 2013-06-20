@@ -28,6 +28,8 @@
 #include <queue>
 #include <assert.h>
 
+namespace EW
+{
 class PresenceHandlerStub : public AbstractPresenceHandler
 {
     public:
@@ -61,5 +63,6 @@ class PresenceHandlerStub : public AbstractPresenceHandler
     private:
         std::queue<bool> m_Results;
 };
+}
 
 #endif // PRESENCEHANDLERSTUB_H

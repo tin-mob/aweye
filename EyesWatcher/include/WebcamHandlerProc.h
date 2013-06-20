@@ -24,6 +24,8 @@
 
 #include "AbstractPresenceHandler.h"
 
+namespace EW
+{
 class WebcamHandlerProc : public AbstractPresenceHandler
 {
     public:
@@ -42,5 +44,6 @@ class WebcamHandlerProc : public AbstractPresenceHandler
         int m_FaceSizeX;
         int m_FaceSizeY;
 };
+}
 
 #endif // WEBCAMHANDLERPROC_H

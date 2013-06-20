@@ -24,6 +24,8 @@
 #include <functional>
 #include <wx/process.h>
 
+namespace EW
+{
 // delete itself after usage
 class IsHereProcess : public wxProcess
 {
@@ -37,5 +39,6 @@ class IsHereProcess : public wxProcess
 
         std::function<void (bool)> m_CallBack;
 };
+}
 
 #endif // ISHEREPROCESS_H

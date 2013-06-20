@@ -22,6 +22,8 @@
 #ifndef ABSTRACTOPTIONSDIALOG_H
 #define ABSTRACTOPTIONSDIALOG_H
 
+namespace EW
+{
 struct ConfigData;
 class AbstractOptionsDialog
 {
@@ -34,5 +36,6 @@ class AbstractOptionsDialog
     protected:
     private:
 };
+}
 
 #endif // ABSTRACTOPTIONSDIALOG_H

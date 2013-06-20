@@ -25,6 +25,8 @@
 #include "AbstractTimeHandler.h"
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 
+namespace EW
+{
 class TimeHandler : public AbstractTimeHandler
 {
     public:
@@ -34,5 +36,6 @@ class TimeHandler : public AbstractTimeHandler
     protected:
     private:
 };
+}
 
 #endif // TIMEHANDLER_H

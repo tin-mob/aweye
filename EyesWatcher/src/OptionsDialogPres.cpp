@@ -25,6 +25,9 @@
 #include "ConfigData.h"
 #include "OptionsDialogPres.h"
 
+namespace EW
+{
+
 OptionsDialogPres::OptionsDialogPres(AbstractMsgHandler& msgHandler, AbstractConfig& config, bool canCreateTaskBar) :
     m_MsgHandler(msgHandler), m_Config(config), m_CanCreateTaskBar(canCreateTaskBar)
 {
@@ -55,4 +58,5 @@ void OptionsDialogPres::init(AbstractOptionsDialog& dialog)
     {
         dialog.disableTray();
     }
+}
 }

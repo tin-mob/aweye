@@ -24,6 +24,8 @@
 
 #include "TKState.h"
 
+namespace EW
+{
 class TKStateAway : public TKState
 {
     public:
@@ -42,5 +44,6 @@ class TKStateAway : public TKState
     protected:
     private:
 };
+}
 
 #endif // TKSTATEAWAY_H

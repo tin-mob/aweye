@@ -31,6 +31,8 @@
 #include "TimerStub.h"
 #include "EWViewObserverStub.h"
 
+namespace EW
+{
 struct EWPresenterFixture
 {
     public:
@@ -259,4 +261,5 @@ SUITE(TestEWPresenter)
         clockTimer.ring();
         CHECK_EQUAL(viewObserver.checkTimeUpdated(), true);
     }
+}
 }

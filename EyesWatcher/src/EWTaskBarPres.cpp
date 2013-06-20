@@ -23,6 +23,8 @@
 #include "AbstractEWPresenter.h"
 #include "AbstractEWTaskbar.h"
 
+namespace EW
+{
 EWTaskBarPres::EWTaskBarPres(AbstractEWTaskbar& taskBar, AbstractEWPresenter& presenter,
                              AbstractEventHandler& hdlr) :
     m_TaskBar(taskBar), m_Presenter(presenter), m_EventHandler(hdlr), m_LastIcon("")
@@ -77,4 +79,5 @@ void EWTaskBarPres::refresh()
 {
     OnStatusUpdate();
     OnTimeUpdate();
+}
 }

@@ -25,6 +25,8 @@
 #include "AbstractTimer.h"
 #include <wx/timer.h>
 
+namespace EW
+{
 class MyWxTimer : public AbstractTimer, public wxTimer
 {
     public:
@@ -36,5 +38,6 @@ class MyWxTimer : public AbstractTimer, public wxTimer
     private:
         void Notify();
 };
+}
 
 #endif // MYWXTIMER_H

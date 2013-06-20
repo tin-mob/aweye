@@ -24,6 +24,8 @@
 
 #include "AbstractOptionsDialogPres.h"
 
+namespace EW
+{
 class AbstractMsgHandler;
 class AbstractConfig;
 class ConfigData;
@@ -41,5 +43,6 @@ class OptionsDialogPres :  public AbstractOptionsDialogPres
         AbstractConfig& m_Config;
         bool m_CanCreateTaskBar;
 };
+}
 
 #endif // OPTIONSDIALOGPRES_H

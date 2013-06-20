@@ -25,6 +25,8 @@
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 #include <string>
 
+namespace EW
+{
 class AbstractTimeKeeper
 {
     public:
@@ -69,5 +71,6 @@ class AbstractTimeKeeper
     protected:
     private:
 };
+}
 
 #endif // ABSTRACTTIMEKEEPER_H

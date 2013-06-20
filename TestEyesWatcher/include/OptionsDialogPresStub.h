@@ -26,6 +26,8 @@
 #include "AbstractMsgHandler.h"
 #include "AbstractOptionsDialogPres.h"
 
+namespace EW
+{
 class OptionsDialogPresStub : public AbstractOptionsDialogPres
 {
     public:
@@ -56,6 +58,6 @@ class OptionsDialogPresStubFail : public OptionsDialogPresStub
             bool canCreateTaskBar) :
             OptionsDialogPresStub(msgHandler, config, canCreateTaskBar, true) {}
 };
-
+}
 
 #endif // OPTIONSDIALOGPRESSTUB_H

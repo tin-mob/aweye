@@ -28,8 +28,10 @@
 #include "ObservableWxMenu.h"
 #include <map>
 
-class AbstractEventHandler;
 class wxMenu;
+namespace EW
+{
+class AbstractEventHandler;
 class EWTaskBar : public AbstractEWTaskbar, public wxTaskBarIcon, public ObservableWxMenuObserver
 {
     public:
@@ -69,5 +71,6 @@ class EWTaskBar : public AbstractEWTaskbar, public wxTaskBarIcon, public Observa
 
         DECLARE_EVENT_TABLE()
 };
+}
 
 #endif // EWTASKBAR_H

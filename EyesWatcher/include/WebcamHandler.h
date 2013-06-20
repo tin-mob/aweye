@@ -27,6 +27,8 @@
 
 #include <functional>
 
+namespace EW
+{
 class AbstractMsgHandler;
 class AbstractConfig;
 class WebcamHandler : public AbstractPresenceHandler
@@ -49,5 +51,6 @@ class WebcamHandler : public AbstractPresenceHandler
         int m_FaceSizeY;
         cv::CascadeClassifier m_FaceCascade;
 };
+}
 
 #endif // WEBCAMHANDLER_H

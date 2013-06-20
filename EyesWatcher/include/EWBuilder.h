@@ -29,6 +29,8 @@
 #include "BaseException.h"
 #include "SetTopWindowInt.h"
 
+namespace EW
+{
 template <class T>
 struct PtrTraits
 {
@@ -191,5 +193,6 @@ class EWBuilder
         TPresHdlrConfigObserverPtr m_PresHdlrConfigObserver;
         TEWPresConfigObserverPtr m_EWPresConfigObserver;
 };
+}
 
 #endif // EWBUILDER_H

@@ -40,6 +40,8 @@
 #include "ConfigObserverStubs.h"
 #include "EventHandlerStub.h"
 
+namespace EW
+{
 struct EWBuilderFixture
 {
     EWBuilderFixture() : path("path") {}
@@ -168,4 +170,4 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(true, trown);
     }
 }
-
+}

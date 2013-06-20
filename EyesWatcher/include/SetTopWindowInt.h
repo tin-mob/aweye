@@ -23,6 +23,8 @@
 #ifndef SETTOPWINDOWINT_H
 #define SETTOPWINDOWINT_H
 
+namespace EW
+{
 class AbstractEWMainFrame;
 class SetTopWindowInt
 {
@@ -32,5 +34,6 @@ class SetTopWindowInt
     protected:
     private:
 };
+}
 
 #endif // SETTOPWINDOWINT_H

@@ -28,6 +28,8 @@
 #include "TKState.h"
 #include "AbstractTimeKeeper.h"
 
+namespace EW
+{
 class TKStateHere;
 class TKStateAway;
 class TKStateOff;
@@ -117,5 +119,6 @@ class TimeKeeper : public AbstractTimeKeeper
         unsigned int m_WorkTol;
         bool m_CummulPause;
 };
+}
 
 #endif // TIMEKEEPER_H

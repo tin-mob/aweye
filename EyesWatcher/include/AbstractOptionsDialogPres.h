@@ -22,6 +22,8 @@
 #ifndef ABSTRACTOPTIONSDIALOGPRES_H
 #define ABSTRACTOPTIONSDIALOGPRES_H
 
+namespace EW
+{
 class ConfigData;
 class AbstractOptionsDialog;
 class AbstractOptionsDialogPres
@@ -33,5 +35,6 @@ class AbstractOptionsDialogPres
     protected:
     private:
 };
+}
 
 #endif // ABSTRACTOPTIONSDIALOGPRES_H

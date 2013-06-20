@@ -24,6 +24,9 @@
 #include <wx/notifmsg.h>
 #include <wx/sound.h>
 
+namespace EW
+{
+
 MsgHandler::MsgHandler()
 {
     //ctor
@@ -54,4 +57,6 @@ void MsgHandler::playSound(std::string filename)
     /// (sample does not work either) ; works in windows
     wxSound sound(wxString(filename.c_str(), wxConvUTF8));
     sound.Play(wxSOUND_SYNC);
+}
+
 }

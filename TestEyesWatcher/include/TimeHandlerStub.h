@@ -25,6 +25,8 @@
 #include "AbstractTimeHandler.h"
 #include "boost/date_time/posix_time/posix_time.hpp"
 
+namespace EW
+{
 class TimeHandlerStub : public AbstractTimeHandler
 {
      public:
@@ -44,5 +46,6 @@ class TimeHandlerStub : public AbstractTimeHandler
     private:
         boost::posix_time::ptime m_Time;
 };
+}
 
 #endif // TIMEHANDLERSTUB_H

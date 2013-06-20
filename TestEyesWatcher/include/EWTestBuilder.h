@@ -24,6 +24,8 @@
 
 #include "EWBuilder.h"
 
+namespace EW
+{
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
     class TTimeHandler, class TTimeKeeper, class TTimer, class TEWPresenter,
     class TEventHandler, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
@@ -53,5 +55,6 @@ class EWTestBuilder : public EWBuilder<TMsgHandler, TConfigImpl,
     protected:
     private:
 };
+}
 
 #endif // EWTESTBUILDER_H

@@ -26,6 +26,8 @@
 #include "Subject.h"
 #include "EWViewObserver.h"
 
+namespace EW
+{
 class ConfigData;
 class AbstractEWPresenter : public Subject<EWViewObserver>
 {
@@ -77,5 +79,6 @@ class AbstractEWPresenter : public Subject<EWViewObserver>
     protected:
     private:
 };
+}
 
 #endif // ABSTRACTEWPRESENTER_H

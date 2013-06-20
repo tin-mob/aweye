@@ -28,6 +28,8 @@
 #include "AbstractPresenceHandler.h"
 #include "ConfigObservers.h"
 
+namespace EW
+{
 class TKConfigObserver : public ConfigObserver
 {
     public:
@@ -84,5 +86,6 @@ class EWPresConfigObserver : public ConfigObserver
     private:
         AbstractEWPresenter& m_Presenter;
 };
+}
 
 #endif // CONFIGOBSERVERS_H_INCLUDED

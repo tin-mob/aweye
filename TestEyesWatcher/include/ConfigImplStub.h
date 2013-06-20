@@ -26,6 +26,8 @@
 #include <string>
 #include "AbstractConfigImpl.h"
 
+namespace EW
+{
 class ConfigImplStub : public AbstractConfigImpl
 {
     public:
@@ -90,5 +92,6 @@ class ConfigImplStub : public AbstractConfigImpl
     private:
         bool m_Flushed;
 };
+}
 
 #endif // CONFIGIMPLSTUB_H

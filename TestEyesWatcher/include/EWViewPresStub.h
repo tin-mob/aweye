@@ -24,6 +24,8 @@
 #include "AbstractEventHandler.h"
 #include "EWViewObserver.h"
 
+namespace EW
+{
 class AbstractEventHandler;
 class AbstractEWMainFrame;
 class AbstractEWPresenter;
@@ -49,4 +51,6 @@ class EWViewPresStub : public EWViewObserver, public EventHandlerObserver
     protected:
     private:
 };
+}
+
 #endif // EWVIEWPRESSTUB_H

@@ -26,6 +26,8 @@
 #include "PresenceHandlerStub.h"
 #include "ConfigData.h"
 
+namespace EW
+{
 struct TimeKeeperFixture
 {
     public:
@@ -747,5 +749,4 @@ SUITE(TestTimeKeeper)
         CHECK_EQUAL(keeper.getWorkTimeLeft(), data.workLength);
     }
 }
-
-
+}

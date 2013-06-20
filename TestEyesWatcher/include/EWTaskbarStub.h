@@ -24,6 +24,8 @@
 
 #include "AbstractEWTaskbar.h"
 
+namespace EW
+{
 class EWTaskbarStub : public AbstractEWTaskbar
 {
     public:
@@ -74,6 +76,6 @@ class EWTaskbarStub : public AbstractEWTaskbar
     protected:
     private:
 };
-
+}
 
 #endif // EWTASKBARSTUB_H

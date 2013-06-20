@@ -24,6 +24,8 @@
 
 #include "EWViewObserver.h"
 
+namespace EW
+{
 class EWViewObserverStub : public EWViewObserver
 {
     public:
@@ -41,5 +43,6 @@ class EWViewObserverStub : public EWViewObserver
         bool m_TimeUpdated;
         bool m_QuitUpdated;
 };
+}
 
 #endif // OBSERVERSTUB_H

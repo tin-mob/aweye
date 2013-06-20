@@ -25,6 +25,8 @@
 #include <stdexcept>
 #include <string>
 
+namespace EW
+{
 class BaseException : public std::logic_error
 {
     public:
@@ -32,5 +34,6 @@ class BaseException : public std::logic_error
     protected:
     private:
 };
+}
 
 #endif // BASEEXCEPTION_H

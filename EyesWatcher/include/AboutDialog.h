@@ -32,6 +32,8 @@
 //(*Headers(AboutDialog)
 //*)
 
+namespace EW
+{
 class AboutDialog: public wxDialog
 {
 	public:
@@ -56,5 +58,5 @@ class AboutDialog: public wxDialog
 
 		DECLARE_EVENT_TABLE()
 };
-
+}
 #endif

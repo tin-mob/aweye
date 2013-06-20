@@ -25,6 +25,8 @@
 #include "AbstractConfigImpl.h"
 
 class wxConfigBase;
+namespace EW
+{
 class wxConfigImpl : public AbstractConfigImpl
 {
     public:
@@ -46,5 +48,6 @@ class wxConfigImpl : public AbstractConfigImpl
     private:
         wxConfigBase* m_Config;
 };
+}
 
 #endif // WXCONFIGIMPL_H

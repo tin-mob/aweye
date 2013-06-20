@@ -22,11 +22,11 @@
 #ifndef MSGHANDLERSTUB_H
 #define MSGHANDLERSTUB_H
 
-
 #include "AbstractMsgHandler.h"
-
 #include <string>
 
+namespace EW
+{
 class MsgHandlerStub : public AbstractMsgHandler
 {
     public:
@@ -41,7 +41,6 @@ class MsgHandlerStub : public AbstractMsgHandler
     protected:
     private:
 };
-
-
+}
 
 #endif // MSGHANDLERSTUB_H

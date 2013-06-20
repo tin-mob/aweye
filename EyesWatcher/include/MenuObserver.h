@@ -22,6 +22,8 @@
 #ifndef MENUOBSERVER_H
 #define MENUOBSERVER_H
 
+namespace EW
+{
 class MenuObserver
 {
     public:
@@ -30,5 +32,6 @@ class MenuObserver
     protected:
     private:
 };
+}
 
 #endif // MENUOBSERVER_H

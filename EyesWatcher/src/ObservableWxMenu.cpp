@@ -21,8 +21,12 @@
 
 #include "ObservableWxMenu.h"
 
+namespace EW
+{
+
 ObservableWxMenu::~ObservableWxMenu()
 {
     //dtor
     notify(&ObservableWxMenuObserver::onMenuDelete, this);
+}
 }

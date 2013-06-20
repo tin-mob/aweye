@@ -25,6 +25,8 @@
 #include "Subject.h"
 #include <wx/menu.h>
 
+namespace EW
+{
 class ObservableWxMenuObserver;
 class ObservableWxMenu : public wxMenu, public Subject<ObservableWxMenuObserver, ObservableWxMenu*>
 {
@@ -40,5 +42,6 @@ class ObservableWxMenuObserver  // yeah!
         virtual ~ObservableWxMenuObserver() {}
         virtual void onMenuDelete(ObservableWxMenu* menu) = 0;
 };
+}
 
 #endif // OBSERVABLEWXMENU_H

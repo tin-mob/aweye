@@ -21,12 +21,13 @@
 #ifndef EVENTHANDLERSTUB_H
 #define EVENTHANDLERSTUB_H
 
-
 #include "AbstractEventHandler.h"
 #include "AbstractEWPresenter.h"
 #include "AbstractMsgHandler.h"
 #include <functional>
 
+namespace EW
+{
 class EventHandlerObserverStub : public EventHandlerObserver
 {
     public:
@@ -70,5 +71,6 @@ class EventHandlerStub : public AbstractEventHandler
     protected:
     private:
 };
+}
 
 #endif // EVENTHANDLERSTUB_H

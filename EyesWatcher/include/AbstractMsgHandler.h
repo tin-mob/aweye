@@ -24,6 +24,8 @@
 
 #include <string>
 
+namespace EW
+{
 class AbstractMsgHandler
 {
     public:
@@ -34,5 +36,6 @@ class AbstractMsgHandler
     protected:
     private:
 };
+}
 
 #endif // ABSTRACTMSGHANDLER_H

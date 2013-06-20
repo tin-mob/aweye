@@ -23,6 +23,9 @@
 #include "AbstractConfigImpl.h"
 #include "boost/date_time/posix_time/posix_time.hpp"
 
+namespace EW
+{
+
 Config::Config(AbstractConfigImpl& impl) : m_Impl(impl), m_HasInvalidData(false)
 {
     load();
@@ -133,4 +136,5 @@ bool Config::validateData(const ConfigData& data) const
         return false;
     }
     return true;
+}
 }

@@ -39,6 +39,8 @@
 
 #include "AbstractOptionsDialog.h"
 
+namespace EW
+{
 class AbstractOptionsDialogPres;
 class ConfigData;
 class OptionsDialog: public wxDialog, public AbstractOptionsDialog
@@ -140,5 +142,6 @@ class OptionsDialog: public wxDialog, public AbstractOptionsDialog
 
 		DECLARE_EVENT_TABLE()
 };
+}
 
 #endif

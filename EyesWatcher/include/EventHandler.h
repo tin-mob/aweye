@@ -25,6 +25,8 @@
 #include "AbstractEventHandler.h"
 #include <functional>
 
+namespace EW
+{
 class AbstractEWPresenter;
 class AbstractMsgHandler;
 class EventHandler : public AbstractEventHandler
@@ -47,5 +49,6 @@ class EventHandler : public AbstractEventHandler
         AbstractEWPresenter& m_Presenter;
         std::function<bool()>& m_DisplayOptionsDialog;
 };
+}
 
 #endif // EVENTHANDLER_H

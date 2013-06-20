@@ -24,6 +24,8 @@
 
 #include <string>
 
+namespace EW
+{
 class AbstractOptionsDialogPres;
 class AbstractEWMainFrame
 {
@@ -39,5 +41,6 @@ class AbstractEWMainFrame
     protected:
     private:
 };
+}
 
 #endif // ABSTRACTEWMAINFRAME_H

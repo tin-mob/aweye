@@ -24,6 +24,8 @@
 
 #include "Subject.h"
 
+namespace EW
+{
 struct ConfigData;
 class ConfigObserver;
 class AbstractConfig : public Subject<ConfigObserver, const ConfigData&>
@@ -55,6 +57,6 @@ class ConfigObserver
     private:
         AbstractConfig& m_Config;
 };
-
+}
 
 #endif // ABSTRACTCONFIG_H

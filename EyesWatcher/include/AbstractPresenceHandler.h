@@ -25,6 +25,8 @@
 #include "BaseException.h"
 #include <functional>
 
+namespace EW
+{
 class GenericPresenceHandlerException : public BaseException
 {
     public:
@@ -43,7 +45,6 @@ class InvalidCameraException : public BaseException
           InvalidCameraException() :  BaseException("Error using the camera.") { }
 };
 
-
 // isHere takes a callback rather than returning to allow async execution
 class AbstractPresenceHandler
 {
@@ -56,5 +57,6 @@ class AbstractPresenceHandler
     protected:
     private:
 };
+}
 
 #endif // ABSTRACTPRESENCEHANDLER_H

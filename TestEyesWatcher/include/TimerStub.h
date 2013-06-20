@@ -24,6 +24,8 @@
 
 #include "AbstractTimer.h"
 
+namespace EW
+{
 class TimerStub : public AbstractTimer
 {
     public:
@@ -47,5 +49,6 @@ class TimerStub : public AbstractTimer
     protected:
     private:
 };
+}
 
 #endif // TIMERSTUB_H

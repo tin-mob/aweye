@@ -26,7 +26,7 @@
 int main(int argc, char* argv[])
 {
     assert(argc == 5);
-    if (argc != 5) return (int)IsHereCmdRetCode::INVALID_NB_ARGS;
+    if (argc != 5) return (int)EW::IsHereCmdRetCode::INVALID_NB_ARGS;
 
     const char* indexChar = argv[1];
     const char* faceCascadeName = argv[2];
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
     if (!iss >> index)
     {
         assert(0);
-        return (int)IsHereCmdRetCode::INVALID_INDEX;
+        return (int)EW::IsHereCmdRetCode::INVALID_INDEX;
     }
 
     iss.str(faceSizeXChar);
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
     if (!iss >> faceSizeX)
     {
         assert(0);
-        return (int)IsHereCmdRetCode::INVALID_FACEX;
+        return (int)EW::IsHereCmdRetCode::INVALID_FACEX;
     }
 
     iss.str(faceSizeYChar);
@@ -57,31 +57,31 @@ int main(int argc, char* argv[])
     if (!iss >> faceSizeY)
     {
         assert(0);
-        return (int)IsHereCmdRetCode::INVALID_FACEY;
+        return (int)EW::IsHereCmdRetCode::INVALID_FACEY;
     }
 
     try
     {
-        WebcamHandler handler(index, faceCascadeName, faceSizeX, faceSizeY);
+        EW::WebcamHandler handler(index, faceCascadeName, faceSizeX, faceSizeY);
         if(handler.isHere())
         {
-            return (int)IsHereCmdRetCode::HERE;
+            return (int)EW::IsHereCmdRetCode::HERE;
         }
         else
         {
-            return (int)IsHereCmdRetCode::AWAY;
+            return (int)EW::IsHereCmdRetCode::AWAY;
         }
     }
-    catch (MissingCascadeFileException)
+    catch (EW::MissingCascadeFileException)
     {
-        return (int)IsHereCmdRetCode::INVALID_CASCADE;
+        return (int)EW::IsHereCmdRetCode::INVALID_CASCADE;
     }
-    catch (InvalidCameraException)
+    catch (EW::InvalidCameraException)
     {
-        return (int)IsHereCmdRetCode::INVALID_CAMERA;
+        return (int)EW::IsHereCmdRetCode::INVALID_CAMERA;
     }
     catch (...)
     {
-        return (int)IsHereCmdRetCode::OTHER_ERROR;
+        return (int)EW::IsHereCmdRetCode::OTHER_ERROR;
     }
 }

@@ -26,14 +26,15 @@
 #include <wx/app.h>
 #include "SetTopWindowInt.h"
 
+class wxCmdLineParser;
+namespace EW
+{
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
     class TTimeHandler, class TTimeKeeper, class TTimer, class TEWPresenter,
     class TEventHandler, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
     class TEWTaskbar, class TOptionsDialogPres, class TOptionsDialog,
     class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
 class EWBuilder;
-
-class wxCmdLineParser;
 class AbstractEWMainFrame;
 class MsgHandler;
 class wxConfigImpl;
@@ -78,5 +79,6 @@ class EWApp : public wxApp, public SetTopWindowInt
 
         wxString m_ConfigPath;
 };
+}
 
 #endif // EWAPP_H

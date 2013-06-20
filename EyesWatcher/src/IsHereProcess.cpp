@@ -18,10 +18,12 @@
 
  **************************************************************/
 
-
 #include "AbstractPresenceHandler.h"
 #include "IsHereCmd.h"
 #include "IsHereProcess.h"
+
+namespace EW
+{
 
 IsHereProcess::IsHereProcess(std::function<void (bool)> callBack) :
     m_CallBack(callBack)
@@ -65,4 +67,6 @@ void IsHereProcess::OnTerminate(int pid, int status)
     }
 
     callBack(code == IsHereCmdRetCode::HERE);
+}
+
 }

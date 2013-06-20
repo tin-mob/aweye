@@ -25,6 +25,8 @@
 #include "EWPresenterStub.h"
 #include "EventHandlerStub.h"
 
+namespace EW
+{
 struct EWMainFramePresFixture
 {
     EWMainFramePresFixture() : frame(), pres(), handler(), framePres(frame, pres, handler)
@@ -130,4 +132,4 @@ SUITE(TestEWMainFramePres)
         CHECK_EQUAL(values.shown, frame.m_Shown);
     }
 }
-
+}

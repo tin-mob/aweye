@@ -25,6 +25,8 @@
 #include "wx_pch.h"
 #include <wx/menu.h>
 
+namespace EW
+{
 BEGIN_EVENT_TABLE(EWTaskBar,wxTaskBarIcon)
     EVT_MENU(ID_HIDE_RESTORE, EWTaskBar::OnMenuHideRestore)
     EVT_MENU(ID_START_STOP, EWTaskBar::OnMenuStartStop)
@@ -133,4 +135,5 @@ void EWTaskBar::OnMenuPauseResume(wxCommandEvent&)
 void EWTaskBar::OnMenuExit(wxCommandEvent&)
 {
     m_EventHandler.OnViewQuit();
+}
 }

@@ -26,7 +26,8 @@
 #include "EWPresenterStub.h"
 #include "MsgHandlerStub.h"
 
-
+namespace EW
+{
 struct EventHandlerFixture
 {
     EventHandlerFixture() : displayed(false), displayThrow(false), msgHandler(), presenter(),
@@ -97,4 +98,5 @@ SUITE(TestEventHandler)
         handler.forceUpdate();
         CHECK_EQUAL(true, observer.m_Refreshed);
     }
+}
 }

@@ -24,6 +24,8 @@
 
 #include "SetTopWindowInt.h"
 
+namespace EW
+{
 class AbstractEWMainFrame;
 class SetTopWindowStub : public SetTopWindowInt
 {
@@ -36,5 +38,6 @@ class SetTopWindowStub : public SetTopWindowInt
     protected:
     private:
 };
+}
 
 #endif // SETTOPWINDOWSTUB_H

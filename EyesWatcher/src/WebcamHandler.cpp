@@ -20,8 +20,10 @@
 
 
 #include "WebcamHandler.h"
-
 #include <fstream>
+
+namespace EW
+{
 
 /// @note opencv 2.3.1 leaks in ishere (videocapture and mat not deleted)
 /// options are either installing 2.4 from source, installing a new version
@@ -100,4 +102,5 @@ bool WebcamHandler::isHere()
 void WebcamHandler::isHere(std::function<void (bool)> callBack)
 {
     callBack(isHere());
+}
 }

@@ -33,6 +33,8 @@
 #include <iomanip>
 #include <stdlib.h>
 
+namespace EW
+{
 /// @todo EWPresenter to EWTimeKeeperController,
 EWPresenter::EWPresenter(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& keeper,
                          AbstractTimer& clockTimer, AbstractTimeHandler& timeHandler,
@@ -288,4 +290,5 @@ void EWPresenter::alert()
         m_MsgHandler.playSound(m_SoundPath);
     }
     m_LastAlert = m_TimeHandler.getTime();
+}
 }

@@ -25,6 +25,9 @@
 #include "AbstractTimeHandler.h"
 #include "boost/date_time/posix_time/posix_time.hpp"
 
+namespace EW
+{
+
 TKStateHere::TKStateHere()
 {
 }
@@ -156,4 +159,5 @@ boost::posix_time::time_duration TKStateHere::getWorkTimeLeft(const TimeKeeper& 
 void TKStateHere::addDuration(TimeKeeper& parent)
 {
     parent.m_HereDur += (parent.m_StartTimeUpdate - parent.m_LastUpdate);
+}
 }
