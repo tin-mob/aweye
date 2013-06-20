@@ -35,7 +35,8 @@ class TKState
         virtual boost::posix_time::ptime getNextUpdate(const TimeKeeper& parent) const = 0;
         virtual bool isLate(const TimeKeeper& parent) const = 0;
         virtual boost::posix_time::time_duration getInterval(const TimeKeeper& parent) const = 0;
-        virtual boost::posix_time::time_duration getTimeLeft(const TimeKeeper& parent, bool isUpdate = false) const = 0;
+        virtual boost::posix_time::time_duration getTimeLeft(const TimeKeeper& parent,
+                boost::posix_time::ptime now = boost::posix_time::not_a_date_time) const = 0;
         virtual boost::posix_time::time_duration getWorkTimeLeft(const TimeKeeper& parent) const = 0;
         virtual void addDuration(TimeKeeper& parent) = 0;
     protected:

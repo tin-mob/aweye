@@ -44,6 +44,7 @@ void TKStateOff::initState(TimeKeeper& parent, bool cancelled)
     parent.m_AwayDur = boost::posix_time::seconds(0);
     parent.m_LastUpdate = boost::posix_time::not_a_date_time;
     parent.m_NextCheck = boost::posix_time::not_a_date_time;
+    parent.m_TolerationTime = boost::posix_time::not_a_date_time;
 }
 
 boost::posix_time::ptime TKStateOff::getNextUpdate(const TimeKeeper&) const
@@ -61,7 +62,8 @@ boost::posix_time::time_duration TKStateOff::getInterval(const TimeKeeper&) cons
     return boost::posix_time::time_duration(0,0,0,0);
 }
 
-boost::posix_time::time_duration TKStateOff::getTimeLeft(const TimeKeeper& parent, bool isUpdate) const
+boost::posix_time::time_duration TKStateOff::getTimeLeft(const TimeKeeper& parent,
+                boost::posix_time::ptime now) const
 {
     return boost::posix_time::time_duration(0,0,0,0);
 }

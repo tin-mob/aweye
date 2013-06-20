@@ -89,6 +89,7 @@ void EWPresenter::onTimerRing(AbstractTimer*)
         if(m_TimeKeeper.checkUpdate())
         {
             notify(&EWViewObserver::OnStatusUpdate);
+            ///@todo do not wark when tolerated (in process of change)
             if (m_TimeKeeper.isLate() && m_TimeKeeper.getStatus() == AbstractTimeKeeper::HERE)
             {
                 alert();
