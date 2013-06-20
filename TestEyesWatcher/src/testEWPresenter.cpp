@@ -108,18 +108,82 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastAlert, "");
         CHECK_EQUAL(msgHandler.m_LastSound, "");
 
+        CHECK_EQUAL(msgHandler.m_LastAlert, "");
+        CHECK_EQUAL(msgHandler.m_LastSound, "");
+    }
+
+    TEST_FIXTURE(EWPresenterFixture, TestAlert)
+    {
         keeper.m_Updated = true;
         keeper.m_Late = true;
+        presenter.toggleStart();
+        presenter.onTimerRing(&clockTimer);
+        CHECK_EQUAL(msgHandler.m_LastAlert, presenter.m_LateMsg);
+        CHECK_EQUAL(msgHandler.m_LastSound, data.soundPath);
+    }
+
+    TEST_FIXTURE(EWPresenterFixture, TestAlertPaused)
+    {
+        keeper.m_Updated = true;
+        keeper.m_Late = true;
+        presenter.toggleStart();
         presenter.togglePause();
         presenter.onTimerRing(&clockTimer);
         CHECK_EQUAL(msgHandler.m_LastAlert, "");
         CHECK_EQUAL(msgHandler.m_LastSound, "");
+    }
 
-        presenter.togglePause();
+    TEST_FIXTURE(EWPresenterFixture, TestNoAlertAway)
+    {
+        keeper.m_Updated = true;
+        keeper.m_Late = true;
+        keeper.m_Status = AbstractTimeKeeper::AWAY;
+        presenter.toggleStart();
+        presenter.onTimerRing(&clockTimer);
+        CHECK_EQUAL(msgHandler.m_LastAlert, "");
+        CHECK_EQUAL(msgHandler.m_LastSound, "");
+    }
+
+    TEST_FIXTURE(EWPresenterFixture, TestNoAlertTooSoon)
+    {
+        keeper.m_Updated = true;
+        keeper.m_Late = true;
+        presenter.toggleStart();
+        presenter.onTimerRing(&clockTimer);
+        msgHandler.m_LastAlert = "";
+        msgHandler.m_LastSound = "";
+        presenter.onTimerRing(&clockTimer);
+        CHECK_EQUAL(msgHandler.m_LastAlert, "");
+        CHECK_EQUAL(msgHandler.m_LastSound, "");
+    }
+
+    TEST_FIXTURE(EWPresenterFixture, TestNoAlertSoonEnough)
+    {
+        keeper.m_Updated = true;
+        keeper.m_Late = true;
+        presenter.toggleStart();
+        presenter.onTimerRing(&clockTimer);
+        msgHandler.m_LastAlert = "";
+        msgHandler.m_LastSound = "";
+        timeHandler.setTime(timeHandler.getTime() + keeper.getRemFreq());
         presenter.onTimerRing(&clockTimer);
         CHECK_EQUAL(msgHandler.m_LastAlert, presenter.m_LateMsg);
         CHECK_EQUAL(msgHandler.m_LastSound, data.soundPath);
+    }
 
+    TEST_FIXTURE(EWPresenterFixture, TestAlertTolerating)
+    {
+        keeper.m_Updated = true;
+        keeper.m_Late = true;
+        keeper.m_Tolerating = true;
+        presenter.toggleStart();
+        presenter.onTimerRing(&clockTimer);
+        CHECK_EQUAL(msgHandler.m_LastAlert, "");
+        CHECK_EQUAL(msgHandler.m_LastSound, "");
+    }
+
+    TEST_FIXTURE(EWPresenterFixture, TestFail)
+    {
         keeper.m_Fail = true;
         CHECK_EQUAL(msgHandler.m_LastError, "");
         presenter.onTimerRing(&clockTimer);

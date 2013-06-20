@@ -176,6 +176,11 @@ bool TimeKeeper::isLate() const
     return state.isLate(*this);
 }
 
+bool TimeKeeper::isTolerating() const
+{
+    return m_NumTolerated != 0;
+}
+
 TimeKeeper::Status TimeKeeper::getStatus() const
 {
     return m_CurrentState;
@@ -207,6 +212,11 @@ boost::posix_time::time_duration TimeKeeper::getWorkTimeLeft() const
 {
     const TKState& state = *m_States.find(m_CurrentState)->second;
     return state.getWorkTimeLeft(*this);
+}
+
+boost::posix_time::time_duration TimeKeeper::getRemFreq() const
+{
+    return m_RemFreq;
 }
 
 void TimeKeeper::setNextUpdate()

@@ -40,7 +40,8 @@ EWPresenter::EWPresenter(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& kee
                          boost::posix_time::time_duration runningLateThreshold)
     : m_Warn(true), m_Shown(true), m_TimeKeeper(keeper), m_MsgHandler(msgHandler),
     m_ClockTimer(clockTimer), m_TimeHandler(timeHandler), m_PopupAlarm(popupAlarm),
-    m_SoundAlarm(soundAlarm), m_SoundPath(soundPath), m_RunningLateThreshold(runningLateThreshold)
+    m_SoundAlarm(soundAlarm), m_SoundPath(soundPath), m_RunningLateThreshold(runningLateThreshold),
+    m_LastAlert(boost::posix_time::not_a_date_time)
 {
     m_ClockTimer.attach(this);
 }
@@ -89,8 +90,14 @@ void EWPresenter::onTimerRing(AbstractTimer*)
         if(m_TimeKeeper.checkUpdate())
         {
             notify(&EWViewObserver::OnStatusUpdate);
-            ///@todo do not wark when tolerated (in process of change)
-            if (m_TimeKeeper.isLate() && m_TimeKeeper.getStatus() == AbstractTimeKeeper::HERE)
+
+            bool late = m_TimeKeeper.isLate();
+            bool here = m_TimeKeeper.getStatus() == AbstractTimeKeeper::HERE;
+            bool isAlertTime = m_LastAlert.is_special() ||
+                m_TimeHandler.getTime() >= m_LastAlert + m_TimeKeeper.getRemFreq();
+            bool intolerant = !m_TimeKeeper.isTolerating();
+
+            if (late && here && isAlertTime && intolerant)
             {
                 alert();
             }
@@ -264,6 +271,7 @@ void EWPresenter::setSoundPath(std::string soundPath)
     m_SoundPath = soundPath;
 }
 
+///@note should alert timing be here or in timekeeper?
 void EWPresenter::alert()
 {
     if (!m_Warn)
@@ -279,4 +287,5 @@ void EWPresenter::alert()
     {
         m_MsgHandler.playSound(m_SoundPath);
     }
+    m_LastAlert = m_TimeHandler.getTime();
 }

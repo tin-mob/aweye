@@ -91,6 +91,7 @@ class EWPresenter : public AbstractEWPresenter, public TimerInterface
         bool m_SoundAlarm;
         std::string m_SoundPath;
         boost::posix_time::time_duration m_RunningLateThreshold;
+        boost::posix_time::ptime m_LastAlert;
 };
 
 #endif // EWPRESENTER_H
