@@ -19,23 +19,38 @@
  **************************************************************/
 
 
-#ifndef EWVIEWOBSERVER_H
-#define EWVIEWOBSERVER_H
+#ifndef TASKBARPRES_H
+#define TASKBARPRES_H
+
+#include "AbstractEventHandler.h"
+#include "TKControllerObserver.h"
+#include <string>
 
 namespace EW
 {
-///@todo change to TKObserver
-class AbstractEWPresenter;
-class EWViewObserver
+class AbstractEventHandler;
+class AbstractTKController;
+class AbstractTaskBar;
+class TaskBarPres : public TKControllerObserver, public EventHandlerObserver
 {
     public:
-        virtual ~EWViewObserver() {}
-        virtual void OnStatusUpdate() = 0;
-        virtual void OnTimeUpdate() = 0;
-        virtual void OnQuit() = 0;
+        TaskBarPres(AbstractTaskBar& taskBar, AbstractTKController& presenter,
+                      AbstractEventHandler& hdlr);
+        virtual ~TaskBarPres();
+
+        virtual void OnStatusUpdate();
+        virtual void OnTimeUpdate();
+        virtual void OnQuit();
+        virtual void refresh();
     protected:
     private:
+        void setIcon();
+
+        AbstractTaskBar& m_TaskBar;
+        AbstractTKController& m_Presenter;
+        AbstractEventHandler& m_EventHandler;
+        std::string m_LastIcon;
 };
 }
 
-#endif // EWVIEWOBSERVER_H
+#endif // TASKBARPRES_H

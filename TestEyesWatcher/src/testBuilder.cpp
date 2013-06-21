@@ -29,37 +29,37 @@
 #include "TimeHandlerStub.h"
 #include "TimeKeeperStub.h"
 #include "TimerStub.h"
-#include "EWPresenterStub.h"
-#include "EWViewPresStub.h"
-#include "EWMainFrameStub.h"
+#include "TKControllerStub.h"
+#include "ViewPresStub.h"
+#include "MainFrameStub.h"
 #include "OptionsDialogPresStub.h"
-#include "EWTaskbarStub.h"
+#include "TaskBarStub.h"
 #include "OptionsDialogStub.h"
-#include "EWTestBuilder.h"
+#include "TestBuilder.h"
 #include "SetTopWindowStub.h"
 #include "ConfigObserverStubs.h"
 #include "EventHandlerStub.h"
 
 namespace EW
 {
-struct EWBuilderFixture
+struct BuilderFixture
 {
-    EWBuilderFixture() : path("path") {}
-    ~EWBuilderFixture() {}
+    BuilderFixture() : path("path") {}
+    ~BuilderFixture() {}
 
     SetTopWindowStub setTop;
     std::string path;
 };
 
-SUITE(TestEWBuilder)
+SUITE(TestBuilder)
 {
-    TEST_FIXTURE(EWBuilderFixture, TestBuild)
+    TEST_FIXTURE(BuilderFixture, TestBuild)
     {
-        const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerStub,
-            TimeHandlerStub, TimeKeeperStub, TimerStub, EWPresenterStub, EventHandlerStub,
-            EWViewPresStub<AbstractEWMainFrame>, EWMainFrameStub, EWViewPresStub<AbstractEWTaskbar>,
-            EWTaskbarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
-            PresHdlrConfigObserverStub, EWPresConfigObserverStub> builder(&setTop, path, true, OptionsDialogStub::IdOK);
+        const TestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerStub,
+            TimeHandlerStub, TimeKeeperStub, TimerStub, TKControllerStub, EventHandlerStub,
+            ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
+            TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
+            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub> builder(&setTop, path, true, OptionsDialogStub::IdOK);
 
         CHECK_EQUAL(false, builder.links.m_MsgHandler == nullptr);
         CHECK_EQUAL(false, builder.links.m_ConfigImpl == nullptr);
@@ -110,7 +110,7 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(builder.links.m_DisplayOptionsDialogCmd, builder.links.m_EventHandler->m_DisplayOptionsDialog);
 
         CHECK_EQUAL(builder.links.m_EventHandler, builder.links.m_MainFrame->m_EventHandler);
-        CHECK_EQUAL(true, builder.links.m_MainFrame->m_TaskbarCreated);
+        CHECK_EQUAL(true, builder.links.m_MainFrame->m_TaskBarCreated);
 
         CHECK_EQUAL(builder.links.m_MainFrame, builder.links.m_MainFramePres->m_View);
         CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_MainFramePres->m_Presenter);
@@ -131,37 +131,37 @@ SUITE(TestEWBuilder)
         CHECK_EQUAL(false, builder.links.m_OptionsPres->m_Displayed);
     }
 
-    TEST_FIXTURE(EWBuilderFixture, TestBuildNoTaskBar)
+    TEST_FIXTURE(BuilderFixture, TestBuildNoTaskBar)
     {
-        const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerStub,
-            TimeHandlerStub, TimeKeeperStub, TimerStub, EWPresenterStub, EventHandlerStub,
-            EWViewPresStub<AbstractEWMainFrame>, EWMainFrameStub, EWViewPresStub<AbstractEWTaskbar>,
-            EWTaskbarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
-            PresHdlrConfigObserverStub, EWPresConfigObserverStub> builder(&setTop, path, false, OptionsDialogStub::IdOK);
+        const TestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerStub,
+            TimeHandlerStub, TimeKeeperStub, TimerStub, TKControllerStub, EventHandlerStub,
+            ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
+            TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
+            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub> builder(&setTop, path, false, OptionsDialogStub::IdOK);
         CHECK_EQUAL(true, builder.links.m_TaskBarPres == nullptr);
         CHECK_EQUAL(true, builder.links.m_TaskBar == nullptr);
     }
 
-    TEST_FIXTURE(EWBuilderFixture, TestBuildBadConfig)
+    TEST_FIXTURE(BuilderFixture, TestBuildBadConfig)
     {
-        const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStubFail, PresenceHandlerStub,
-            TimeHandlerStub, TimeKeeperStub, TimerStub, EWPresenterStub, EventHandlerStub,
-            EWViewPresStub<AbstractEWMainFrame>, EWMainFrameStub, EWViewPresStub<AbstractEWTaskbar>,
-            EWTaskbarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
-            PresHdlrConfigObserverStub, EWPresConfigObserverStub> builder(&setTop, path, true, OptionsDialogStub::IdOK);
+        const TestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStubFail, PresenceHandlerStub,
+            TimeHandlerStub, TimeKeeperStub, TimerStub, TKControllerStub, EventHandlerStub,
+            ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
+            TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
+            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub> builder(&setTop, path, true, OptionsDialogStub::IdOK);
         CHECK_EQUAL(true, builder.links.m_OptionsPres->m_Displayed);
     }
 
-    TEST_FIXTURE(EWBuilderFixture, TestBuildBadConfigUnrecovered)
+    TEST_FIXTURE(BuilderFixture, TestBuildBadConfigUnrecovered)
     {
         bool trown = false;
         try
         {
-            const EWTestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStubFail, PresenceHandlerStub,
-            TimeHandlerStub, TimeKeeperStub, TimerStub, EWPresenterStub, EventHandlerStub,
-            EWViewPresStub<AbstractEWMainFrame>, EWMainFrameStub, EWViewPresStub<AbstractEWTaskbar>,
-            EWTaskbarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
-            PresHdlrConfigObserverStub, EWPresConfigObserverStub> builder(&setTop, path, true, OptionsDialogStub::IdOK + 1);
+            const TestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStubFail, PresenceHandlerStub,
+            TimeHandlerStub, TimeKeeperStub, TimerStub, TKControllerStub, EventHandlerStub,
+            ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
+            TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
+            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub> builder(&setTop, path, true, OptionsDialogStub::IdOK + 1);
         }
         catch (InvalidConfigFileException)
         {

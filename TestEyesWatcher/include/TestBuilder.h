@@ -19,42 +19,42 @@
  **************************************************************/
 
 
-#ifndef EWTESTBUILDER_H
-#define EWTESTBUILDER_H
+#ifndef TESTBUILDER_H
+#define TESTBUILDER_H
 
-#include "EWBuilder.h"
+#include "Builder.h"
 
 namespace EW
 {
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
-    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWPresenter,
-    class TEventHandler, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
-    class TEWTaskbar, class TOptionsDialogPres, class TOptionsDialog,
+    class TTimeHandler, class TTimeKeeper, class TTimer, class TTKController,
+    class TEventHandler, class TMainFramePres, class TMainFrame, class TEWTaskBarPres,
+    class TEWTaskBar, class TOptionsDialogPres, class TOptionsDialog,
     class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
-class EWTestBuilder : public EWBuilder<TMsgHandler, TConfigImpl,
+class TestBuilder : public Builder<TMsgHandler, TConfigImpl,
     TConfig, TPresenceHandler, TTimeHandler, TTimeKeeper, TTimer,
-    TEWPresenter, TEventHandler, TEWMainFramePres, TEWMainFrame, TEWTaskbarPres,
-    TEWTaskbar, TOptionsDialogPres, TOptionsDialog,
+    TTKController, TEventHandler, TMainFramePres, TMainFrame, TEWTaskBarPres,
+    TEWTaskBar, TOptionsDialogPres, TOptionsDialog,
     TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver>
 {
     public:
-        EWTestBuilder(SetTopWindowInt* topInt, std::string configPath, bool canCreateTaskbar, int idOk) :
-            EWBuilder<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler, TTimeHandler,
-            TTimeKeeper, TTimer, TEWPresenter, TEventHandler, TEWMainFramePres,
-            TEWMainFrame, TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres, TOptionsDialog,
+        TestBuilder(SetTopWindowInt* topInt, std::string configPath, bool canCreateTaskbar, int idOk) :
+            Builder<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler, TTimeHandler,
+            TTimeKeeper, TTimer, TTKController, TEventHandler, TMainFramePres,
+            TMainFrame, TEWTaskBarPres, TEWTaskBar, TOptionsDialogPres, TOptionsDialog,
             TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver>
             (topInt, configPath, canCreateTaskbar, idOk),
             links(this->getBuild()){}
 
-        virtual ~EWTestBuilder() {}
+        virtual ~TestBuilder() {}
 
-        const EWBuild<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler, TTimeHandler,
-            TTimeKeeper, TTimer, TEWPresenter, TEventHandler, TEWMainFramePres,
-            TEWMainFrame, TEWTaskbarPres, TEWTaskbar, TOptionsDialogPres, TOptionsDialog,
+        const Build<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler, TTimeHandler,
+            TTimeKeeper, TTimer, TTKController, TEventHandler, TMainFramePres,
+            TMainFrame, TEWTaskBarPres, TEWTaskBar, TOptionsDialogPres, TOptionsDialog,
             TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver> links;
     protected:
     private:
 };
 }
 
-#endif // EWTESTBUILDER_H
+#endif // TESTBUILDER_H

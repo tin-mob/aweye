@@ -19,28 +19,25 @@
  **************************************************************/
 
 
-#ifndef ABSTRACTEWMAINFRAME_H
-#define ABSTRACTEWMAINFRAME_H
+#ifndef ABSTRACTTASKBAR_H
+#define ABSTRACTTASKBAR_H
 
 #include <string>
 
 namespace EW
 {
-class AbstractOptionsDialogPres;
-class AbstractEWMainFrame
+class AbstractTaskBar
 {
     public:
-        AbstractEWMainFrame() {}
-        virtual void setValues( std::string statusLabel, std::string onClockLabel,
-                               std::string offClockLabel, std::string runningClockLabel,
-                               std::string leftClockLabel) = 0;
-        virtual void show(bool show = true) = 0;
-        virtual void setPauseButtonLabel(std::string label) = 0;
-        virtual void setStartButtonLabel(std::string label) = 0;
-        virtual void close() = 0;
+        virtual ~AbstractTaskBar() {}
+        virtual void setPopupMenuCommands( std::string hideRestoreLabel,
+            std::string startStopLabel, std::string pauseResumeLabel) = 0;
+        virtual void setPopupMenuTimes( std::string onClock, std::string offClock,
+            std::string runningClock, std::string leftClock) = 0;
+        virtual void setIcon(std::string loc) = 0;
     protected:
     private:
 };
 }
 
-#endif // ABSTRACTEWMAINFRAME_H
+#endif // ABSTRACTTASKBAR_H

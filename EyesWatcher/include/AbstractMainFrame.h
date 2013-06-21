@@ -19,38 +19,28 @@
  **************************************************************/
 
 
-#ifndef EWTASKBARPRES_H
-#define EWTASKBARPRES_H
+#ifndef ABSTRACTMAINFRAME_H
+#define ABSTRACTMAINFRAME_H
 
-#include "AbstractEventHandler.h"
-#include "EWViewObserver.h"
 #include <string>
 
 namespace EW
 {
-class AbstractEventHandler;
-class AbstractEWPresenter;
-class AbstractEWTaskbar;
-class EWTaskBarPres : public EWViewObserver, public EventHandlerObserver
+class AbstractOptionsDialogPres;
+class AbstractMainFrame
 {
     public:
-        EWTaskBarPres(AbstractEWTaskbar& taskBar, AbstractEWPresenter& presenter,
-                      AbstractEventHandler& hdlr);
-        virtual ~EWTaskBarPres();
-
-        virtual void OnStatusUpdate();
-        virtual void OnTimeUpdate();
-        virtual void OnQuit();
-        virtual void refresh();
+        AbstractMainFrame() {}
+        virtual void setValues( std::string statusLabel, std::string onClockLabel,
+                               std::string offClockLabel, std::string runningClockLabel,
+                               std::string leftClockLabel) = 0;
+        virtual void show(bool show = true) = 0;
+        virtual void setPauseButtonLabel(std::string label) = 0;
+        virtual void setStartButtonLabel(std::string label) = 0;
+        virtual void close() = 0;
     protected:
     private:
-        void setIcon();
-
-        AbstractEWTaskbar& m_TaskBar;
-        AbstractEWPresenter& m_Presenter;
-        AbstractEventHandler& m_EventHandler;
-        std::string m_LastIcon;
 };
 }
 
-#endif // EWTASKBARPRES_H
+#endif // ABSTRACTMAINFRAME_H

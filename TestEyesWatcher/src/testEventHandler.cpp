@@ -23,7 +23,7 @@
 #include "BaseException.h"
 #include "EventHandler.h"
 #include "EventHandlerStub.h"
-#include "EWPresenterStub.h"
+#include "TKControllerStub.h"
 #include "MsgHandlerStub.h"
 
 namespace EW
@@ -40,7 +40,7 @@ struct EventHandlerFixture
     bool displayed;
     bool displayThrow;
     MsgHandlerStub msgHandler;
-    EWPresenterStub presenter;
+    TKControllerStub presenter;
     std::function<bool()> displayCmd;
     EventHandler handler;
     EventHandlerObserverStub observer;

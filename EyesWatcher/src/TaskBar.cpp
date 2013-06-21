@@ -19,7 +19,7 @@
  **************************************************************/
 
 #include "AbstractEventHandler.h"
-#include "EWTaskBar.h"
+#include "TaskBar.h"
 #include "ObservableWxMenu.h"
 
 #include "wx_pch.h"
@@ -27,19 +27,19 @@
 
 namespace EW
 {
-BEGIN_EVENT_TABLE(EWTaskBar,wxTaskBarIcon)
-    EVT_MENU(ID_HIDE_RESTORE, EWTaskBar::OnMenuHideRestore)
-    EVT_MENU(ID_START_STOP, EWTaskBar::OnMenuStartStop)
-    EVT_MENU(ID_PAUSE_RESUME,EWTaskBar::OnMenuPauseResume)
-    EVT_MENU(ID_EXIT,EWTaskBar::OnMenuExit)
+BEGIN_EVENT_TABLE(TaskBar,wxTaskBarIcon)
+    EVT_MENU(ID_HIDE_RESTORE, TaskBar::OnMenuHideRestore)
+    EVT_MENU(ID_START_STOP, TaskBar::OnMenuStartStop)
+    EVT_MENU(ID_PAUSE_RESUME,TaskBar::OnMenuPauseResume)
+    EVT_MENU(ID_EXIT,TaskBar::OnMenuExit)
 END_EVENT_TABLE()
 
-EWTaskBar::EWTaskBar(AbstractEventHandler& hdlr) :
+TaskBar::TaskBar(AbstractEventHandler& hdlr) :
     m_EventHandler(hdlr), m_Menu(nullptr)
 {
 }
 
-EWTaskBar::~EWTaskBar()
+TaskBar::~TaskBar()
 {
     if (m_Menu != nullptr)
     {
@@ -48,30 +48,30 @@ EWTaskBar::~EWTaskBar()
     RemoveIcon();
 }
 
-void EWTaskBar::setPopupMenuCommands( std::string hideRestoreLabel,
+void TaskBar::setPopupMenuCommands( std::string hideRestoreLabel,
     std::string startStopLabel, std::string pauseResumeLabel)
 {
     if (m_Menu != nullptr)
     {
-        m_Menu->FindItem(EWTaskBar::ID_HIDE_RESTORE)->SetItemLabel(wxString(hideRestoreLabel.c_str(), wxConvUTF8));
-        m_Menu->FindItem(EWTaskBar::ID_START_STOP)->SetItemLabel(wxString(startStopLabel.c_str(), wxConvUTF8));
-        m_Menu->FindItem(EWTaskBar::ID_PAUSE_RESUME)->SetItemLabel(wxString(pauseResumeLabel.c_str(), wxConvUTF8));
+        m_Menu->FindItem(TaskBar::ID_HIDE_RESTORE)->SetItemLabel(wxString(hideRestoreLabel.c_str(), wxConvUTF8));
+        m_Menu->FindItem(TaskBar::ID_START_STOP)->SetItemLabel(wxString(startStopLabel.c_str(), wxConvUTF8));
+        m_Menu->FindItem(TaskBar::ID_PAUSE_RESUME)->SetItemLabel(wxString(pauseResumeLabel.c_str(), wxConvUTF8));
     }
 }
 
-void EWTaskBar::setPopupMenuTimes( std::string onClock, std::string offClock,
+void TaskBar::setPopupMenuTimes( std::string onClock, std::string offClock,
     std::string runningClock, std::string leftClock)
 {
     if (m_Menu != nullptr)
     {
-        m_Menu->FindItem(EWTaskBar::ID_ON_TIME)->SetItemLabel(wxString(onClock.c_str(), wxConvUTF8));
-        m_Menu->FindItem(EWTaskBar::ID_OFF_TIME)->SetItemLabel(wxString(offClock.c_str(), wxConvUTF8));
-        m_Menu->FindItem(EWTaskBar::ID_RUNNING_TIME)->SetItemLabel(wxString(runningClock.c_str(), wxConvUTF8));
-        m_Menu->FindItem(EWTaskBar::ID_LEFT_TIME)->SetItemLabel(wxString(leftClock.c_str(), wxConvUTF8));
+        m_Menu->FindItem(TaskBar::ID_ON_TIME)->SetItemLabel(wxString(onClock.c_str(), wxConvUTF8));
+        m_Menu->FindItem(TaskBar::ID_OFF_TIME)->SetItemLabel(wxString(offClock.c_str(), wxConvUTF8));
+        m_Menu->FindItem(TaskBar::ID_RUNNING_TIME)->SetItemLabel(wxString(runningClock.c_str(), wxConvUTF8));
+        m_Menu->FindItem(TaskBar::ID_LEFT_TIME)->SetItemLabel(wxString(leftClock.c_str(), wxConvUTF8));
     }
 }
 
-wxMenu* EWTaskBar::CreatePopupMenu()
+wxMenu* TaskBar::CreatePopupMenu()
 {
     // is this necessary? Investigate.
     if (m_Menu != nullptr)
@@ -80,23 +80,23 @@ wxMenu* EWTaskBar::CreatePopupMenu()
     }
     m_Menu = new ObservableWxMenu();
     m_Menu->attach(this);
-    m_Menu->Append(EWTaskBar::ID_HIDE_RESTORE, wxT("Hide/Restore"));
-    m_Menu->Append(EWTaskBar::ID_EXIT, wxT("Exit"));
+    m_Menu->Append(TaskBar::ID_HIDE_RESTORE, wxT("Hide/Restore"));
+    m_Menu->Append(TaskBar::ID_EXIT, wxT("Exit"));
     m_Menu->AppendSeparator();
-    m_Menu->Append(EWTaskBar::ID_START_STOP, wxT("Start/Stop"));
-    m_Menu->Append(EWTaskBar::ID_PAUSE_RESUME, wxT("Pause/Resume"));
+    m_Menu->Append(TaskBar::ID_START_STOP, wxT("Start/Stop"));
+    m_Menu->Append(TaskBar::ID_PAUSE_RESUME, wxT("Pause/Resume"));
     m_Menu->AppendSeparator();
-    m_Menu->Append(EWTaskBar::ID_ON_TIME, wxT("Last Session"));
-    m_Menu->Append(EWTaskBar::ID_OFF_TIME, wxT("Last Pause"));
-    m_Menu->Append(EWTaskBar::ID_RUNNING_TIME, wxT("Running"));
-    m_Menu->Append(EWTaskBar::ID_LEFT_TIME, wxT("Time Left"));
+    m_Menu->Append(TaskBar::ID_ON_TIME, wxT("Last Session"));
+    m_Menu->Append(TaskBar::ID_OFF_TIME, wxT("Last Pause"));
+    m_Menu->Append(TaskBar::ID_RUNNING_TIME, wxT("Running"));
+    m_Menu->Append(TaskBar::ID_LEFT_TIME, wxT("Time Left"));
 
     m_EventHandler.forceUpdate();
     return m_Menu;
 }
 
 // all icons are png files for now...
-void EWTaskBar::setIcon(std::string loc)
+void TaskBar::setIcon(std::string loc)
 {
     if (loc != "")
     {
@@ -112,27 +112,27 @@ void EWTaskBar::setIcon(std::string loc)
 
 // the menu is managed by Wx. When It decides to delete it, we receive
 // a nice warning...
-void EWTaskBar::onMenuDelete(ObservableWxMenu* menu)
+void TaskBar::onMenuDelete(ObservableWxMenu* menu)
 {
     m_Menu = nullptr;
 }
 
-void EWTaskBar::OnMenuHideRestore(wxCommandEvent&)
+void TaskBar::OnMenuHideRestore(wxCommandEvent&)
 {
     m_EventHandler.OnViewHideRestore();
 }
 
-void EWTaskBar::OnMenuStartStop(wxCommandEvent&)
+void TaskBar::OnMenuStartStop(wxCommandEvent&)
 {
     m_EventHandler.OnViewStartStop();
 }
 
-void EWTaskBar::OnMenuPauseResume(wxCommandEvent&)
+void TaskBar::OnMenuPauseResume(wxCommandEvent&)
 {
     m_EventHandler.OnViewPauseResume();
 }
 
-void EWTaskBar::OnMenuExit(wxCommandEvent&)
+void TaskBar::OnMenuExit(wxCommandEvent&)
 {
     m_EventHandler.OnViewQuit();
 }

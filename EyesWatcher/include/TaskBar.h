@@ -19,12 +19,12 @@
  **************************************************************/
 
 
-#ifndef EWTASKBAR_H
-#define EWTASKBAR_H
+#ifndef TASKBAR_H
+#define TASKBAR_H
 
 #include <wx/taskbar.h>
 #include <string>
-#include "AbstractEWTaskbar.h"
+#include "AbstractTaskBar.h"
 #include "ObservableWxMenu.h"
 #include <map>
 
@@ -32,11 +32,11 @@ class wxMenu;
 namespace EW
 {
 class AbstractEventHandler;
-class EWTaskBar : public AbstractEWTaskbar, public wxTaskBarIcon, public ObservableWxMenuObserver
+class TaskBar : public AbstractTaskBar, public wxTaskBarIcon, public ObservableWxMenuObserver
 {
     public:
-        EWTaskBar(AbstractEventHandler& hdlr);
-        virtual ~EWTaskBar();
+        TaskBar(AbstractEventHandler& hdlr);
+        virtual ~TaskBar();
         virtual void setPopupMenuCommands( std::string hideRestoreLabel,
             std::string startStopLabel, std::string pauseResumeLabel);
         virtual void setPopupMenuTimes( std::string onClock, std::string offClock,
@@ -73,4 +73,4 @@ class EWTaskBar : public AbstractEWTaskbar, public wxTaskBarIcon, public Observa
 };
 }
 
-#endif // EWTASKBAR_H
+#endif // TASKBAR_H

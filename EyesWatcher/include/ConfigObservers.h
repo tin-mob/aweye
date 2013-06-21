@@ -23,7 +23,7 @@
 #define CONFIGOBSERVERS_H_INCLUDED
 
 #include "AbstractConfig.h"
-#include "AbstractEWPresenter.h"
+#include "AbstractTKController.h"
 #include "AbstractTimeKeeper.h"
 #include "AbstractPresenceHandler.h"
 #include "ConfigObservers.h"
@@ -72,7 +72,7 @@ class PresHdlrConfigObserver : public ConfigObserver
 class EWPresConfigObserver : public ConfigObserver
 {
     public:
-        EWPresConfigObserver(AbstractConfig& config, AbstractEWPresenter& pres) :
+        EWPresConfigObserver(AbstractConfig& config, AbstractTKController& pres) :
             ConfigObserver(config), m_Presenter(pres) {}
         virtual ~EWPresConfigObserver() {}
 
@@ -84,7 +84,7 @@ class EWPresConfigObserver : public ConfigObserver
             m_Presenter.setRunningLateThreshold(data.runningLateThreshold);
         }
     private:
-        AbstractEWPresenter& m_Presenter;
+        AbstractTKController& m_Presenter;
 };
 }
 

@@ -19,27 +19,27 @@
  **************************************************************/
 
 
-#ifndef EWTASKBARSTUB_H
-#define EWTASKBARSTUB_H
+#ifndef TASKBARSTUB_H
+#define TASKBARSTUB_H
 
-#include "AbstractEWTaskbar.h"
+#include "AbstractTaskBar.h"
 
 namespace EW
 {
-class EWTaskbarStub : public AbstractEWTaskbar
+class TaskBarStub : public AbstractTaskBar
 {
     public:
-        EWTaskbarStub(AbstractEventHandler* hdlr = nullptr) : m_HideRestoreLabel(""),
+        TaskBarStub(AbstractEventHandler* hdlr = nullptr) : m_HideRestoreLabel(""),
             m_StartStopLabel(""), m_PauseResumeLabel(""), m_OnClock(""),
             m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
             m_Loc(""), m_EventHandler(hdlr){}
 
-        EWTaskbarStub(AbstractEventHandler& hdlr) : m_HideRestoreLabel(""),
+        TaskBarStub(AbstractEventHandler& hdlr) : m_HideRestoreLabel(""),
             m_StartStopLabel(""), m_PauseResumeLabel(""), m_OnClock(""),
             m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
             m_Loc(""), m_EventHandler(&hdlr){}
 
-        virtual ~EWTaskbarStub() {}
+        virtual ~TaskBarStub() {}
 
         virtual void setPopupMenuCommands( std::string hrl,
             std::string ssl, std::string prl)
@@ -78,4 +78,4 @@ class EWTaskbarStub : public AbstractEWTaskbar
 };
 }
 
-#endif // EWTASKBARSTUB_H
+#endif // TASKBARSTUB_H

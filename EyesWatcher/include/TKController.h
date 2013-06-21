@@ -18,13 +18,13 @@
 
  **************************************************************/
 
-#ifndef EWPRESENTER_H
-#define EWPRESENTER_H
+#ifndef TKCONTROLLER_H
+#define TKCONTROLLER_H
 
 #include <string>
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 
-#include "AbstractEWPresenter.h"
+#include "AbstractTKController.h"
 #include "AbstractTimer.h"
 
 namespace EW
@@ -40,14 +40,14 @@ class ConfigData;
 ///@todo possible improvement : separate all the std::string get*
 /// from the actions. would allow for views with different behaviour
 
-class EWPresenter : public AbstractEWPresenter, public TimerInterface
+class TKController : public AbstractTKController, public TimerInterface
 {
     public:
-        EWPresenter(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& keeper,
+        TKController(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& keeper,
                     AbstractTimer& clockTimer, AbstractTimeHandler& timeHandler,
                     bool popupAlarm = true, bool soundAlarm = false, std::string soundPath = "",
                     boost::posix_time::time_duration runningLateThreshold = boost::posix_time::minutes(4));
-        virtual ~EWPresenter();
+        virtual ~TKController();
 
         virtual void togglePause();
         virtual void toggleStart();
@@ -97,4 +97,4 @@ class EWPresenter : public AbstractEWPresenter, public TimerInterface
 };
 }
 
-#endif // EWPRESENTER_H
+#endif // TKCONTROLLER_H

@@ -19,33 +19,32 @@
  **************************************************************/
 
 #include <unittest++/UnitTest++.h>
-#include "EWTaskBarPres.h"
-#include "EWTaskbarStub.h"
-#include "EWPresenterStub.h"
+#include "TaskBarPres.h"
+#include "TaskBarStub.h"
+#include "TKControllerStub.h"
 #include "EventHandlerStub.h"
 
 namespace EW
 {
-///@todo sort TaskBar/Taskbar
-struct EWTaskBarPresFixture
+struct TaskBarPresFixture
 {
-    EWTaskBarPresFixture() : bar(), pres(), handler(), barPres(bar, pres, handler)
+    TaskBarPresFixture() : bar(), pres(), handler(), barPres(bar, pres, handler)
     {
     }
-    ~EWTaskBarPresFixture() {}
+    ~TaskBarPresFixture() {}
 
-    EWTaskbarStub bar;
-    EWPresenterStub pres;
+    TaskBarStub bar;
+    TKControllerStub pres;
     EventHandlerStub handler;
-    EWTaskBarPres barPres;
+    TaskBarPres barPres;
 };
 
-SUITE(TestEWTaskBarPres)
+SUITE(TestTaskBarPres)
 {
-    TEST_FIXTURE(EWTaskBarPresFixture, TestTimesUpdate)
+    TEST_FIXTURE(TaskBarPresFixture, TestTimesUpdate)
     {
-        EWPresenterStub::DisplayValues values =
-            EWPresenterStub::DisplayValues::getTestValues();
+        TKControllerStub::DisplayValues values =
+            TKControllerStub::DisplayValues::getTestValues();
         pres.setDisplayValues(values);
         pres.notifyTime();
 
@@ -56,10 +55,10 @@ SUITE(TestEWTaskBarPres)
         CHECK_EQUAL(values.icon, bar.m_Loc);
     }
 
-    TEST_FIXTURE(EWTaskBarPresFixture, TestTimesUpdateNoIcon)
+    TEST_FIXTURE(TaskBarPresFixture, TestTimesUpdateNoIcon)
     {
-        EWPresenterStub::DisplayValues values =
-            EWPresenterStub::DisplayValues::getTestValues(true, false);
+        TKControllerStub::DisplayValues values =
+            TKControllerStub::DisplayValues::getTestValues(true, false);
         bar.m_Loc = "in";
         pres.setDisplayValues(values);
         pres.notifyTime();
@@ -71,10 +70,10 @@ SUITE(TestEWTaskBarPres)
         CHECK_EQUAL("in", bar.m_Loc);
     }
 
-    TEST_FIXTURE(EWTaskBarPresFixture, TestStatusUpdate)
+    TEST_FIXTURE(TaskBarPresFixture, TestStatusUpdate)
     {
-        EWPresenterStub::DisplayValues values =
-            EWPresenterStub::DisplayValues::getTestValues();
+        TKControllerStub::DisplayValues values =
+            TKControllerStub::DisplayValues::getTestValues();
         pres.setDisplayValues(values);
         pres.notifyStatus();
 
@@ -84,10 +83,10 @@ SUITE(TestEWTaskBarPres)
         CHECK_EQUAL(values.icon, bar.m_Loc);
     }
 
-    TEST_FIXTURE(EWTaskBarPresFixture, TestStatusUpdateNoIcon)
+    TEST_FIXTURE(TaskBarPresFixture, TestStatusUpdateNoIcon)
     {
-        EWPresenterStub::DisplayValues values =
-            EWPresenterStub::DisplayValues::getTestValues(true, false);
+        TKControllerStub::DisplayValues values =
+            TKControllerStub::DisplayValues::getTestValues(true, false);
         bar.m_Loc = "in";
         pres.setDisplayValues(values);
         pres.notifyStatus();
@@ -98,10 +97,10 @@ SUITE(TestEWTaskBarPres)
         CHECK_EQUAL("in", bar.m_Loc);
     }
 
-    TEST_FIXTURE(EWTaskBarPresFixture, TestForceUpdate)
+    TEST_FIXTURE(TaskBarPresFixture, TestForceUpdate)
     {
-        EWPresenterStub::DisplayValues values =
-            EWPresenterStub::DisplayValues::getTestValues();
+        TKControllerStub::DisplayValues values =
+            TKControllerStub::DisplayValues::getTestValues();
         pres.setDisplayValues(values);
         handler.forceUpdate();
 

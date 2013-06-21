@@ -20,34 +20,34 @@
 
 
 #include <unittest++/UnitTest++.h>
-#include "EWPresenter.h"
+#include "TKController.h"
 #include "ConfigStub.h"
-#include "EWMainFrameStub.h"
+#include "MainFrameStub.h"
 #include "OptionsDialogStub.h"
 #include "MsgHandlerStub.h"
 #include "TimeHandlerStub.h"
 #include "TimeKeeperStub.h"
 #include "PresenceHandlerStub.h"
 #include "TimerStub.h"
-#include "EWViewObserverStub.h"
+#include "TKControllerObserverStub.h"
 
 namespace EW
 {
-struct EWPresenterFixture
+struct TKControllerFixture
 {
     public:
-        EWPresenterFixture() :
+        TKControllerFixture() :
             data({boost::posix_time::seconds(5), boost::posix_time::seconds(3),
                 boost::posix_time::seconds(1), boost::posix_time::seconds(2)}),
             msgHandler(), timeHandler(), keeper(), clockTimer(),
             dialog(), viewObserver(),
-            presenter(EWPresenter(msgHandler, keeper,
+            presenter(TKController(msgHandler, keeper,
                 clockTimer, timeHandler, data.popupAlarm, true, data.soundPath))
         {
             data.soundAlarm = true;
             presenter.attach(&viewObserver);
         }
-        ~EWPresenterFixture()
+        ~TKControllerFixture()
         {
         }
 
@@ -57,16 +57,16 @@ struct EWPresenterFixture
         TimeKeeperStub keeper;
         TimerStub clockTimer;
         OptionsDialogStub dialog;
-        EWViewObserverStub viewObserver;
-        EWPresenter presenter;
+        TKControllerObserverStub viewObserver;
+        TKController presenter;
 
     protected:
     private:
 };
 
-SUITE(TestEWPresenter)
+SUITE(TestTKController)
 {
-    TEST_FIXTURE(EWPresenterFixture, TestStartStop)
+    TEST_FIXTURE(TKControllerFixture, TestStartStop)
     {
         presenter.toggleStart();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
@@ -87,7 +87,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastError, "Testing!");
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestUpdate)
+    TEST_FIXTURE(TKControllerFixture, TestUpdate)
     {
         CHECK_EQUAL(presenter.getStatus(), "Off");
         CHECK_EQUAL(presenter.getTimeOn(), "10:59:00");
@@ -114,7 +114,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastSound, "");
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestAlert)
+    TEST_FIXTURE(TKControllerFixture, TestAlert)
     {
         keeper.m_Updated = true;
         keeper.m_Late = true;
@@ -124,7 +124,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastSound, data.soundPath);
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestAlertPaused)
+    TEST_FIXTURE(TKControllerFixture, TestAlertPaused)
     {
         keeper.m_Updated = true;
         keeper.m_Late = true;
@@ -135,7 +135,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastSound, "");
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestNoAlertAway)
+    TEST_FIXTURE(TKControllerFixture, TestNoAlertAway)
     {
         keeper.m_Updated = true;
         keeper.m_Late = true;
@@ -146,7 +146,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastSound, "");
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestNoAlertTooSoon)
+    TEST_FIXTURE(TKControllerFixture, TestNoAlertTooSoon)
     {
         keeper.m_Updated = true;
         keeper.m_Late = true;
@@ -159,7 +159,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastSound, "");
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestNoAlertSoonEnough)
+    TEST_FIXTURE(TKControllerFixture, TestNoAlertSoonEnough)
     {
         keeper.m_Updated = true;
         keeper.m_Late = true;
@@ -173,7 +173,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastSound, data.soundPath);
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestAlertTolerating)
+    TEST_FIXTURE(TKControllerFixture, TestAlertTolerating)
     {
         keeper.m_Updated = true;
         keeper.m_Late = true;
@@ -184,7 +184,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastSound, "");
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestFail)
+    TEST_FIXTURE(TKControllerFixture, TestFail)
     {
         keeper.m_Fail = true;
         CHECK_EQUAL(msgHandler.m_LastError, "");
@@ -192,7 +192,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(msgHandler.m_LastError, "Testing!");
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestNegatives)
+    TEST_FIXTURE(TKControllerFixture, TestNegatives)
     {
 
         presenter.toggleStart();
@@ -202,27 +202,27 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL("-01:01:01", presenter.getTimeLeft());
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestQuit)
+    TEST_FIXTURE(TKControllerFixture, TestQuit)
     {
         presenter.quit();
         CHECK_EQUAL(viewObserver.checkQuitUpdated(), true);
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestPauseButtonsLabels)
+    TEST_FIXTURE(TKControllerFixture, TestPauseButtonsLabels)
     {
         CHECK_EQUAL(presenter.getPauseButtonLabel(), presenter.m_PauseBtnLabel);
         presenter.togglePause();
         CHECK_EQUAL(presenter.getPauseButtonLabel(), presenter.m_ResumeBtnLabel);
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestStartButtonsLabels)
+    TEST_FIXTURE(TKControllerFixture, TestStartButtonsLabels)
     {
         CHECK_EQUAL(presenter.getStartButtonLabel(), presenter.m_StartBtnLabel);
         presenter.toggleStart();
         CHECK_EQUAL(presenter.getStartButtonLabel(), presenter.m_StopBtnLabel);
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestHideButtonsLabels)
+    TEST_FIXTURE(TKControllerFixture, TestHideButtonsLabels)
     {
         CHECK_EQUAL(presenter.getHideButtonLabel(), presenter.m_HideBtnLabel);
         CHECK_EQUAL(true, presenter.isShown());
@@ -236,7 +236,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(true, presenter.isShown());
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestIconName)
+    TEST_FIXTURE(TKControllerFixture, TestIconName)
     {
         CHECK_EQUAL(presenter.getIconName(), presenter.m_StopWebcamIcon);
 
@@ -255,7 +255,7 @@ SUITE(TestEWPresenter)
         CHECK_EQUAL(presenter.getIconName(), presenter.m_GreenWebcamIcon);
     }
 
-    TEST_FIXTURE(EWPresenterFixture, TestUpdateTime)
+    TEST_FIXTURE(TKControllerFixture, TestUpdateTime)
     {
         presenter.toggleStart();
         clockTimer.ring();

@@ -18,14 +18,14 @@
 
  **************************************************************/
 
-#include "EWTaskBarPres.h"
+#include "TaskBarPres.h"
 #include "AbstractEventHandler.h"
-#include "AbstractEWPresenter.h"
-#include "AbstractEWTaskbar.h"
+#include "AbstractTKController.h"
+#include "AbstractTaskBar.h"
 
 namespace EW
 {
-EWTaskBarPres::EWTaskBarPres(AbstractEWTaskbar& taskBar, AbstractEWPresenter& presenter,
+TaskBarPres::TaskBarPres(AbstractTaskBar& taskBar, AbstractTKController& presenter,
                              AbstractEventHandler& hdlr) :
     m_TaskBar(taskBar), m_Presenter(presenter), m_EventHandler(hdlr), m_LastIcon("")
 {
@@ -35,13 +35,13 @@ EWTaskBarPres::EWTaskBarPres(AbstractEWTaskbar& taskBar, AbstractEWPresenter& pr
     refresh();
 }
 
-EWTaskBarPres::~EWTaskBarPres()
+TaskBarPres::~TaskBarPres()
 {
     m_Presenter.detach(this);
     m_EventHandler.detach(this);
 }
 
-void EWTaskBarPres::OnStatusUpdate()
+void TaskBarPres::OnStatusUpdate()
 {
     m_TaskBar.setPopupMenuCommands(
         m_Presenter.getHideButtonLabel(),
@@ -50,7 +50,7 @@ void EWTaskBarPres::OnStatusUpdate()
     setIcon();
 }
 
-void EWTaskBarPres::OnTimeUpdate()
+void TaskBarPres::OnTimeUpdate()
 {
     m_TaskBar.setPopupMenuTimes(
         "Last Session : " + m_Presenter.getTimeOn(),
@@ -60,12 +60,12 @@ void EWTaskBarPres::OnTimeUpdate()
     setIcon();
 }
 
-void EWTaskBarPres::OnQuit()
+void TaskBarPres::OnQuit()
 {
     m_TaskBar.setIcon("");
 }
 
-void EWTaskBarPres::setIcon()
+void TaskBarPres::setIcon()
 {
     const std::string newIcon = m_Presenter.getIconName();
     if (newIcon != m_LastIcon)
@@ -75,7 +75,7 @@ void EWTaskBarPres::setIcon()
     }
 }
 
-void EWTaskBarPres::refresh()
+void TaskBarPres::refresh()
 {
     OnStatusUpdate();
     OnTimeUpdate();

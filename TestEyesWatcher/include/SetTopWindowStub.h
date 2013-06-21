@@ -26,15 +26,15 @@
 
 namespace EW
 {
-class AbstractEWMainFrame;
+class AbstractMainFrame;
 class SetTopWindowStub : public SetTopWindowInt
 {
     public:
         SetTopWindowStub() : m_Frame(nullptr){}
         virtual ~SetTopWindowStub() {}
-        virtual void setTopWindow(AbstractEWMainFrame* f) {m_Frame = f;}
+        virtual void setTopWindow(AbstractMainFrame* f) {m_Frame = f;}
 
-        AbstractEWMainFrame* m_Frame;
+        AbstractMainFrame* m_Frame;
     protected:
     private:
 };

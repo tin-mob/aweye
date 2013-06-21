@@ -19,30 +19,30 @@
  **************************************************************/
 
 
-#ifndef EWMAINFRAMESTUB_H
-#define EWMAINFRAMESTUB_H
+#ifndef MAINFRAMESTUB_H
+#define MAINFRAMESTUB_H
 
-#include "AbstractEWMainFrame.h"
+#include "AbstractMainFrame.h"
 
 namespace EW
 {
 class AbstractEventHandler;
-class EWMainFrameStub : public AbstractEWMainFrame
+class MainFrameStub : public AbstractMainFrame
 {
     public:
-        EWMainFrameStub(AbstractEventHandler* hdlr = nullptr,
+        MainFrameStub(AbstractEventHandler* hdlr = nullptr,
             bool tc = true) :
             m_Closed(false), m_Shown(false), m_Status(""),
             m_OnClock(""), m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
-            m_PauseLabel(""), m_StartLabel(""), m_EventHandler(hdlr), m_TaskbarCreated(tc) {}
+            m_PauseLabel(""), m_StartLabel(""), m_EventHandler(hdlr), m_TaskBarCreated(tc) {}
 
-        EWMainFrameStub(AbstractEventHandler& hdlr,
+        MainFrameStub(AbstractEventHandler& hdlr,
             bool tc = true) :
             m_Closed(false), m_Shown(false), m_Status(""),
             m_OnClock(""), m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
-            m_PauseLabel(""), m_StartLabel(""), m_EventHandler(&hdlr), m_TaskbarCreated(tc) {}
+            m_PauseLabel(""), m_StartLabel(""), m_EventHandler(&hdlr), m_TaskBarCreated(tc) {}
 
-        virtual ~EWMainFrameStub() {}
+        virtual ~MainFrameStub() {}
 
         virtual void setValues( std::string s, std::string onC,
                                std::string offC, std::string r,
@@ -68,7 +68,7 @@ class EWMainFrameStub : public AbstractEWMainFrame
         std::string m_StartLabel;
 
         AbstractEventHandler* m_EventHandler;
-        bool m_TaskbarCreated;
+        bool m_TaskBarCreated;
 
         virtual void setPauseButtonLabel(std::string label) {m_PauseLabel = label;}
         virtual void setStartButtonLabel(std::string label) {m_StartLabel = label;}
@@ -79,4 +79,4 @@ class EWMainFrameStub : public AbstractEWMainFrame
 };
 }
 
-#endif // EWMAINFRAMESTUB_H
+#endif // MAINFRAMESTUB_H

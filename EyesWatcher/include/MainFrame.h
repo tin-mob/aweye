@@ -18,10 +18,10 @@
 
  **************************************************************/
 
-#ifndef EWMAINFRAME_H
-#define EWMAINFRAME_H
+#ifndef MAINFRAME_H
+#define MAINFRAME_H
 
-//(*Headers(EWMainFrame)
+//(*Headers(MainFrame)
 #include <wx/sizer.h>
 #include <wx/menu.h>
 #include <wx/statline.h>
@@ -32,18 +32,18 @@
 #include <wx/valgen.h>
 #include <string>
 
-#include "AbstractEWMainFrame.h"
+#include "AbstractMainFrame.h"
 
 namespace EW
 {
 class AbstractEventHandler;
 class AbstractOptionsDialogPres;
-class EWMainFrame: public wxFrame, public AbstractEWMainFrame
+class MainFrame: public wxFrame, public AbstractMainFrame
 {
     public:
-        EWMainFrame(AbstractEventHandler& hdlr,
-                    bool taskbarCreated = true, wxWindow* parent = nullptr, wxWindowID id = -1);
-        virtual ~EWMainFrame();
+        MainFrame(AbstractEventHandler& hdlr,
+                    bool taskBarCreated = true, wxWindow* parent = nullptr, wxWindowID id = -1);
+        virtual ~MainFrame();
 
         virtual void setValues( std::string statusLabel, std::string onClockLabel,
                        std::string offClockLabel, std::string runningClockLabel,
@@ -55,7 +55,7 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
 
     private:
 
-        //(*Handlers(EWMainFrame)
+        //(*Handlers(MainFrame)
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
         void OnOptionsButtonClick(wxCommandEvent& event);
@@ -64,7 +64,7 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
         void OnPauseButtonClick(wxCommandEvent& event);
         //*)
 
-        //(*Identifiers(EWMainFrame)
+        //(*Identifiers(MainFrame)
         static const long ID_STATICTEXT9;
         static const long ID_STATICLINE1;
         static const long ID_STATICTEXT1;
@@ -85,7 +85,7 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
         static const long ID_EXITMENUITEM;
         //*)
 
-        //(*Declarations(EWMainFrame)
+        //(*Declarations(MainFrame)
         wxStaticText* m_StatusLabel;
         wxMenuBar* m_EwMenuBar;
         wxMenu* m_DoMenu;
@@ -105,10 +105,10 @@ class EWMainFrame: public wxFrame, public AbstractEWMainFrame
         //*)
 
         AbstractEventHandler& m_EventHandler;
-        bool m_TaskbarCreated;
+        bool m_TaskBarCreated;
 
         DECLARE_EVENT_TABLE()
 };
 }
 
-#endif // EWMAINFRAME_H
+#endif // MAINFRAME_H

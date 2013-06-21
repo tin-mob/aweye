@@ -19,14 +19,14 @@
  **************************************************************/
 
 #include "EventHandler.h"
-#include "AbstractEWPresenter.h"
+#include "AbstractTKController.h"
 #include "AbstractMsgHandler.h"
 #include "BaseException.h"
 
 namespace EW
 {
 EventHandler::EventHandler(AbstractMsgHandler& msgHandler,
-    AbstractEWPresenter& presenter, std::function<bool()>& dispCmd) :
+    AbstractTKController& presenter, std::function<bool()>& dispCmd) :
     m_MsgHandler(msgHandler), m_Presenter(presenter), m_DisplayOptionsDialog(dispCmd)
 {
     //ctor

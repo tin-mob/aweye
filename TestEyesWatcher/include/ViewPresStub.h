@@ -22,23 +22,23 @@
 #define EWVIEWPRESSTUB_H
 
 #include "AbstractEventHandler.h"
-#include "EWViewObserver.h"
+#include "TKControllerObserver.h"
 
 namespace EW
 {
 class AbstractEventHandler;
-class AbstractEWMainFrame;
-class AbstractEWPresenter;
+class AbstractMainFrame;
+class AbstractTKController;
 
 ///@note separate when needed
 template <class TView>
-class EWViewPresStub : public EWViewObserver, public EventHandlerObserver
+class ViewPresStub : public TKControllerObserver, public EventHandlerObserver
 {
     public:
-        EWViewPresStub(TView& view, AbstractEWPresenter& presenter,
+        ViewPresStub(TView& view, AbstractTKController& presenter,
             AbstractEventHandler& hdlr) :
             m_View(&view), m_Presenter(&presenter), m_EventHandler(&hdlr) {}
-        virtual ~EWViewPresStub() {}
+        virtual ~ViewPresStub() {}
 
         virtual void OnStatusUpdate() {}
         virtual void OnTimeUpdate() {}
@@ -46,7 +46,7 @@ class EWViewPresStub : public EWViewObserver, public EventHandlerObserver
         virtual void refresh() {}
 
         TView* m_View;
-        AbstractEWPresenter* m_Presenter;
+        AbstractTKController* m_Presenter;
         AbstractEventHandler* m_EventHandler;
     protected:
     private:

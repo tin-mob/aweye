@@ -19,13 +19,13 @@
  **************************************************************/
 
 
-#include "EWPresenter.h"
+#include "TKController.h"
 #include "AbstractMsgHandler.h"
 #include "AbstractTimeHandler.h"
 #include "AbstractTimeKeeper.h"
 #include "AbstractTimer.h"
 #include "BaseException.h"
-#include "EWViewObserver.h"
+#include "TKControllerObserver.h"
 
 #include "boost/date_time/posix_time/posix_time.hpp"
 
@@ -35,8 +35,8 @@
 
 namespace EW
 {
-/// @todo EWPresenter to EWTimeKeeperController,
-EWPresenter::EWPresenter(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& keeper,
+/// @todo TKController to EWTimeKeeperController,
+TKController::TKController(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& keeper,
                          AbstractTimer& clockTimer, AbstractTimeHandler& timeHandler,
                          bool popupAlarm, bool soundAlarm, std::string soundPath,
                          boost::posix_time::time_duration runningLateThreshold)
@@ -48,17 +48,17 @@ EWPresenter::EWPresenter(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& kee
     m_ClockTimer.attach(this);
 }
 
-EWPresenter::~EWPresenter()
+TKController::~TKController()
 {
     m_ClockTimer.detach(this);
 }
 
-void EWPresenter::start()
+void TKController::start()
 {
     try
     {
         m_TimeKeeper.start();
-        notify(&EWViewObserver::OnStatusUpdate);
+        notify(&TKControllerObserver::OnStatusUpdate);
         m_ClockTimer.startTimer(1000, false);
     }
     catch (BaseException e)
@@ -67,31 +67,31 @@ void EWPresenter::start()
     }
 }
 
-void EWPresenter::stop()
+void TKController::stop()
 {
     m_TimeKeeper.stop();
     m_ClockTimer.stopTimer();
-    notify(&EWViewObserver::OnStatusUpdate);
+    notify(&TKControllerObserver::OnStatusUpdate);
 }
 
-void EWPresenter::quit()
+void TKController::quit()
 {
-    notify(&EWViewObserver::OnQuit);
+    notify(&TKControllerObserver::OnQuit);
 }
 
-void EWPresenter::show(bool show)
+void TKController::show(bool show)
 {
     m_Shown = show;
-    notify(&EWViewObserver::OnStatusUpdate);
+    notify(&TKControllerObserver::OnStatusUpdate);
 }
 
-void EWPresenter::onTimerRing(AbstractTimer*)
+void TKController::onTimerRing(AbstractTimer*)
 {
     try
     {
         if(m_TimeKeeper.checkUpdate())
         {
-            notify(&EWViewObserver::OnStatusUpdate);
+            notify(&TKControllerObserver::OnStatusUpdate);
 
             bool late = m_TimeKeeper.isLate();
             bool here = m_TimeKeeper.getStatus() == AbstractTimeKeeper::HERE;
@@ -106,7 +106,7 @@ void EWPresenter::onTimerRing(AbstractTimer*)
         }
         else
         {
-            notify(&EWViewObserver::OnTimeUpdate);
+            notify(&TKControllerObserver::OnTimeUpdate);
         }
     }
     catch (BaseException e)
@@ -116,13 +116,13 @@ void EWPresenter::onTimerRing(AbstractTimer*)
     }
 }
 
-void EWPresenter::togglePause()
+void TKController::togglePause()
 {
     m_Warn = !m_Warn;
-    notify(&EWViewObserver::OnStatusUpdate);
+    notify(&TKControllerObserver::OnStatusUpdate);
 }
 
-void EWPresenter::toggleStart()
+void TKController::toggleStart()
 {
     if(m_TimeKeeper.getStatus() != AbstractTimeKeeper::OFF)
     {
@@ -134,7 +134,7 @@ void EWPresenter::toggleStart()
     }
 }
 
-std::string EWPresenter::getHideButtonLabel() const
+std::string TKController::getHideButtonLabel() const
 {
     if (m_Shown)
     {
@@ -146,7 +146,7 @@ std::string EWPresenter::getHideButtonLabel() const
     }
 }
 
-std::string EWPresenter::getPauseButtonLabel() const
+std::string TKController::getPauseButtonLabel() const
 {
     if (m_Warn)
     {
@@ -158,7 +158,7 @@ std::string EWPresenter::getPauseButtonLabel() const
     }
 }
 
-std::string EWPresenter::getStartButtonLabel() const
+std::string TKController::getStartButtonLabel() const
 {
     if (m_TimeKeeper.getStatus() != AbstractTimeKeeper::OFF)
     {
@@ -171,12 +171,12 @@ std::string EWPresenter::getStartButtonLabel() const
 }
 
 
-std::string EWPresenter::getStatus() const
+std::string TKController::getStatus() const
 {
     return m_TimeKeeper.getStatusStr();
 }
 
-std::string EWPresenter::getIconName()const
+std::string TKController::getIconName()const
 {
     if (m_TimeKeeper.getStatus() == AbstractTimeKeeper::OFF)
     {
@@ -205,7 +205,7 @@ std::string EWPresenter::getIconName()const
     }
 }
 
-std::string EWPresenter::durationToString(boost::posix_time::time_duration duration)
+std::string TKController::durationToString(boost::posix_time::time_duration duration)
 {
     if (duration.is_special())
     {
@@ -223,58 +223,58 @@ std::string EWPresenter::durationToString(boost::posix_time::time_duration durat
     return out.str();
 }
 
-std::string EWPresenter::getTimeOn() const
+std::string TKController::getTimeOn() const
 {
     const boost::posix_time::time_duration stamp = m_TimeKeeper.getHereStamp().time_of_day();
-    return EWPresenter::durationToString(stamp);
+    return TKController::durationToString(stamp);
 }
 
-std::string EWPresenter::getTimeOff() const
+std::string TKController::getTimeOff() const
 {
     const boost::posix_time::time_duration stamp = m_TimeKeeper.getAwayStamp().time_of_day();
-    return EWPresenter::durationToString(stamp);
+    return TKController::durationToString(stamp);
 }
 
-std::string EWPresenter::getTimeRunning() const
+std::string TKController::getTimeRunning() const
 {
     const boost::posix_time::time_duration stamp = m_TimeKeeper.getInterval();
-    return EWPresenter::durationToString(stamp);
+    return TKController::durationToString(stamp);
 }
 
-std::string EWPresenter::getTimeLeft() const
+std::string TKController::getTimeLeft() const
 {
     const boost::posix_time::time_duration stamp = m_TimeKeeper.getTimeLeft();
-    return EWPresenter::durationToString(stamp);
+    return TKController::durationToString(stamp);
 }
 
-bool EWPresenter::isShown() const
+bool TKController::isShown() const
 {
     return m_Shown;
 }
 
-void EWPresenter::setRunningLateThreshold(
+void TKController::setRunningLateThreshold(
             boost::posix_time::time_duration runningLateThreshold)
 {
     m_RunningLateThreshold = runningLateThreshold;
 }
 
-void EWPresenter::setPopupAlarm(bool popupAlarm)
+void TKController::setPopupAlarm(bool popupAlarm)
 {
     m_PopupAlarm = popupAlarm;
 }
 
-void EWPresenter::setSoundAlarm(bool soundAlarm)
+void TKController::setSoundAlarm(bool soundAlarm)
 {
     m_SoundAlarm = soundAlarm;
 }
 
-void EWPresenter::setSoundPath(std::string soundPath)
+void TKController::setSoundPath(std::string soundPath)
 {
     m_SoundPath = soundPath;
 }
 
 ///@note should alert timing be here or in timekeeper?
-void EWPresenter::alert()
+void TKController::alert()
 {
     if (!m_Warn)
     {

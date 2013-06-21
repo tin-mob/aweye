@@ -19,20 +19,20 @@
  **************************************************************/
 
 
-#ifndef ABSTRACTEWPRESENTER_H
-#define ABSTRACTEWPRESENTER_H
+#ifndef ABSTRACTTKCONTROLLER_H
+#define ABSTRACTTKCONTROLLER_H
 
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 #include "Subject.h"
-#include "EWViewObserver.h"
+#include "TKControllerObserver.h"
 
 namespace EW
 {
 class ConfigData;
-class AbstractEWPresenter : public Subject<EWViewObserver>
+class AbstractTKController : public Subject<TKControllerObserver>
 {
     public:
-        AbstractEWPresenter() : m_LateMsg("Time for a pause!"),
+        AbstractTKController() : m_LateMsg("Time for a pause!"),
             m_HideBtnLabel("Hide"), m_RestoreBtnLabel("Restore"),
             m_PauseBtnLabel("Pause"), m_ResumeBtnLabel("Resume"),
             m_StartBtnLabel("Start"), m_StopBtnLabel("Stop"),
@@ -40,7 +40,7 @@ class AbstractEWPresenter : public Subject<EWViewObserver>
             m_YellowWebcamIcon("webcam-yellow.png"), m_RedWebcamIcon("webcam-red.png")
         {
         }
-        virtual ~AbstractEWPresenter() {}
+        virtual ~AbstractTKController() {}
 
         virtual void togglePause() = 0;
         virtual void toggleStart() = 0;
@@ -81,4 +81,4 @@ class AbstractEWPresenter : public Subject<EWViewObserver>
 };
 }
 
-#endif // ABSTRACTEWPRESENTER_H
+#endif // ABSTRACTTKCONTROLLER_H

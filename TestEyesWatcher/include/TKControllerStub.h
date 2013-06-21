@@ -19,10 +19,10 @@
  **************************************************************/
 
 
-#ifndef EWPRESENTERSTUB_H
-#define EWPRESENTERSTUB_H
+#ifndef TKCONTROLLERSTUB_H
+#define TKCONTROLLERSTUB_H
 
-#include "AbstractEWPresenter.h"
+#include "AbstractTKController.h"
 #include "AbstractMsgHandler.h"
 #include "AbstractTimeHandler.h"
 #include "AbstractTimeKeeper.h"
@@ -31,10 +31,10 @@
 
 namespace EW
 {
-class EWPresenterStub : public AbstractEWPresenter
+class TKControllerStub : public AbstractTKController
 {
     public:
-        EWPresenterStub(AbstractMsgHandler* mH = nullptr, AbstractTimeKeeper* k = nullptr,
+        TKControllerStub(AbstractMsgHandler* mH = nullptr, AbstractTimeKeeper* k = nullptr,
             AbstractTimer* clT = nullptr, AbstractTimeHandler* tH = nullptr, bool pA = false,
             bool sA = false, std::string sP = "",
             boost::posix_time::time_duration rLT = boost::posix_time::seconds(0)) :
@@ -43,7 +43,7 @@ class EWPresenterStub : public AbstractEWPresenter
             m_StatusUpdated(false), m_TimesUpdated(false), m_DisplayValues(),
             m_MsgHandler(mH), m_Keeper(k), m_ClockTimer(clT), m_TimeHandler(tH) {}
 
-        EWPresenterStub(AbstractMsgHandler& mH, AbstractTimeKeeper& k,
+        TKControllerStub(AbstractMsgHandler& mH, AbstractTimeKeeper& k,
             AbstractTimer& clT, AbstractTimeHandler& tH, bool pA, bool sA,
             std::string sP, boost::posix_time::time_duration rLT) :
             m_PopupAlarm(pA), m_SoundAlarm(sA), m_SoundPath(sP), m_RunningLateThreshold(rLT),
@@ -51,7 +51,7 @@ class EWPresenterStub : public AbstractEWPresenter
             m_StatusUpdated(false), m_TimesUpdated(false), m_DisplayValues(),
             m_MsgHandler(&mH), m_Keeper(&k), m_ClockTimer(&clT), m_TimeHandler(&tH) {}
 
-        virtual ~EWPresenterStub() {}
+        virtual ~TKControllerStub() {}
 
         virtual void togglePause() {m_Paused = !m_Paused;}
         virtual void toggleStart() {m_Started = !m_Started;}
@@ -78,9 +78,9 @@ class EWPresenterStub : public AbstractEWPresenter
         virtual void setSoundAlarm(bool val) {m_SoundAlarm = val;}
         virtual void setSoundPath(std::string val) {m_SoundPath = val;}
 
-        void notifyStatus() {notify(&EWViewObserver::OnStatusUpdate);}
-        void notifyTime() {notify(&EWViewObserver::OnTimeUpdate);}
-        void notifyQuit() {notify(&EWViewObserver::OnQuit);}
+        void notifyStatus() {notify(&TKControllerObserver::OnStatusUpdate);}
+        void notifyTime() {notify(&TKControllerObserver::OnTimeUpdate);}
+        void notifyQuit() {notify(&TKControllerObserver::OnQuit);}
 
 
         struct DisplayValues
@@ -134,4 +134,4 @@ class EWPresenterStub : public AbstractEWPresenter
 };
 }
 
-#endif // EWPRESENTERSTUB_H
+#endif // TKCONTROLLERSTUB_H

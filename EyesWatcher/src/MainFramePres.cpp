@@ -19,14 +19,14 @@
  **************************************************************/
 
 #include "AbstractEventHandler.h"
-#include "AbstractEWMainFrame.h"
-#include "AbstractEWPresenter.h"
+#include "AbstractMainFrame.h"
+#include "AbstractTKController.h"
 #include "BaseException.h"
-#include "EWMainFramePres.h"
+#include "MainFramePres.h"
 
 namespace EW
 {
-EWMainFramePres::EWMainFramePres(AbstractEWMainFrame& frame, AbstractEWPresenter& presenter,
+MainFramePres::MainFramePres(AbstractMainFrame& frame, AbstractTKController& presenter,
                                  AbstractEventHandler& hdlr) :
     m_Frame(frame), m_Presenter(presenter), m_EventHandler(hdlr)
 {
@@ -36,13 +36,13 @@ EWMainFramePres::EWMainFramePres(AbstractEWMainFrame& frame, AbstractEWPresenter
     refresh();
 }
 
-EWMainFramePres::~EWMainFramePres()
+MainFramePres::~MainFramePres()
 {
     m_Presenter.detach(this);
     m_EventHandler.detach(this);
 }
 
-void EWMainFramePres::OnStatusUpdate()
+void MainFramePres::OnStatusUpdate()
 {
     const bool shown = m_Presenter.isShown();
     m_Frame.show(shown);
@@ -58,7 +58,7 @@ void EWMainFramePres::OnStatusUpdate()
     }
 }
 
-void EWMainFramePres::OnTimeUpdate()
+void MainFramePres::OnTimeUpdate()
 {
     if (m_Presenter.isShown())
     {
@@ -68,12 +68,12 @@ void EWMainFramePres::OnTimeUpdate()
     }
 }
 
-void EWMainFramePres::OnQuit()
+void MainFramePres::OnQuit()
 {
     m_Frame.close();
 }
 
-void EWMainFramePres::refresh()
+void MainFramePres::refresh()
 {
     OnStatusUpdate();
 }

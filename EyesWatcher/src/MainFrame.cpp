@@ -22,14 +22,14 @@
 #include "wx_pch.h"
 #include "AbstractEventHandler.h"
 #include "AboutDialog.h"
-#include "EWMainFrame.h"
+#include "MainFrame.h"
 
 #include <wx/msgdlg.h>
 #include <wx/valgen.h>
 #include <wx/utils.h>
 #include <wx/notifmsg.h>
 
-//(*InternalHeaders(EWMainFrame)
+//(*InternalHeaders(MainFrame)
 #include <wx/string.h>
 #include <wx/intl.h>
 #include <wx/bitmap.h>
@@ -66,37 +66,37 @@ wxString wxbuildinfo(wxbuildinfoformat format)
     return wxbuild;
 }
 
-//(*IdInit(EWMainFrame)
-const long EWMainFrame::ID_STATICTEXT9 = wxNewId();
-const long EWMainFrame::ID_STATICLINE1 = wxNewId();
-const long EWMainFrame::ID_STATICTEXT1 = wxNewId();
-const long EWMainFrame::ID_STATICTEXT2 = wxNewId();
-const long EWMainFrame::ID_STATICLINE2 = wxNewId();
-const long EWMainFrame::ID_STATICTEXT3 = wxNewId();
-const long EWMainFrame::ID_STATICTEXT4 = wxNewId();
-const long EWMainFrame::ID_STATICLINE3 = wxNewId();
-const long EWMainFrame::ID_STATICTEXT5 = wxNewId();
-const long EWMainFrame::ID_STATICTEXT6 = wxNewId();
-const long EWMainFrame::ID_STATICLINE4 = wxNewId();
-const long EWMainFrame::ID_STATICTEXT7 = wxNewId();
-const long EWMainFrame::ID_STATICTEXT8 = wxNewId();
-const long EWMainFrame::ID_STARTMENUITEM = wxNewId();
-const long EWMainFrame::ID_PAUSEMENUITEM = wxNewId();
-const long EWMainFrame::ID_OPTIONSMENUITEM = wxNewId();
-const long EWMainFrame::ID_ABOUTMENUITEM = wxNewId();
-const long EWMainFrame::ID_EXITMENUITEM = wxNewId();
+//(*IdInit(MainFrame)
+const long MainFrame::ID_STATICTEXT9 = wxNewId();
+const long MainFrame::ID_STATICLINE1 = wxNewId();
+const long MainFrame::ID_STATICTEXT1 = wxNewId();
+const long MainFrame::ID_STATICTEXT2 = wxNewId();
+const long MainFrame::ID_STATICLINE2 = wxNewId();
+const long MainFrame::ID_STATICTEXT3 = wxNewId();
+const long MainFrame::ID_STATICTEXT4 = wxNewId();
+const long MainFrame::ID_STATICLINE3 = wxNewId();
+const long MainFrame::ID_STATICTEXT5 = wxNewId();
+const long MainFrame::ID_STATICTEXT6 = wxNewId();
+const long MainFrame::ID_STATICLINE4 = wxNewId();
+const long MainFrame::ID_STATICTEXT7 = wxNewId();
+const long MainFrame::ID_STATICTEXT8 = wxNewId();
+const long MainFrame::ID_STARTMENUITEM = wxNewId();
+const long MainFrame::ID_PAUSEMENUITEM = wxNewId();
+const long MainFrame::ID_OPTIONSMENUITEM = wxNewId();
+const long MainFrame::ID_ABOUTMENUITEM = wxNewId();
+const long MainFrame::ID_EXITMENUITEM = wxNewId();
 //*)
 
-BEGIN_EVENT_TABLE(EWMainFrame,wxFrame)
-    //(*EventTable(EWMainFrame)
+BEGIN_EVENT_TABLE(MainFrame,wxFrame)
+    //(*EventTable(MainFrame)
     //*)
 END_EVENT_TABLE()
 
-EWMainFrame::EWMainFrame(AbstractEventHandler& hdlr,
-                         bool taskbarCreated, wxWindow* parent, wxWindowID id) :
-                         m_EventHandler(hdlr), m_TaskbarCreated(taskbarCreated)
+MainFrame::MainFrame(AbstractEventHandler& hdlr,
+                         bool taskBarCreated, wxWindow* parent, wxWindowID id) :
+                         m_EventHandler(hdlr), m_TaskBarCreated(taskBarCreated)
 {
-    //(*Initialize(EWMainFrame)
+    //(*Initialize(MainFrame)
     wxMenuItem* m_ExitMenuItem;
     wxBoxSizer* m_LeftBoxSizer;
     wxMenuItem* m_AboutMenuItem;
@@ -166,22 +166,22 @@ EWMainFrame::EWMainFrame(AbstractEventHandler& hdlr,
     m_MainFlexGridSizer->Fit(this);
     m_MainFlexGridSizer->SetSizeHints(this);
 
-    Connect(ID_STARTMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&EWMainFrame::OnPlayButtonClick);
-    Connect(ID_PAUSEMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&EWMainFrame::OnPauseButtonClick);
-    Connect(ID_OPTIONSMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&EWMainFrame::OnOptionsButtonClick);
-    Connect(ID_ABOUTMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&EWMainFrame::OnAbout);
-    Connect(ID_EXITMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&EWMainFrame::OnQuit);
-    Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&EWMainFrame::OnClose);
+    Connect(ID_STARTMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnPlayButtonClick);
+    Connect(ID_PAUSEMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnPauseButtonClick);
+    Connect(ID_OPTIONSMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnOptionsButtonClick);
+    Connect(ID_ABOUTMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnAbout);
+    Connect(ID_EXITMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnQuit);
+    Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&MainFrame::OnClose);
     //*)
 }
 
-EWMainFrame::~EWMainFrame()
+MainFrame::~MainFrame()
 {
-    //(*Destroy(EWMainFrame)
+    //(*Destroy(MainFrame)
     //*)
 }
 
-void EWMainFrame::setValues( std::string statusLabel, std::string onClockLabel,
+void MainFrame::setValues( std::string statusLabel, std::string onClockLabel,
                             std::string offClockLabel, std::string runningClockLabel,
                             std::string leftClockLabel)
 {
@@ -198,50 +198,50 @@ void EWMainFrame::setValues( std::string statusLabel, std::string onClockLabel,
     m_LeftClock->GetParent()->Layout();
 }
 
-void EWMainFrame::show(bool show)
+void MainFrame::show(bool show)
 {
     Show(show);
 }
 
-void EWMainFrame::setPauseButtonLabel(std::string label)
+void MainFrame::setPauseButtonLabel(std::string label)
 {
     m_DoMenu->SetLabel(ID_PAUSEMENUITEM, wxString(label.c_str(), wxConvUTF8));
 }
 
-void EWMainFrame::setStartButtonLabel(std::string label)
+void MainFrame::setStartButtonLabel(std::string label)
 {
     m_DoMenu->SetLabel(ID_STARTMENUITEM, wxString(label.c_str(), wxConvUTF8));
 }
 
-void EWMainFrame::close()
+void MainFrame::close()
 {
     Destroy();
 }
 
-void EWMainFrame::OnQuit(wxCommandEvent& event)
+void MainFrame::OnQuit(wxCommandEvent& event)
 {
     m_EventHandler.OnViewQuit();
 }
 
-void EWMainFrame::OnAbout(wxCommandEvent& event)
+void MainFrame::OnAbout(wxCommandEvent& event)
 {
     AboutDialog dialog(this);
     dialog.ShowModal();
 }
 
-void EWMainFrame::OnOptionsButtonClick(wxCommandEvent& event)
+void MainFrame::OnOptionsButtonClick(wxCommandEvent& event)
 {
     m_EventHandler.OnViewOptionsButtonClick();
 }
 
-void EWMainFrame::OnPlayButtonClick(wxCommandEvent& event)
+void MainFrame::OnPlayButtonClick(wxCommandEvent& event)
 {
     m_EventHandler.OnViewStartStop();
 }
 
-void EWMainFrame::OnClose(wxCloseEvent& event)
+void MainFrame::OnClose(wxCloseEvent& event)
 {
-    if (!event.CanVeto() || !m_TaskbarCreated)
+    if (!event.CanVeto() || !m_TaskBarCreated)
     {
         m_EventHandler.OnViewQuit();
         Destroy();
@@ -250,7 +250,7 @@ void EWMainFrame::OnClose(wxCloseEvent& event)
     m_EventHandler.OnViewHideRestore();
 }
 
-void EWMainFrame::OnPauseButtonClick(wxCommandEvent& event)
+void MainFrame::OnPauseButtonClick(wxCommandEvent& event)
 {
     m_EventHandler.OnViewPauseResume();
 }

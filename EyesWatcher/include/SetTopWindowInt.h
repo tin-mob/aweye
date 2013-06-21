@@ -18,19 +18,19 @@
 
  **************************************************************/
 
-///@todo set top in ewapp instead (with EWBuilder::getMainFrame) ?
+///@todo set top in ewapp instead (with Builder::getMainFrame) ?
 
 #ifndef SETTOPWINDOWINT_H
 #define SETTOPWINDOWINT_H
 
 namespace EW
 {
-class AbstractEWMainFrame;
+class AbstractMainFrame;
 class SetTopWindowInt
 {
     public:
         virtual ~SetTopWindowInt() {}
-        virtual void setTopWindow(AbstractEWMainFrame* frame) = 0;
+        virtual void setTopWindow(AbstractMainFrame* frame) = 0;
     protected:
     private:
 };

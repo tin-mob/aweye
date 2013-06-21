@@ -19,25 +19,21 @@
  **************************************************************/
 
 
-#ifndef ABSTRACTEWTASKBAR_H
-#define ABSTRACTEWTASKBAR_H
-
-#include <string>
+#ifndef TKCONTROLLEROBSERVER_H
+#define TKCONTROLLEROBSERVER_H
 
 namespace EW
 {
-class AbstractEWTaskbar
+class TKControllerObserver
 {
     public:
-        virtual ~AbstractEWTaskbar() {}
-        virtual void setPopupMenuCommands( std::string hideRestoreLabel,
-            std::string startStopLabel, std::string pauseResumeLabel) = 0;
-        virtual void setPopupMenuTimes( std::string onClock, std::string offClock,
-            std::string runningClock, std::string leftClock) = 0;
-        virtual void setIcon(std::string loc) = 0;
+        virtual ~TKControllerObserver() {}
+        virtual void OnStatusUpdate() = 0;
+        virtual void OnTimeUpdate() = 0;
+        virtual void OnQuit() = 0;
     protected:
     private:
 };
 }
 
-#endif // ABSTRACTEWTASKBAR_H
+#endif // TKCONTROLLEROBSERVER_H

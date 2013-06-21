@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <wxsmith>
-	<object class="wxFrame" name="EWMainFrame">
+	<object class="wxFrame" name="MainFrame">
 		<icon>webcam.ico</icon>
 		<id_arg>0</id_arg>
 		<handler function="OnClose" entry="EVT_CLOSE" />

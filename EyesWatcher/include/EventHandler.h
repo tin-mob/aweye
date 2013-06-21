@@ -27,12 +27,12 @@
 
 namespace EW
 {
-class AbstractEWPresenter;
+class AbstractTKController;
 class AbstractMsgHandler;
 class EventHandler : public AbstractEventHandler
 {
     public:
-        EventHandler(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter,
+        EventHandler(AbstractMsgHandler& msgHandler, AbstractTKController& presenter,
                      std::function<bool()>& dispCmd);
         virtual ~EventHandler();
 
@@ -46,7 +46,7 @@ class EventHandler : public AbstractEventHandler
     protected:
     private:
         AbstractMsgHandler& m_MsgHandler;
-        AbstractEWPresenter& m_Presenter;
+        AbstractTKController& m_Presenter;
         std::function<bool()>& m_DisplayOptionsDialog;
 };
 }

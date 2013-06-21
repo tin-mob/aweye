@@ -19,34 +19,30 @@
  **************************************************************/
 
 
-#ifndef EWMAINFRAMEPRES_H
-#define EWMAINFRAMEPRES_H
+#ifndef OBSERVERSTUB_H
+#define OBSERVERSTUB_H
 
-#include "AbstractEventHandler.h"
-#include "EWViewObserver.h"
+#include "TKControllerObserver.h"
 
 namespace EW
 {
-class AbstractEventHandler;
-class AbstractEWMainFrame;
-class AbstractEWPresenter;
-class EWMainFramePres : public EWViewObserver, public EventHandlerObserver
+class TKControllerObserverStub : public TKControllerObserver
 {
     public:
-        EWMainFramePres(AbstractEWMainFrame& frame, AbstractEWPresenter& presenter,
-                        AbstractEventHandler& hdlr);
-        virtual ~EWMainFramePres();
-
-        virtual void OnStatusUpdate();
-        virtual void OnTimeUpdate();
-        virtual void OnQuit();
-        virtual void refresh();
+        TKControllerObserverStub() : m_StatUpdated(false), m_TimeUpdated(false), m_QuitUpdated(false){}
+        virtual ~TKControllerObserverStub() {}
+        virtual void OnStatusUpdate() {m_StatUpdated = true;}
+        virtual void OnTimeUpdate() {m_TimeUpdated = true;}
+        virtual void OnQuit() {m_QuitUpdated = true;}
+        bool checkStatUpdated() {bool temp = m_StatUpdated; m_StatUpdated = false; return temp;}
+        bool checkTimeUpdated() {bool temp = m_TimeUpdated; m_TimeUpdated = false; return temp;}
+        bool checkQuitUpdated() {bool temp = m_QuitUpdated; m_QuitUpdated = false; return temp;}
     protected:
     private:
-        AbstractEWMainFrame& m_Frame;
-        AbstractEWPresenter& m_Presenter;
-        AbstractEventHandler& m_EventHandler;
+        bool m_StatUpdated;
+        bool m_TimeUpdated;
+        bool m_QuitUpdated;
 };
 }
 
-#endif // EWMAINFRAMEPRES_H
+#endif // OBSERVERSTUB_H

@@ -51,16 +51,16 @@ class PresHdlrConfigObserverStub : public ConfigObserver
         AbstractPresenceHandler& m_PresenceHandler;
 };
 
-class EWPresConfigObserverStub : public ConfigObserver
+class TKCtrlConfigObserverStub : public ConfigObserver
 {
     public:
-        EWPresConfigObserverStub(AbstractConfig& config, AbstractEWPresenter& pres) :
+        TKCtrlConfigObserverStub(AbstractConfig& config, AbstractTKController& pres) :
             ConfigObserver(config), m_Presenter(pres) {}
-        virtual ~EWPresConfigObserverStub() {}
+        virtual ~TKCtrlConfigObserverStub() {}
 
         virtual void update(const ConfigData& data) {}
 
-        AbstractEWPresenter& m_Presenter;
+        AbstractTKController& m_Presenter;
 };
 }
 

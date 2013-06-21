@@ -19,8 +19,8 @@
  **************************************************************/
 
 
-#ifndef EWAPP_H
-#define EWAPP_H
+#ifndef APP_H
+#define APP_H
 
 #include <memory>
 #include <wx/app.h>
@@ -30,12 +30,12 @@ class wxCmdLineParser;
 namespace EW
 {
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
-    class TTimeHandler, class TTimeKeeper, class TTimer, class TEWPresenter,
-    class TEventHandler, class TEWMainFramePres, class TEWMainFrame, class TEWTaskbarPres,
-    class TEWTaskbar, class TOptionsDialogPres, class TOptionsDialog,
+    class TTimeHandler, class TTimeKeeper, class TTimer, class TTKController,
+    class TEventHandler, class TMainFramePres, class TMainFrame, class TEWTaskBarPres,
+    class TEWTaskBar, class TOptionsDialogPres, class TOptionsDialog,
     class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
-class EWBuilder;
-class AbstractEWMainFrame;
+class Builder;
+class AbstractMainFrame;
 class MsgHandler;
 class wxConfigImpl;
 class Config;
@@ -44,35 +44,35 @@ class TimeHandler;
 class TimeKeeper;
 class MyWxTimer;
 class EventHandler;
-class EWPresenter;
-class EWMainFramePres;
-class EWMainFrame;
-class EWTaskBarPres;
-class EWTaskBar;
+class TKController;
+class MainFramePres;
+class MainFrame;
+class TaskBarPres;
+class TaskBar;
 class OptionsDialog;
 class OptionsDialogPres;
 class AbstractMsgHandler;
 class TKConfigObserver;
 class PresHdlrConfigObserver;
 class EWPresConfigObserver;
-class EWApp : public wxApp, public SetTopWindowInt
+class App : public wxApp, public SetTopWindowInt
 {
     public:
-        EWApp();
-        ~EWApp();
+        App();
+        ~App();
 
-        EWApp(const EWApp&) = delete;
-        EWApp& operator=(const EWApp&) = delete;
+        App(const App&) = delete;
+        App& operator=(const App&) = delete;
 
         virtual bool OnInit();
         virtual void OnInitCmdLine(wxCmdLineParser& parser);
         virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
 
-        virtual void setTopWindow(AbstractEWMainFrame* frame);
+        virtual void setTopWindow(AbstractMainFrame* frame);
     private:
-        std::unique_ptr<EWBuilder<MsgHandler, wxConfigImpl, Config,
-                WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, EWPresenter,
-                EventHandler, EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
+        std::unique_ptr<Builder<MsgHandler, wxConfigImpl, Config,
+                WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, TKController,
+                EventHandler, MainFramePres, MainFrame, TaskBarPres, TaskBar,
                 OptionsDialogPres, OptionsDialog, TKConfigObserver,
                 PresHdlrConfigObserver, EWPresConfigObserver>>
             m_AppImpl;
@@ -81,4 +81,4 @@ class EWApp : public wxApp, public SetTopWindowInt
 };
 }
 
-#endif // EWAPP_H
+#endif // APP_H

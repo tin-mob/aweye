@@ -26,7 +26,7 @@
 #include "ConfigData.h"
 #include "ConfigStub.h"
 #include "ConfigObservers.h"
-#include "EWPresenterStub.h"
+#include "TKControllerStub.h"
 #include "PresenceHandlerStub.h"
 #include "TimeKeeperStub.h"
 
@@ -41,13 +41,13 @@ struct ConfigObserversFixture
     ConfigStub config;
     TimeKeeperStub timeKeeper;
     PresenceHandlerStub presenceHandler;
-    EWPresenterStub presenter;
+    TKControllerStub presenter;
     TKConfigObserver keeperObserver;
     PresHdlrConfigObserver presHdlrObserver;
     EWPresConfigObserver presObserver;
 };
 
-SUITE(TestEWAppController)
+SUITE(TestAppController)
 {
     TEST_FIXTURE(ConfigObserversFixture, TestSave)
     {

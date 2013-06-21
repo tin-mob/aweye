@@ -20,12 +20,12 @@
 
 
 #include "wx_pch.h"
-#include "EWApp.h"
+#include "App.h"
 #include <wx/cmdline.h>
 #include <wx/image.h>
 #include <wx/taskbar.h>
 
-#include "EWBuilder.h"
+#include "Builder.h"
 
 #include "MsgHandler.h"
 #include "wxConfigImpl.h"
@@ -35,19 +35,19 @@
 #include "TimeKeeper.h"
 #include "MyWxTimer.h"
 #include "EventHandler.h"
-#include "EWBuilder.h"
-#include "EWPresenter.h"
-#include "EWMainFramePres.h"
-#include "EWMainFrame.h"
+#include "Builder.h"
+#include "TKController.h"
+#include "MainFramePres.h"
+#include "MainFrame.h"
 #include "OptionsDialogPres.h"
-#include "EWTaskBarPres.h"
-#include "EWTaskBar.h"
+#include "TaskBarPres.h"
+#include "TaskBar.h"
 #include "ConfigObservers.h"
 #include "OptionsDialog.h"
 
 #include <memory>
 
-IMPLEMENT_APP(EW::EWApp);
+IMPLEMENT_APP(EW::App);
 
 namespace EW
 {
@@ -58,22 +58,22 @@ template <class T> class no_delete
         void operator()(T* ptr) const {}
 };
 
-// EWMainFrame is managed by wx
+// MainFrame is managed by wx
 template <>
-struct PtrTraits<EWMainFrame>
+struct PtrTraits<MainFrame>
 {
-  typedef typename std::unique_ptr<EWMainFrame, no_delete<EWMainFrame>> Ptr;
+  typedef typename std::unique_ptr<MainFrame, no_delete<MainFrame>> Ptr;
 };
 
-EWApp::EWApp() : m_AppImpl(nullptr)
+App::App() : m_AppImpl(nullptr)
 {
 }
 
-EWApp::~EWApp()
+App::~App()
 {
 }
 
-bool EWApp::OnInit()
+bool App::OnInit()
 {
     if (!wxApp::OnInit())
         return false;
@@ -84,9 +84,9 @@ bool EWApp::OnInit()
     {
     	if (m_AppImpl.get() == nullptr)
     	{
-    	    m_AppImpl.reset(new EWBuilder<MsgHandler, wxConfigImpl, Config,
-                WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, EWPresenter,
-                EventHandler, EWMainFramePres, EWMainFrame, EWTaskBarPres, EWTaskBar,
+    	    m_AppImpl.reset(new Builder<MsgHandler, wxConfigImpl, Config,
+                WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, TKController,
+                EventHandler, MainFramePres, MainFrame, TaskBarPres, TaskBar,
                 OptionsDialogPres, OptionsDialog, TKConfigObserver,
                 PresHdlrConfigObserver, EWPresConfigObserver>
                 (this, std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable(), wxID_OK));
@@ -95,7 +95,7 @@ bool EWApp::OnInit()
     return wxsOK;
 }
 
-void EWApp::OnInitCmdLine(wxCmdLineParser& parser)
+void App::OnInitCmdLine(wxCmdLineParser& parser)
 {
     parser.AddOption(wxT("c"),wxT("config"),
                      wxT("Use a specific configuration file."),
@@ -103,15 +103,15 @@ void EWApp::OnInitCmdLine(wxCmdLineParser& parser)
     parser.SetSwitchChars (wxT("-"));
 }
 
-bool EWApp::OnCmdLineParsed(wxCmdLineParser& parser)
+bool App::OnCmdLineParsed(wxCmdLineParser& parser)
 {
     parser.Found(wxT("c"), &m_ConfigPath);
     return true;
 }
 
-void EWApp::setTopWindow(AbstractEWMainFrame* frame)
+void App::setTopWindow(AbstractMainFrame* frame)
 {
-    EWMainFrame* castedFrame = dynamic_cast<EWMainFrame*>(frame);
+    MainFrame* castedFrame = dynamic_cast<MainFrame*>(frame);
 
     assert(castedFrame != nullptr);
     if (castedFrame != nullptr)

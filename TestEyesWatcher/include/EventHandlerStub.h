@@ -22,7 +22,7 @@
 #define EVENTHANDLERSTUB_H
 
 #include "AbstractEventHandler.h"
-#include "AbstractEWPresenter.h"
+#include "AbstractTKController.h"
 #include "AbstractMsgHandler.h"
 #include <functional>
 
@@ -49,7 +49,7 @@ class EventHandlerObserverStub : public EventHandlerObserver
 class EventHandlerStub : public AbstractEventHandler
 {
     public:
-        EventHandlerStub(AbstractMsgHandler& msgHandler, AbstractEWPresenter& presenter,
+        EventHandlerStub(AbstractMsgHandler& msgHandler, AbstractTKController& presenter,
             std::function<bool()>& dispCmd)
             : m_MsgHandler(&msgHandler), m_Presenter(&presenter), m_DisplayOptionsDialog(&dispCmd){}
 
@@ -66,7 +66,7 @@ class EventHandlerStub : public AbstractEventHandler
         virtual void OnViewHideRestore() {}
 
         AbstractMsgHandler* m_MsgHandler;
-        AbstractEWPresenter* m_Presenter;
+        AbstractTKController* m_Presenter;
         std::function<bool()>* m_DisplayOptionsDialog;
     protected:
     private:

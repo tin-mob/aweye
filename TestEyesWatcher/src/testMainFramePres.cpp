@@ -20,32 +20,32 @@
 
 
 #include <unittest++/UnitTest++.h>
-#include "EWMainFramePres.h"
-#include "EWMainFrameStub.h"
-#include "EWPresenterStub.h"
+#include "MainFramePres.h"
+#include "MainFrameStub.h"
+#include "TKControllerStub.h"
 #include "EventHandlerStub.h"
 
 namespace EW
 {
-struct EWMainFramePresFixture
+struct MainFramePresFixture
 {
-    EWMainFramePresFixture() : frame(), pres(), handler(), framePres(frame, pres, handler)
+    MainFramePresFixture() : frame(), pres(), handler(), framePres(frame, pres, handler)
     {
     }
-    ~EWMainFramePresFixture() {}
+    ~MainFramePresFixture() {}
 
-    EWMainFrameStub frame;
-    EWPresenterStub pres;
+    MainFrameStub frame;
+    TKControllerStub pres;
     EventHandlerStub handler;
-    EWMainFramePres framePres;
+    MainFramePres framePres;
 };
 
-SUITE(TestEWMainFramePres)
+SUITE(TestMainFramePres)
 {
-    TEST_FIXTURE(EWMainFramePresFixture, TestStatusUpdate)
+    TEST_FIXTURE(MainFramePresFixture, TestStatusUpdate)
     {
-        EWPresenterStub::DisplayValues values =
-            EWPresenterStub::DisplayValues::getTestValues();
+        TKControllerStub::DisplayValues values =
+            TKControllerStub::DisplayValues::getTestValues();
         pres.setDisplayValues(values);
         pres.notifyStatus();
 
@@ -60,12 +60,12 @@ SUITE(TestEWMainFramePres)
         CHECK_EQUAL(values.shown, frame.m_Shown);
     }
 
-    TEST_FIXTURE(EWMainFramePresFixture, TestStatusUpdateNoShow)
+    TEST_FIXTURE(MainFramePresFixture, TestStatusUpdateNoShow)
     {
         frame.m_Shown = true;
 
-        EWPresenterStub::DisplayValues values =
-            EWPresenterStub::DisplayValues::getTestValues(false);
+        TKControllerStub::DisplayValues values =
+            TKControllerStub::DisplayValues::getTestValues(false);
         pres.setDisplayValues(values);
         pres.notifyStatus();
 
@@ -80,10 +80,10 @@ SUITE(TestEWMainFramePres)
         CHECK_EQUAL(false, frame.m_Shown);
     }
 
-    TEST_FIXTURE(EWMainFramePresFixture, TestTimesUpdate)
+    TEST_FIXTURE(MainFramePresFixture, TestTimesUpdate)
     {
-        EWPresenterStub::DisplayValues values =
-            EWPresenterStub::DisplayValues::getTestValues();
+        TKControllerStub::DisplayValues values =
+            TKControllerStub::DisplayValues::getTestValues();
         pres.setDisplayValues(values);
         pres.notifyTime();
 
@@ -97,10 +97,10 @@ SUITE(TestEWMainFramePres)
         CHECK_EQUAL(values.timeLeft, frame.m_LeftClock);
     }
 
-    TEST_FIXTURE(EWMainFramePresFixture, TestTimesUpdateNoShow)
+    TEST_FIXTURE(MainFramePresFixture, TestTimesUpdateNoShow)
     {
-        EWPresenterStub::DisplayValues values =
-            EWPresenterStub::DisplayValues::getTestValues(false);
+        TKControllerStub::DisplayValues values =
+            TKControllerStub::DisplayValues::getTestValues(false);
         pres.setDisplayValues(values);
         pres.notifyTime();
 
@@ -114,10 +114,10 @@ SUITE(TestEWMainFramePres)
         CHECK_EQUAL("", frame.m_LeftClock);
     }
 
-    TEST_FIXTURE(EWMainFramePresFixture, TestForceUpdate)
+    TEST_FIXTURE(MainFramePresFixture, TestForceUpdate)
     {
-        EWPresenterStub::DisplayValues values =
-            EWPresenterStub::DisplayValues::getTestValues();
+        TKControllerStub::DisplayValues values =
+            TKControllerStub::DisplayValues::getTestValues();
         pres.setDisplayValues(values);
         handler.forceUpdate();
 
