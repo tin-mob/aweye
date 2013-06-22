@@ -67,7 +67,7 @@ SUITE(TestBuilder)
         CHECK_EQUAL(false, builder.links.m_TimeHandler == nullptr);
         CHECK_EQUAL(false, builder.links.m_TimeKeeper == nullptr);
         CHECK_EQUAL(false, builder.links.m_ClockTimer == nullptr);
-        CHECK_EQUAL(false, builder.links.m_Presenter == nullptr);
+        CHECK_EQUAL(false, builder.links.m_TKController == nullptr);
         CHECK_EQUAL(false, builder.links.m_MainFramePres == nullptr);
         CHECK_EQUAL(false, builder.links.m_MainFrame == nullptr);
         CHECK_EQUAL(false, builder.links.m_OptionsPres == nullptr);
@@ -94,38 +94,38 @@ SUITE(TestBuilder)
         CHECK_EQUAL(data.pauseTol, builder.links.m_TimeKeeper->m_PauseTol);
         CHECK_EQUAL(data.workTol, builder.links.m_TimeKeeper->m_WorkTol);
 
-        CHECK_EQUAL(builder.links.m_MsgHandler, builder.links.m_Presenter->m_MsgHandler);
-        CHECK_EQUAL(builder.links.m_TimeKeeper, builder.links.m_Presenter->m_Keeper);
-        CHECK_EQUAL(builder.links.m_ClockTimer, builder.links.m_Presenter->m_ClockTimer);
-        CHECK_EQUAL(builder.links.m_TimeHandler, builder.links.m_Presenter->m_TimeHandler);
+        CHECK_EQUAL(builder.links.m_MsgHandler, builder.links.m_TKController->m_MsgHandler);
+        CHECK_EQUAL(builder.links.m_TimeKeeper, builder.links.m_TKController->m_Keeper);
+        CHECK_EQUAL(builder.links.m_ClockTimer, builder.links.m_TKController->m_ClockTimer);
+        CHECK_EQUAL(builder.links.m_TimeHandler, builder.links.m_TKController->m_TimeHandler);
 
-        CHECK_EQUAL(data.popupAlarm, builder.links.m_Presenter->m_PopupAlarm);
-        CHECK_EQUAL(data.soundAlarm, builder.links.m_Presenter->m_SoundAlarm);
-        CHECK_EQUAL(data.soundPath, builder.links.m_Presenter->m_SoundPath);
-        CHECK_EQUAL(data.runningLateThreshold, builder.links.m_Presenter->m_RunningLateThreshold);
+        CHECK_EQUAL(data.popupAlarm, builder.links.m_TKController->m_PopupAlarm);
+        CHECK_EQUAL(data.soundAlarm, builder.links.m_TKController->m_SoundAlarm);
+        CHECK_EQUAL(data.soundPath, builder.links.m_TKController->m_SoundPath);
+        CHECK_EQUAL(data.runningLateThreshold, builder.links.m_TKController->m_RunningLateThreshold);
 
         CHECK_EQUAL(builder.links.m_MsgHandler, builder.links.m_EventHandler->m_MsgHandler);
-        CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_EventHandler->m_Presenter);
+        CHECK_EQUAL(builder.links.m_TKController, builder.links.m_EventHandler->m_TKController);
         CHECK_EQUAL(builder.links.m_DisplayOptionsDialogCmd, builder.links.m_EventHandler->m_DisplayOptionsDialog);
 
         CHECK_EQUAL(builder.links.m_EventHandler, builder.links.m_MainFrame->m_EventHandler);
         CHECK_EQUAL(true, builder.links.m_MainFrame->m_TaskBarCreated);
 
         CHECK_EQUAL(builder.links.m_MainFrame, builder.links.m_MainFramePres->m_View);
-        CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_MainFramePres->m_Presenter);
+        CHECK_EQUAL(builder.links.m_TKController, builder.links.m_MainFramePres->m_TKController);
         CHECK_EQUAL(builder.links.m_EventHandler, builder.links.m_MainFramePres->m_EventHandler);
 
         CHECK_EQUAL(builder.links.m_EventHandler, builder.links.m_TaskBar->m_EventHandler);
 
         CHECK_EQUAL(builder.links.m_TaskBar, builder.links.m_TaskBarPres->m_View);
-        CHECK_EQUAL(builder.links.m_Presenter, builder.links.m_TaskBarPres->m_Presenter);
+        CHECK_EQUAL(builder.links.m_TKController, builder.links.m_TaskBarPres->m_TKController);
         CHECK_EQUAL(builder.links.m_EventHandler, builder.links.m_TaskBarPres->m_EventHandler);
 
         CHECK_EQUAL(builder.links.m_MainFrame, setTop.m_Frame);
 
         CHECK_EQUAL(builder.links.m_PresenceHandler, &builder.links.m_PresHdlrConfigObserver->m_PresenceHandler);
         CHECK_EQUAL(builder.links.m_TimeKeeper, &builder.links.m_TKConfigObserver->m_TimeKeeper);
-        CHECK_EQUAL(builder.links.m_Presenter, &builder.links.m_EWPresConfigObserver->m_Presenter);
+        CHECK_EQUAL(builder.links.m_TKController, &builder.links.m_EWPresConfigObserver->m_TKController);
 
         CHECK_EQUAL(false, builder.links.m_OptionsPres->m_Displayed);
     }

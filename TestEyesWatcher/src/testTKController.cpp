@@ -41,11 +41,11 @@ struct TKControllerFixture
                 boost::posix_time::seconds(1), boost::posix_time::seconds(2)}),
             msgHandler(), timeHandler(), keeper(), clockTimer(),
             dialog(), viewObserver(),
-            presenter(TKController(msgHandler, keeper,
+            controller(TKController(msgHandler, keeper,
                 clockTimer, timeHandler, data.popupAlarm, true, data.soundPath))
         {
             data.soundAlarm = true;
-            presenter.attach(&viewObserver);
+            controller.attach(&viewObserver);
         }
         ~TKControllerFixture()
         {
@@ -58,7 +58,7 @@ struct TKControllerFixture
         TimerStub clockTimer;
         OptionsDialogStub dialog;
         TKControllerObserverStub viewObserver;
-        TKController presenter;
+        TKController controller;
 
     protected:
     private:
@@ -68,19 +68,19 @@ SUITE(TestTKController)
 {
     TEST_FIXTURE(TKControllerFixture, TestStartStop)
     {
-        presenter.toggleStart();
+        controller.toggleStart();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::HERE);
         CHECK_EQUAL(1000, clockTimer.m_Running);
         CHECK_EQUAL(viewObserver.checkStatUpdated(), true);
 
-        presenter.toggleStart();
+        controller.toggleStart();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
         CHECK_EQUAL(clockTimer.m_Running, 0);
         CHECK_EQUAL(viewObserver.checkStatUpdated(), true);
 
         keeper.m_Fail = true;
         CHECK_EQUAL(msgHandler.m_LastError, "");
-        presenter.toggleStart();
+        controller.toggleStart();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
         CHECK_EQUAL(clockTimer.m_Running, 0);
         CHECK_EQUAL(viewObserver.checkStatUpdated(), false);
@@ -89,24 +89,24 @@ SUITE(TestTKController)
 
     TEST_FIXTURE(TKControllerFixture, TestUpdate)
     {
-        CHECK_EQUAL(presenter.getStatus(), "Off");
-        CHECK_EQUAL(presenter.getTimeOn(), "10:59:00");
-        CHECK_EQUAL(presenter.getTimeOff(), "11:31:01");
-        CHECK_EQUAL(presenter.getTimeRunning(), "00:00:02");
-        CHECK_EQUAL(presenter.getTimeLeft(), "00:03:00");
+        CHECK_EQUAL(controller.getStatus(), "Off");
+        CHECK_EQUAL(controller.getTimeOn(), "10:59:00");
+        CHECK_EQUAL(controller.getTimeOff(), "11:31:01");
+        CHECK_EQUAL(controller.getTimeRunning(), "00:00:02");
+        CHECK_EQUAL(controller.getTimeLeft(), "00:03:00");
         CHECK_EQUAL(msgHandler.m_LastAlert, "");
 
-        presenter.toggleStart();
+        controller.toggleStart();
         keeper.m_HereStamp = boost::posix_time::not_a_date_time;
         keeper.m_AwayStamp = boost::posix_time::not_a_date_time;
         keeper.m_Interval = boost::posix_time::not_a_date_time;
         keeper.m_Left = boost::posix_time::not_a_date_time;
 
-        CHECK_EQUAL(presenter.getStatus(), "Here");
-        CHECK_EQUAL(presenter.getTimeOn(), "00:00:00");
-        CHECK_EQUAL(presenter.getTimeOff(), "00:00:00");
-        CHECK_EQUAL(presenter.getTimeRunning(), "00:00:00");
-        CHECK_EQUAL(presenter.getTimeLeft(), "00:00:00");
+        CHECK_EQUAL(controller.getStatus(), "Here");
+        CHECK_EQUAL(controller.getTimeOn(), "00:00:00");
+        CHECK_EQUAL(controller.getTimeOff(), "00:00:00");
+        CHECK_EQUAL(controller.getTimeRunning(), "00:00:00");
+        CHECK_EQUAL(controller.getTimeLeft(), "00:00:00");
         CHECK_EQUAL(msgHandler.m_LastAlert, "");
         CHECK_EQUAL(msgHandler.m_LastSound, "");
 
@@ -118,9 +118,9 @@ SUITE(TestTKController)
     {
         keeper.m_Updated = true;
         keeper.m_Late = true;
-        presenter.toggleStart();
-        presenter.onTimerRing(&clockTimer);
-        CHECK_EQUAL(msgHandler.m_LastAlert, presenter.m_LateMsg);
+        controller.toggleStart();
+        controller.onTimerRing(&clockTimer);
+        CHECK_EQUAL(msgHandler.m_LastAlert, controller.m_LateMsg);
         CHECK_EQUAL(msgHandler.m_LastSound, data.soundPath);
     }
 
@@ -128,9 +128,9 @@ SUITE(TestTKController)
     {
         keeper.m_Updated = true;
         keeper.m_Late = true;
-        presenter.toggleStart();
-        presenter.togglePause();
-        presenter.onTimerRing(&clockTimer);
+        controller.toggleStart();
+        controller.togglePause();
+        controller.onTimerRing(&clockTimer);
         CHECK_EQUAL(msgHandler.m_LastAlert, "");
         CHECK_EQUAL(msgHandler.m_LastSound, "");
     }
@@ -140,8 +140,8 @@ SUITE(TestTKController)
         keeper.m_Updated = true;
         keeper.m_Late = true;
         keeper.m_Status = AbstractTimeKeeper::AWAY;
-        presenter.toggleStart();
-        presenter.onTimerRing(&clockTimer);
+        controller.toggleStart();
+        controller.onTimerRing(&clockTimer);
         CHECK_EQUAL(msgHandler.m_LastAlert, "");
         CHECK_EQUAL(msgHandler.m_LastSound, "");
     }
@@ -150,11 +150,11 @@ SUITE(TestTKController)
     {
         keeper.m_Updated = true;
         keeper.m_Late = true;
-        presenter.toggleStart();
-        presenter.onTimerRing(&clockTimer);
+        controller.toggleStart();
+        controller.onTimerRing(&clockTimer);
         msgHandler.m_LastAlert = "";
         msgHandler.m_LastSound = "";
-        presenter.onTimerRing(&clockTimer);
+        controller.onTimerRing(&clockTimer);
         CHECK_EQUAL(msgHandler.m_LastAlert, "");
         CHECK_EQUAL(msgHandler.m_LastSound, "");
     }
@@ -163,13 +163,13 @@ SUITE(TestTKController)
     {
         keeper.m_Updated = true;
         keeper.m_Late = true;
-        presenter.toggleStart();
-        presenter.onTimerRing(&clockTimer);
+        controller.toggleStart();
+        controller.onTimerRing(&clockTimer);
         msgHandler.m_LastAlert = "";
         msgHandler.m_LastSound = "";
         timeHandler.setTime(timeHandler.getTime() + keeper.getRemFreq());
-        presenter.onTimerRing(&clockTimer);
-        CHECK_EQUAL(msgHandler.m_LastAlert, presenter.m_LateMsg);
+        controller.onTimerRing(&clockTimer);
+        CHECK_EQUAL(msgHandler.m_LastAlert, controller.m_LateMsg);
         CHECK_EQUAL(msgHandler.m_LastSound, data.soundPath);
     }
 
@@ -178,8 +178,8 @@ SUITE(TestTKController)
         keeper.m_Updated = true;
         keeper.m_Late = true;
         keeper.m_Tolerating = true;
-        presenter.toggleStart();
-        presenter.onTimerRing(&clockTimer);
+        controller.toggleStart();
+        controller.onTimerRing(&clockTimer);
         CHECK_EQUAL(msgHandler.m_LastAlert, "");
         CHECK_EQUAL(msgHandler.m_LastSound, "");
     }
@@ -188,76 +188,76 @@ SUITE(TestTKController)
     {
         keeper.m_Fail = true;
         CHECK_EQUAL(msgHandler.m_LastError, "");
-        presenter.onTimerRing(&clockTimer);
+        controller.onTimerRing(&clockTimer);
         CHECK_EQUAL(msgHandler.m_LastError, "Testing!");
     }
 
     TEST_FIXTURE(TKControllerFixture, TestNegatives)
     {
 
-        presenter.toggleStart();
+        controller.toggleStart();
         keeper.m_Left = boost::posix_time::hours(-1) +
             boost::posix_time::minutes(-1) + boost::posix_time::seconds(-1);
 
-        CHECK_EQUAL("-01:01:01", presenter.getTimeLeft());
+        CHECK_EQUAL("-01:01:01", controller.getTimeLeft());
     }
 
     TEST_FIXTURE(TKControllerFixture, TestQuit)
     {
-        presenter.quit();
+        controller.quit();
         CHECK_EQUAL(viewObserver.checkQuitUpdated(), true);
     }
 
     TEST_FIXTURE(TKControllerFixture, TestPauseButtonsLabels)
     {
-        CHECK_EQUAL(presenter.getPauseButtonLabel(), presenter.m_PauseBtnLabel);
-        presenter.togglePause();
-        CHECK_EQUAL(presenter.getPauseButtonLabel(), presenter.m_ResumeBtnLabel);
+        CHECK_EQUAL(controller.getPauseButtonLabel(), controller.m_PauseBtnLabel);
+        controller.togglePause();
+        CHECK_EQUAL(controller.getPauseButtonLabel(), controller.m_ResumeBtnLabel);
     }
 
     TEST_FIXTURE(TKControllerFixture, TestStartButtonsLabels)
     {
-        CHECK_EQUAL(presenter.getStartButtonLabel(), presenter.m_StartBtnLabel);
-        presenter.toggleStart();
-        CHECK_EQUAL(presenter.getStartButtonLabel(), presenter.m_StopBtnLabel);
+        CHECK_EQUAL(controller.getStartButtonLabel(), controller.m_StartBtnLabel);
+        controller.toggleStart();
+        CHECK_EQUAL(controller.getStartButtonLabel(), controller.m_StopBtnLabel);
     }
 
     TEST_FIXTURE(TKControllerFixture, TestHideButtonsLabels)
     {
-        CHECK_EQUAL(presenter.getHideButtonLabel(), presenter.m_HideBtnLabel);
-        CHECK_EQUAL(true, presenter.isShown());
+        CHECK_EQUAL(controller.getHideButtonLabel(), controller.m_HideBtnLabel);
+        CHECK_EQUAL(true, controller.isShown());
 
-        presenter.show(false);
-        CHECK_EQUAL(presenter.getHideButtonLabel(), presenter.m_RestoreBtnLabel);
-        CHECK_EQUAL(false, presenter.isShown());
+        controller.show(false);
+        CHECK_EQUAL(controller.getHideButtonLabel(), controller.m_RestoreBtnLabel);
+        CHECK_EQUAL(false, controller.isShown());
 
-        presenter.show(true);
-        CHECK_EQUAL(presenter.getHideButtonLabel(), presenter.m_HideBtnLabel);
-        CHECK_EQUAL(true, presenter.isShown());
+        controller.show(true);
+        CHECK_EQUAL(controller.getHideButtonLabel(), controller.m_HideBtnLabel);
+        CHECK_EQUAL(true, controller.isShown());
     }
 
     TEST_FIXTURE(TKControllerFixture, TestIconName)
     {
-        CHECK_EQUAL(presenter.getIconName(), presenter.m_StopWebcamIcon);
+        CHECK_EQUAL(controller.getIconName(), controller.m_StopWebcamIcon);
 
-        presenter.toggleStart();
+        controller.toggleStart();
         keeper.m_WorkLeft = boost::posix_time::hours(1);
-        CHECK_EQUAL(presenter.getIconName(), presenter.m_GreenWebcamIcon);
+        CHECK_EQUAL(controller.getIconName(), controller.m_GreenWebcamIcon);
 
         keeper.m_WorkLeft = boost::posix_time::seconds(1);
-        CHECK_EQUAL(presenter.getIconName(), presenter.m_YellowWebcamIcon);
+        CHECK_EQUAL(controller.getIconName(), controller.m_YellowWebcamIcon);
 
         keeper.m_WorkLeft = boost::posix_time::seconds(0);
-        CHECK_EQUAL(presenter.getIconName(), presenter.m_RedWebcamIcon);
+        CHECK_EQUAL(controller.getIconName(), controller.m_RedWebcamIcon);
 
         keeper.m_Status = AbstractTimeKeeper::AWAY;
         keeper.m_Left = boost::posix_time::seconds(0);
-        CHECK_EQUAL(presenter.getIconName(), presenter.m_GreenWebcamIcon);
+        CHECK_EQUAL(controller.getIconName(), controller.m_GreenWebcamIcon);
     }
 
     TEST_FIXTURE(TKControllerFixture, TestUpdateTime)
     {
-        presenter.toggleStart();
+        controller.toggleStart();
         clockTimer.ring();
         CHECK_EQUAL(viewObserver.checkTimeUpdated(), true);
     }

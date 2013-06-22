@@ -26,11 +26,11 @@
 
 namespace EW
 {
-MainFramePres::MainFramePres(AbstractMainFrame& frame, AbstractTKController& presenter,
+MainFramePres::MainFramePres(AbstractMainFrame& frame, AbstractTKController& controller,
                                  AbstractEventHandler& hdlr) :
-    m_Frame(frame), m_Presenter(presenter), m_EventHandler(hdlr)
+    m_Frame(frame), m_TKController(controller), m_EventHandler(hdlr)
 {
-    m_Presenter.attach(this);
+    m_TKController.attach(this);
     m_EventHandler.attach(this);
 
     refresh();
@@ -38,33 +38,33 @@ MainFramePres::MainFramePres(AbstractMainFrame& frame, AbstractTKController& pre
 
 MainFramePres::~MainFramePres()
 {
-    m_Presenter.detach(this);
+    m_TKController.detach(this);
     m_EventHandler.detach(this);
 }
 
 void MainFramePres::OnStatusUpdate()
 {
-    const bool shown = m_Presenter.isShown();
+    const bool shown = m_TKController.isShown();
     m_Frame.show(shown);
     if (shown)
     {
-        m_Frame.setPauseButtonLabel(m_Presenter.getPauseButtonLabel());
-        m_Frame.setStartButtonLabel(m_Presenter.getStartButtonLabel());
+        m_Frame.setPauseButtonLabel(m_TKController.getPauseButtonLabel());
+        m_Frame.setStartButtonLabel(m_TKController.getStartButtonLabel());
 
         // times could change in a status update (stop)
-        m_Frame.setValues(m_Presenter.getStatus(), m_Presenter.getTimeOn(),
-            m_Presenter.getTimeOff(), m_Presenter.getTimeRunning(),
-            m_Presenter.getTimeLeft());
+        m_Frame.setValues(m_TKController.getStatus(), m_TKController.getTimeOn(),
+            m_TKController.getTimeOff(), m_TKController.getTimeRunning(),
+            m_TKController.getTimeLeft());
     }
 }
 
 void MainFramePres::OnTimeUpdate()
 {
-    if (m_Presenter.isShown())
+    if (m_TKController.isShown())
     {
-        m_Frame.setValues(m_Presenter.getStatus(), m_Presenter.getTimeOn(),
-            m_Presenter.getTimeOff(), m_Presenter.getTimeRunning(),
-            m_Presenter.getTimeLeft());
+        m_Frame.setValues(m_TKController.getStatus(), m_TKController.getTimeOn(),
+            m_TKController.getTimeOff(), m_TKController.getTimeRunning(),
+            m_TKController.getTimeLeft());
     }
 }
 

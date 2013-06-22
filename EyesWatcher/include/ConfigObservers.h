@@ -73,18 +73,18 @@ class EWPresConfigObserver : public ConfigObserver
 {
     public:
         EWPresConfigObserver(AbstractConfig& config, AbstractTKController& pres) :
-            ConfigObserver(config), m_Presenter(pres) {}
+            ConfigObserver(config), m_TKController(pres) {}
         virtual ~EWPresConfigObserver() {}
 
         virtual void update(const ConfigData& data)
         {
-            m_Presenter.setPopupAlarm(data.popupAlarm);
-            m_Presenter.setSoundAlarm(data.soundAlarm);
-            m_Presenter.setSoundPath(data.soundPath);
-            m_Presenter.setRunningLateThreshold(data.runningLateThreshold);
+            m_TKController.setPopupAlarm(data.popupAlarm);
+            m_TKController.setSoundAlarm(data.soundAlarm);
+            m_TKController.setSoundPath(data.soundPath);
+            m_TKController.setRunningLateThreshold(data.runningLateThreshold);
         }
     private:
-        AbstractTKController& m_Presenter;
+        AbstractTKController& m_TKController;
 };
 }
 

@@ -52,7 +52,7 @@ struct Build
     const TTimeHandler* m_TimeHandler;
     const TTimeKeeper* m_TimeKeeper;
     const TTimer* m_ClockTimer;
-    const TTKController* m_Presenter;
+    const TTKController* m_TKController;
     const TEventHandler* m_EventHandler;
     const TMainFramePres* m_MainFramePres;
     const TMainFrame* m_MainFrame;
@@ -107,23 +107,23 @@ class Builder
                     data.checkFreq, data.pauseTol, data.workTol, data.cummulPause));
 
                 m_ClockTimer.reset(new TTimer());
-                m_Presenter.reset(new TTKController(*m_MsgHandler,
+                m_TKController.reset(new TTKController(*m_MsgHandler,
                     *m_TimeKeeper, *m_ClockTimer, *m_TimeHandler, data.popupAlarm,
                     data.soundAlarm, data.soundPath, data.runningLateThreshold));
 
-                m_EventHandler.reset(new TEventHandler(*m_MsgHandler, *m_Presenter, m_DisplayOptionsDialogCmd));
+                m_EventHandler.reset(new TEventHandler(*m_MsgHandler, *m_TKController, m_DisplayOptionsDialogCmd));
                 m_MainFrame.reset(new TMainFrame(*m_EventHandler, canCreateTaskbar && data.trayIcon));
-                m_MainFramePres.reset(new TMainFramePres(*m_MainFrame, *m_Presenter, *m_EventHandler));
+                m_MainFramePres.reset(new TMainFramePres(*m_MainFrame, *m_TKController, *m_EventHandler));
 
                 if (canCreateTaskbar && data.trayIcon)
                 {
                     m_TaskBar.reset(new TEWTaskBar(*m_EventHandler));
-                    m_TaskBarPres.reset(new TEWTaskBarPres(*m_TaskBar, *m_Presenter, *m_EventHandler));
+                    m_TaskBarPres.reset(new TEWTaskBarPres(*m_TaskBar, *m_TKController, *m_EventHandler));
                 }
 
                 m_TKConfigObserver.reset(new TTKConfigObserver(*m_Config, *m_TimeKeeper));
                 m_PresHdlrConfigObserver.reset(new TPresHdlrConfigObserver(*m_Config, *m_PresenceHandler));
-                m_EWPresConfigObserver.reset(new TEWPresConfigObserver(*m_Config, *m_Presenter));
+                m_EWPresConfigObserver.reset(new TEWPresConfigObserver(*m_Config, *m_TKController));
 
                 if (topInt != nullptr)
                 {
@@ -149,7 +149,7 @@ class Builder
                 TPresHdlrConfigObserver, TEWPresConfigObserver> getBuild()
         {
             return {&*m_MsgHandler, &*m_ConfigImpl, &*m_Config, &*m_PresenceHandler,
-                &*m_TimeHandler, &*m_TimeKeeper, &*m_ClockTimer, &*m_Presenter,
+                &*m_TimeHandler, &*m_TimeKeeper, &*m_ClockTimer, &*m_TKController,
                 &*m_EventHandler, &*m_MainFramePres, &*m_MainFrame, &*m_TaskBarPres,
                 &*m_TaskBar, &*m_OptionsPres, &m_DisplayOptionsDialogCmd,
                 &*m_TKConfigObserver, &*m_PresHdlrConfigObserver, &*m_EWPresConfigObserver};
@@ -181,7 +181,7 @@ class Builder
         TTimeHandlerPtr m_TimeHandler;
         TTimeKeeperPtr m_TimeKeeper;
         TTimerPtr m_ClockTimer;
-        TTKControllerPtr m_Presenter;
+        TTKControllerPtr m_TKController;
         TEventHandlerPtr m_EventHandler;
         TMainFramePresPtr m_MainFramePres;
         TMainFramePtr m_MainFrame;

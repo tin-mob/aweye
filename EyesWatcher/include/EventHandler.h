@@ -32,7 +32,7 @@ class AbstractMsgHandler;
 class EventHandler : public AbstractEventHandler
 {
     public:
-        EventHandler(AbstractMsgHandler& msgHandler, AbstractTKController& presenter,
+        EventHandler(AbstractMsgHandler& msgHandler, AbstractTKController& controller,
                      std::function<bool()>& dispCmd);
         virtual ~EventHandler();
 
@@ -46,7 +46,7 @@ class EventHandler : public AbstractEventHandler
     protected:
     private:
         AbstractMsgHandler& m_MsgHandler;
-        AbstractTKController& m_Presenter;
+        AbstractTKController& m_TKController;
         std::function<bool()>& m_DisplayOptionsDialog;
 };
 }

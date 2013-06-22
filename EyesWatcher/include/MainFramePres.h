@@ -33,7 +33,7 @@ class AbstractTKController;
 class MainFramePres : public TKControllerObserver, public EventHandlerObserver
 {
     public:
-        MainFramePres(AbstractMainFrame& frame, AbstractTKController& presenter,
+        MainFramePres(AbstractMainFrame& frame, AbstractTKController& controller,
                         AbstractEventHandler& hdlr);
         virtual ~MainFramePres();
 
@@ -44,7 +44,7 @@ class MainFramePres : public TKControllerObserver, public EventHandlerObserver
     protected:
     private:
         AbstractMainFrame& m_Frame;
-        AbstractTKController& m_Presenter;
+        AbstractTKController& m_TKController;
         AbstractEventHandler& m_EventHandler;
 };
 }

@@ -55,12 +55,12 @@ class TKCtrlConfigObserverStub : public ConfigObserver
 {
     public:
         TKCtrlConfigObserverStub(AbstractConfig& config, AbstractTKController& pres) :
-            ConfigObserver(config), m_Presenter(pres) {}
+            ConfigObserver(config), m_TKController(pres) {}
         virtual ~TKCtrlConfigObserverStub() {}
 
         virtual void update(const ConfigData& data) {}
 
-        AbstractTKController& m_Presenter;
+        AbstractTKController& m_TKController;
 };
 }
 

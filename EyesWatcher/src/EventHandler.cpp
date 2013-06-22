@@ -26,8 +26,8 @@
 namespace EW
 {
 EventHandler::EventHandler(AbstractMsgHandler& msgHandler,
-    AbstractTKController& presenter, std::function<bool()>& dispCmd) :
-    m_MsgHandler(msgHandler), m_Presenter(presenter), m_DisplayOptionsDialog(dispCmd)
+    AbstractTKController& controller, std::function<bool()>& dispCmd) :
+    m_MsgHandler(msgHandler), m_TKController(controller), m_DisplayOptionsDialog(dispCmd)
 {
     //ctor
 }
@@ -44,7 +44,7 @@ void EventHandler::forceUpdate()
 
 void EventHandler::OnViewQuit()
 {
-    m_Presenter.quit();
+    m_TKController.quit();
 }
 
 void EventHandler::OnViewAbout()
@@ -65,16 +65,16 @@ void EventHandler::OnViewOptionsButtonClick()
 
 void EventHandler::OnViewStartStop()
 {
-    m_Presenter.toggleStart();
+    m_TKController.toggleStart();
 }
 
 void EventHandler::OnViewPauseResume()
 {
-    m_Presenter.togglePause();
+    m_TKController.togglePause();
 }
 
 void EventHandler::OnViewHideRestore()
 {
-    m_Presenter.show(!m_Presenter.isShown());
+    m_TKController.show(!m_TKController.isShown());
 }
 }

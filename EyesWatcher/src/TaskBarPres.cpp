@@ -25,11 +25,11 @@
 
 namespace EW
 {
-TaskBarPres::TaskBarPres(AbstractTaskBar& taskBar, AbstractTKController& presenter,
+TaskBarPres::TaskBarPres(AbstractTaskBar& taskBar, AbstractTKController& controller,
                              AbstractEventHandler& hdlr) :
-    m_TaskBar(taskBar), m_Presenter(presenter), m_EventHandler(hdlr), m_LastIcon("")
+    m_TaskBar(taskBar), m_TKController(controller), m_EventHandler(hdlr), m_LastIcon("")
 {
-    m_Presenter.attach(this);
+    m_TKController.attach(this);
     m_EventHandler.attach(this);
 
     refresh();
@@ -37,26 +37,26 @@ TaskBarPres::TaskBarPres(AbstractTaskBar& taskBar, AbstractTKController& present
 
 TaskBarPres::~TaskBarPres()
 {
-    m_Presenter.detach(this);
+    m_TKController.detach(this);
     m_EventHandler.detach(this);
 }
 
 void TaskBarPres::OnStatusUpdate()
 {
     m_TaskBar.setPopupMenuCommands(
-        m_Presenter.getHideButtonLabel(),
-        m_Presenter.getStartButtonLabel(),
-        m_Presenter.getPauseButtonLabel());
+        m_TKController.getHideButtonLabel(),
+        m_TKController.getStartButtonLabel(),
+        m_TKController.getPauseButtonLabel());
     setIcon();
 }
 
 void TaskBarPres::OnTimeUpdate()
 {
     m_TaskBar.setPopupMenuTimes(
-        "Last Session : " + m_Presenter.getTimeOn(),
-        "Last Pause : " + m_Presenter.getTimeOff(),
-        "Running : " + m_Presenter.getTimeRunning(),
-        "Time Left : " + m_Presenter.getTimeLeft());
+        "Last Session : " + m_TKController.getTimeOn(),
+        "Last Pause : " + m_TKController.getTimeOff(),
+        "Running : " + m_TKController.getTimeRunning(),
+        "Time Left : " + m_TKController.getTimeLeft());
     setIcon();
 }
 
@@ -67,7 +67,7 @@ void TaskBarPres::OnQuit()
 
 void TaskBarPres::setIcon()
 {
-    const std::string newIcon = m_Presenter.getIconName();
+    const std::string newIcon = m_TKController.getIconName();
     if (newIcon != m_LastIcon)
     {
         m_LastIcon = newIcon;

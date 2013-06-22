@@ -35,9 +35,9 @@ template <class TView>
 class ViewPresStub : public TKControllerObserver, public EventHandlerObserver
 {
     public:
-        ViewPresStub(TView& view, AbstractTKController& presenter,
+        ViewPresStub(TView& view, AbstractTKController& controller,
             AbstractEventHandler& hdlr) :
-            m_View(&view), m_Presenter(&presenter), m_EventHandler(&hdlr) {}
+            m_View(&view), m_TKController(&controller), m_EventHandler(&hdlr) {}
         virtual ~ViewPresStub() {}
 
         virtual void OnStatusUpdate() {}
@@ -46,7 +46,7 @@ class ViewPresStub : public TKControllerObserver, public EventHandlerObserver
         virtual void refresh() {}
 
         TView* m_View;
-        AbstractTKController* m_Presenter;
+        AbstractTKController* m_TKController;
         AbstractEventHandler* m_EventHandler;
     protected:
     private:

@@ -30,9 +30,9 @@ namespace EW
 {
 struct EventHandlerFixture
 {
-    EventHandlerFixture() : displayed(false), displayThrow(false), msgHandler(), presenter(),
+    EventHandlerFixture() : displayed(false), displayThrow(false), msgHandler(), controller(),
     displayCmd([this] () {if (displayThrow) throw BaseException("Testing!"); displayed = true; return true;}),
-    handler(msgHandler, presenter, displayCmd), observer(handler)
+    handler(msgHandler, controller, displayCmd), observer(handler)
     {}
 
     ~EventHandlerFixture() {}
@@ -40,7 +40,7 @@ struct EventHandlerFixture
     bool displayed;
     bool displayThrow;
     MsgHandlerStub msgHandler;
-    TKControllerStub presenter;
+    TKControllerStub controller;
     std::function<bool()> displayCmd;
     EventHandler handler;
     EventHandlerObserverStub observer;
@@ -51,7 +51,7 @@ SUITE(TestEventHandler)
     TEST_FIXTURE(EventHandlerFixture, TestQuit)
     {
         handler.OnViewQuit();
-        CHECK_EQUAL(true, presenter.m_Quitted);
+        CHECK_EQUAL(true, controller.m_Quitted);
     }
 
     TEST_FIXTURE(EventHandlerFixture, TestAbout)
@@ -74,23 +74,23 @@ SUITE(TestEventHandler)
 
     TEST_FIXTURE(EventHandlerFixture, TestFramePlay)
     {
-        presenter.m_Started = false;
+        controller.m_Started = false;
         handler.OnViewStartStop();
-        CHECK_EQUAL(true, presenter.m_Started);
+        CHECK_EQUAL(true, controller.m_Started);
     }
 
     TEST_FIXTURE(EventHandlerFixture, TestFrameClose)
     {
-        presenter.m_DisplayValues.shown = true;
+        controller.m_DisplayValues.shown = true;
         handler.OnViewHideRestore();
-        CHECK_EQUAL(false, presenter.m_DisplayValues.shown);
+        CHECK_EQUAL(false, controller.m_DisplayValues.shown);
     }
 
     TEST_FIXTURE(EventHandlerFixture, TestFramePause)
     {
-        presenter.m_Paused = false;
+        controller.m_Paused = false;
         handler.OnViewPauseResume();
-        CHECK_EQUAL(true, presenter.m_Paused);
+        CHECK_EQUAL(true, controller.m_Paused);
     }
 
     TEST_FIXTURE(EventHandlerFixture, TestUpdate)

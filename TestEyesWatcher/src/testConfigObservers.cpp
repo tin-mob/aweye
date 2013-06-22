@@ -35,13 +35,13 @@ namespace EW
 struct ConfigObserversFixture
 {
     ConfigObserversFixture() : keeperObserver(config, timeKeeper),
-        presHdlrObserver(config, presenceHandler), presObserver(config, presenter) {}
+        presHdlrObserver(config, presenceHandler), presObserver(config, controller) {}
     ~ConfigObserversFixture() {}
 
     ConfigStub config;
     TimeKeeperStub timeKeeper;
     PresenceHandlerStub presenceHandler;
-    TKControllerStub presenter;
+    TKControllerStub controller;
     TKConfigObserver keeperObserver;
     PresHdlrConfigObserver presHdlrObserver;
     EWPresConfigObserver presObserver;
@@ -69,10 +69,10 @@ SUITE(TestAppController)
         CHECK_EQUAL(newData.workLength, timeKeeper.m_WorkLength);
         CHECK_EQUAL(newData.cummulPause, timeKeeper.m_CummulPause);
 
-        CHECK_EQUAL(newData.popupAlarm, presenter.m_PopupAlarm);
-        CHECK_EQUAL(newData.soundAlarm, presenter.m_SoundAlarm);
-        CHECK_EQUAL(newData.soundPath, presenter.m_SoundPath);
-        CHECK_EQUAL(newData.runningLateThreshold, presenter.m_RunningLateThreshold);
+        CHECK_EQUAL(newData.popupAlarm, controller.m_PopupAlarm);
+        CHECK_EQUAL(newData.soundAlarm, controller.m_SoundAlarm);
+        CHECK_EQUAL(newData.soundPath, controller.m_SoundPath);
+        CHECK_EQUAL(newData.runningLateThreshold, controller.m_RunningLateThreshold);
     }
 }
 }

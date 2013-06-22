@@ -49,11 +49,11 @@ class EventHandlerObserverStub : public EventHandlerObserver
 class EventHandlerStub : public AbstractEventHandler
 {
     public:
-        EventHandlerStub(AbstractMsgHandler& msgHandler, AbstractTKController& presenter,
+        EventHandlerStub(AbstractMsgHandler& msgHandler, AbstractTKController& controller,
             std::function<bool()>& dispCmd)
-            : m_MsgHandler(&msgHandler), m_Presenter(&presenter), m_DisplayOptionsDialog(&dispCmd){}
+            : m_MsgHandler(&msgHandler), m_TKController(&controller), m_DisplayOptionsDialog(&dispCmd){}
 
-        EventHandlerStub() : m_MsgHandler(nullptr), m_Presenter(nullptr),
+        EventHandlerStub() : m_MsgHandler(nullptr), m_TKController(nullptr),
             m_DisplayOptionsDialog(nullptr) {}
         virtual ~EventHandlerStub() {}
 
@@ -66,7 +66,7 @@ class EventHandlerStub : public AbstractEventHandler
         virtual void OnViewHideRestore() {}
 
         AbstractMsgHandler* m_MsgHandler;
-        AbstractTKController* m_Presenter;
+        AbstractTKController* m_TKController;
         std::function<bool()>* m_DisplayOptionsDialog;
     protected:
     private:

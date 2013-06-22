@@ -34,7 +34,7 @@ class AbstractTaskBar;
 class TaskBarPres : public TKControllerObserver, public EventHandlerObserver
 {
     public:
-        TaskBarPres(AbstractTaskBar& taskBar, AbstractTKController& presenter,
+        TaskBarPres(AbstractTaskBar& taskBar, AbstractTKController& controller,
                       AbstractEventHandler& hdlr);
         virtual ~TaskBarPres();
 
@@ -47,7 +47,7 @@ class TaskBarPres : public TKControllerObserver, public EventHandlerObserver
         void setIcon();
 
         AbstractTaskBar& m_TaskBar;
-        AbstractTKController& m_Presenter;
+        AbstractTKController& m_TKController;
         AbstractEventHandler& m_EventHandler;
         std::string m_LastIcon;
 };
