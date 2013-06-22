@@ -35,7 +35,6 @@
 
 namespace EW
 {
-/// @todo TKController to EWTimeKeeperController,
 TKController::TKController(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& keeper,
                          AbstractTimer& clockTimer, AbstractTimeHandler& timeHandler,
                          bool popupAlarm, bool soundAlarm, std::string soundPath,

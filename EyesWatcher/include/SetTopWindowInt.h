@@ -18,7 +18,6 @@
 
  **************************************************************/
 
-///@todo set top in ewapp instead (with Builder::getMainFrame) ?
 
 #ifndef SETTOPWINDOWINT_H
 #define SETTOPWINDOWINT_H

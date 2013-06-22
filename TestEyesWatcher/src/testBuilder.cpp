@@ -17,7 +17,6 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-///@todo test no taskbar
 
 #include <unittest++/UnitTest++.h>
 #include <memory>
