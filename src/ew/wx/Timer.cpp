@@ -19,32 +19,31 @@
  **************************************************************/
 
 
-#include "ew/wx/MyWxTimer.h"
+#include "ew/wx/Timer.h"
 
 namespace EW { namespace WX {
 
-///@todo to Timer
-MyWxTimer::MyWxTimer()
+Timer::Timer()
 {
     //ctor
 }
 
-MyWxTimer::~MyWxTimer()
+Timer::~Timer()
 {
     //dtor
 }
 
-bool MyWxTimer::startTimer(long total_milliseconds, bool oneShot)
+bool Timer::startTimer(long total_milliseconds, bool oneShot)
 {
     return Start(total_milliseconds, oneShot);
 }
 
-void MyWxTimer::stopTimer()
+void Timer::stopTimer()
 {
     Stop();
 }
 
-void MyWxTimer::Notify()
+void Timer::Notify()
 {
     notify(&TimerInterface::onTimerRing, this);
 }

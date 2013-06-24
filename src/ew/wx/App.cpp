@@ -34,7 +34,7 @@
 #include "ew/wx/App.h"
 #include "ew/wx/MainFrame.h"
 #include "ew/wx/MsgHandler.h"
-#include "ew/wx/MyWxTimer.h"
+#include "ew/wx/Timer.h"
 #include "ew/wx/OptionsDialog.h"
 #include "ew/wx/TaskBar.h"
 #include "ew/wx/wxConfigImpl.h"
@@ -85,7 +85,7 @@ bool App::OnInit()
     	if (m_AppImpl.get() == nullptr)
     	{
     	    m_AppImpl.reset(new Builder<MsgHandler, wxConfigImpl, Config,
-                WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, TKController,
+                WebcamHandlerProc, TimeHandler, TimeKeeper, Timer, TKController,
                 EventHandler, MainFramePres, MainFrame, TaskBarPres, TaskBar,
                 OptionsDialogPres, OptionsDialog, TKConfigObserver,
                 PresHdlrConfigObserver, EWPresConfigObserver>

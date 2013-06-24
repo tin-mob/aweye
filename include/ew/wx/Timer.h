@@ -28,11 +28,11 @@
 
 namespace EW { namespace WX {
 
-class MyWxTimer : public AbstractTimer, public wxTimer
+class Timer : public AbstractTimer, public wxTimer
 {
     public:
-        MyWxTimer();
-        virtual ~MyWxTimer();
+        Timer();
+        virtual ~Timer();
         virtual bool startTimer(long total_milliseconds, bool oneShot);
         virtual void stopTimer();
     protected:

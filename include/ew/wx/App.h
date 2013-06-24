@@ -54,7 +54,7 @@ namespace WX {
 
 class MainFrame;
 class MsgHandler;
-class MyWxTimer;
+class Timer;
 class OptionsDialog;
 class TaskBar;
 class wxConfigImpl;
@@ -74,7 +74,7 @@ class App : public wxApp, public SetTopWindowInt
         virtual void setTopWindow(AbstractMainFrame* frame);
     private:
         std::unique_ptr<Builder<MsgHandler, wxConfigImpl, Config,
-                WebcamHandlerProc, TimeHandler, TimeKeeper, MyWxTimer, TKController,
+                WebcamHandlerProc, TimeHandler, TimeKeeper, Timer, TKController,
                 EventHandler, MainFramePres, MainFrame, TaskBarPres, TaskBar,
                 OptionsDialogPres, OptionsDialog, TKConfigObserver,
                 PresHdlrConfigObserver, EWPresConfigObserver>>
