@@ -1,0 +1,254 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-24 14:48-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/ew/wx/MainFrame.cpp:159
+msgid "About"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:247
+msgid "Advanced"
+msgstr ""
+
+#: include/ew/AbstractTimeKeeper.h:41
+msgid "Away"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:219
+msgid "Cascade File Location"
+msgstr ""
+
+#: include/ew/AbstractPresenceHandler.h:41
+msgid "Cascade file not found."
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:148
+msgid "Check Interval"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:168
+msgid "Cummulative Pause"
+msgstr ""
+
+#: src/ew/wx/MainFrame.cpp:163
+msgid "Do"
+msgstr ""
+
+#: src/ew/wx/MsgHandler.cpp:44
+msgid "Error"
+msgstr ""
+
+#: include/ew/AbstractPresenceHandler.h:47
+msgid "Error using the camera."
+msgstr ""
+
+#: include/ew/AbstractPresenceHandler.h:35
+msgid "Error while establishing presence."
+msgstr ""
+
+#: src/ew/wx/TaskBar.cpp:84 src/ew/wx/MainFrame.cpp:161
+msgid "Exit"
+msgstr ""
+
+#: src/ew/wx/AboutDialog.cpp:53
+msgid ""
+"EyeWatcher - Watches your eyes and reminds you to take a break.\n"
+"\n"
+"Copyright (C) 2013 - Robert Morin\n"
+"\n"
+"This program is free software: you can redistribute it and/or modify\n"
+"it under the terms of the GNU General Public License as published by\n"
+"the Free Software Foundation, either version 3 of the License, or\n"
+"(at your option) any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License\n"
+"along with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
+"\n"
+"webcam.ico is part of WPZOOM Developer Icon Set by WPZOOM,\n"
+"designed by David Ferreira. http://www.wpzoom.com\n"
+"webcam-*.png are derived from webcam.ico.\n"
+"\n"
+"The icons are licensed under a Creative Commons Attribution-Share Alike 3.0\n"
+"Unported License (http://creativecommons.org/licenses/by-nc-sa/3.0/). \n"
+"\n"
+msgstr ""
+
+#: src/ew/wx/MsgHandler.cpp:51
+msgid "Eyes Watcher"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:246
+msgid "General"
+msgstr ""
+
+#: include/ew/AbstractTimeKeeper.h:40
+msgid "Here"
+msgstr ""
+
+#: include/ew/AbstractTKController.h:37
+msgid "Hide"
+msgstr ""
+
+#: src/ew/wx/TaskBar.cpp:83
+msgid "Hide/Restore"
+msgstr ""
+
+#: src/ew/wx/TaskBar.cpp:90 src/ew/wx/MainFrame.cpp:129
+msgid "Last Pause"
+msgstr ""
+
+#: src/ew/TaskBarPres.cpp:59
+msgid "Last Pause : "
+msgstr ""
+
+#: src/ew/wx/TaskBar.cpp:89 src/ew/wx/MainFrame.cpp:121
+msgid "Last Session"
+msgstr ""
+
+#: src/ew/TaskBarPres.cpp:58
+msgid "Last Session : "
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:178
+msgid "Minimum Face Size (X/Y)"
+msgstr ""
+
+#: include/ew/AbstractTimeKeeper.h:39
+msgid "Off"
+msgstr ""
+
+#: src/ew/wx/MainFrame.cpp:157
+msgid "Options"
+msgstr ""
+
+#: src/ew/wx/MainFrame.cpp:155 include/ew/AbstractTKController.h:38
+msgid "Pause"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:124
+msgid "Pause Period"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:190
+msgid "Pause Tolerance"
+msgstr ""
+
+#: src/ew/wx/TaskBar.cpp:87
+msgid "Pause/Resume"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:162
+msgid "Popup Alarm"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:136
+msgid "Reminder Frequency"
+msgstr ""
+
+#: include/ew/AbstractTKController.h:37
+msgid "Restore"
+msgstr ""
+
+#: include/ew/AbstractTKController.h:38
+msgid "Resume"
+msgstr ""
+
+#: src/ew/wx/TaskBar.cpp:91 src/ew/wx/MainFrame.cpp:137
+msgid "Running"
+msgstr ""
+
+#: src/ew/TaskBarPres.cpp:60
+msgid "Running : "
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:159
+msgid "Sound Alarm"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:226
+msgid "Sound File Location"
+msgstr ""
+
+#: src/ew/wx/MainFrame.cpp:153 include/ew/AbstractTKController.h:39
+msgid "Start"
+msgstr ""
+
+#: src/ew/wx/TaskBar.cpp:86
+msgid "Start/Stop"
+msgstr ""
+
+#: include/ew/AbstractTKController.h:39
+msgid "Stop"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:191 src/ew/wx/OptionsDialog.cpp:201
+msgid "Test"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:109
+msgid "Time (Minutes / Seconds)"
+msgstr ""
+
+#: src/ew/wx/TaskBar.cpp:92 src/ew/wx/MainFrame.cpp:145
+msgid "Time Left"
+msgstr ""
+
+#: src/ew/TaskBarPres.cpp:61
+msgid "Time Left : "
+msgstr ""
+
+#: include/ew/AbstractTKController.h:36
+msgid "Time for a pause!"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:165
+msgid "Tray Icon"
+msgstr ""
+
+#: src/ew/wx/App.cpp:101
+msgid "Use a specific configuration file."
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:210
+msgid "Webcam Index"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:200
+msgid "Work Tolerance"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:112
+msgid "Working Length"
+msgstr ""
+
+#: src/ew/wx/OptionsDialog.cpp:233
+msgid "Yellow Icon Threshold"
+msgstr ""
+
+#: include/ew/AbstractConfigImpl.h:35
+msgid "invalid config file."
+msgstr ""
+
+#: include/ew/AbstractConfigImpl.h:41
+msgid "invalid configuration data."
+msgstr ""
