@@ -19,14 +19,14 @@
  **************************************************************/
 
 
-#include "ew/ObservableWxMenu.h"
+#include "ew/wx/ObservableMenu.h"
 
 namespace EW
 {
 
-ObservableWxMenu::~ObservableWxMenu()
+ObservableMenu::~ObservableMenu()
 {
     //dtor
-    notify(&ObservableWxMenuObserver::onMenuDelete, this);
+    notify(&ObservableMenuObserver::onMenuDelete, this);
 }
 }

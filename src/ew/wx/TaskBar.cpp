@@ -18,8 +18,9 @@
 
  **************************************************************/
 
+
 #include "ew/AbstractEventHandler.h"
-#include "ew/ObservableWxMenu.h"
+#include "ew/wx/ObservableMenu.h"
 #include "ew/wx/TaskBar.h"
 #include "ew/wx/wx_pch.h"
 
@@ -78,7 +79,7 @@ wxMenu* TaskBar::CreatePopupMenu()
     {
         delete m_Menu;
     }
-    m_Menu = new ObservableWxMenu();
+    m_Menu = new ObservableMenu();
     m_Menu->attach(this);
     m_Menu->Append(TaskBar::ID_HIDE_RESTORE, _("Hide/Restore"));
     m_Menu->Append(TaskBar::ID_EXIT, _("Exit"));
@@ -112,7 +113,7 @@ void TaskBar::setIcon(std::string loc)
 
 // the menu is managed by Wx. When It decides to delete it, we receive
 // a nice warning...
-void TaskBar::onMenuDelete(ObservableWxMenu* menu)
+void TaskBar::onMenuDelete(ObservableMenu* menu)
 {
     m_Menu = nullptr;
 }

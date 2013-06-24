@@ -23,7 +23,7 @@
 #define TASKBAR_H
 
 #include "ew/AbstractTaskBar.h"
-#include "ew/ObservableWxMenu.h"
+#include "ew/wx/ObservableMenu.h"
 
 #include <string>
 #include <wx/taskbar.h>
@@ -35,7 +35,7 @@ class AbstractEventHandler;
 
 namespace WX {
 
-class TaskBar : public AbstractTaskBar, public wxTaskBarIcon, public ObservableWxMenuObserver
+class TaskBar : public AbstractTaskBar, public wxTaskBarIcon, public ObservableMenuObserver
 {
     public:
         TaskBar(AbstractEventHandler& hdlr);
@@ -46,7 +46,7 @@ class TaskBar : public AbstractTaskBar, public wxTaskBarIcon, public ObservableW
             std::string runningClock, std::string leftClock);
         virtual void setIcon(std::string loc);
 
-        virtual void onMenuDelete(ObservableWxMenu* menu);
+        virtual void onMenuDelete(ObservableMenu* menu);
     protected:
     private:
         void OnMenuHideRestore(wxCommandEvent&);
@@ -57,7 +57,7 @@ class TaskBar : public AbstractTaskBar, public wxTaskBarIcon, public ObservableW
         virtual wxMenu* CreatePopupMenu();
 
         AbstractEventHandler& m_EventHandler;
-        ObservableWxMenu* m_Menu;
+        ObservableMenu* m_Menu;
 
         enum Menu_IDS
         {

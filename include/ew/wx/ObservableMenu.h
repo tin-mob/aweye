@@ -17,7 +17,7 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-/// @todo move to wx, remove wx in name
+
 
 #ifndef OBSERVABLEWXMENU_H
 #define OBSERVABLEWXMENU_H
@@ -27,20 +27,20 @@
 #include <wx/menu.h>
 
 namespace EW {
-class ObservableWxMenuObserver;
-class ObservableWxMenu : public wxMenu, public Subject<ObservableWxMenuObserver, ObservableWxMenu*>
+class ObservableMenuObserver;
+class ObservableMenu : public wxMenu, public Subject<ObservableMenuObserver, ObservableMenu*>
 {
     public:
-        virtual ~ObservableWxMenu();
+        virtual ~ObservableMenu();
     protected:
     private:
 };
 
-class ObservableWxMenuObserver  // yeah!
+class ObservableMenuObserver  // yeah!
 {
     public:
-        virtual ~ObservableWxMenuObserver() {}
-        virtual void onMenuDelete(ObservableWxMenu* menu) = 0;
+        virtual ~ObservableMenuObserver() {}
+        virtual void onMenuDelete(ObservableMenu* menu) = 0;
 };
 }
 
