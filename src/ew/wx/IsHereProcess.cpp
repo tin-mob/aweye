@@ -17,6 +17,10 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
+///@note running this in linux results in zombie processes, probably linked with :
+/// https://groups.google.com/forum/#!topic/wx-users/tFXaa5N-yc0
+/// http://trac.wxwidgets.org/ticket/10258
+/// sigh...
 
 #include "ew/AbstractPresenceHandler.h"
 #include "ew/IsHereCmd.h"
