@@ -17,7 +17,7 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-///@todo since using wx 2.9, remove all string <-> wxstring conversion functions
+
 
 #include "ew/AbstractEventHandler.h"
 #include "ew/wx/AboutDialog.h"

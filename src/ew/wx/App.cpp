@@ -33,6 +33,7 @@
 #include "ew/WebcamHandlerProc.h"
 #include "ew/wx/App.h"
 #include "ew/wx/ConfigImpl.h"
+#include "ew/wx/IsHereProcess.h"
 #include "ew/wx/MainFrame.h"
 #include "ew/wx/MsgHandler.h"
 #include "ew/wx/Timer.h"
@@ -70,7 +71,11 @@ struct PresenceHandlerFactory<WebcamHandlerProc>
     template <class TBuilder>
     static WebcamHandlerProc* create(TBuilder& b, const ConfigData& data)
     {
-        return new WebcamHandlerProc(*(b.m_Utils), data.webcamIndex, data.cascadePath,
+        auto cmd = [] (std::function<void (bool)> callback, std::string cmd)
+        {
+            WX::IsHereProcess::run(callback, cmd);
+        };
+        return new WebcamHandlerProc(*(b.m_Utils), cmd, data.webcamIndex, data.cascadePath,
             data.faceSizeX, data.faceSizeY);
     }
 };

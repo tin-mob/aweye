@@ -17,20 +17,21 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-///@todo clean wx dependancy and test
+
 
 #include "ew/AbstractUtils.h"
 #include "ew/IsHereCmd.h"
 #include "ew/WebcamHandlerProc.h"
-#include "ew/wx/IsHereProcess.h"
 
 #include <functional>
+#include <sstream>
 
 namespace EW {
 
-WebcamHandlerProc::WebcamHandlerProc(AbstractUtils& utils, int index,
-    std::string faceCascadeName, int faceSizeX, int faceSizeY) :
-    m_Utils(utils), m_index(index), m_FaceCascadeName(faceCascadeName),
+WebcamHandlerProc::WebcamHandlerProc(AbstractUtils& utils,
+    std::function<void (std::function<void (bool)>, std::string)> cmd,
+    int index, std::string faceCascadeName, int faceSizeX, int faceSizeY) :
+    m_Utils(utils), m_Cmd(cmd), m_index(index), m_FaceCascadeName(faceCascadeName),
     m_FaceSizeX(faceSizeX), m_FaceSizeY(faceSizeY)
 {
     //ctor
@@ -64,18 +65,12 @@ void WebcamHandlerProc::isHere(std::function<void (bool)> callBack)
     // validate m_FaceCascadeName (and prevent injection)
     if (!m_Utils.fileExists(m_FaceCascadeName))
     {
-        assert(false);
         throw MissingCascadeFileException();
     }
-    std::string cmd = "./IsHereCmd '";
-    cmd += m_index;
-    cmd += "' '";
-    cmd += m_FaceCascadeName;
-    cmd += "' '";
-    cmd += m_FaceSizeX;
-    cmd += "' '";
-    cmd += m_FaceSizeY + "'";
+    std::ostringstream s;
+    s  << "./IsHereCmd '" << m_index << "' '" << m_FaceCascadeName << "' '"
+        << m_FaceSizeX << "' '" << m_FaceSizeY << "'";
 
-    WX::IsHereProcess::run(callBack, cmd);
+    m_Cmd(callBack, s.str());
 }
 }

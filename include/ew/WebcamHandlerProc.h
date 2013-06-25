@@ -23,6 +23,7 @@
 #define WEBCAMHANDLERPROC_H
 
 #include "ew/AbstractPresenceHandler.h"
+#include <functional>
 
 namespace EW {
 
@@ -30,8 +31,9 @@ class AbstractUtils;
 class WebcamHandlerProc : public AbstractPresenceHandler
 {
     public:
-        WebcamHandlerProc(AbstractUtils& utils, int index, std::string faceCascadeName,
-                      int faceSizeX, int faceSizeY);
+        WebcamHandlerProc(AbstractUtils& utils,
+            std::function<void (std::function<void (bool)>, std::string)> cmd,
+            int index, std::string faceCascadeName, int faceSizeX, int faceSizeY);
         ~WebcamHandlerProc();
 
         virtual void isHere(std::function<void (bool)> callBack);
@@ -41,6 +43,7 @@ class WebcamHandlerProc : public AbstractPresenceHandler
     protected:
     private:
         AbstractUtils& m_Utils;
+        std::function<void (std::function<void (bool)>, std::string)> m_Cmd;
         int m_index;
         std::string m_FaceCascadeName;
         int m_FaceSizeX;
