@@ -17,17 +17,12 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-
+///@todo since using wx 2.9, remove all string <-> wxstring conversion functions
 
 #include "ew/AbstractEventHandler.h"
 #include "ew/wx/AboutDialog.h"
 #include "ew/wx/MainFrame.h"
 #include "ew/wx/wx_pch.h"
-
-//#include <wx/msgdlg.h>
-//#include <wx/valgen.h>
-//#include <wx/utils.h>
-//#include <wx/notifmsg.h>
 
 //(*InternalHeaders(MainFrame)
 #include <wx/string.h>

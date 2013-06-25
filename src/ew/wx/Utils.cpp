@@ -18,28 +18,32 @@
 
  **************************************************************/
 
-#ifndef ISHEREPROCESS_H
-#define ISHEREPROCESS_H
+#include "ew/wx/Utils.h"
 
-#include <functional>
 #include <string>
-#include <wx/process.h>
+#include <wx/filename.h>
+#include <wx/stdpaths.h>
 
 namespace EW { namespace WX {
 
-// delete itself after usage
-class IsHereProcess : public wxProcess
+Utils::Utils()
 {
-    public:
-        static void run(std::function<void (bool)> callBack, std::string cmd);
-        virtual void OnTerminate(int pid, int status);
+    //ctor
+}
 
-    private:
-        IsHereProcess(std::function<void (bool)> callBack);
-        virtual ~IsHereProcess();
+Utils::~Utils()
+{
+    //dtor
+}
 
-        std::function<void (bool)> m_CallBack;
-};
+bool Utils::fileExists(std::string name) const
+{
+    const wxFileName fileName(name);
+    if(fileName.IsOk())
+    {
+        return wxFileName::FileExists(fileName. GetFullPath());
+    }
+    return false;
+}
+
 }}
-
-#endif // ISHEREPROCESS_H

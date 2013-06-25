@@ -35,6 +35,7 @@
 #include "ew/test/TimeKeeperStub.h"
 #include "ew/test/TimerStub.h"
 #include "ew/test/TKControllerStub.h"
+#include "ew/test/UtilsStub.h"
 #include "ew/test/ViewPresStub.h"
 
 #include <memory>
@@ -51,6 +52,67 @@ struct BuilderFixture
     std::string path;
 };
 
+template <>
+struct PresenceHandlerFactory<PresenceHandlerProcStub>
+{
+    template <class TBuilder>
+    static PresenceHandlerProcStub* create(TBuilder& b, const ConfigData& data)
+    {
+        return new PresenceHandlerProcStub(*(b.m_Utils), data.webcamIndex, data.cascadePath,
+            data.faceSizeX, data.faceSizeY);
+    }
+};
+
+template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
+    class TTimeHandler, class TTimeKeeper, class TTimer, class TTKController,
+    class TEventHandler, class TMainFramePres, class TMainFrame, class TEWTaskBarPres,
+    class TEWTaskBar, class TOptionsDialogPres, class TOptionsDialog,
+    class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver,
+    class TUtils>
+struct TestPresenceHandler
+{
+    void run(const Build<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler,
+                TTimeHandler, TTimeKeeper, TTimer, TTKController, TEventHandler,
+                TMainFramePres, TMainFrame, TEWTaskBarPres, TEWTaskBar,
+                TOptionsDialogPres, TOptionsDialog, TTKConfigObserver,
+                TPresHdlrConfigObserver, TEWPresConfigObserver, TUtils>& links,
+                const ConfigData& data)
+    {
+        CHECK_EQUAL(data.cascadePath, links.m_PresenceHandler->m_CascadePath);
+        CHECK_EQUAL(data.webcamIndex, links.m_PresenceHandler->m_WebcamIndex);
+        CHECK_EQUAL(data.faceSizeX, links.m_PresenceHandler->m_FaceSizeX);
+        CHECK_EQUAL(data.faceSizeY, links.m_PresenceHandler->m_FaceSizeY);
+    }
+};
+
+template <class TMsgHandler, class TConfigImpl, class TConfig,
+    class TTimeHandler, class TTimeKeeper, class TTimer, class TTKController,
+    class TEventHandler, class TMainFramePres, class TMainFrame, class TEWTaskBarPres,
+    class TEWTaskBar, class TOptionsDialogPres, class TOptionsDialog,
+    class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver,
+    class TUtils>
+struct TestPresenceHandler<TMsgHandler, TConfigImpl, TConfig, PresenceHandlerProcStub,
+                TTimeHandler, TTimeKeeper, TTimer, TTKController, TEventHandler,
+                TMainFramePres, TMainFrame, TEWTaskBarPres, TEWTaskBar,
+                TOptionsDialogPres, TOptionsDialog, TTKConfigObserver,
+                TPresHdlrConfigObserver, TEWPresConfigObserver, TUtils>
+{
+    void run(const Build<TMsgHandler, TConfigImpl, TConfig, PresenceHandlerProcStub,
+                TTimeHandler, TTimeKeeper, TTimer, TTKController, TEventHandler,
+                TMainFramePres, TMainFrame, TEWTaskBarPres, TEWTaskBar,
+                TOptionsDialogPres, TOptionsDialog, TTKConfigObserver,
+                TPresHdlrConfigObserver, TEWPresConfigObserver, TUtils>& links,
+                const ConfigData& data)
+    {
+        CHECK_EQUAL(data.cascadePath, links.m_PresenceHandler->m_CascadePath);
+        CHECK_EQUAL(data.webcamIndex, links.m_PresenceHandler->m_WebcamIndex);
+        CHECK_EQUAL(data.faceSizeX, links.m_PresenceHandler->m_FaceSizeX);
+        CHECK_EQUAL(data.faceSizeY, links.m_PresenceHandler->m_FaceSizeY);
+
+        CHECK_EQUAL(links.m_Utils, links.m_PresenceHandler->m_Utils);
+    }
+};
+
 SUITE(TestBuilder)
 {
     TEST_FIXTURE(BuilderFixture, TestBuild)
@@ -59,7 +121,8 @@ SUITE(TestBuilder)
             TimeHandlerStub, TimeKeeperStub, TimerStub, TKControllerStub, EventHandlerStub,
             ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
             TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
-            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub> builder(&setTop, path, true, OptionsDialogStub::IdOK);
+            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub, UtilsStub>
+            builder(&setTop, path, true, OptionsDialogStub::IdOK);
 
         CHECK_EQUAL(false, builder.links.m_MsgHandler == nullptr);
         CHECK_EQUAL(false, builder.links.m_ConfigImpl == nullptr);
@@ -75,15 +138,18 @@ SUITE(TestBuilder)
         CHECK_EQUAL(false, builder.links.m_TaskBarPres == nullptr);
         CHECK_EQUAL(false, builder.links.m_TaskBar == nullptr);
         CHECK_EQUAL(false, builder.links.m_DisplayOptionsDialogCmd == nullptr);
+        CHECK_EQUAL(false, builder.links.m_Utils == nullptr);
 
         CHECK_EQUAL(path, builder.links.m_ConfigImpl->m_Path);
         CHECK_EQUAL(builder.links.m_Config->m_Impl, builder.links.m_ConfigImpl);
+        CHECK_EQUAL(builder.links.m_Config->m_Utils, builder.links.m_Utils);
 
-        ConfigData data = builder.links.m_Config->getData();
-        CHECK_EQUAL(data.cascadePath, builder.links.m_PresenceHandler->m_CascadePath);
-        CHECK_EQUAL(data.webcamIndex, builder.links.m_PresenceHandler->m_WebcamIndex);
-        CHECK_EQUAL(data.faceSizeX, builder.links.m_PresenceHandler->m_FaceSizeX);
-        CHECK_EQUAL(data.faceSizeY, builder.links.m_PresenceHandler->m_FaceSizeY);
+        const ConfigData data = builder.links.m_Config->getData();
+        TestPresenceHandler<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerStub,
+            TimeHandlerStub, TimeKeeperStub, TimerStub, TKControllerStub, EventHandlerStub,
+            ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
+            TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
+            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub, UtilsStub>().run(builder.links, data);
 
         CHECK_EQUAL(builder.links.m_TimeHandler, builder.links.m_TimeKeeper->m_TimeHandler);
         CHECK_EQUAL(builder.links.m_PresenceHandler, builder.links.m_TimeKeeper->m_PresenceHandler);
@@ -131,13 +197,31 @@ SUITE(TestBuilder)
         CHECK_EQUAL(false, builder.links.m_OptionsPres->m_Displayed);
     }
 
+    TEST_FIXTURE(BuilderFixture, TestBuildProc)
+    {
+        const TestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerProcStub,
+            TimeHandlerStub, TimeKeeperStub, TimerStub, TKControllerStub, EventHandlerStub,
+            ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
+            TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
+            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub, UtilsStub>
+            builder(&setTop, path, true, OptionsDialogStub::IdOK);
+        const ConfigData data = builder.links.m_Config->getData();
+        TestPresenceHandler<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerProcStub,
+            TimeHandlerStub, TimeKeeperStub, TimerStub, TKControllerStub, EventHandlerStub,
+            ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
+            TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
+            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub, UtilsStub>().run(builder.links, data);
+    }
+
+
     TEST_FIXTURE(BuilderFixture, TestBuildNoTaskBar)
     {
         const TestBuilder<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerStub,
             TimeHandlerStub, TimeKeeperStub, TimerStub, TKControllerStub, EventHandlerStub,
             ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
             TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
-            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub> builder(&setTop, path, false, OptionsDialogStub::IdOK);
+            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub, UtilsStub>
+            builder(&setTop, path, false, OptionsDialogStub::IdOK);
         CHECK_EQUAL(true, builder.links.m_TaskBarPres == nullptr);
         CHECK_EQUAL(true, builder.links.m_TaskBar == nullptr);
     }
@@ -148,7 +232,8 @@ SUITE(TestBuilder)
             TimeHandlerStub, TimeKeeperStub, TimerStub, TKControllerStub, EventHandlerStub,
             ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
             TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
-            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub> builder(&setTop, path, true, OptionsDialogStub::IdOK);
+            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub, UtilsStub>
+            builder(&setTop, path, true, OptionsDialogStub::IdOK);
         CHECK_EQUAL(true, builder.links.m_OptionsPres->m_Displayed);
     }
 
@@ -161,7 +246,8 @@ SUITE(TestBuilder)
             TimeHandlerStub, TimeKeeperStub, TimerStub, TKControllerStub, EventHandlerStub,
             ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
             TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
-            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub> builder(&setTop, path, true, OptionsDialogStub::IdOK + 1);
+            PresHdlrConfigObserverStub, TKCtrlConfigObserverStub, UtilsStub>
+            builder(&setTop, path, true, OptionsDialogStub::IdOK + 1);
         }
         catch (InvalidConfigFileException)
         {

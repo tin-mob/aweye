@@ -30,19 +30,20 @@ template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHa
     class TTimeHandler, class TTimeKeeper, class TTimer, class TTKController,
     class TEventHandler, class TMainFramePres, class TMainFrame, class TEWTaskBarPres,
     class TEWTaskBar, class TOptionsDialogPres, class TOptionsDialog,
-    class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
+    class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver,
+    class TUtils>
 class TestBuilder : public Builder<TMsgHandler, TConfigImpl,
     TConfig, TPresenceHandler, TTimeHandler, TTimeKeeper, TTimer,
     TTKController, TEventHandler, TMainFramePres, TMainFrame, TEWTaskBarPres,
     TEWTaskBar, TOptionsDialogPres, TOptionsDialog,
-    TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver>
+    TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver, TUtils>
 {
     public:
         TestBuilder(SetTopWindowInt* topInt, std::string configPath, bool canCreateTaskbar, int idOk) :
             Builder<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler, TTimeHandler,
             TTimeKeeper, TTimer, TTKController, TEventHandler, TMainFramePres,
             TMainFrame, TEWTaskBarPres, TEWTaskBar, TOptionsDialogPres, TOptionsDialog,
-            TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver>
+            TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver, TUtils>
             (topInt, configPath, canCreateTaskbar, idOk),
             links(this->getBuild()){}
 
@@ -51,7 +52,7 @@ class TestBuilder : public Builder<TMsgHandler, TConfigImpl,
         const Build<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler, TTimeHandler,
             TTimeKeeper, TTimer, TTKController, TEventHandler, TMainFramePres,
             TMainFrame, TEWTaskBarPres, TEWTaskBar, TOptionsDialogPres, TOptionsDialog,
-            TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver> links;
+            TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver, TUtils> links;
     protected:
     private:
 };

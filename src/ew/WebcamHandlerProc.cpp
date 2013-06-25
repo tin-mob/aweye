@@ -19,19 +19,18 @@
  **************************************************************/
 ///@todo clean wx dependancy and test
 
+#include "ew/AbstractUtils.h"
 #include "ew/IsHereCmd.h"
 #include "ew/WebcamHandlerProc.h"
 #include "ew/wx/IsHereProcess.h"
 
 #include <functional>
-#include <wx/filename.h>
-#include <wx/stdpaths.h>
 
 namespace EW {
 
-WebcamHandlerProc::WebcamHandlerProc(int index, std::string faceCascadeName,
-                             int faceSizeX, int faceSizeY) :
-    m_index(index), m_FaceCascadeName(faceCascadeName),
+WebcamHandlerProc::WebcamHandlerProc(AbstractUtils& utils, int index,
+    std::string faceCascadeName, int faceSizeX, int faceSizeY) :
+    m_Utils(utils), m_index(index), m_FaceCascadeName(faceCascadeName),
     m_FaceSizeX(faceSizeX), m_FaceSizeY(faceSizeY)
 {
     //ctor
@@ -58,30 +57,24 @@ void WebcamHandlerProc::setFaceSize(unsigned int x, unsigned int y)
     m_FaceSizeY = y;
 }
 
-///@todo copy pasted from wxConfigImpl
-bool fileExists(wxString name)
-{
-    const wxFileName fileName(name);
-    if(fileName.IsOk())
-    {
-        return wxFileName::FileExists(fileName. GetFullPath());
-    }
-    return false;
-}
-
 ///@note IsHereCmd in same path than main executable,
 ///@todo test if this works in windows
 void WebcamHandlerProc::isHere(std::function<void (bool)> callBack)
 {
     // validate m_FaceCascadeName (and prevent injection)
-    const wxString cascade(m_FaceCascadeName.c_str(), wxConvUTF8);
-    if (!fileExists(cascade))
+    if (!m_Utils.fileExists(m_FaceCascadeName))
     {
         assert(false);
         throw MissingCascadeFileException();
     }
-    wxString cmd = wxT("./IsHereCmd '");
-    cmd << m_index << "' '" << cascade << "' '" << m_FaceSizeX << "' '" << m_FaceSizeY << "'";
+    std::string cmd = "./IsHereCmd '";
+    cmd += m_index;
+    cmd += "' '";
+    cmd += m_FaceCascadeName;
+    cmd += "' '";
+    cmd += m_FaceSizeX;
+    cmd += "' '";
+    cmd += m_FaceSizeY + "'";
 
     WX::IsHereProcess::run(callBack, cmd);
 }

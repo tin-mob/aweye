@@ -63,6 +63,16 @@ class PresenceHandlerStub : public AbstractPresenceHandler
     private:
         std::queue<bool> m_Results;
 };
+
+class PresenceHandlerProcStub : public PresenceHandlerStub
+{
+    public:
+        PresenceHandlerProcStub(AbstractUtils& u, int i = 1001, std::string fcn = "",
+                                int fx = 1010, int fy = 1011) :
+            PresenceHandlerStub(i,fcn,fx,fy), m_Utils(&u) {}
+        virtual ~PresenceHandlerProcStub() {}
+        AbstractUtils* m_Utils;
+};
 }
 
 #endif // PRESENCEHANDLERSTUB_H

@@ -34,7 +34,7 @@ IsHereProcess::~IsHereProcess()
 
 }
 
-void IsHereProcess::run(std::function<void (bool)> callBack, wxString cmd)
+void IsHereProcess::run(std::function<void (bool)> callBack, std::string cmd)
 {
     IsHereProcess* process = new IsHereProcess(callBack);
     wxExecute(cmd, wxEXEC_ASYNC, process);

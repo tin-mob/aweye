@@ -35,7 +35,8 @@ template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHa
     class TTimeHandler, class TTimeKeeper, class TTimer, class TTKController,
     class TEventHandler, class TMainFramePres, class TMainFrame, class TEWTaskBarPres,
     class TEWTaskBar, class TOptionsDialogPres, class TOptionsDialog,
-    class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
+    class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver,
+    class TUtils>
 class Builder;
 class Config;
 class EventHandler;
@@ -57,6 +58,7 @@ class MsgHandler;
 class Timer;
 class OptionsDialog;
 class TaskBar;
+class Utils;
 class wxConfigImpl;
 class App : public wxApp, public SetTopWindowInt
 {
@@ -77,7 +79,7 @@ class App : public wxApp, public SetTopWindowInt
                 WebcamHandlerProc, TimeHandler, TimeKeeper, Timer, TKController,
                 EventHandler, MainFramePres, MainFrame, TaskBarPres, TaskBar,
                 OptionsDialogPres, OptionsDialog, TKConfigObserver,
-                PresHdlrConfigObserver, EWPresConfigObserver>>
+                PresHdlrConfigObserver, EWPresConfigObserver, Utils>>
             m_AppImpl;
 
         wxString m_ConfigPath;

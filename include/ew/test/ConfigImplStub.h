@@ -33,7 +33,7 @@ namespace EW
 class ConfigImplStub : public AbstractConfigImpl
 {
     public:
-        ConfigImplStub(std::string path = "") : m_Path(path), m_FailName("") {}
+        ConfigImplStub(std::string path = "") : m_Path(path) {}
         virtual ~ConfigImplStub() {}
 
         virtual std::string read(std::string key, std::string defaultValue) const
@@ -74,21 +74,11 @@ class ConfigImplStub : public AbstractConfigImpl
 
         bool getFlushed() {bool t = m_Flushed; m_Flushed = false; return t;}
 
-        virtual bool fileExists(std::string name) const
-        {
-            if (name == m_FailName)
-            {
-                return false;
-            }
-            return true;
-        }
-
         std::map<std::string,std::string> m_StringData;
         std::map<std::string,long> m_LongData;
         std::map<std::string,bool> m_BoolData;
 
         std::string m_Path;
-        std::string m_FailName;
 
     protected:
     private:

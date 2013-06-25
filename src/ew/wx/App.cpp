@@ -37,6 +37,7 @@
 #include "ew/wx/Timer.h"
 #include "ew/wx/OptionsDialog.h"
 #include "ew/wx/TaskBar.h"
+#include "ew/wx/Utils.h"
 #include "ew/wx/wxConfigImpl.h"
 #include "ew/wx/wx_pch.h"
 
@@ -61,6 +62,17 @@ template <>
 struct PtrTraits<WX::MainFrame>
 {
   typedef typename std::unique_ptr<WX::MainFrame, no_delete<WX::MainFrame>> Ptr;
+};
+
+template <>
+struct PresenceHandlerFactory<WebcamHandlerProc>
+{
+    template <class TBuilder>
+    static WebcamHandlerProc* create(TBuilder& b, const ConfigData& data)
+    {
+        return new WebcamHandlerProc(*(b.m_Utils), data.webcamIndex, data.cascadePath,
+            data.faceSizeX, data.faceSizeY);
+    }
 };
 
 namespace WX {
@@ -88,7 +100,7 @@ bool App::OnInit()
                 WebcamHandlerProc, TimeHandler, TimeKeeper, Timer, TKController,
                 EventHandler, MainFramePres, MainFrame, TaskBarPres, TaskBar,
                 OptionsDialogPres, OptionsDialog, TKConfigObserver,
-                PresHdlrConfigObserver, EWPresConfigObserver>
+                PresHdlrConfigObserver, EWPresConfigObserver, Utils>
                 (this, std::string(m_ConfigPath.mb_str()), wxTaskBarIcon::IsAvailable(), wxID_OK));
     	}
     }

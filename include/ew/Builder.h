@@ -36,12 +36,27 @@ struct PtrTraits
   typedef typename std::unique_ptr<T> Ptr;
 };
 
+// factory to allow creation with differents parameters with default version
+// limitation - order of creation is not garanteed
+// (thinking about how to do that was interresting...)
+template <class TPresenceHandler>
+struct PresenceHandlerFactory
+{
+    template <class TBuilder>
+    static TPresenceHandler* create(TBuilder& b, const ConfigData& data)
+    {
+        return new TPresenceHandler(data.webcamIndex, data.cascadePath,
+            data.faceSizeX, data.faceSizeY);
+    }
+};
+
 // for testing
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
     class TTimeHandler, class TTimeKeeper, class TTimer, class TTKController,
     class TEventHandler, class TMainFramePres, class TMainFrame, class TEWTaskBarPres,
     class TEWTaskBar, class TOptionsDialogPres, class TOptionsDialog,
-    class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
+    class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver,
+    class TUtils>
 struct Build
 {
     const TMsgHandler* m_MsgHandler;
@@ -62,13 +77,15 @@ struct Build
     const TTKConfigObserver* m_TKConfigObserver;
     const TPresHdlrConfigObserver* m_PresHdlrConfigObserver;
     const TEWPresConfigObserver* m_EWPresConfigObserver;
+    const TUtils* m_Utils;
 };
 
 template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHandler,
     class TTimeHandler, class TTimeKeeper, class TTimer, class TTKController,
     class TEventHandler, class TMainFramePres, class TMainFrame, class TEWTaskBarPres,
     class TEWTaskBar, class TOptionsDialogPres, class TOptionsDialog,
-    class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver>
+    class TTKConfigObserver, class TPresHdlrConfigObserver, class TEWPresConfigObserver,
+    class TUtils>
 class Builder
 {
     public:
@@ -76,10 +93,11 @@ class Builder
             m_MainFrame(nullptr)
         {
             m_MsgHandler.reset(new TMsgHandler());
+            m_Utils.reset(new TUtils());
             try
             {
                 m_ConfigImpl.reset(new TConfigImpl(configPath));
-                m_Config.reset(new TConfig(*m_ConfigImpl));
+                m_Config.reset(new TConfig(*m_ConfigImpl, *m_Utils));
                 m_OptionsPres.reset(new TOptionsDialogPres(*m_MsgHandler, *m_Config, canCreateTaskbar));
 
                 m_DisplayOptionsDialogCmd = [&] ()
@@ -98,8 +116,7 @@ class Builder
                 }
                 ConfigData data = m_Config->getData();
 
-                m_PresenceHandler.reset(new TPresenceHandler(data.webcamIndex, data.cascadePath,
-                    data.faceSizeX, data.faceSizeY));
+                m_PresenceHandler.reset(PresenceHandlerFactory<TPresenceHandler>::create(*this, data));
                 m_TimeHandler.reset(new TTimeHandler());
                 m_TimeKeeper.reset(new TTimeKeeper(*m_TimeHandler,
                     *m_PresenceHandler, data.workLength, data.pauseLength, data.remFreq,
@@ -145,16 +162,19 @@ class Builder
                 TTimeHandler, TTimeKeeper, TTimer, TTKController, TEventHandler,
                 TMainFramePres, TMainFrame, TEWTaskBarPres, TEWTaskBar,
                 TOptionsDialogPres, TOptionsDialog, TTKConfigObserver,
-                TPresHdlrConfigObserver, TEWPresConfigObserver> getBuild()
+                TPresHdlrConfigObserver, TEWPresConfigObserver, TUtils> getBuild()
         {
             return {&*m_MsgHandler, &*m_ConfigImpl, &*m_Config, &*m_PresenceHandler,
                 &*m_TimeHandler, &*m_TimeKeeper, &*m_ClockTimer, &*m_TKController,
                 &*m_EventHandler, &*m_MainFramePres, &*m_MainFrame, &*m_TaskBarPres,
                 &*m_TaskBar, &*m_OptionsPres, &m_DisplayOptionsDialogCmd,
-                &*m_TKConfigObserver, &*m_PresHdlrConfigObserver, &*m_EWPresConfigObserver};
+                &*m_TKConfigObserver, &*m_PresHdlrConfigObserver, &*m_EWPresConfigObserver,
+                &*m_Utils};
         }
 
     private:
+        friend class PresenceHandlerFactory<TPresenceHandler>;
+
         typedef class PtrTraits<TMsgHandler>::Ptr TMsgHandlerPtr;
         typedef class PtrTraits<TConfigImpl>::Ptr TConfigImplPtr;
         typedef class PtrTraits<TConfig>::Ptr TConfigPtr;
@@ -172,6 +192,7 @@ class Builder
         typedef class PtrTraits<TTKConfigObserver>::Ptr TTKConfigObserverPtr;
         typedef class PtrTraits<TPresHdlrConfigObserver>::Ptr TPresHdlrConfigObserverPtr;
         typedef class PtrTraits<TEWPresConfigObserver>::Ptr TEWPresConfigObserverPtr;
+        typedef class PtrTraits<TUtils>::Ptr TUtilsPtr;
 
         TMsgHandlerPtr m_MsgHandler;
         TConfigImplPtr m_ConfigImpl;
@@ -191,6 +212,7 @@ class Builder
         TTKConfigObserverPtr m_TKConfigObserver;
         TPresHdlrConfigObserverPtr m_PresHdlrConfigObserver;
         TEWPresConfigObserverPtr m_EWPresConfigObserver;
+        TUtilsPtr m_Utils;
 };
 }
 

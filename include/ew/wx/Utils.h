@@ -18,28 +18,22 @@
 
  **************************************************************/
 
-#ifndef ISHEREPROCESS_H
-#define ISHEREPROCESS_H
+#ifndef UTILSIMPL_H
+#define UTILSIMPL_H
 
-#include <functional>
-#include <string>
-#include <wx/process.h>
+#include "ew/AbstractUtils.h"
 
 namespace EW { namespace WX {
 
-// delete itself after usage
-class IsHereProcess : public wxProcess
+class Utils : public AbstractUtils
 {
     public:
-        static void run(std::function<void (bool)> callBack, std::string cmd);
-        virtual void OnTerminate(int pid, int status);
-
+        Utils();
+        virtual ~Utils();
+        virtual bool fileExists(std::string name) const;
+    protected:
     private:
-        IsHereProcess(std::function<void (bool)> callBack);
-        virtual ~IsHereProcess();
-
-        std::function<void (bool)> m_CallBack;
 };
 }}
 
-#endif // ISHEREPROCESS_H
+#endif // UTILS_H

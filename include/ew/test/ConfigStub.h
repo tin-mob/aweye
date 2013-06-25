@@ -24,6 +24,7 @@
 
 #include "ew/AbstractConfig.h"
 #include "ew/AbstractConfigImpl.h"
+#include "ew/AbstractUtils.h"
 #include "ew/BaseException.h"
 #include "ew/ConfigData.h"
 
@@ -32,10 +33,10 @@ namespace EW
 class ConfigStub : public AbstractConfig
 {
     public:
-        ConfigStub(ConfigData data = ConfigData()) : m_Impl(nullptr), m_Fail(false),
+        ConfigStub(ConfigData data = ConfigData()) : m_Impl(nullptr), m_Utils(nullptr), m_Fail(false),
             m_Invalid(false), m_data(data) {}
-        ConfigStub(AbstractConfigImpl& i, bool invalid = false) :
-            m_Impl(&i), m_Fail(false), m_Invalid(invalid) {}
+        ConfigStub(AbstractConfigImpl& i, AbstractUtils& u, bool invalid = false) :
+            m_Impl(&i), m_Utils(&u), m_Fail(false), m_Invalid(invalid) {}
         virtual ~ConfigStub() {}
         virtual void load() {}
         virtual void save(const ConfigData& data)
@@ -81,6 +82,7 @@ class ConfigStub : public AbstractConfig
         }
 
         AbstractConfigImpl* m_Impl;
+        AbstractUtils* m_Utils;
         bool m_Fail;
         bool m_Invalid;
     protected:
@@ -91,7 +93,7 @@ class ConfigStub : public AbstractConfig
 class ConfigStubFail : public ConfigStub
 {
     public :
-        ConfigStubFail(AbstractConfigImpl& i) : ConfigStub(i, true){}
+        ConfigStubFail(AbstractConfigImpl& i, AbstractUtils& u) : ConfigStub(i, u, true){}
 };
 }
 

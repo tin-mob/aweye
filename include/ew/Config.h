@@ -28,10 +28,11 @@
 namespace EW {
 
 class AbstractConfigImpl;
+class AbstractUtils;
 class Config : public AbstractConfig
 {
     public:
-        Config(AbstractConfigImpl& impl);
+        Config(AbstractConfigImpl& impl, AbstractUtils& utils);
         virtual ~Config();
 
         virtual void load();
@@ -45,6 +46,7 @@ class Config : public AbstractConfig
         void write();
 
         AbstractConfigImpl& m_Impl;
+        AbstractUtils& m_Utils;
         ConfigData m_data;
         bool m_HasInvalidData;
 };

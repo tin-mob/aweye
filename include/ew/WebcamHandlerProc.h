@@ -17,7 +17,7 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-
+///@todo new vs create static method...
 
 #ifndef WEBCAMHANDLERPROC_H
 #define WEBCAMHANDLERPROC_H
@@ -26,10 +26,11 @@
 
 namespace EW {
 
+class AbstractUtils;
 class WebcamHandlerProc : public AbstractPresenceHandler
 {
     public:
-        WebcamHandlerProc(int index, std::string faceCascadeName,
+        WebcamHandlerProc(AbstractUtils& utils, int index, std::string faceCascadeName,
                       int faceSizeX, int faceSizeY);
         ~WebcamHandlerProc();
 
@@ -39,6 +40,7 @@ class WebcamHandlerProc : public AbstractPresenceHandler
         virtual void setFaceSize(unsigned int x, unsigned int y);
     protected:
     private:
+        AbstractUtils& m_Utils;
         int m_index;
         std::string m_FaceCascadeName;
         int m_FaceSizeX;

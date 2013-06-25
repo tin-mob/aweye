@@ -20,13 +20,15 @@
 ///@todo define strings keys somewhere
 
 #include "ew/AbstractConfigImpl.h"
+#include "ew/AbstractUtils.h"
 #include "ew/Config.h"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 namespace EW {
 
-Config::Config(AbstractConfigImpl& impl) : m_Impl(impl), m_HasInvalidData(false)
+Config::Config(AbstractConfigImpl& impl, AbstractUtils& utils) :
+    m_Impl(impl), m_Utils(utils), m_HasInvalidData(false)
 {
     load();
 }
@@ -129,8 +131,8 @@ bool Config::validateData(const ConfigData& data) const
         data.remFreq.total_seconds() <= 0 ||
         data.checkFreq.total_seconds() <= 0 ||
         data.runningLateThreshold.is_special() ||
-        !m_Impl.fileExists(data.cascadePath) ||
-        !m_Impl.fileExists(data.soundPath)
+        !m_Utils.fileExists(data.cascadePath) ||
+        !m_Utils.fileExists(data.soundPath)
         )
     {
         return false;

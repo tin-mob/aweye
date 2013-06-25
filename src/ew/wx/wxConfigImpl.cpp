@@ -17,7 +17,7 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-
+/// @todo to ConfigImpl
 
 #include "ew/wx/wxConfigImpl.h"
 
@@ -26,7 +26,6 @@
 
 namespace EW { namespace WX {
 
-///@todo to ConfigImpl
 wxConfigImpl::wxConfigImpl(std::string configPath)
 {
     if (configPath != "")
@@ -87,15 +86,5 @@ void wxConfigImpl::write(std::string key, bool value)
 void wxConfigImpl::flush()
 {
     m_Config->Flush();
-}
-
-bool wxConfigImpl::fileExists(std::string name) const
-{
-    const wxFileName fileName(wxString(name.c_str(), wxConvUTF8));
-    if(fileName.IsOk())
-    {
-        return wxFileName::FileExists(fileName. GetFullPath());
-    }
-    return false;
 }
 }}
