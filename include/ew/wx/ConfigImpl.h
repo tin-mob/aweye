@@ -27,11 +27,11 @@
 class wxConfigBase;
 namespace EW { namespace WX {
 
-class wxConfigImpl : public AbstractConfigImpl
+class ConfigImpl : public AbstractConfigImpl
 {
     public:
-        wxConfigImpl(std::string configPath = "");
-        virtual ~wxConfigImpl();
+        ConfigImpl(std::string configPath = "");
+        virtual ~ConfigImpl();
 
         virtual std::string read(std::string key, std::string defaultValue) const;
         virtual long read(std::string key, long defaultValue) const;

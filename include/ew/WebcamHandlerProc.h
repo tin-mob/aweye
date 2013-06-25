@@ -17,7 +17,7 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-///@todo new vs create static method...
+
 
 #ifndef WEBCAMHANDLERPROC_H
 #define WEBCAMHANDLERPROC_H

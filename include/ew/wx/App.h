@@ -59,7 +59,7 @@ class Timer;
 class OptionsDialog;
 class TaskBar;
 class Utils;
-class wxConfigImpl;
+class ConfigImpl;
 class App : public wxApp, public SetTopWindowInt
 {
     public:
@@ -75,7 +75,7 @@ class App : public wxApp, public SetTopWindowInt
 
         virtual void setTopWindow(AbstractMainFrame* frame);
     private:
-        std::unique_ptr<Builder<MsgHandler, wxConfigImpl, Config,
+        std::unique_ptr<Builder<MsgHandler, ConfigImpl, Config,
                 WebcamHandlerProc, TimeHandler, TimeKeeper, Timer, TKController,
                 EventHandler, MainFramePres, MainFrame, TaskBarPres, TaskBar,
                 OptionsDialogPres, OptionsDialog, TKConfigObserver,

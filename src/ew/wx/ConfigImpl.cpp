@@ -17,16 +17,16 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-/// @todo to ConfigImpl
 
-#include "ew/wx/wxConfigImpl.h"
+
+#include "ew/wx/ConfigImpl.h"
 
 #include <wx/config.h>
 #include <wx/filename.h>
 
 namespace EW { namespace WX {
 
-wxConfigImpl::wxConfigImpl(std::string configPath)
+ConfigImpl::ConfigImpl(std::string configPath)
 {
     if (configPath != "")
     {
@@ -45,45 +45,45 @@ wxConfigImpl::wxConfigImpl(std::string configPath)
     m_Config = wxConfigBase::Get();
 }
 
-wxConfigImpl::~wxConfigImpl()
+ConfigImpl::~ConfigImpl()
 {
     // m_Config is managed by wx
 }
 
-std::string wxConfigImpl::read(std::string key, std::string defaultValue) const
+std::string ConfigImpl::read(std::string key, std::string defaultValue) const
 {
     return std::string(m_Config->Read(wxString(key.c_str(), wxConvUTF8),
                                 wxString(defaultValue.c_str(), wxConvUTF8)).mb_str());
 }
 
-long wxConfigImpl::read(std::string key, long defaultValue) const
+long ConfigImpl::read(std::string key, long defaultValue) const
 {
     return m_Config->Read(wxString(key.c_str(), wxConvUTF8), defaultValue);
 }
 
-bool wxConfigImpl::read(std::string key, bool defaultValue) const
+bool ConfigImpl::read(std::string key, bool defaultValue) const
 {
     m_Config->Read(wxString(key.c_str(), wxConvUTF8),&defaultValue);
     return defaultValue;
 }
 
-void wxConfigImpl::write(std::string key, std::string value)
+void ConfigImpl::write(std::string key, std::string value)
 {
     m_Config->Write(wxString(key.c_str(), wxConvUTF8),
                           wxString(value.c_str(), wxConvUTF8));
 }
 
-void wxConfigImpl::write(std::string key, long value)
+void ConfigImpl::write(std::string key, long value)
 {
     m_Config->Write(wxString(key.c_str(), wxConvUTF8), value);
 }
 
-void wxConfigImpl::write(std::string key, bool value)
+void ConfigImpl::write(std::string key, bool value)
 {
     m_Config->Write(wxString(key.c_str(), wxConvUTF8), value);
 }
 
-void wxConfigImpl::flush()
+void ConfigImpl::flush()
 {
     m_Config->Flush();
 }
