@@ -30,18 +30,21 @@ namespace EW {
 
 struct ConfigData
 {
-    ConfigData(boost::posix_time::time_duration wl = default_WorkLength,
+    ConfigData(boost::posix_time::time_duration wl, boost::posix_time::time_duration pl,
+        boost::posix_time::time_duration rf, boost::posix_time::time_duration cf,
+        unsigned int pt, unsigned int wt, bool sa, bool pa, bool tr,
+        int wi, unsigned int fx, unsigned int fy, std::string cp,
+        std::string sp, boost::posix_time::time_duration lt, bool cup);
+
+    static ConfigData getDefault(std::string path = "",
+        boost::posix_time::time_duration wl = default_WorkLength,
         boost::posix_time::time_duration pl = default_PauseLength,
         boost::posix_time::time_duration rf = default_RemFreq,
         boost::posix_time::time_duration cf = default_CheckFreq,
-        unsigned int pt = default_PauseTol,
-        unsigned int wt = default_WorkTol,
-        bool sa = default_SoundAlarm,
-        bool pa = default_PopupAlarm,
-        bool tr = default_TrayIcon,
-        int wi = default_WebcamIndex,
-        unsigned int fx = default_FaceSizeX,
-        unsigned int fy = default_FaceSizeY,
+        unsigned int pt = default_PauseTol, unsigned int wt = default_WorkTol,
+        bool sa = default_SoundAlarm, bool pa = default_PopupAlarm,
+        bool tr = default_TrayIcon, int wi = default_WebcamIndex,
+        unsigned int fx = default_FaceSizeX, unsigned int fy = default_FaceSizeY,
         std::string cp = default_CascadePath,
         std::string sp = default_SoundPath,
         boost::posix_time::time_duration lt = default_RunningLateThreshold,

@@ -37,7 +37,6 @@ struct OptionsDialogPresFixture
     ~OptionsDialogPresFixture() {}
 
     MsgHandlerStub msgHandler;
-    ConfigData data;
     ConfigStub config;
 };
 
@@ -56,7 +55,7 @@ SUITE(TestBuilderOptionsDialogPres)
     {
         OptionsDialogPres pres(msgHandler, config, true);
         config.m_Fail = true;
-        CHECK_EQUAL(false, pres.saveData(ConfigData()));
+        CHECK_EQUAL(false, pres.saveData(ConfigStub::getTestData()));
         CHECK_EQUAL("Testing!", msgHandler.m_LastError);
     }
 
@@ -65,7 +64,7 @@ SUITE(TestBuilderOptionsDialogPres)
         OptionsDialogPres pres(msgHandler, config, true);
         OptionsDialogStub dialog;
 
-        config.save({boost::posix_time::not_a_date_time});
+        config.save(ConfigData::getDefault("", boost::posix_time::not_a_date_time));
         pres.init(dialog);
         CHECK_EQUAL(config.getData(), dialog.getData());
         CHECK_EQUAL(false, dialog.m_Disabled);
@@ -76,7 +75,7 @@ SUITE(TestBuilderOptionsDialogPres)
         OptionsDialogPres pres(msgHandler, config, false);
         OptionsDialogStub dialog;
 
-        config.save({boost::posix_time::not_a_date_time});
+        config.save(ConfigData::getDefault("", boost::posix_time::not_a_date_time));
         pres.init(dialog);
         CHECK_EQUAL(config.getData(), dialog.getData());
         CHECK_EQUAL(true, dialog.m_Disabled);

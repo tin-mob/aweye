@@ -44,6 +44,7 @@ class Config : public AbstractConfig
     protected:
     private:
         void write();
+        ConfigData getLoadedData() const;
 
         AbstractConfigImpl& m_Impl;
         AbstractUtils& m_Utils;

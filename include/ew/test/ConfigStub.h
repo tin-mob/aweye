@@ -33,20 +33,20 @@ namespace EW
 class ConfigStub : public AbstractConfig
 {
     public:
-        ConfigStub(ConfigData data = ConfigData()) : m_Impl(nullptr), m_Utils(nullptr), m_Fail(false),
-            m_Invalid(false), m_data(data) {}
+        ConfigStub(ConfigData data = ConfigData::getDefault()) : m_Impl(nullptr), m_Utils(nullptr), m_Fail(false),
+            m_Invalid(false), m_Data(data) {}
         ConfigStub(AbstractConfigImpl& i, AbstractUtils& u, bool invalid = false) :
-            m_Impl(&i), m_Utils(&u), m_Fail(false), m_Invalid(invalid) {}
+            m_Impl(&i), m_Utils(&u), m_Fail(false), m_Invalid(invalid), m_Data(ConfigData::getDefault()) {}
         virtual ~ConfigStub() {}
         virtual void load() {}
         virtual void save(const ConfigData& data)
         {
             if (m_Fail) { throw BaseException("Testing!"); }
-            m_data = data;
+            m_Data = data;
         }
         virtual const ConfigData& getData() const
         {
-            return m_data;
+            return m_Data;
         }
 
         virtual bool hasInvalidData() const
@@ -56,7 +56,7 @@ class ConfigStub : public AbstractConfig
 
         void notifyUpdate()
         {
-            notify(&ConfigObserver::update, m_data);
+            notify(&ConfigObserver::update, m_Data);
         }
 
         static ConfigData getTestData()
@@ -87,7 +87,7 @@ class ConfigStub : public AbstractConfig
         bool m_Invalid;
     protected:
     private:
-        ConfigData m_data;
+        ConfigData m_Data;
 };
 
 class ConfigStubFail : public ConfigStub

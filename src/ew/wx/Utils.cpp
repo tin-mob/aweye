@@ -26,7 +26,7 @@
 
 namespace EW { namespace WX {
 
-Utils::Utils()
+Utils::Utils(std::string dataDir) : m_DataDir(dataDir)
 {
     //ctor
 }
@@ -41,9 +41,17 @@ bool Utils::fileExists(std::string name) const
     const wxFileName fileName(name);
     if(fileName.IsOk())
     {
-        return wxFileName::FileExists(fileName. GetFullPath());
+        return wxFileName::FileExists(fileName.GetFullPath());
     }
     return false;
+}
+
+std::string Utils::getDataDir() const
+{
+    if (m_DataDir == "")
+        return std::string(wxStandardPaths::Get().GetDataDir());
+    else
+        return m_DataDir;
 }
 
 }}

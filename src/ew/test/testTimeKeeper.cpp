@@ -33,7 +33,7 @@ struct TimeKeeperFixture
 {
     public:
         TimeKeeperFixture() :
-            data(), timeHandler(TimeHandlerStub()),
+            data(ConfigData::getDefault()), timeHandler(TimeHandlerStub()),
             presenceHandler(), keeper(timeHandler, presenceHandler,
                 data.workLength, data.pauseLength, data.remFreq, data.checkFreq,
                 data.pauseTol, data.workTol, data.cummulPause)
@@ -330,10 +330,12 @@ SUITE(TestTimeKeeper)
         data.workLength = boost::posix_time::seconds(4);
         data.pauseLength = boost::posix_time::seconds(1);
         data.workTol = 0;
+        data.pauseTol = 1;
         keeper.setCheckFreq(data.checkFreq);
         keeper.setWorkLength(data.workLength);
         keeper.setPauseLength(data.pauseLength);
         keeper.setWorkTol(data.workTol);
+        keeper.setPauseTol(data.pauseTol);
 
         const boost::posix_time::ptime startingTime = timeHandler.getTime();
         keeper.start();

@@ -26,6 +26,7 @@
 
 #include "ew/AbstractTimer.h"
 #include "ew/AbstractTKController.h"
+#include "ew/AbstractUtils.h"
 
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <string>
@@ -40,6 +41,7 @@ class TKController : public AbstractTKController, public TimerInterface
     public:
         TKController(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& keeper,
                     AbstractTimer& clockTimer, AbstractTimeHandler& timeHandler,
+                    AbstractUtils& utils,
                     bool popupAlarm = true, bool soundAlarm = false, std::string soundPath = "",
                     boost::posix_time::time_duration runningLateThreshold = boost::posix_time::minutes(4));
         virtual ~TKController();
@@ -83,6 +85,7 @@ class TKController : public AbstractTKController, public TimerInterface
         AbstractMsgHandler& m_MsgHandler;
         AbstractTimer& m_ClockTimer;
         AbstractTimeHandler& m_TimeHandler;
+        AbstractUtils& m_Utils;
 
         bool m_PopupAlarm;
         bool m_SoundAlarm;

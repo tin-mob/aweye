@@ -17,7 +17,7 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-
+///@todo test utils path
 
 #include "ew/TKController.h"
 #include "ew/test/ConfigStub.h"
@@ -29,6 +29,7 @@
 #include "ew/test/TimeKeeperStub.h"
 #include "ew/test/TimerStub.h"
 #include "ew/test/TKControllerObserverStub.h"
+#include "ew/test/UtilsStub.h"
 
 #include <unittest++/UnitTest++.h>
 
@@ -38,12 +39,11 @@ struct TKControllerFixture
 {
     public:
         TKControllerFixture() :
-            data({boost::posix_time::seconds(5), boost::posix_time::seconds(3),
-                boost::posix_time::seconds(1), boost::posix_time::seconds(2)}),
+            data(ConfigData::getDefault()),
             msgHandler(), timeHandler(), keeper(), clockTimer(),
             dialog(), viewObserver(),
             controller(TKController(msgHandler, keeper,
-                clockTimer, timeHandler, data.popupAlarm, true, data.soundPath))
+                clockTimer, timeHandler, utils, data.popupAlarm, true, data.soundPath))
         {
             data.soundAlarm = true;
             controller.attach(&viewObserver);
@@ -57,6 +57,7 @@ struct TKControllerFixture
         TimeHandlerStub timeHandler;
         TimeKeeperStub keeper;
         TimerStub clockTimer;
+        UtilsStub utils;
         OptionsDialogStub dialog;
         TKControllerObserverStub viewObserver;
         TKController controller;

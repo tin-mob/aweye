@@ -36,11 +36,13 @@ namespace EW {
 
 TKController::TKController(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& keeper,
                          AbstractTimer& clockTimer, AbstractTimeHandler& timeHandler,
+                         AbstractUtils& utils,
                          bool popupAlarm, bool soundAlarm, std::string soundPath,
                          boost::posix_time::time_duration runningLateThreshold)
     : m_Warn(true), m_Shown(true), m_TimeKeeper(keeper), m_MsgHandler(msgHandler),
-    m_ClockTimer(clockTimer), m_TimeHandler(timeHandler), m_PopupAlarm(popupAlarm),
-    m_SoundAlarm(soundAlarm), m_SoundPath(soundPath), m_RunningLateThreshold(runningLateThreshold),
+    m_ClockTimer(clockTimer), m_TimeHandler(timeHandler), m_Utils(utils),
+    m_PopupAlarm(popupAlarm), m_SoundAlarm(soundAlarm), m_SoundPath(soundPath),
+    m_RunningLateThreshold(runningLateThreshold),
     m_LastAlert(boost::posix_time::not_a_date_time)
 {
     m_ClockTimer.attach(this);
@@ -176,31 +178,33 @@ std::string TKController::getStatus() const
 
 std::string TKController::getIconName()const
 {
+    std::string iconName = m_Utils.getDataDir();
     if (m_TimeKeeper.getStatus() == AbstractTimeKeeper::OFF)
     {
-        return m_StopWebcamIcon;
+        iconName += m_StopWebcamIcon;
     }
     else if (m_TimeKeeper.getStatus() == AbstractTimeKeeper::AWAY &&
              m_TimeKeeper.getTimeLeft() <= boost::posix_time::seconds(0))
     {
-        return m_GreenWebcamIcon;
+        iconName += m_GreenWebcamIcon;
     }
     else
     {
         const boost::posix_time::time_duration timeLeft = m_TimeKeeper.getWorkTimeLeft();
         if (timeLeft > m_RunningLateThreshold)
         {
-            return m_GreenWebcamIcon;
+            iconName += m_GreenWebcamIcon;
         }
         else if (timeLeft > boost::posix_time::seconds(0))
         {
-            return m_YellowWebcamIcon;
+            iconName += m_YellowWebcamIcon;
         }
         else
         {
-            return m_RedWebcamIcon;
+            iconName += m_RedWebcamIcon;
         }
     }
+    return iconName;
 }
 
 std::string TKController::durationToString(boost::posix_time::time_duration duration)

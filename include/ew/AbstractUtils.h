@@ -30,6 +30,7 @@ class AbstractUtils
     public:
         virtual ~AbstractUtils() {}
         virtual bool fileExists(std::string name) const = 0;
+        virtual std::string getDataDir() const = 0;
     protected:
     private:
 };

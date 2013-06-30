@@ -28,11 +28,13 @@ namespace EW { namespace WX {
 class Utils : public AbstractUtils
 {
     public:
-        Utils();
+        Utils(std::string dataDir = "");
         virtual ~Utils();
         virtual bool fileExists(std::string name) const;
+        virtual std::string getDataDir() const;
     protected:
     private:
+        std::string m_DataDir;
 };
 }}
 

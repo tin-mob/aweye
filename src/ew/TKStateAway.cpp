@@ -35,6 +35,7 @@ TKStateAway::~TKStateAway()
 {
 }
 
+///@todo almost the same as TKStateHere...
 void TKStateAway::updateStatus(TimeKeeper& parent, bool isHere)
 {
     if (isHere)
@@ -90,7 +91,6 @@ void TKStateAway::initState(TimeKeeper& parent, bool cancelled)
     }
 }
 
-///@todo almost the same as TKStateAway...
 boost::posix_time::ptime TKStateAway::getNextUpdate(const TimeKeeper& parent) const
 {
     boost::posix_time::time_duration timerInterval = parent.m_CheckFreq;

@@ -28,6 +28,7 @@
 #include "ew/AbstractTimer.h"
 #include "ew/AbstractTKController.h"
 #include "ew/TKControllerObserver.h"
+#include "ew/test/UtilsStub.h"
 
 #include <string>
 
@@ -37,21 +38,23 @@ class TKControllerStub : public AbstractTKController
 {
     public:
         TKControllerStub(AbstractMsgHandler* mH = nullptr, AbstractTimeKeeper* k = nullptr,
-            AbstractTimer* clT = nullptr, AbstractTimeHandler* tH = nullptr, bool pA = false,
-            bool sA = false, std::string sP = "",
+            AbstractTimer* clT = nullptr, AbstractTimeHandler* tH = nullptr,
+            AbstractUtils* u = nullptr, bool pA = false, bool sA = false, std::string sP = "",
             boost::posix_time::time_duration rLT = boost::posix_time::seconds(0)) :
-            m_PopupAlarm(pA), m_SoundAlarm(sA), m_SoundPath(sP), m_RunningLateThreshold(rLT),
-            m_Paused(false), m_Started(false), m_Quitted(false),
+            m_PopupAlarm(pA), m_SoundAlarm(sA), m_SoundPath(sP),
+            m_RunningLateThreshold(rLT), m_Paused(false), m_Started(false), m_Quitted(false),
             m_StatusUpdated(false), m_TimesUpdated(false), m_DisplayValues(),
-            m_MsgHandler(mH), m_Keeper(k), m_ClockTimer(clT), m_TimeHandler(tH) {}
+            m_MsgHandler(mH), m_Keeper(k), m_ClockTimer(clT), m_TimeHandler(tH),
+            m_Utils(u) {}
 
         TKControllerStub(AbstractMsgHandler& mH, AbstractTimeKeeper& k,
-            AbstractTimer& clT, AbstractTimeHandler& tH, bool pA, bool sA,
-            std::string sP, boost::posix_time::time_duration rLT) :
-            m_PopupAlarm(pA), m_SoundAlarm(sA), m_SoundPath(sP), m_RunningLateThreshold(rLT),
-            m_Paused(false), m_Started(false), m_Quitted(false),
+            AbstractTimer& clT, AbstractTimeHandler& tH, AbstractUtils& utils, bool pA,
+            bool sA, std::string sP, boost::posix_time::time_duration rLT) :
+            m_PopupAlarm(pA), m_SoundAlarm(sA), m_SoundPath(sP),
+            m_RunningLateThreshold(rLT), m_Paused(false), m_Started(false), m_Quitted(false),
             m_StatusUpdated(false), m_TimesUpdated(false), m_DisplayValues(),
-            m_MsgHandler(&mH), m_Keeper(&k), m_ClockTimer(&clT), m_TimeHandler(&tH) {}
+            m_MsgHandler(&mH), m_Keeper(&k), m_ClockTimer(&clT), m_TimeHandler(&tH),
+            m_Utils(&utils) {}
 
         virtual ~TKControllerStub() {}
 
@@ -130,6 +133,7 @@ class TKControllerStub : public AbstractTKController
         AbstractTimeKeeper* m_Keeper;
         AbstractTimer* m_ClockTimer;
         AbstractTimeHandler* m_TimeHandler;
+        AbstractUtils* m_Utils;
 
     protected:
     private:

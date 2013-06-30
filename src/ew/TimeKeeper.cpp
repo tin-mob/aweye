@@ -234,7 +234,7 @@ void TimeKeeper::setStatus(Status status, bool cancelled)
     m_CurrentState = status;
 
     TKState& state = *m_States.find(m_CurrentState)->second;
-    return state.initState(*this, cancelled);
+    state.initState(*this, cancelled);
 
     m_TolerationTime = boost::posix_time::ptime(boost::posix_time::not_a_date_time);
 }

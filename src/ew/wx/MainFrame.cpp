@@ -17,7 +17,7 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-
+///@todo webcam path
 
 #include "ew/AbstractEventHandler.h"
 #include "ew/wx/AboutDialog.h"
@@ -27,9 +27,6 @@
 //(*InternalHeaders(MainFrame)
 #include <wx/string.h>
 #include <wx/intl.h>
-#include <wx/bitmap.h>
-#include <wx/icon.h>
-#include <wx/image.h>
 //*)
 
 namespace EW { namespace WX {
@@ -100,13 +97,8 @@ MainFrame::MainFrame(AbstractEventHandler& hdlr,
     wxBoxSizer* m_RunningBoxSizer;
     wxFlexGridSizer* m_MainFlexGridSizer;
     wxMenuItem* m_PauseMenuItem;
-
+    
     Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
-    {
-    	wxIcon FrameIcon;
-    	FrameIcon.CopyFromBitmap(wxBitmap(wxImage(_T("webcam.ico"))));
-    	SetIcon(FrameIcon);
-    }
     m_MainFlexGridSizer = new wxFlexGridSizer(0, 1, 0, 0);
     m_StatusLabel = new wxStaticText(this, ID_STATICTEXT9, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
     m_MainFlexGridSizer->Add(m_StatusLabel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -159,13 +151,12 @@ MainFrame::MainFrame(AbstractEventHandler& hdlr,
     SetMenuBar(m_EwMenuBar);
     m_MainFlexGridSizer->Fit(this);
     m_MainFlexGridSizer->SetSizeHints(this);
-
+    
     Connect(ID_STARTMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnPlayButtonClick);
     Connect(ID_PAUSEMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnPauseButtonClick);
     Connect(ID_OPTIONSMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnOptionsButtonClick);
     Connect(ID_ABOUTMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnAbout);
     Connect(ID_EXITMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnQuit);
-    Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&MainFrame::OnClose);
     //*)
 }
 

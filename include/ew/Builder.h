@@ -89,11 +89,11 @@ template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHa
 class Builder
 {
     public:
-        Builder(SetTopWindowInt* topInt, std::string configPath, bool canCreateTaskbar, int idOk) :
+        Builder(SetTopWindowInt* topInt, std::string configPath, std::string dataPath, bool canCreateTaskbar, int idOk) :
             m_MainFrame(nullptr)
         {
             m_MsgHandler.reset(new TMsgHandler());
-            m_Utils.reset(new TUtils());
+            m_Utils.reset(new TUtils(dataPath));
             try
             {
                 m_ConfigImpl.reset(new TConfigImpl(configPath));
@@ -124,7 +124,7 @@ class Builder
 
                 m_ClockTimer.reset(new TTimer());
                 m_TKController.reset(new TTKController(*m_MsgHandler,
-                    *m_TimeKeeper, *m_ClockTimer, *m_TimeHandler, data.popupAlarm,
+                    *m_TimeKeeper, *m_ClockTimer, *m_TimeHandler, *m_Utils, data.popupAlarm,
                     data.soundAlarm, data.soundPath, data.runningLateThreshold));
 
                 m_EventHandler.reset(new TEventHandler(*m_MsgHandler, *m_TKController, m_DisplayOptionsDialogCmd));

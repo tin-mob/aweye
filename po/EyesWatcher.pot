@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-24 14:48-0400\n"
+"POT-Creation-Date: 2013-06-27 15:19-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,55 +17,55 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/ew/wx/MainFrame.cpp:159
+#: ../src/ew/wx/MainFrame.cpp:154
 msgid "About"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:247
+#: ../src/ew/wx/OptionsDialog.cpp:247
 msgid "Advanced"
 msgstr ""
 
-#: include/ew/AbstractTimeKeeper.h:41
+#: ../include/ew/AbstractTimeKeeper.h:42
 msgid "Away"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:219
+#: ../src/ew/wx/OptionsDialog.cpp:219
 msgid "Cascade File Location"
 msgstr ""
 
-#: include/ew/AbstractPresenceHandler.h:41
+#: ../include/ew/AbstractPresenceHandler.h:41
 msgid "Cascade file not found."
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:148
+#: ../src/ew/wx/OptionsDialog.cpp:148
 msgid "Check Interval"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:168
+#: ../src/ew/wx/OptionsDialog.cpp:168
 msgid "Cummulative Pause"
 msgstr ""
 
-#: src/ew/wx/MainFrame.cpp:163
+#: ../src/ew/wx/MainFrame.cpp:158
 msgid "Do"
 msgstr ""
 
-#: src/ew/wx/MsgHandler.cpp:44
+#: ../src/ew/wx/MsgHandler.cpp:44
 msgid "Error"
 msgstr ""
 
-#: include/ew/AbstractPresenceHandler.h:47
+#: ../include/ew/AbstractPresenceHandler.h:47
 msgid "Error using the camera."
 msgstr ""
 
-#: include/ew/AbstractPresenceHandler.h:35
+#: ../include/ew/AbstractPresenceHandler.h:35
 msgid "Error while establishing presence."
 msgstr ""
 
-#: src/ew/wx/TaskBar.cpp:84 src/ew/wx/MainFrame.cpp:161
+#: ../src/ew/wx/TaskBar.cpp:85 ../src/ew/wx/MainFrame.cpp:156
 msgid "Exit"
 msgstr ""
 
-#: src/ew/wx/AboutDialog.cpp:53
+#: ../src/ew/wx/AboutDialog.cpp:53
 msgid ""
 "EyeWatcher - Watches your eyes and reminds you to take a break.\n"
 "\n"
@@ -93,162 +93,162 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/ew/wx/MsgHandler.cpp:51
+#: ../src/ew/wx/MsgHandler.cpp:51
 msgid "Eyes Watcher"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:246
+#: ../src/ew/wx/OptionsDialog.cpp:246
 msgid "General"
 msgstr ""
 
-#: include/ew/AbstractTimeKeeper.h:40
+#: ../include/ew/AbstractTimeKeeper.h:41
 msgid "Here"
 msgstr ""
 
-#: include/ew/AbstractTKController.h:37
+#: ../include/ew/AbstractTKController.h:38
 msgid "Hide"
 msgstr ""
 
-#: src/ew/wx/TaskBar.cpp:83
+#: ../src/ew/wx/TaskBar.cpp:84
 msgid "Hide/Restore"
 msgstr ""
 
-#: src/ew/wx/TaskBar.cpp:90 src/ew/wx/MainFrame.cpp:129
+#: ../src/ew/wx/TaskBar.cpp:91 ../src/ew/wx/MainFrame.cpp:124
 msgid "Last Pause"
 msgstr ""
 
-#: src/ew/TaskBarPres.cpp:59
+#: ../src/ew/TaskBarPres.cpp:59
 msgid "Last Pause : "
 msgstr ""
 
-#: src/ew/wx/TaskBar.cpp:89 src/ew/wx/MainFrame.cpp:121
+#: ../src/ew/wx/TaskBar.cpp:90 ../src/ew/wx/MainFrame.cpp:116
 msgid "Last Session"
 msgstr ""
 
-#: src/ew/TaskBarPres.cpp:58
+#: ../src/ew/TaskBarPres.cpp:58
 msgid "Last Session : "
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:178
+#: ../src/ew/wx/OptionsDialog.cpp:178
 msgid "Minimum Face Size (X/Y)"
 msgstr ""
 
-#: include/ew/AbstractTimeKeeper.h:39
+#: ../include/ew/AbstractTimeKeeper.h:40
 msgid "Off"
 msgstr ""
 
-#: src/ew/wx/MainFrame.cpp:157
+#: ../src/ew/wx/MainFrame.cpp:152
 msgid "Options"
 msgstr ""
 
-#: src/ew/wx/MainFrame.cpp:155 include/ew/AbstractTKController.h:38
+#: ../src/ew/wx/MainFrame.cpp:150 ../include/ew/AbstractTKController.h:39
 msgid "Pause"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:124
+#: ../src/ew/wx/OptionsDialog.cpp:124
 msgid "Pause Period"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:190
+#: ../src/ew/wx/OptionsDialog.cpp:190
 msgid "Pause Tolerance"
 msgstr ""
 
-#: src/ew/wx/TaskBar.cpp:87
+#: ../src/ew/wx/TaskBar.cpp:88
 msgid "Pause/Resume"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:162
+#: ../src/ew/wx/OptionsDialog.cpp:162
 msgid "Popup Alarm"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:136
+#: ../src/ew/wx/OptionsDialog.cpp:136
 msgid "Reminder Frequency"
 msgstr ""
 
-#: include/ew/AbstractTKController.h:37
+#: ../include/ew/AbstractTKController.h:38
 msgid "Restore"
 msgstr ""
 
-#: include/ew/AbstractTKController.h:38
+#: ../include/ew/AbstractTKController.h:39
 msgid "Resume"
 msgstr ""
 
-#: src/ew/wx/TaskBar.cpp:91 src/ew/wx/MainFrame.cpp:137
+#: ../src/ew/wx/TaskBar.cpp:92 ../src/ew/wx/MainFrame.cpp:132
 msgid "Running"
 msgstr ""
 
-#: src/ew/TaskBarPres.cpp:60
+#: ../src/ew/TaskBarPres.cpp:60
 msgid "Running : "
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:159
+#: ../src/ew/wx/OptionsDialog.cpp:159
 msgid "Sound Alarm"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:226
+#: ../src/ew/wx/OptionsDialog.cpp:226
 msgid "Sound File Location"
 msgstr ""
 
-#: src/ew/wx/MainFrame.cpp:153 include/ew/AbstractTKController.h:39
+#: ../src/ew/wx/MainFrame.cpp:148 ../include/ew/AbstractTKController.h:40
 msgid "Start"
 msgstr ""
 
-#: src/ew/wx/TaskBar.cpp:86
+#: ../src/ew/wx/TaskBar.cpp:87
 msgid "Start/Stop"
 msgstr ""
 
-#: include/ew/AbstractTKController.h:39
+#: ../include/ew/AbstractTKController.h:40
 msgid "Stop"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:191 src/ew/wx/OptionsDialog.cpp:201
+#: ../src/ew/wx/OptionsDialog.cpp:191 ../src/ew/wx/OptionsDialog.cpp:201
 msgid "Test"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:109
+#: ../src/ew/wx/OptionsDialog.cpp:109
 msgid "Time (Minutes / Seconds)"
 msgstr ""
 
-#: src/ew/wx/TaskBar.cpp:92 src/ew/wx/MainFrame.cpp:145
+#: ../src/ew/wx/TaskBar.cpp:93 ../src/ew/wx/MainFrame.cpp:140
 msgid "Time Left"
 msgstr ""
 
-#: src/ew/TaskBarPres.cpp:61
+#: ../src/ew/TaskBarPres.cpp:61
 msgid "Time Left : "
 msgstr ""
 
-#: include/ew/AbstractTKController.h:36
+#: ../include/ew/AbstractTKController.h:37
 msgid "Time for a pause!"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:165
+#: ../src/ew/wx/OptionsDialog.cpp:165
 msgid "Tray Icon"
 msgstr ""
 
-#: src/ew/wx/App.cpp:101
+#: ../src/ew/wx/App.cpp:118
 msgid "Use a specific configuration file."
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:210
+#: ../src/ew/wx/OptionsDialog.cpp:210
 msgid "Webcam Index"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:200
+#: ../src/ew/wx/OptionsDialog.cpp:200
 msgid "Work Tolerance"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:112
+#: ../src/ew/wx/OptionsDialog.cpp:112
 msgid "Working Length"
 msgstr ""
 
-#: src/ew/wx/OptionsDialog.cpp:233
+#: ../src/ew/wx/OptionsDialog.cpp:233
 msgid "Yellow Icon Threshold"
 msgstr ""
 
-#: include/ew/AbstractConfigImpl.h:35
+#: ../include/ew/AbstractConfigImpl.h:35
 msgid "invalid config file."
 msgstr ""
 
-#: include/ew/AbstractConfigImpl.h:41
+#: ../include/ew/AbstractConfigImpl.h:41
 msgid "invalid configuration data."
 msgstr ""

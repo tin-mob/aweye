@@ -28,9 +28,13 @@
 namespace EW {
 
 Config::Config(AbstractConfigImpl& impl, AbstractUtils& utils) :
-    m_Impl(impl), m_Utils(utils), m_HasInvalidData(false)
+    m_Impl(impl), m_Utils(utils),  m_data(getLoadedData()),
+    m_HasInvalidData(false)
 {
-    load();
+    if (!validateData(m_data))
+    {
+        m_HasInvalidData = true;
+    }
 }
 
 Config::~Config()
@@ -42,10 +46,9 @@ const ConfigData& Config::getData() const
     return m_data;
 }
 
-void Config::load()
+ConfigData Config::getLoadedData() const
 {
-    const ConfigData tempData =
-    {
+    return {
         boost::posix_time::duration_from_string(m_Impl.read("WorkLength",
             boost::posix_time::to_simple_string(ConfigData::default_WorkLength))),
         boost::posix_time::duration_from_string(m_Impl.read("PauseLength",
@@ -62,15 +65,18 @@ void Config::load()
         (int)m_Impl.read("WebcamIndex", (long)ConfigData::default_WebcamIndex),
         (unsigned int)m_Impl.read("FaceSizeX", (long)ConfigData::default_FaceSizeX),
         (unsigned int)m_Impl.read("FaceSizeY", (long)ConfigData::default_FaceSizeY),
-        m_Impl.read("CascadePath", ConfigData::default_CascadePath),
-        m_Impl.read("SoundPath", ConfigData::default_SoundPath),
+        m_Impl.read("CascadePath", m_Utils.getDataDir() + ConfigData::default_CascadePath),
+        m_Impl.read("SoundPath",  m_Utils.getDataDir() + ConfigData::default_SoundPath),
         boost::posix_time::duration_from_string(m_Impl.read("RunningLateThreshold",
             boost::posix_time::to_simple_string(ConfigData::default_RunningLateThreshold))),
         m_Impl.read("CummulPause", ConfigData::default_CummulPause)
     };
+}
 
-    m_data = tempData;
-    if (!validateData(tempData))
+void Config::load()
+{
+    m_data = getLoadedData();
+    if (!validateData(m_data))
     {
         m_HasInvalidData = true;
     }

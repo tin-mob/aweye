@@ -39,12 +39,13 @@ class TestBuilder : public Builder<TMsgHandler, TConfigImpl,
     TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver, TUtils>
 {
     public:
-        TestBuilder(SetTopWindowInt* topInt, std::string configPath, bool canCreateTaskbar, int idOk) :
+        TestBuilder(SetTopWindowInt* topInt, std::string configPath, std::string dataPath,
+                    bool canCreateTaskbar, int idOk) :
             Builder<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler, TTimeHandler,
             TTimeKeeper, TTimer, TTKController, TEventHandler, TMainFramePres,
             TMainFrame, TEWTaskBarPres, TEWTaskBar, TOptionsDialogPres, TOptionsDialog,
             TTKConfigObserver, TPresHdlrConfigObserver, TEWPresConfigObserver, TUtils>
-            (topInt, configPath, canCreateTaskbar, idOk),
+            (topInt, configPath, dataPath, canCreateTaskbar, idOk),
             links(this->getBuild()){}
 
         virtual ~TestBuilder() {}

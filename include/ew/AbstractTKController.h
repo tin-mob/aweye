@@ -38,8 +38,10 @@ class AbstractTKController : public Subject<TKControllerObserver>
             m_HideBtnLabel(tr("Hide")), m_RestoreBtnLabel(tr("Restore")),
             m_PauseBtnLabel(tr("Pause")), m_ResumeBtnLabel(tr("Resume")),
             m_StartBtnLabel(tr("Start")), m_StopBtnLabel(tr("Stop")),
-            m_StopWebcamIcon("webcam-stop.png"), m_GreenWebcamIcon("webcam-green.png"),
-            m_YellowWebcamIcon("webcam-yellow.png"), m_RedWebcamIcon("webcam-red.png")
+            m_StopWebcamIcon("icons/webcam-stop.png"),
+            m_GreenWebcamIcon("icons/webcam-green.png"),
+            m_YellowWebcamIcon("icons/webcam-yellow.png"),
+            m_RedWebcamIcon("icons/webcam-red.png")
         {
         }
         virtual ~AbstractTKController() {}

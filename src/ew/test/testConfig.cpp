@@ -17,7 +17,7 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-
+///@todo test utils path
 
 #include "ew/Config.h"
 #include "ew/test/ConfigImplStub.h"
@@ -43,7 +43,7 @@ SUITE(TestConfig)
 {
     TEST_FIXTURE(ConfigFixture, TestValidation)
     {
-        ConfigData data;
+        ConfigData data(ConfigData::getDefault());
         const Config config(impl, utils);
 
         CHECK_EQUAL(true, config.validateData(data));
@@ -96,12 +96,12 @@ SUITE(TestConfig)
         const Config config(impl, utils);
 
         ConfigData data = config.getData();
-        CHECK_EQUAL(ConfigData(), data);
+        CHECK_EQUAL(ConfigData::getDefault(), data);
     }
 
     TEST_FIXTURE(ConfigFixture, TestSaveLoad)
     {
-        ConfigData data;
+        ConfigData data(ConfigData::getDefault());
         const ConfigData srcData = ConfigStub::getTestData();
 
         Config config(impl, utils);
@@ -123,7 +123,7 @@ SUITE(TestConfig)
 
     TEST_FIXTURE(ConfigFixture, TestInvalidSave)
     {
-        const ConfigData data = {boost::posix_time::neg_infin};
+        const ConfigData data(ConfigData::getDefault("", boost::posix_time::neg_infin));
         Config config(impl, utils);
         CHECK_THROW(config.save(data), InvalidConfigDataException);
     }
@@ -131,7 +131,7 @@ SUITE(TestConfig)
     TEST_FIXTURE(ConfigFixture, TestInvalidLoad)
     {
         Config config(impl, utils);
-        config.save({});
+        config.save(ConfigData::getDefault());
         CHECK_EQUAL(false, config.hasInvalidData());
 
         utils.m_FailName = impl.read(std::string("CascadePath"), std::string("ShouldNotBeUsed"));

@@ -31,9 +31,9 @@ class OptionsDialogStub : public AbstractOptionsDialog
 {
     public:
         OptionsDialogStub(std::nullptr_t, OptionsDialogPresStub& pres) :
-            m_Disabled(false), m_Presenter(&pres){}
+            m_Disabled(false), m_Presenter(&pres), m_Data(ConfigData::getDefault()) {}
         OptionsDialogStub() :
-            m_Disabled(false), m_Presenter(nullptr){}
+            m_Disabled(false), m_Presenter(nullptr), m_Data(ConfigData::getDefault()) {}
         virtual ~OptionsDialogStub() {}
         virtual ConfigData getData() const
         {

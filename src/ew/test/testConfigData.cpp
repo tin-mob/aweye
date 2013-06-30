@@ -37,70 +37,70 @@ SUITE(TestConfigData)
 {
     TEST_FIXTURE(ConfigDataFixture, TestComparison)
     {
-        const ConfigData src;
+        const ConfigData src(ConfigData::getDefault());
         CHECK_EQUAL(src, src);
 
-        ConfigData mod;
+        ConfigData mod(ConfigData::getDefault());
         mod.workLength = ConfigData::default_WorkLength + boost::posix_time::seconds(1);
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.pauseLength = ConfigData::default_PauseLength + boost::posix_time::seconds(1);
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.remFreq = ConfigData::default_RemFreq + boost::posix_time::seconds(1);
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.checkFreq = ConfigData::default_CheckFreq + boost::posix_time::seconds(1);
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.pauseTol = ConfigData::default_PauseTol + 1;
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.workTol = ConfigData::default_WorkTol + 1;
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.soundAlarm = !ConfigData::default_SoundAlarm;
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.popupAlarm = !ConfigData::default_PopupAlarm;
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.trayIcon = !ConfigData::default_TrayIcon;
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.webcamIndex = ConfigData::default_WebcamIndex + 1;
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.faceSizeX = ConfigData::default_FaceSizeX + 1;
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.faceSizeY = ConfigData::default_FaceSizeY + 1;
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.cascadePath = "test.cfg";
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.soundPath = "test.wav";
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.runningLateThreshold = ConfigData::default_CheckFreq + boost::posix_time::seconds(1);
         CHECK_EQUAL(false, mod == src);
 
-        mod = {};
+        mod = ConfigData::getDefault();
         mod.cummulPause = !ConfigData::default_CummulPause;
         CHECK_EQUAL(false, mod == src);
     }

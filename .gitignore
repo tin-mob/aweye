@@ -47,6 +47,5 @@ Thumbs.db
 
 # Other #
 #########
-EyesWatcher/EyesWatcher.cfg
-EyesWatcher/wx_pch.h.gch/
-EyesWatcher/IsHereCmd
+project/
+bin/
