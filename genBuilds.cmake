@@ -25,7 +25,10 @@ file(MAKE_DIRECTORY ${EW_DIR})
 file(MAKE_DIRECTORY ${EW_TEST_DIR})
 
 configure_file(cmake/EW.in.cmake ${EW_DIR}/CMakeLists.txt COPYONLY)
+configure_file(cmake/common.cmake ${EW_DIR}/common.cmake COPYONLY)
+
 configure_file(cmake/EWTest.in.cmake ${EW_TEST_DIR}/CMakeLists.txt COPYONLY)
+configure_file(cmake/common.cmake ${EW_TEST_DIR}/common.cmake COPYONLY)
 
 configure_file(cmake/CMakeCmd.in.py ${EW_DIR}/cmake-deb.py)
 configure_file(cmake/CMakeCmd.in.py ${EW_TEST_DIR}/cmake-deb.py)
