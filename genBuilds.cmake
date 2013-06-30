@@ -6,5 +6,5 @@ file(MAKE_DIRECTORY ${BUILD_DIR})
 file(MAKE_DIRECTORY ${EW_DIR})
 file(MAKE_DIRECTORY ${EW_TEST_DIR})
 
-file(COPY CMakeLists.txt DESTINATION ${EW_DIR})
-configure_file(CMakeTest.txt ${EW_TEST_DIR}/CMakeLists.txt COPYONLY)
+configure_file(cmake/EW.in.cmake ${EW_DIR}/CMakeLists.txt COPYONLY)
+configure_file(cmake/EWTest.in.cmake ${EW_TEST_DIR}/CMakeLists.txt COPYONLY)
