@@ -17,8 +17,9 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
+/// @todo run from Code::Blocks add data path option
 
-
+#include "CMakeDefines.h"
 #include "ew/Builder.h"
 #include "ew/Config.h"
 #include "ew/ConfigObservers.h"
@@ -84,6 +85,9 @@ namespace WX {
 
 App::App() : m_AppImpl(nullptr)
 {
+    #ifdef EW_DATA_DIR
+        m_DataPath = EW_DATA_DIR;
+    #endif
 }
 
 App::~App()

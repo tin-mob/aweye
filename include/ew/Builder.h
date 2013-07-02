@@ -93,9 +93,10 @@ class Builder
             m_MainFrame(nullptr)
         {
             m_MsgHandler.reset(new TMsgHandler());
-            m_Utils.reset(new TUtils(dataPath));
             try
             {
+                m_Utils.reset(new TUtils(dataPath));
+
                 m_ConfigImpl.reset(new TConfigImpl(configPath));
                 m_Config.reset(new TConfig(*m_ConfigImpl, *m_Utils));
                 m_OptionsPres.reset(new TOptionsDialogPres(*m_MsgHandler, *m_Config, canCreateTaskbar));

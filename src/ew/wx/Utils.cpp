@@ -17,10 +17,14 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
+///@todo maybe use a path list instead + add path in debug instead
+/// of having a program argument...
+
 
 #include "ew/wx/Utils.h"
 
 #include <string>
+#include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 
@@ -46,12 +50,38 @@ bool Utils::fileExists(std::string name) const
     return false;
 }
 
-std::string Utils::getDataDir() const
+std::string joinPath(wxString firstStr, wxString secondStr)
 {
-    if (m_DataDir == "")
-        return std::string(wxStandardPaths::Get().GetDataDir());
+    wxFileName first(firstStr, "");
+    const wxFileName second(secondStr);
+
+    const wxArrayString secDirs = second.GetDirs();
+
+    for (int i = 0; i < secDirs.GetCount(); ++i)
+    {
+        first.AppendDir(secDirs[i]);
+    }
+    first.SetFullName(second.GetFullName());
+    return std::string(first.GetFullPath());
+}
+
+std::string Utils::getDataPath(std::string item) const
+{
+    if (wxFileName(item).IsAbsolute())
+    {
+        return item;
+    }
     else
-        return m_DataDir;
+    {
+        if (m_DataDir == "")
+        {
+            return joinPath(std::string(wxStandardPaths::Get().GetDataDir()), item);
+        }
+        else
+        {
+            return joinPath(m_DataDir, item);
+        }
+    }
 }
 
 }}

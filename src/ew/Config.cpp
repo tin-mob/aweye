@@ -65,8 +65,8 @@ ConfigData Config::getLoadedData() const
         (int)m_Impl.read("WebcamIndex", (long)ConfigData::default_WebcamIndex),
         (unsigned int)m_Impl.read("FaceSizeX", (long)ConfigData::default_FaceSizeX),
         (unsigned int)m_Impl.read("FaceSizeY", (long)ConfigData::default_FaceSizeY),
-        m_Impl.read("CascadePath", m_Utils.getDataDir() + ConfigData::default_CascadePath),
-        m_Impl.read("SoundPath",  m_Utils.getDataDir() + ConfigData::default_SoundPath),
+        m_Impl.read("CascadePath", m_Utils.getDataPath(ConfigData::default_CascadePath)),
+        m_Impl.read("SoundPath",  m_Utils.getDataPath(ConfigData::default_SoundPath)),
         boost::posix_time::duration_from_string(m_Impl.read("RunningLateThreshold",
             boost::posix_time::to_simple_string(ConfigData::default_RunningLateThreshold))),
         m_Impl.read("CummulPause", ConfigData::default_CummulPause)

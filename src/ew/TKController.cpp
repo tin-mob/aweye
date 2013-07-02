@@ -178,7 +178,7 @@ std::string TKController::getStatus() const
 
 std::string TKController::getIconName()const
 {
-    std::string iconName = m_Utils.getDataDir();
+    std::string iconName;
     if (m_TimeKeeper.getStatus() == AbstractTimeKeeper::OFF)
     {
         iconName += m_StopWebcamIcon;
@@ -204,7 +204,7 @@ std::string TKController::getIconName()const
             iconName += m_RedWebcamIcon;
         }
     }
-    return iconName;
+    return m_Utils.getDataPath(iconName);
 }
 
 std::string TKController::durationToString(boost::posix_time::time_duration duration)

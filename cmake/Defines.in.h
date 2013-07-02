@@ -18,24 +18,9 @@
 
  **************************************************************/
 
-#ifndef UTILSIMPL_H
-#define UTILSIMPL_H
+#ifndef BUILDDEFINES_H_INCLUDED
+#define BUILDDEFINES_H_INCLUDED
 
-#include "ew/AbstractUtils.h"
+#define EW_DATA_DIR "@EW_DATA_DIR@"
 
-namespace EW { namespace WX {
-
-class Utils : public AbstractUtils
-{
-    public:
-        Utils(std::string dataDir = "");
-        virtual ~Utils();
-        virtual bool fileExists(std::string name) const;
-        virtual std::string getDataPath(std::string item) const;
-    protected:
-    private:
-        std::string m_DataDir;
-};
-}}
-
-#endif // UTILS_H
+#endif // BUILDDEFINES_H_INCLUDED

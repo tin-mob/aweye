@@ -40,9 +40,9 @@ class UtilsStub : public AbstractUtils
             return true;
         }
 
-        virtual std::string getDataDir() const
+        virtual std::string getDataPath(std::string item) const
         {
-            return m_DataDir;
+            return m_DataDir + item;
         }
 
         std::string m_FailName;
