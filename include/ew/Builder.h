@@ -129,7 +129,7 @@ class Builder
                     data.soundAlarm, data.soundPath, data.runningLateThreshold));
 
                 m_EventHandler.reset(new TEventHandler(*m_MsgHandler, *m_TKController, m_DisplayOptionsDialogCmd));
-                m_MainFrame.reset(new TMainFrame(*m_EventHandler, canCreateTaskbar && data.trayIcon));
+                m_MainFrame.reset(new TMainFrame(*m_EventHandler, *m_Utils, canCreateTaskbar && data.trayIcon));
                 m_MainFramePres.reset(new TMainFramePres(*m_MainFrame, *m_TKController, *m_EventHandler));
 
                 if (canCreateTaskbar && data.trayIcon)

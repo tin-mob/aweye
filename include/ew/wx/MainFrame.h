@@ -38,13 +38,14 @@ namespace EW {
 
 class AbstractEventHandler;
 class AbstractOptionsDialogPres;
+class AbstractUtils;
 
 namespace WX {
 
 class MainFrame: public wxFrame, public AbstractMainFrame
 {
     public:
-        MainFrame(AbstractEventHandler& hdlr,
+        MainFrame(AbstractEventHandler& hdlr, AbstractUtils& utils,
                     bool taskBarCreated = true, wxWindow* parent = nullptr, wxWindowID id = -1);
         virtual ~MainFrame();
 

@@ -20,6 +20,7 @@
 ///@todo webcam path
 
 #include "ew/AbstractEventHandler.h"
+#include "ew/AbstractUtils.h"
 #include "ew/wx/AboutDialog.h"
 #include "ew/wx/MainFrame.h"
 #include "ew/wx/wx_pch.h"
@@ -83,7 +84,7 @@ BEGIN_EVENT_TABLE(MainFrame,wxFrame)
     //*)
 END_EVENT_TABLE()
 
-MainFrame::MainFrame(AbstractEventHandler& hdlr,
+MainFrame::MainFrame(AbstractEventHandler& hdlr, AbstractUtils& utils,
                          bool taskBarCreated, wxWindow* parent, wxWindowID id) :
                          m_EventHandler(hdlr), m_TaskBarCreated(taskBarCreated)
 {
@@ -97,7 +98,7 @@ MainFrame::MainFrame(AbstractEventHandler& hdlr,
     wxBoxSizer* m_RunningBoxSizer;
     wxFlexGridSizer* m_MainFlexGridSizer;
     wxMenuItem* m_PauseMenuItem;
-    
+
     Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
     m_MainFlexGridSizer = new wxFlexGridSizer(0, 1, 0, 0);
     m_StatusLabel = new wxStaticText(this, ID_STATICTEXT9, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
@@ -151,13 +152,19 @@ MainFrame::MainFrame(AbstractEventHandler& hdlr,
     SetMenuBar(m_EwMenuBar);
     m_MainFlexGridSizer->Fit(this);
     m_MainFlexGridSizer->SetSizeHints(this);
-    
+
     Connect(ID_STARTMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnPlayButtonClick);
     Connect(ID_PAUSEMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnPauseButtonClick);
     Connect(ID_OPTIONSMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnOptionsButtonClick);
     Connect(ID_ABOUTMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnAbout);
     Connect(ID_EXITMENUITEM,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&MainFrame::OnQuit);
     //*)
+
+    Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&MainFrame::OnClose);
+
+    wxIcon FrameIcon;
+    FrameIcon.CopyFromBitmap(wxBitmap(wxImage(utils.getDataPath("icons/webcam.ico"))));
+    SetIcon(FrameIcon);
 }
 
 MainFrame::~MainFrame()

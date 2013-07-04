@@ -27,20 +27,23 @@
 namespace EW
 {
 class AbstractEventHandler;
+class AbstractUtils;
 class MainFrameStub : public AbstractMainFrame
 {
     public:
-        MainFrameStub(AbstractEventHandler* hdlr = nullptr,
+        MainFrameStub(AbstractEventHandler* hdlr = nullptr, AbstractUtils* utils = nullptr,
             bool tc = true) :
             m_Closed(false), m_Shown(false), m_Status(""),
             m_OnClock(""), m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
-            m_PauseLabel(""), m_StartLabel(""), m_EventHandler(hdlr), m_TaskBarCreated(tc) {}
+            m_PauseLabel(""), m_StartLabel(""), m_EventHandler(hdlr),
+            m_Utils(utils), m_TaskBarCreated(tc) {}
 
-        MainFrameStub(AbstractEventHandler& hdlr,
+        MainFrameStub(AbstractEventHandler& hdlr, AbstractUtils& utils,
             bool tc = true) :
             m_Closed(false), m_Shown(false), m_Status(""),
             m_OnClock(""), m_OffClock(""), m_RunningClock(""), m_LeftClock(""),
-            m_PauseLabel(""), m_StartLabel(""), m_EventHandler(&hdlr), m_TaskBarCreated(tc) {}
+            m_PauseLabel(""), m_StartLabel(""), m_EventHandler(&hdlr),
+            m_Utils(&utils), m_TaskBarCreated(tc) {}
 
         virtual ~MainFrameStub() {}
 
@@ -68,6 +71,7 @@ class MainFrameStub : public AbstractMainFrame
         std::string m_StartLabel;
 
         AbstractEventHandler* m_EventHandler;
+        AbstractUtils* m_Utils;
         bool m_TaskBarCreated;
 
         virtual void setPauseButtonLabel(std::string label) {m_PauseLabel = label;}

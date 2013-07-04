@@ -178,6 +178,7 @@ SUITE(TestBuilder)
         CHECK_EQUAL(builder.links.m_DisplayOptionsDialogCmd, builder.links.m_EventHandler->m_DisplayOptionsDialog);
 
         CHECK_EQUAL(builder.links.m_EventHandler, builder.links.m_MainFrame->m_EventHandler);
+        CHECK_EQUAL(builder.links.m_Utils, builder.links.m_MainFrame->m_Utils);
         CHECK_EQUAL(true, builder.links.m_MainFrame->m_TaskBarCreated);
 
         CHECK_EQUAL(builder.links.m_MainFrame, builder.links.m_MainFramePres->m_View);
