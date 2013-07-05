@@ -45,12 +45,11 @@ namespace EW
 {
 struct BuilderFixture
 {
-    BuilderFixture() : configPath("configPath"), dataDir("dataDir") {}
+    BuilderFixture() : configPath("configPath") {}
     ~BuilderFixture() {}
 
     SetTopWindowStub setTop;
     std::string configPath;
-    std::string dataDir;
 };
 
 template <>
@@ -123,7 +122,7 @@ SUITE(TestBuilder)
             ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
             TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
             PresHdlrConfigObserverStub, TKCtrlConfigObserverStub, UtilsStub>
-            builder(&setTop, configPath, dataDir, true, OptionsDialogStub::IdOK);
+            builder(&setTop, configPath, true, OptionsDialogStub::IdOK);
 
         CHECK_EQUAL(false, builder.links.m_MsgHandler == nullptr);
         CHECK_EQUAL(false, builder.links.m_ConfigImpl == nullptr);
@@ -191,8 +190,6 @@ SUITE(TestBuilder)
         CHECK_EQUAL(builder.links.m_TKController, builder.links.m_TaskBarPres->m_TKController);
         CHECK_EQUAL(builder.links.m_EventHandler, builder.links.m_TaskBarPres->m_EventHandler);
 
-        CHECK_EQUAL(dataDir, builder.links.m_Utils->m_DataDir);
-
         CHECK_EQUAL(builder.links.m_MainFrame, setTop.m_Frame);
 
         CHECK_EQUAL(builder.links.m_PresenceHandler, &builder.links.m_PresHdlrConfigObserver->m_PresenceHandler);
@@ -209,7 +206,7 @@ SUITE(TestBuilder)
             ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
             TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
             PresHdlrConfigObserverStub, TKCtrlConfigObserverStub, UtilsStub>
-            builder(&setTop, configPath, dataDir, true, OptionsDialogStub::IdOK);
+            builder(&setTop, configPath, true, OptionsDialogStub::IdOK);
         const ConfigData data = builder.links.m_Config->getData();
         TestPresenceHandler<MsgHandlerStub, ConfigImplStub, ConfigStub, PresenceHandlerProcStub,
             TimeHandlerStub, TimeKeeperStub, TimerStub, TKControllerStub, EventHandlerStub,
@@ -226,7 +223,7 @@ SUITE(TestBuilder)
             ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
             TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
             PresHdlrConfigObserverStub, TKCtrlConfigObserverStub, UtilsStub>
-            builder(&setTop, configPath, dataDir, false, OptionsDialogStub::IdOK);
+            builder(&setTop, configPath, false, OptionsDialogStub::IdOK);
         CHECK_EQUAL(true, builder.links.m_TaskBarPres == nullptr);
         CHECK_EQUAL(true, builder.links.m_TaskBar == nullptr);
     }
@@ -238,7 +235,7 @@ SUITE(TestBuilder)
             ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
             TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
             PresHdlrConfigObserverStub, TKCtrlConfigObserverStub, UtilsStub>
-            builder(&setTop, configPath, dataDir, true, OptionsDialogStub::IdOK);
+            builder(&setTop, configPath, true, OptionsDialogStub::IdOK);
         CHECK_EQUAL(true, builder.links.m_OptionsPres->m_Displayed);
     }
 
@@ -252,7 +249,7 @@ SUITE(TestBuilder)
             ViewPresStub<AbstractMainFrame>, MainFrameStub, ViewPresStub<AbstractTaskBar>,
             TaskBarStub, OptionsDialogPresStub, OptionsDialogStub, TKConfigObserverStub,
             PresHdlrConfigObserverStub, TKCtrlConfigObserverStub, UtilsStub>
-            builder(&setTop, configPath, dataDir, true, OptionsDialogStub::IdOK + 1);
+            builder(&setTop, configPath, true, OptionsDialogStub::IdOK + 1);
         }
         catch (InvalidConfigFileException)
         {

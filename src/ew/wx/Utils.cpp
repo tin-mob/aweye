@@ -17,10 +17,9 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-///@todo maybe use a path list instead + add path in debug instead
-/// of having a program argument...
 
 
+#include "CMakeDefines.h"
 #include "ew/wx/Utils.h"
 
 #include <string>
@@ -30,14 +29,25 @@
 
 namespace EW { namespace WX {
 
-Utils::Utils(std::string dataDir) : m_DataDir(dataDir)
+Utils::Utils()
 {
-    //ctor
+    m_DataDirs.Add(wxT("data/"));
+
+    #ifdef EW_DATA_DIR
+        m_DataDirs.Add(wxT(EW_DATA_DIR));
+    #endif
+
+    #ifndef NDEBUG
+    #ifdef EW_SRC_BASE
+        std::string path = EW_SRC_BASE;
+        path += "/data/";
+        m_DataDirs.Add(path);
+    #endif
+    #endif
 }
 
 Utils::~Utils()
 {
-    //dtor
 }
 
 bool Utils::fileExists(std::string name) const
@@ -50,38 +60,9 @@ bool Utils::fileExists(std::string name) const
     return false;
 }
 
-std::string joinPath(wxString firstStr, wxString secondStr)
-{
-    wxFileName first(firstStr, "");
-    const wxFileName second(secondStr);
-
-    const wxArrayString secDirs = second.GetDirs();
-
-    for (int i = 0; i < secDirs.GetCount(); ++i)
-    {
-        first.AppendDir(secDirs[i]);
-    }
-    first.SetFullName(second.GetFullName());
-    return std::string(first.GetFullPath());
-}
-
 std::string Utils::getDataPath(std::string item) const
 {
-    if (wxFileName(item).IsAbsolute())
-    {
-        return item;
-    }
-    else
-    {
-        if (m_DataDir == "")
-        {
-            return joinPath(std::string(wxStandardPaths::Get().GetDataDir()), item);
-        }
-        else
-        {
-            return joinPath(m_DataDir, item);
-        }
-    }
+    return std::string(m_DataDirs.FindAbsoluteValidPath(item));
 }
 
 }}

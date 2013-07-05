@@ -35,7 +35,6 @@ TKStateAway::~TKStateAway()
 {
 }
 
-///@todo almost the same as TKStateHere...
 void TKStateAway::updateStatus(TimeKeeper& parent, bool isHere)
 {
     if (isHere)

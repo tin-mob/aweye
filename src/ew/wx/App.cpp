@@ -17,9 +17,8 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-/// @todo run from Code::Blocks add data path option
 
-#include "CMakeDefines.h"
+
 #include "ew/Builder.h"
 #include "ew/Config.h"
 #include "ew/ConfigObservers.h"
@@ -85,9 +84,6 @@ namespace WX {
 
 App::App() : m_AppImpl(nullptr)
 {
-    #ifdef EW_DATA_DIR
-        m_DataPath = EW_DATA_DIR;
-    #endif
 }
 
 App::~App()
@@ -110,7 +106,7 @@ bool App::OnInit()
                 EventHandler, MainFramePres, MainFrame, TaskBarPres, TaskBar,
                 OptionsDialogPres, OptionsDialog, TKConfigObserver,
                 PresHdlrConfigObserver, EWPresConfigObserver, Utils>
-                (this, std::string(m_ConfigPath), std::string(m_DataPath), wxTaskBarIcon::IsAvailable(), wxID_OK));
+                (this, std::string(m_ConfigPath), wxTaskBarIcon::IsAvailable(), wxID_OK));
     	}
     }
     return wxsOK;
@@ -121,16 +117,12 @@ void App::OnInitCmdLine(wxCmdLineParser& parser)
     parser.AddOption(wxT("c"),wxT("config"),
                      _("Use a specific configuration file."),
                      wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL);
-    parser.AddOption(wxT("d"),wxT("data"),
-                     _("Use a specific data path."),
-                     wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL);
     parser.SetSwitchChars (wxT("-"));
 }
 
 bool App::OnCmdLineParsed(wxCmdLineParser& parser)
 {
     parser.Found(wxT("c"), &m_ConfigPath);
-    parser.Found(wxT("d"), &m_DataPath);
     return true;
 }
 

@@ -20,5 +20,5 @@
 ########################################################################
 
 from subprocess import call
-call(["./EyesWatcher", "-c", "${CONFIG_PATH}", "-d", "${DATA_DIR}"])
+call(["./EyesWatcher", "-c", "${CONFIG_PATH}"])
 

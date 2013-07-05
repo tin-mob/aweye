@@ -22,19 +22,20 @@
 #define UTILSIMPL_H
 
 #include "ew/AbstractUtils.h"
+#include <wx/filefn.h>
 
 namespace EW { namespace WX {
 
 class Utils : public AbstractUtils
 {
     public:
-        Utils(std::string dataDir = "");
+        Utils();
         virtual ~Utils();
         virtual bool fileExists(std::string name) const;
         virtual std::string getDataPath(std::string item) const;
     protected:
     private:
-        std::string m_DataDir;
+        wxPathList m_DataDirs;
 };
 }}
 

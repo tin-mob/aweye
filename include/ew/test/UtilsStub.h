@@ -23,12 +23,14 @@
 
 #include "ew/AbstractUtils.h"
 
+#include <string>
+
 namespace EW {
 
 class UtilsStub : public AbstractUtils
 {
     public:
-        UtilsStub(std::string dataDir = "") : m_FailName(""), m_DataDir(dataDir) {}
+        UtilsStub() : m_FailName(""), m_DataDir("") {}
         virtual ~UtilsStub() {}
 
         virtual bool fileExists(std::string name) const

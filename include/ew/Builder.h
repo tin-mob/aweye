@@ -89,13 +89,13 @@ template <class TMsgHandler, class TConfigImpl, class TConfig, class TPresenceHa
 class Builder
 {
     public:
-        Builder(SetTopWindowInt* topInt, std::string configPath, std::string dataPath, bool canCreateTaskbar, int idOk) :
+        Builder(SetTopWindowInt* topInt, std::string configPath, bool canCreateTaskbar, int idOk) :
             m_MainFrame(nullptr)
         {
             m_MsgHandler.reset(new TMsgHandler());
             try
             {
-                m_Utils.reset(new TUtils(dataPath));
+                m_Utils.reset(new TUtils());
 
                 m_ConfigImpl.reset(new TConfigImpl(configPath));
                 m_Config.reset(new TConfig(*m_ConfigImpl, *m_Utils));

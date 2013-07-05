@@ -17,7 +17,7 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-///@todo paths
+
 
 #include "ew/ConfigData.h"
 

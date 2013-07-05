@@ -83,7 +83,6 @@ class App : public wxApp, public SetTopWindowInt
             m_AppImpl;
 
         wxString m_ConfigPath;
-        wxString m_DataPath;
 };
 }}
 
