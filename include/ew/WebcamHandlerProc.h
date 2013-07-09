@@ -17,33 +17,44 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
+///@todo private inheritance for fields?
 
 
 #ifndef WEBCAMHANDLERPROC_H
 #define WEBCAMHANDLERPROC_H
 
 #include "ew/AbstractPresenceHandler.h"
+#include "ew/TaskCaller.h"
+#include "ew/Subject.h"
+
 #include <functional>
+#include <memory>
 
 namespace EW {
 
 class AbstractUtils;
-class WebcamHandlerProc : public AbstractPresenceHandler
+enum class IsHereCmdRetCode;
+struct TaskContext;
+class TaskExceptionObserver;
+class WebcamHandlerProc : public AbstractPresenceHandler, public TaskCaller,
+    public Subject<TaskExceptionObserver, std::exception_ptr>
 {
     public:
         WebcamHandlerProc(AbstractUtils& utils,
-            std::function<void (std::function<void (bool)>, std::string)> cmd,
+            std::function<void (std::shared_ptr<const TaskContext> context)> cmd,
             int index, std::string faceCascadeName, int faceSizeX, int faceSizeY);
         ~WebcamHandlerProc();
 
         virtual void isHere(std::function<void (bool)> callBack);
+        virtual void onTaskEnded(int status, std::shared_ptr<const TaskContext> context);
         virtual void setCascade(std::string name);
         virtual void setIndex(int index);
         virtual void setFaceSize(unsigned int x, unsigned int y);
     protected:
     private:
         AbstractUtils& m_Utils;
-        std::function<void (std::function<void (bool)>, std::string)> m_Cmd;
+        std::function<void (std::shared_ptr<const TaskContext> context)> m_Cmd;
+
         int m_index;
         std::string m_FaceCascadeName;
         int m_FaceSizeX;

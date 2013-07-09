@@ -21,54 +21,35 @@
 /// https://groups.google.com/forum/#!topic/wx-users/tFXaa5N-yc0
 /// http://trac.wxwidgets.org/ticket/10258
 /// sigh...
+///@todo test if this works in windows
 
-#include "ew/AbstractPresenceHandler.h"
-#include "ew/IsHereCmd.h"
-#include "ew/wx/IsHereProcess.h"
+#include "ew/TaskCaller.h"
+#include "ew/TaskContext.h"
+#include "ew/wx/Task.h"
+
+#include <memory>
 
 namespace EW { namespace WX {
 
-IsHereProcess::IsHereProcess(std::function<void (bool)> callBack) :
-    m_CallBack(callBack)
+Task::Task( std::shared_ptr<const TaskContext> context) : m_Context(context)
 {
-
 }
-IsHereProcess::~IsHereProcess()
+Task::~Task()
 {
-
 }
 
-void IsHereProcess::run(std::function<void (bool)> callBack, std::string cmd)
+void Task::run(std::shared_ptr<const TaskContext> context)
 {
-    IsHereProcess* process = new IsHereProcess(callBack);
-    wxExecute(cmd, wxEXEC_ASYNC, process);
+    Task* task = new Task(context);
+    wxExecute(context->m_Command, wxEXEC_ASYNC, task);
 }
 
-void IsHereProcess::OnTerminate(int pid, int status)
+void Task::OnTerminate(int pid, int status)
 {
-    auto callBack = m_CallBack;
+    std::shared_ptr<const TaskContext> context = m_Context;
 
     // cannot use this after this
     delete this;
-
-    IsHereCmdRetCode code = (IsHereCmdRetCode)status;
-    switch (code)
-    {
-        case IsHereCmdRetCode::INVALID_CAMERA:
-            throw InvalidCameraException();
-        case IsHereCmdRetCode::INVALID_CASCADE:
-            throw MissingCascadeFileException();
-        case IsHereCmdRetCode::INVALID_FACEX:
-        case IsHereCmdRetCode::INVALID_FACEY:
-        case IsHereCmdRetCode::INVALID_INDEX:
-        case IsHereCmdRetCode::INVALID_NB_ARGS:
-        case IsHereCmdRetCode::OTHER_ERROR:
-            assert(false);
-            throw GenericPresenceHandlerException();
-        default:
-            break;
-    }
-
-    callBack(code == IsHereCmdRetCode::HERE);
+    context->m_Caller.onTaskEnded(status, context);
 }
 }}

@@ -53,6 +53,8 @@ class AbstractPresenceHandler
     public:
         virtual ~AbstractPresenceHandler() {}
         virtual void isHere(std::function<void (bool)> callBack) = 0;
+
+        ///@todo this is specific to webcam - create another interface when required
         virtual void setCascade(std::string name) = 0;
         virtual void setIndex(int index) = 0;
         virtual void setFaceSize(unsigned int x, unsigned int y) = 0;

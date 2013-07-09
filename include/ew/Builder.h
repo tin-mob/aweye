@@ -38,7 +38,7 @@ struct PtrTraits
 
 // factory to allow creation with differents parameters with default version
 // limitation - order of creation is not garanteed
-// (thinking about how to do that was interresting...)
+// (thinking about how to do that was interesting...)
 template <class TPresenceHandler>
 struct PresenceHandlerFactory
 {
@@ -47,6 +47,15 @@ struct PresenceHandlerFactory
     {
         return new TPresenceHandler(data.webcamIndex, data.cascadePath,
             data.faceSizeX, data.faceSizeY);
+    }
+};
+
+// this vs builder param?
+template <class TPresenceHandler, class TTKController>
+struct TaskExceptionLinker
+{
+    static void link(TPresenceHandler& p, TTKController& c)
+    {
     }
 };
 
@@ -127,6 +136,8 @@ class Builder
                 m_TKController.reset(new TTKController(*m_MsgHandler,
                     *m_TimeKeeper, *m_ClockTimer, *m_TimeHandler, *m_Utils, data.popupAlarm,
                     data.soundAlarm, data.soundPath, data.runningLateThreshold));
+
+                TaskExceptionLinker<TPresenceHandler,TTKController>::link(*m_PresenceHandler, *m_TKController);
 
                 m_EventHandler.reset(new TEventHandler(*m_MsgHandler, *m_TKController, m_DisplayOptionsDialogCmd));
                 m_MainFrame.reset(new TMainFrame(*m_EventHandler, *m_Utils, canCreateTaskbar && data.trayIcon));

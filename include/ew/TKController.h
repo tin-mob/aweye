@@ -27,8 +27,10 @@
 #include "ew/AbstractTimer.h"
 #include "ew/AbstractTKController.h"
 #include "ew/AbstractUtils.h"
+#include "ew/TaskExceptionObserver.h"
 
 #include <boost/date_time/posix_time/posix_time_types.hpp>
+#include <exception>
 #include <string>
 
 namespace EW {
@@ -36,7 +38,7 @@ namespace EW {
 class AbstractMsgHandler;
 class AbstractTimeHandler;
 class AbstractTimeKeeper;
-class TKController : public AbstractTKController, public TimerInterface
+class TKController : public AbstractTKController, public TimerInterface, public TaskExceptionObserver
 {
     public:
         TKController(AbstractMsgHandler& msgHandler, AbstractTimeKeeper& keeper,
@@ -69,6 +71,8 @@ class TKController : public AbstractTKController, public TimerInterface
         virtual void setPopupAlarm(bool popupAlarm);
         virtual void setSoundAlarm(bool soundAlarm);
         virtual void setSoundPath(std::string soundPath);
+
+        virtual void onException(const std::exception_ptr exception);
 
     protected:
     private:

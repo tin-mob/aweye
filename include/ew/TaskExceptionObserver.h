@@ -18,28 +18,20 @@
 
  **************************************************************/
 
-#ifndef ISHEREPROCESS_H
-#define ISHEREPROCESS_H
 
-#include <functional>
-#include <string>
-#include <wx/process.h>
+#ifndef TASKEXCEPTIONOBSERVER_H
+#define TASKEXCEPTIONOBSERVER_H
 
-namespace EW { namespace WX {
+#include <exception>
 
-// delete itself after usage
-class IsHereProcess : public wxProcess
+namespace EW {
+
+class TaskExceptionObserver
 {
     public:
-        static void run(std::function<void (bool)> callBack, std::string cmd);
-        virtual void OnTerminate(int pid, int status);
-
+        virtual void onException(const std::exception_ptr exception) = 0;
     private:
-        IsHereProcess(std::function<void (bool)> callBack);
-        virtual ~IsHereProcess();
-
-        std::function<void (bool)> m_CallBack;
 };
-}}
+}
 
-#endif // ISHEREPROCESS_H
+#endif // TASKEXCEPTIONOBSERVER_H

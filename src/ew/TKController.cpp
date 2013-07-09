@@ -61,9 +61,9 @@ void TKController::start()
         notify(&TKControllerObserver::OnStatusUpdate);
         m_ClockTimer.startTimer(1000, false);
     }
-    catch (BaseException e)
+    catch (...)
     {
-        m_MsgHandler.displayError(e.what());
+        onException(std::current_exception());
     }
 }
 
@@ -109,10 +109,9 @@ void TKController::onTimerRing(AbstractTimer*)
             notify(&TKControllerObserver::OnTimeUpdate);
         }
     }
-    catch (BaseException e)
+    catch (...)
     {
-        m_MsgHandler.displayError(e.what());
-        m_TimeKeeper.stop();
+        onException(std::current_exception());
     }
 }
 
@@ -131,6 +130,22 @@ void TKController::toggleStart()
     else
     {
         start();
+    }
+}
+
+///@note convert to real shared_ptr to remove silly try?
+/// No, it allows to Exception not derived from BaseException
+/// to stop the app.
+void TKController::onException(const std::exception_ptr exception)
+{
+    try
+    {
+        std::rethrow_exception(exception);
+    }
+    catch (BaseException e)
+    {
+        stop();
+        m_MsgHandler.displayError(e.what());
     }
 }
 

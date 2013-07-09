@@ -33,7 +33,7 @@
 #include "ew/WebcamHandlerProc.h"
 #include "ew/wx/App.h"
 #include "ew/wx/ConfigImpl.h"
-#include "ew/wx/IsHereProcess.h"
+#include "ew/wx/Task.h"
 #include "ew/wx/MainFrame.h"
 #include "ew/wx/MsgHandler.h"
 #include "ew/wx/Timer.h"
@@ -71,12 +71,22 @@ struct PresenceHandlerFactory<WebcamHandlerProc>
     template <class TBuilder>
     static WebcamHandlerProc* create(TBuilder& b, const ConfigData& data)
     {
-        auto cmd = [] (std::function<void (bool)> callback, std::string cmd)
+        auto cmd = [] (std::shared_ptr<const TaskContext> context)
         {
-            WX::IsHereProcess::run(callback, cmd);
+            WX::Task::run(context);
         };
         return new WebcamHandlerProc(*(b.m_Utils), cmd, data.webcamIndex, data.cascadePath,
             data.faceSizeX, data.faceSizeY);
+    }
+};
+
+// this vs builder param?
+template <class TTKController>
+struct TaskExceptionLinker<WebcamHandlerProc, TTKController>
+{
+    static void link(WebcamHandlerProc& p, TTKController& c)
+    {
+        p.attach(&c);
     }
 };
 
