@@ -25,6 +25,7 @@
 
 #include "ew/AbstractPresenceHandler.h"
 #include "ew/TaskCaller.h"
+#include "ew/TaskContext.h"
 #include "ew/Subject.h"
 
 #include <functional>
@@ -34,7 +35,6 @@ namespace EW {
 
 class AbstractUtils;
 enum class IsHereCmdRetCode;
-struct TaskContext;
 class TaskExceptionObserver;
 class WebcamHandlerProc : public AbstractPresenceHandler, public TaskCaller,
     public Subject<TaskExceptionObserver, std::exception_ptr>
@@ -59,6 +59,18 @@ class WebcamHandlerProc : public AbstractPresenceHandler, public TaskCaller,
         std::string m_FaceCascadeName;
         int m_FaceSizeX;
         int m_FaceSizeY;
+};
+
+struct IsHereTaskContext : public TaskContext
+{
+    IsHereTaskContext(std::string command, TaskCaller& caller,
+                      std::function<void (bool)> timeKeeperCallback) :
+        TaskContext(command, caller), m_TimeKeeperCallback(timeKeeperCallback)
+    {
+    }
+    virtual ~IsHereTaskContext() {}
+
+    std::function<void (bool)> m_TimeKeeperCallback;
 };
 }
 

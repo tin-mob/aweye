@@ -158,7 +158,7 @@ class Builder
                     topInt->setTopWindow(&*m_MainFrame);
                 }
             }
-            catch (BaseException e)
+            catch (const BaseException& e)
             {
                 m_MsgHandler->displayError(e.what());
                 throw;

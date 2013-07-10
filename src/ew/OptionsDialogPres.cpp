@@ -43,7 +43,7 @@ bool OptionsDialogPres::saveData(const ConfigData& data)
     {
         m_Config.save(data);
     }
-    catch (BaseException e)
+    catch (const BaseException& e)
     {
         m_MsgHandler.displayError(e.what());
         return false;

@@ -75,7 +75,10 @@ class TimeKeeperStub : public AbstractTimeKeeper
 
         virtual void start()
         {
-            if (m_Fail) { throw BaseException("Testing!"); }
+            if (m_Fail)
+            {
+                throw BaseException("Testing!");
+            }
             m_Status = AbstractTimeKeeper::HERE;
         }
         virtual void stop() {m_Status = AbstractTimeKeeper::OFF;}

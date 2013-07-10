@@ -19,20 +19,37 @@
  **************************************************************/
 
 
-#ifndef TASKEXCEPTIONOBSERVER_H
-#define TASKEXCEPTIONOBSERVER_H
+#ifndef TASKEXCEPTIONOBSERVERSTUB_H
+#define TASKEXCEPTIONOBSERVERSTUB_H
+
+#include "ew/BaseException.h"
+#include "ew/TaskExceptionObserver.h"
 
 #include <exception>
 
 namespace EW {
 
-class TaskExceptionObserver
+class TaskExceptionObserverStub : public TaskExceptionObserver
 {
     public:
-        virtual ~TaskExceptionObserver() {}
-        virtual void onException(const std::exception_ptr exception) = 0;
+        TaskExceptionObserverStub() : what("") {}
+        virtual ~TaskExceptionObserverStub() {}
+        virtual void onException(const std::exception_ptr exception)
+        {
+            try
+            {
+                std::rethrow_exception(exception);
+            }
+            catch (const BaseException& e)
+            {
+                what = e.what();
+            }
+        }
+        std::string what;
+
+    protected:
     private:
 };
 }
 
-#endif // TASKEXCEPTIONOBSERVER_H
+#endif // TASKEXCEPTIONOBSERVERSTUB_H

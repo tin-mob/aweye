@@ -62,18 +62,6 @@ void WebcamHandlerProc::setFaceSize(unsigned int x, unsigned int y)
     m_FaceSizeY = y;
 }
 
-struct IsHereTaskContext : public TaskContext
-{
-    IsHereTaskContext(std::string command, TaskCaller& caller,
-                      std::function<void (bool)> timeKeeperCallback) :
-        TaskContext(command, caller), m_TimeKeeperCallback(timeKeeperCallback)
-    {
-    }
-    virtual ~IsHereTaskContext() {}
-
-    std::function<void (bool)> m_TimeKeeperCallback;
-};
-
 ///@note IsHereCmd in same path than main executable,
 void WebcamHandlerProc::isHere(std::function<void (bool)> callBack)
 {
@@ -95,7 +83,6 @@ void WebcamHandlerProc::onTaskEnded(int status, std::shared_ptr<const TaskContex
     const IsHereTaskContext* isHereContext = dynamic_cast<const IsHereTaskContext*>(&*context);
     if (isHereContext == nullptr)
     {
-        assert(false);
         notify(&TaskExceptionObserver::onException, std::make_exception_ptr(GenericPresenceHandlerException()));
     }
     else
@@ -120,7 +107,6 @@ void WebcamHandlerProc::onTaskEnded(int status, std::shared_ptr<const TaskContex
             case IsHereCmdRetCode::INVALID_INDEX:
             case IsHereCmdRetCode::INVALID_NB_ARGS:
             case IsHereCmdRetCode::OTHER_ERROR:
-                assert(false);
                 notify(&TaskExceptionObserver::onException, std::make_exception_ptr(GenericPresenceHandlerException()));
                 break;
             default:

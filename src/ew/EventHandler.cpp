@@ -58,7 +58,7 @@ void EventHandler::OnViewOptionsButtonClick()
     {
         m_DisplayOptionsDialog();
     }
-    catch (BaseException e)
+    catch (const BaseException& e)
     {
         m_MsgHandler.displayError(e.what());
     }

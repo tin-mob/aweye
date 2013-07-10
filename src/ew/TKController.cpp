@@ -142,7 +142,7 @@ void TKController::onException(const std::exception_ptr exception)
     {
         std::rethrow_exception(exception);
     }
-    catch (BaseException e)
+    catch (const BaseException& e)
     {
         stop();
         m_MsgHandler.displayError(e.what());

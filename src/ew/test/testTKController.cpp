@@ -79,13 +79,16 @@ SUITE(TestTKController)
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
         CHECK_EQUAL(clockTimer.m_Running, 0);
         CHECK_EQUAL(viewObserver.checkStatUpdated(), true);
+    }
 
+    TEST_FIXTURE(TKControllerFixture, TestStartFail)
+    {
         keeper.m_Fail = true;
         CHECK_EQUAL(msgHandler.m_LastError, "");
         controller.toggleStart();
         CHECK_EQUAL(keeper.getStatus(), AbstractTimeKeeper::OFF);
         CHECK_EQUAL(clockTimer.m_Running, 0);
-        CHECK_EQUAL(viewObserver.checkStatUpdated(), false);
+        CHECK_EQUAL(viewObserver.checkStatUpdated(), true);
         CHECK_EQUAL(msgHandler.m_LastError, "Testing!");
     }
 

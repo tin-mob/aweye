@@ -26,7 +26,6 @@ namespace EW {
 
 enum class IsHereCmdRetCode
 {
-    NO_CODE = -1,
     AWAY,
     HERE,
     INVALID_NB_ARGS,

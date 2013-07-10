@@ -17,9 +17,12 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-// the testing code is bigger and more complicated than the tested code...
 
+
+#include "ew/IsHereCmd.h"
+#include "ew/TaskContext.h"
 #include "ew/WebcamHandlerProc.h"
+#include "ew/test/TaskExceptionObserverStub.h"
 #include "ew/test/UtilsStub.h"
 
 #include <functional>
@@ -33,53 +36,44 @@ namespace EW {
 
 struct WebcamHandlerProcFixture
 {
-    WebcamHandlerProcFixture() : utils(),
-        cmd( [this] (std::function<void (bool)> callback, std::string cmdStr)
+    WebcamHandlerProcFixture() : utils(), index(1), cascade("cascade"),
+        faceX(2), faceY(3), commandString(""),
+        cmd( [this] (std::shared_ptr<const TaskContext> context)
         {
-            callback(true);
-            returnedCmdStr = cmdStr;
-        }) , returnedCmdStr("")
+            commandString = context->m_Command;
+        }),
+        handler(utils, cmd, index, cascade, faceX, faceY)
     {
     }
     ~WebcamHandlerProcFixture() {}
 
     UtilsStub utils;
-    std::function<void (std::function<void (bool)>, std::string)> cmd;
-    std::string returnedCmdStr;
+    int index;
+    std::string cascade;
+    unsigned int faceX;
+    unsigned int faceY;
+
+    std::string commandString;
+    std::function<void (std::shared_ptr<const TaskContext> context)> cmd;
+    WebcamHandlerProc handler;
 };
 
 SUITE(TestWebcamHandlerProc)
 {
     TEST_FIXTURE(WebcamHandlerProcFixture, TestCmd)
     {
-        int index = 1;
-        std::string cascade = "cascade";
-        unsigned int faceX = 2;
-        unsigned int faceY = 3;
-        WebcamHandlerProc handler(utils, cmd, index, cascade, faceX, faceY);
-
-        bool callbackCalled = false;
-        auto callback = [&] (bool) {callbackCalled = true;};
+        auto callback = [&] (bool) {};
         handler.isHere(callback);
-
-        CHECK_EQUAL(true, callbackCalled);
 
         std::ostringstream s;
         s  << "./IsHereCmd '" << index << "' '" << cascade << "' '"
             << faceX << "' '" << faceY << "'";
-        CHECK_EQUAL(s.str(), returnedCmdStr);
+        CHECK_EQUAL(s.str(), commandString);
     }
 
-    TEST_FIXTURE(WebcamHandlerProcFixture, TestInvalidFile)
+    TEST_FIXTURE(WebcamHandlerProcFixture, TestCmdInvalidFile)
     {
-        int index = 1;
-        std::string cascade = "cascade";
-        unsigned int faceX = 2;
-        unsigned int faceY = 3;
-        WebcamHandlerProc handler(utils, cmd, index, cascade, faceX, faceY);
-
-        bool callbackCalled = false;
-        auto callback = [&] (bool) {callbackCalled = true;};
+        auto callback = [&] (bool) {};
 
         utils.m_FailName = cascade;
         bool trown = false;
@@ -92,8 +86,172 @@ SUITE(TestWebcamHandlerProc)
             trown = true;
         }
 
-        CHECK_EQUAL(false, callbackCalled);
         CHECK_EQUAL(true, trown);
+        CHECK_EQUAL("", commandString);
+    }
+
+    TEST_FIXTURE(WebcamHandlerProcFixture, TestCallbackHere)
+    {
+        bool called = false;
+        bool here = false;
+        auto callback = [&] (bool h) {here = h; called = true;};
+
+        std::shared_ptr<const IsHereTaskContext> context(new IsHereTaskContext("cmd", handler, callback));
+
+        handler.onTaskEnded((int)IsHereCmdRetCode::HERE, context);
+
+        CHECK_EQUAL(true, called);
+        CHECK_EQUAL(true, here);
+    }
+
+    TEST_FIXTURE(WebcamHandlerProcFixture, TestCallbackAway)
+    {
+        bool called = false;
+        bool here = false;
+        auto callback = [&] (bool h) {here = h; called = true;};
+
+        std::shared_ptr<const IsHereTaskContext> context(new IsHereTaskContext("cmd", handler, callback));
+
+        handler.onTaskEnded((int)IsHereCmdRetCode::AWAY, context);
+
+        CHECK_EQUAL(true, called);
+        CHECK_EQUAL(false, here);
+    }
+
+    TEST_FIXTURE(WebcamHandlerProcFixture, TestCallbackInvalidContext)
+    {
+        bool called = false;
+        bool here = false;
+        auto callback = [&] (bool h) {here = h; called = true;};
+
+        std::shared_ptr<const TaskContext> context(new TaskContext("cmd", handler));
+
+        TaskExceptionObserverStub observer;
+        handler.attach(&observer);
+
+        handler.onTaskEnded((int)IsHereCmdRetCode::AWAY, context);
+
+        CHECK_EQUAL(GenericPresenceHandlerException().what(), observer.what);
+        CHECK_EQUAL(false, called);
+    }
+
+    TEST_FIXTURE(WebcamHandlerProcFixture, TestCallbackInvalidNbArgs)
+    {
+        bool called = false;
+        bool here = false;
+        auto callback = [&] (bool h) {here = h; called = true;};
+
+        std::shared_ptr<const IsHereTaskContext> context(new IsHereTaskContext("cmd", handler, callback));
+
+        TaskExceptionObserverStub observer;
+        handler.attach(&observer);
+
+        handler.onTaskEnded((int)IsHereCmdRetCode::INVALID_NB_ARGS, context);
+
+        CHECK_EQUAL(GenericPresenceHandlerException().what(), observer.what);
+        CHECK_EQUAL(false, called);
+    }
+
+    TEST_FIXTURE(WebcamHandlerProcFixture, TestCallbackInvalidIndex)
+    {
+        bool called = false;
+        bool here = false;
+        auto callback = [&] (bool h) {here = h; called = true;};
+
+        std::shared_ptr<const IsHereTaskContext> context(new IsHereTaskContext("cmd", handler, callback));
+
+        TaskExceptionObserverStub observer;
+        handler.attach(&observer);
+
+        handler.onTaskEnded((int)IsHereCmdRetCode::INVALID_INDEX, context);
+
+        CHECK_EQUAL(GenericPresenceHandlerException().what(), observer.what);
+        CHECK_EQUAL(false, called);
+    }
+
+    TEST_FIXTURE(WebcamHandlerProcFixture, TestCallbackInvalidFaceX)
+    {
+        bool called = false;
+        bool here = false;
+        auto callback = [&] (bool h) {here = h; called = true;};
+
+        std::shared_ptr<const IsHereTaskContext> context(new IsHereTaskContext("cmd", handler, callback));
+
+        TaskExceptionObserverStub observer;
+        handler.attach(&observer);
+
+        handler.onTaskEnded((int)IsHereCmdRetCode::INVALID_FACEX, context);
+
+        CHECK_EQUAL(GenericPresenceHandlerException().what(), observer.what);
+        CHECK_EQUAL(false, called);
+    }
+
+    TEST_FIXTURE(WebcamHandlerProcFixture, TestCallbackInvalidFaceY)
+    {
+        bool called = false;
+        bool here = false;
+        auto callback = [&] (bool h) {here = h; called = true;};
+
+        std::shared_ptr<const IsHereTaskContext> context(new IsHereTaskContext("cmd", handler, callback));
+
+        TaskExceptionObserverStub observer;
+        handler.attach(&observer);
+
+        handler.onTaskEnded((int)IsHereCmdRetCode::INVALID_FACEY, context);
+
+        CHECK_EQUAL(GenericPresenceHandlerException().what(), observer.what);
+        CHECK_EQUAL(false, called);
+    }
+
+    TEST_FIXTURE(WebcamHandlerProcFixture, TestCallbackInvalidCascade)
+    {
+        bool called = false;
+        bool here = false;
+        auto callback = [&] (bool h) {here = h; called = true;};
+
+        std::shared_ptr<const IsHereTaskContext> context(new IsHereTaskContext("cmd", handler, callback));
+
+        TaskExceptionObserverStub observer;
+        handler.attach(&observer);
+
+        handler.onTaskEnded((int)IsHereCmdRetCode::INVALID_CASCADE, context);
+
+        CHECK_EQUAL(MissingCascadeFileException().what(), observer.what);
+        CHECK_EQUAL(false, called);
+    }
+
+    TEST_FIXTURE(WebcamHandlerProcFixture, TestCallbackInvalidCamera)
+    {
+        bool called = false;
+        bool here = false;
+        auto callback = [&] (bool h) {here = h; called = true;};
+
+        std::shared_ptr<const IsHereTaskContext> context(new IsHereTaskContext("cmd", handler, callback));
+
+        TaskExceptionObserverStub observer;
+        handler.attach(&observer);
+
+        handler.onTaskEnded((int)IsHereCmdRetCode::INVALID_CAMERA, context);
+
+        CHECK_EQUAL(InvalidCameraException().what(), observer.what);
+        CHECK_EQUAL(false, called);
+    }
+
+    TEST_FIXTURE(WebcamHandlerProcFixture, TestCallbackOtherError)
+    {
+        bool called = false;
+        bool here = false;
+        auto callback = [&] (bool h) {here = h; called = true;};
+
+        std::shared_ptr<const IsHereTaskContext> context(new IsHereTaskContext("cmd", handler, callback));
+
+        TaskExceptionObserverStub observer;
+        handler.attach(&observer);
+
+        handler.onTaskEnded((int)IsHereCmdRetCode::OTHER_ERROR, context);
+
+        CHECK_EQUAL(GenericPresenceHandlerException().what(), observer.what);
+        CHECK_EQUAL(false, called);
     }
 }
 }
