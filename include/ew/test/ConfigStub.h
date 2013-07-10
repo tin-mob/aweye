@@ -59,7 +59,7 @@ class ConfigStub : public AbstractConfig
             notify(&ConfigObserver::update, m_Data);
         }
 
-        static ConfigData getTestData()
+        static ConfigData getTestData(std::string path = "")
         {
             return {
                     ConfigData::default_WorkLength + boost::posix_time::seconds(1),
@@ -74,8 +74,8 @@ class ConfigStub : public AbstractConfig
                     ConfigData::default_WebcamIndex + 1,
                     ConfigData::default_FaceSizeX + 1,
                     ConfigData::default_FaceSizeY + 1,
-                    "test.cfg",
-                    "test.wav",
+                    path + "test.cfg",
+                    path + "test.wav",
                     ConfigData::default_CheckFreq + boost::posix_time::seconds(1),
                     !ConfigData::default_CummulPause
                 };

@@ -17,7 +17,7 @@
     along with Eyes Watcher.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-///@todo test utils path
+
 
 #include "ew/TKController.h"
 #include "ew/test/ConfigStub.h"
@@ -39,7 +39,7 @@ struct TKControllerFixture
 {
     public:
         TKControllerFixture() :
-            data(ConfigData::getDefault()),
+            utils("", "path/"), data(ConfigData::getDefault(utils.m_DataDir)),
             msgHandler(), timeHandler(), keeper(), clockTimer(),
             dialog(), viewObserver(),
             controller(TKController(msgHandler, keeper,
@@ -52,12 +52,12 @@ struct TKControllerFixture
         {
         }
 
+        UtilsStub utils;
         ConfigData data;
         MsgHandlerStub msgHandler;
         TimeHandlerStub timeHandler;
         TimeKeeperStub keeper;
         TimerStub clockTimer;
-        UtilsStub utils;
         OptionsDialogStub dialog;
         TKControllerObserverStub viewObserver;
         TKController controller;
@@ -243,21 +243,21 @@ SUITE(TestTKController)
 
     TEST_FIXTURE(TKControllerFixture, TestIconName)
     {
-        CHECK_EQUAL(controller.getIconName(), controller.m_StopWebcamIcon);
+        CHECK_EQUAL(controller.getIconName(), utils.getDataPath(controller.m_StopWebcamIcon));
 
         controller.toggleStart();
         keeper.m_WorkLeft = boost::posix_time::hours(1);
-        CHECK_EQUAL(controller.getIconName(), controller.m_GreenWebcamIcon);
+        CHECK_EQUAL(controller.getIconName(), utils.getDataPath(controller.m_GreenWebcamIcon));
 
         keeper.m_WorkLeft = boost::posix_time::seconds(1);
-        CHECK_EQUAL(controller.getIconName(), controller.m_YellowWebcamIcon);
+        CHECK_EQUAL(controller.getIconName(), utils.getDataPath(controller.m_YellowWebcamIcon));
 
         keeper.m_WorkLeft = boost::posix_time::seconds(0);
-        CHECK_EQUAL(controller.getIconName(), controller.m_RedWebcamIcon);
+        CHECK_EQUAL(controller.getIconName(), utils.getDataPath(controller.m_RedWebcamIcon));
 
         keeper.m_Status = AbstractTimeKeeper::AWAY;
         keeper.m_Left = boost::posix_time::seconds(0);
-        CHECK_EQUAL(controller.getIconName(), controller.m_GreenWebcamIcon);
+        CHECK_EQUAL(controller.getIconName(), utils.getDataPath(controller.m_GreenWebcamIcon));
     }
 
     TEST_FIXTURE(TKControllerFixture, TestUpdateTime)

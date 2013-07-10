@@ -30,7 +30,8 @@ namespace EW {
 class UtilsStub : public AbstractUtils
 {
     public:
-        UtilsStub() : m_FailName(""), m_DataDir("") {}
+        UtilsStub(std::string failName = "", std::string dataDir = "") :
+            m_FailName(failName), m_DataDir(dataDir) {}
         virtual ~UtilsStub() {}
 
         virtual bool fileExists(std::string name) const
