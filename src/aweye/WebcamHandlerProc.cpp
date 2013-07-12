@@ -110,7 +110,8 @@ void WebcamHandlerProc::onTaskEnded(int status, std::shared_ptr<const TaskContex
                 notify(&TaskExceptionObserver::onException, std::make_exception_ptr(GenericPresenceHandlerException()));
                 break;
             default:
-                assert(false);
+                // wxExecute is buggy, could happen...
+                //assert(false);
                 break;
         }
     }
