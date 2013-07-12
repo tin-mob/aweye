@@ -18,10 +18,20 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef MENUOBSERVER_H
+#define MENUOBSERVER_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+namespace Aweye {
+
+class MenuObserver
+{
+    public:
+        virtual ~MenuObserver() {}
+        virtual void onMenuDelete(int* caller) = 0;
+    protected:
+    private:
+};
+}
+
+#endif // MENUOBSERVER_H

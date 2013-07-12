@@ -18,10 +18,15 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#include "aweye/wx/ObservableMenu.h"
 
-#endif // BUILDDEFINES_H_INCLUDED
+namespace Aweye
+{
+
+ObservableMenu::~ObservableMenu()
+{
+    //dtor
+    notify(&ObservableMenuObserver::onMenuDelete, this);
+}
+}

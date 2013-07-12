@@ -18,10 +18,30 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef OBSERVABLEWXMENU_H
+#define OBSERVABLEWXMENU_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+#include "aweye/Subject.h"
+
+#include <wx/menu.h>
+
+namespace Aweye {
+class ObservableMenuObserver;
+class ObservableMenu : public wxMenu, public Subject<ObservableMenuObserver, ObservableMenu*>
+{
+    public:
+        virtual ~ObservableMenu();
+    protected:
+    private:
+};
+
+class ObservableMenuObserver  // yeah!
+{
+    public:
+        virtual ~ObservableMenuObserver() {}
+        virtual void onMenuDelete(ObservableMenu* menu) = 0;
+};
+}
+
+#endif // OBSERVABLEWXMENU_H

@@ -18,10 +18,37 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef TIMERSTUB_H
+#define TIMERSTUB_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+#include "aweye/AbstractTimer.h"
+
+namespace Aweye
+{
+class TimerStub : public AbstractTimer
+{
+    public:
+        TimerStub() : m_Running(0) {}
+        virtual ~TimerStub() {}
+        virtual bool startTimer(long total_milliseconds, bool oneShot)
+        {
+            m_Running = total_milliseconds;
+            return true;
+        }
+        virtual void stopTimer()
+        {
+            m_Running = 0;
+        }
+        void ring()
+        {
+            notify(&TimerInterface::onTimerRing, this);
+        }
+
+        unsigned int m_Running;
+    protected:
+    private:
+};
+}
+
+#endif // TIMERSTUB_H

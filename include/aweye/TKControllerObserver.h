@@ -18,10 +18,22 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef TKCONTROLLEROBSERVER_H
+#define TKCONTROLLEROBSERVER_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+namespace Aweye {
+
+class TKControllerObserver
+{
+    public:
+        virtual ~TKControllerObserver() {}
+        virtual void OnStatusUpdate() = 0;
+        virtual void OnTimeUpdate() = 0;
+        virtual void OnQuit() = 0;
+    protected:
+    private:
+};
+}
+
+#endif // TKCONTROLLEROBSERVER_H

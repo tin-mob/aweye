@@ -18,10 +18,25 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
+#ifndef UTILSIMPL_H
+#define UTILSIMPL_H
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#include "aweye/AbstractUtils.h"
+#include <wx/filefn.h>
 
-#endif // BUILDDEFINES_H_INCLUDED
+namespace Aweye { namespace WX {
+
+class Utils : public AbstractUtils
+{
+    public:
+        Utils();
+        virtual ~Utils();
+        virtual bool fileExists(std::string name) const;
+        virtual std::string getDataPath(std::string item) const;
+    protected:
+    private:
+        wxPathList m_DataDirs;
+};
+}}
+
+#endif // UTILS_H

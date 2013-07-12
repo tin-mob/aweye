@@ -18,10 +18,26 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef SETTOPWINDOWSTUB_H
+#define SETTOPWINDOWSTUB_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+#include "aweye/SetTopWindowInt.h"
+
+namespace Aweye
+{
+class AbstractMainFrame;
+class SetTopWindowStub : public SetTopWindowInt
+{
+    public:
+        SetTopWindowStub() : m_Frame(nullptr){}
+        virtual ~SetTopWindowStub() {}
+        virtual void setTopWindow(AbstractMainFrame* f) {m_Frame = f;}
+
+        AbstractMainFrame* m_Frame;
+    protected:
+    private:
+};
+}
+
+#endif // SETTOPWINDOWSTUB_H

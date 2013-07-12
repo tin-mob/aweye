@@ -18,10 +18,22 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
+#ifndef ABSTRACTUTILS_H
+#define ABSTRACTUTILS_H
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#include <string>
 
-#endif // BUILDDEFINES_H_INCLUDED
+namespace Aweye {
+
+class AbstractUtils
+{
+    public:
+        virtual ~AbstractUtils() {}
+        virtual bool fileExists(std::string name) const = 0;
+        virtual std::string getDataPath(std::string item) const = 0;
+    protected:
+    private:
+};
+}
+
+#endif // ABSTRACTUTILSIMPL_H

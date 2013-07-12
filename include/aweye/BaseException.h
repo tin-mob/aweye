@@ -18,10 +18,22 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef BASEEXCEPTION_H
+#define BASEEXCEPTION_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+#include <stdexcept>
+#include <string>
+
+namespace Aweye {
+
+class BaseException : public std::logic_error
+{
+    public:
+        BaseException(std::string str) : std::logic_error(str) {}
+    protected:
+    private:
+};
+}
+
+#endif // BASEEXCEPTION_H

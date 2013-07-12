@@ -18,10 +18,27 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef TASKCONTEXT_H
+#define TASKCONTEXT_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+#include <string>
+
+namespace Aweye {
+
+class TaskCaller;
+
+// inherit to add your stuff
+struct TaskContext
+{
+    TaskContext(std::string command, TaskCaller& caller) :
+        m_Command(command), m_Caller(caller) {}
+
+    virtual ~TaskContext() {}
+
+    std::string m_Command;
+    TaskCaller& m_Caller;
+};
+}
+
+#endif // TASKCONTEXT_H

@@ -18,10 +18,21 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef TASKEXCEPTIONOBSERVER_H
+#define TASKEXCEPTIONOBSERVER_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+#include <exception>
+
+namespace Aweye {
+
+class TaskExceptionObserver
+{
+    public:
+        virtual ~TaskExceptionObserver() {}
+        virtual void onException(const std::exception_ptr exception) = 0;
+    private:
+};
+}
+
+#endif // TASKEXCEPTIONOBSERVER_H

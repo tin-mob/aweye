@@ -18,10 +18,23 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#include "aweye/TimeHandler.h"
 
-#endif // BUILDDEFINES_H_INCLUDED
+#include <boost/date_time/posix_time/posix_time.hpp>
+
+namespace Aweye {
+
+TimeHandler::TimeHandler()
+{
+}
+
+TimeHandler::~TimeHandler()
+{
+}
+
+boost::posix_time::ptime TimeHandler::getTime() const
+{
+    return boost::posix_time::second_clock::local_time();
+}
+}

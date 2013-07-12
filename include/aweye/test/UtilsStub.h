@@ -18,10 +18,41 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
+#ifndef UTILSIMPLSTUB_H
+#define UTILSIMPLSTUB_H
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#include "aweye/AbstractUtils.h"
 
-#endif // BUILDDEFINES_H_INCLUDED
+#include <string>
+
+namespace Aweye {
+
+class UtilsStub : public AbstractUtils
+{
+    public:
+        UtilsStub(std::string failName = "", std::string dataDir = "") :
+            m_FailName(failName), m_DataDir(dataDir) {}
+        virtual ~UtilsStub() {}
+
+        virtual bool fileExists(std::string name) const
+        {
+            if (name == m_FailName)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        virtual std::string getDataPath(std::string item) const
+        {
+            return m_DataDir + item;
+        }
+
+        std::string m_FailName;
+        std::string m_DataDir;
+    protected:
+    private:
+};
+}
+
+#endif // UTILSIMPLSTUB_H

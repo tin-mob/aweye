@@ -18,10 +18,26 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef ABSTRACTTASKBAR_H
+#define ABSTRACTTASKBAR_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+#include <string>
+
+namespace Aweye {
+
+class AbstractTaskBar
+{
+    public:
+        virtual ~AbstractTaskBar() {}
+        virtual void setPopupMenuCommands( std::string hideRestoreLabel,
+            std::string startStopLabel, std::string pauseResumeLabel) = 0;
+        virtual void setPopupMenuTimes( std::string onClock, std::string offClock,
+            std::string runningClock, std::string leftClock) = 0;
+        virtual void setIcon(std::string loc) = 0;
+    protected:
+    private:
+};
+}
+
+#endif // ABSTRACTTASKBAR_H

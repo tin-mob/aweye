@@ -18,10 +18,27 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef MSGHANDLER_H
+#define MSGHANDLER_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+#include "aweye/AbstractMsgHandler.h"
+
+#include <string>
+
+namespace Aweye { namespace WX {
+
+class MsgHandler : public AbstractMsgHandler
+{
+    public:
+        MsgHandler();
+        virtual ~MsgHandler();
+        virtual void displayError(std::string msg);
+        virtual void displayAlert(std::string msg);
+        virtual void playSound(std::string filename);
+    protected:
+    private:
+};
+}}
+
+#endif // MSGHANDLER_H

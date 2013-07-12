@@ -18,10 +18,27 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef MYWXTIMER_H
+#define MYWXTIMER_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+#include "aweye/AbstractTimer.h"
+
+#include <wx/timer.h>
+
+namespace Aweye { namespace WX {
+
+class Timer : public AbstractTimer, public wxTimer
+{
+    public:
+        Timer();
+        virtual ~Timer();
+        virtual bool startTimer(long total_milliseconds, bool oneShot);
+        virtual void stopTimer();
+    protected:
+    private:
+        void Notify();
+};
+}}
+
+#endif // MYWXTIMER_H

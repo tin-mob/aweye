@@ -18,10 +18,33 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#include "aweye/wx/Timer.h"
 
-#endif // BUILDDEFINES_H_INCLUDED
+namespace Aweye { namespace WX {
+
+Timer::Timer()
+{
+    //ctor
+}
+
+Timer::~Timer()
+{
+    //dtor
+}
+
+bool Timer::startTimer(long total_milliseconds, bool oneShot)
+{
+    return Start(total_milliseconds, oneShot);
+}
+
+void Timer::stopTimer()
+{
+    Stop();
+}
+
+void Timer::Notify()
+{
+    notify(&TimerInterface::onTimerRing, this);
+}
+}}

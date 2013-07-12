@@ -18,10 +18,22 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef ABSTRACTTIMEHANDLER_H
+#define ABSTRACTTIMEHANDLER_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+#include <boost/date_time/posix_time/posix_time_types.hpp>
+
+namespace Aweye {
+
+class AbstractTimeHandler
+{
+    public:
+        virtual ~AbstractTimeHandler() {};
+        virtual boost::posix_time::ptime getTime() const = 0;
+    protected:
+    private:
+};
+}
+
+#endif // ABSTRACTTIMEHANDLER_H

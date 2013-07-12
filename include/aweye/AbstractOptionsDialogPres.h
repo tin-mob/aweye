@@ -18,10 +18,23 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef ABSTRACTOPTIONSDIALOGPRES_H
+#define ABSTRACTOPTIONSDIALOGPRES_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+namespace Aweye {
+
+class AbstractOptionsDialog;
+class ConfigData;
+class AbstractOptionsDialogPres
+{
+    public:
+        virtual ~AbstractOptionsDialogPres() {}
+        virtual bool saveData(const ConfigData& data) = 0;
+        virtual void init(AbstractOptionsDialog& dialog) = 0;
+    protected:
+    private:
+};
+}
+
+#endif // ABSTRACTOPTIONSDIALOGPRES_H

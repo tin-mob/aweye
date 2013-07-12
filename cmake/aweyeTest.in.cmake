@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 ########################################################################
 #    Copyright: 2013, Robert Morin
 #
@@ -19,11 +18,12 @@
 #
 ########################################################################
 
-generator = "${GENERATOR}"
+cmake_minimum_required(VERSION 2.8)
+project( TestAweye )
+include(common.cmake)
 
-from subprocess import call
+file( GLOB AWEYE_TEST_SOURCES ${AWEYE_BASE}/src/aweye/test/*.cpp )
+file( GLOB AWEYE_TEST_HEADERS ${AWEYE_BASE}/include/aweye/test/*.h )
 
-if generator == "" :
-	call(["cmake", "-DCMAKE_BUILD_TYPE='Debug'", "."])
-else :
-	call(["cmake", "-DCMAKE_BUILD_TYPE='Debug'", "-G", generator, "."])
+add_executable( TestAweye ${AWEYE_SOURCES} ${AWEYE_TEST_SOURCES} ${AWEYE_HEADERS} ${AWEYE_TEST_HEADERS})
+target_link_libraries(TestAweye UnitTest++)

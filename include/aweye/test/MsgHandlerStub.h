@@ -18,10 +18,30 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef MSGHANDLERSTUB_H
+#define MSGHANDLERSTUB_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+#include "aweye/AbstractMsgHandler.h"
+
+#include <string>
+
+namespace Aweye
+{
+class MsgHandlerStub : public AbstractMsgHandler
+{
+    public:
+        MsgHandlerStub() : m_LastError(""), m_LastAlert(""), m_LastSound("") {}
+        virtual ~MsgHandlerStub() {}
+        virtual void displayError(std::string msg) {m_LastError = msg;}
+        virtual void displayAlert(std::string msg) {m_LastAlert = msg;}
+        virtual void playSound(std::string msg) {m_LastSound = msg;}
+        std::string m_LastError;
+        std::string m_LastAlert;
+        std::string m_LastSound;
+    protected:
+    private:
+};
+}
+
+#endif // MSGHANDLERSTUB_H

@@ -18,10 +18,17 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef TR_H_INCLUDED
+#define TR_H_INCLUDED
 
-#endif // BUILDDEFINES_H_INCLUDED
+// allow us to use localization everywhere without creating a dependancy to wx
+#ifdef  __WXWINDOWS__
+    #include "aweye/wx/wx_pch.h"
+    #include <wx/intl.h>
+    inline const char* tr(const char* s) {return _(s);}
+#else
+    inline const char* tr(const char* s) {return s;}
+#endif // __WXWINDOWS__
+
+#endif // TR_H_INCLUDED

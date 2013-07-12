@@ -18,10 +18,34 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef ISHEREPROCESS_H
+#define ISHEREPROCESS_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+#include <functional>
+#include <memory>
+#include <string>
+#include <wx/process.h>
+
+namespace Aweye {
+
+struct TaskContext;
+
+namespace WX {
+
+// delete itself after usage
+class Task : public wxProcess
+{
+    public:
+        static void run(std::shared_ptr<const TaskContext> context);
+        virtual void OnTerminate(int pid, int status);
+
+    private:
+        Task(std::shared_ptr<const TaskContext> context);
+        virtual ~Task();
+
+        std::shared_ptr<const TaskContext> m_Context;
+};
+}}
+
+#endif // ISHEREPROCESS_H

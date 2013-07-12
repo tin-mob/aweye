@@ -18,10 +18,21 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#ifndef SETTOPWINDOWINT_H
+#define SETTOPWINDOWINT_H
 
-#endif // BUILDDEFINES_H_INCLUDED
+namespace Aweye {
+
+class AbstractMainFrame;
+class SetTopWindowInt
+{
+    public:
+        virtual ~SetTopWindowInt() {}
+        virtual void setTopWindow(AbstractMainFrame* frame) = 0;
+    protected:
+    private:
+};
+}
+
+#endif // SETTOPWINDOWINT_H

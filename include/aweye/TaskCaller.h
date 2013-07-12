@@ -18,10 +18,20 @@
 
  **************************************************************/
 
-#ifndef BUILDDEFINES_H_INCLUDED
-#define BUILDDEFINES_H_INCLUDED
+#ifndef TASKCALLER_H
+#define TASKCALLER_H
 
-#define AWEYE_DATA_DIR "@AWEYE_DATA_DIR@"
-#define AWEYE_SRC_BASE "@AWEYE_BASE@"
+#include <memory>
 
-#endif // BUILDDEFINES_H_INCLUDED
+namespace Aweye {
+
+class TaskContext;
+class TaskCaller
+{
+    public:
+        virtual ~TaskCaller() {}
+        virtual void onTaskEnded(int status, std::shared_ptr<const TaskContext> context) = 0;
+};
+}
+
+#endif // TASKCALLER_H
