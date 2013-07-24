@@ -20,10 +20,9 @@
 
 cmake_minimum_required(VERSION 2.8)
 project( TestAweye )
-include(common.cmake)
 
-file( GLOB AWEYE_TEST_SOURCES ${AWEYE_BASE}/src/aweye/test/*.cpp )
-file( GLOB AWEYE_TEST_HEADERS ${AWEYE_BASE}/include/aweye/test/*.h )
+file( GLOB AWEYE_TEST_SOURCES ${CMAKE_SOURCE_DIR}/src/aweye/test/*.cpp )
+file( GLOB AWEYE_TEST_HEADERS ${CMAKE_SOURCE_DIR}/include/aweye/test/*.h )
 
-add_executable( TestAweye ${AWEYE_SOURCES} ${AWEYE_TEST_SOURCES} ${AWEYE_HEADERS} ${AWEYE_TEST_HEADERS})
+add_executable( TestAweye EXCLUDE_FROM_ALL ${AWEYE_SOURCES} ${AWEYE_TEST_SOURCES} ${AWEYE_HEADERS} ${AWEYE_TEST_HEADERS})
 target_link_libraries(TestAweye UnitTest++)

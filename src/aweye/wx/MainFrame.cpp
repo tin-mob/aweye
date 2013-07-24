@@ -140,7 +140,7 @@ MainFrame::MainFrame(AbstractEventHandler& hdlr, AbstractUtils& utils,
     m_DoMenu = new wxMenu();
     m_StartMenuItem = new wxMenuItem(m_DoMenu, ID_STARTMENUITEM, _("Start"), wxEmptyString, wxITEM_NORMAL);
     m_DoMenu->Append(m_StartMenuItem);
-    m_PauseMenuItem = new wxMenuItem(m_DoMenu, ID_PAUSEMENUITEM, _("Pause"), wxEmptyString, wxITEM_NORMAL);
+    m_PauseMenuItem = new wxMenuItem(m_DoMenu, ID_PAUSEMENUITEM, _("Mute"), wxEmptyString, wxITEM_NORMAL);
     m_DoMenu->Append(m_PauseMenuItem);
     m_OptionsMenuItem = new wxMenuItem(m_DoMenu, ID_OPTIONSMENUITEM, _("Options"), wxEmptyString, wxITEM_NORMAL);
     m_DoMenu->Append(m_OptionsMenuItem);

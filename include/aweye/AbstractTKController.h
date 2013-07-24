@@ -36,7 +36,7 @@ class AbstractTKController : public Subject<TKControllerObserver>
     public:
         AbstractTKController() : m_LateMsg(tr("Time for a pause!")),
             m_HideBtnLabel(tr("Hide")), m_RestoreBtnLabel(tr("Restore")),
-            m_PauseBtnLabel(tr("Pause")), m_ResumeBtnLabel(tr("Resume")),
+            m_PauseBtnLabel(tr("Mute")), m_ResumeBtnLabel(tr("Resume")),
             m_StartBtnLabel(tr("Start")), m_StopBtnLabel(tr("Stop")),
             m_StopWebcamIcon("icons/webcam-stop.png"),
             m_GreenWebcamIcon("icons/webcam-green.png"),
