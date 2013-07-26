@@ -19,8 +19,8 @@
  **************************************************************/
 
 
-#include "aweye/ConfigData.h"
-#include "aweye/ConfigObservers.h"
+#include "aweye/core/ConfigData.h"
+#include "aweye/core/ConfigObservers.h"
 #include "aweye/test/ConfigStub.h"
 #include "aweye/test/PresenceHandlerStub.h"
 #include "aweye/test/TimeKeeperStub.h"

@@ -22,8 +22,8 @@
 #ifndef PRESENCEHANDLERSTUB_H
 #define PRESENCEHANDLERSTUB_H
 
-#include "aweye/AbstractPresenceHandler.h"
-#include "aweye/BaseException.h"
+#include "aweye/core/AbstractPresenceHandler.h"
+#include "aweye/core/BaseException.h"
 
 #include <queue>
 #include <assert.h>

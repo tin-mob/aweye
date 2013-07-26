@@ -22,7 +22,7 @@
 #ifndef APP_H
 #define APP_H
 
-#include "aweye/SetTopWindowInt.h"
+#include "aweye/core/SetTopWindowInt.h"
 
 #include <memory>
 #include <wx/app.h>

@@ -22,7 +22,7 @@
 #ifndef TESTBUILDER_H
 #define TESTBUILDER_H
 
-#include "aweye/Builder.h"
+#include "aweye/core/Builder.h"
 
 namespace Aweye
 {

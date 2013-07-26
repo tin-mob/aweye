@@ -22,7 +22,7 @@
 #ifndef TASKBAR_H
 #define TASKBAR_H
 
-#include "aweye/AbstractTaskBar.h"
+#include "aweye/core/AbstractTaskBar.h"
 #include "aweye/wx/ObservableMenu.h"
 
 #include <string>

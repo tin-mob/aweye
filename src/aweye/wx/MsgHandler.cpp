@@ -19,7 +19,7 @@
  **************************************************************/
 
 
-#include "aweye/tr.h"
+#include "aweye/core/tr.h"
 #include "aweye/wx/MsgHandler.h"
 #include "aweye/wx/wx_pch.h"
 

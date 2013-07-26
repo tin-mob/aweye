@@ -22,8 +22,8 @@
 #ifndef TASKEXCEPTIONOBSERVERSTUB_H
 #define TASKEXCEPTIONOBSERVERSTUB_H
 
-#include "aweye/BaseException.h"
-#include "aweye/TaskExceptionObserver.h"
+#include "aweye/core/BaseException.h"
+#include "aweye/core/TaskExceptionObserver.h"
 
 #include <exception>
 

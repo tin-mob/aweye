@@ -22,12 +22,12 @@
 #ifndef TKCONTROLLERSTUB_H
 #define TKCONTROLLERSTUB_H
 
-#include "aweye/AbstractMsgHandler.h"
-#include "aweye/AbstractTimeHandler.h"
-#include "aweye/AbstractTimeKeeper.h"
-#include "aweye/AbstractTimer.h"
-#include "aweye/AbstractTKController.h"
-#include "aweye/TKControllerObserver.h"
+#include "aweye/core/AbstractMsgHandler.h"
+#include "aweye/core/AbstractTimeHandler.h"
+#include "aweye/core/AbstractTimeKeeper.h"
+#include "aweye/core/AbstractTimer.h"
+#include "aweye/core/AbstractTKController.h"
+#include "aweye/core/TKControllerObserver.h"
 #include "aweye/test/UtilsStub.h"
 
 #include <string>

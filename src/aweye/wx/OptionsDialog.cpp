@@ -19,8 +19,8 @@
  **************************************************************/
 
 
-#include "aweye/ConfigData.h"
-#include "aweye/AbstractOptionsDialogPres.h"
+#include "aweye/core/ConfigData.h"
+#include "aweye/core/AbstractOptionsDialogPres.h"
 #include "aweye/wx/OptionsDialog.h"
 #include "aweye/wx/wx_pch.h"
 

@@ -22,9 +22,9 @@
 #ifndef EVENTHANDLERSTUB_H
 #define EVENTHANDLERSTUB_H
 
-#include "aweye/AbstractEventHandler.h"
-#include "aweye/AbstractMsgHandler.h"
-#include "aweye/AbstractTKController.h"
+#include "aweye/core/AbstractEventHandler.h"
+#include "aweye/core/AbstractMsgHandler.h"
+#include "aweye/core/AbstractTKController.h"
 
 #include <functional>
 

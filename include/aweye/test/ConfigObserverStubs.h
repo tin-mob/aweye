@@ -22,10 +22,10 @@
 #ifndef CONFIGOBSERVERSTUBS_INCLUDED
 #define CONFIGOBSERVERSTUBS_INCLUDED
 
-#include "aweye/AbstractConfig.h"
-#include "aweye/AbstractPresenceHandler.h"
-#include "aweye/AbstractTimeKeeper.h"
-#include "aweye/AbstractTKController.h"
+#include "aweye/core/AbstractConfig.h"
+#include "aweye/core/AbstractPresenceHandler.h"
+#include "aweye/core/AbstractTimeKeeper.h"
+#include "aweye/core/AbstractTKController.h"
 
 namespace Aweye
 {

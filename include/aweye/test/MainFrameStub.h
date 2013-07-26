@@ -22,7 +22,7 @@
 #ifndef MAINFRAMESTUB_H
 #define MAINFRAMESTUB_H
 
-#include "aweye/AbstractMainFrame.h"
+#include "aweye/core/AbstractMainFrame.h"
 
 namespace Aweye
 {

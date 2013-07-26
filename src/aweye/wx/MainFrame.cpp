@@ -19,8 +19,8 @@
  **************************************************************/
 
 
-#include "aweye/AbstractEventHandler.h"
-#include "aweye/AbstractUtils.h"
+#include "aweye/core/AbstractEventHandler.h"
+#include "aweye/core/AbstractUtils.h"
 #include "aweye/wx/AboutDialog.h"
 #include "aweye/wx/MainFrame.h"
 #include "aweye/wx/wx_pch.h"

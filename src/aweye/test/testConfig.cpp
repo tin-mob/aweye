@@ -19,7 +19,7 @@
  **************************************************************/
 
 
-#include "aweye/Config.h"
+#include "aweye/core/Config.h"
 #include "aweye/test/ConfigImplStub.h"
 #include "aweye/test/ConfigStub.h"
 #include "aweye/test/UtilsStub.h"

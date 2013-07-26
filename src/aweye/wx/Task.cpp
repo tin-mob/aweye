@@ -17,14 +17,11 @@
     along with Aweye.  If not, see <http://www.gnu.org/licenses/>.
 
  **************************************************************/
-///@note running this in linux results in zombie processes, probably linked with :
-/// https://groups.google.com/forum/#!topic/wx-users/tFXaa5N-yc0
-/// http://trac.wxwidgets.org/ticket/10258
-/// sigh...
+///@note running this in linux with version < 2.9.5 results in zombie processes
 ///@todo test if this works in windows
 
-#include "aweye/TaskCaller.h"
-#include "aweye/TaskContext.h"
+#include "aweye/core/TaskCaller.h"
+#include "aweye/core/TaskContext.h"
 #include "aweye/wx/Task.h"
 
 #include <memory>

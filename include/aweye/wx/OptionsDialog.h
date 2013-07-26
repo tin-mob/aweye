@@ -22,7 +22,7 @@
 #ifndef OPTIONSDIALOG_H
 #define OPTIONSDIALOG_H
 
-#include "aweye/AbstractOptionsDialog.h"
+#include "aweye/core/AbstractOptionsDialog.h"
 
 #ifndef WX_PRECOMP
 	//(*HeadersPCH(OptionsDialog)

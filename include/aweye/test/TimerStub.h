@@ -22,7 +22,7 @@
 #ifndef TIMERSTUB_H
 #define TIMERSTUB_H
 
-#include "aweye/AbstractTimer.h"
+#include "aweye/core/AbstractTimer.h"
 
 namespace Aweye
 {

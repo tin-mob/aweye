@@ -19,7 +19,7 @@
  **************************************************************/
 
 
-#include "aweye/TKController.h"
+#include "aweye/core/TKController.h"
 #include "aweye/test/ConfigStub.h"
 #include "aweye/test/MainFrameStub.h"
 #include "aweye/test/MsgHandlerStub.h"

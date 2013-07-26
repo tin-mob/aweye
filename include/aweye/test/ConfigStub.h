@@ -22,11 +22,11 @@
 #ifndef CONFIGSTUB_H
 #define CONFIGSTUB_H
 
-#include "aweye/AbstractConfig.h"
-#include "aweye/AbstractConfigImpl.h"
-#include "aweye/AbstractUtils.h"
-#include "aweye/BaseException.h"
-#include "aweye/ConfigData.h"
+#include "aweye/core/AbstractConfig.h"
+#include "aweye/core/AbstractConfigImpl.h"
+#include "aweye/core/AbstractUtils.h"
+#include "aweye/core/BaseException.h"
+#include "aweye/core/ConfigData.h"
 
 namespace Aweye
 {

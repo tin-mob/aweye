@@ -22,7 +22,7 @@
 #ifndef OBSERVABLEWXMENU_H
 #define OBSERVABLEWXMENU_H
 
-#include "aweye/Subject.h"
+#include "aweye/core/Subject.h"
 
 #include <wx/menu.h>
 

@@ -22,7 +22,7 @@
 #ifndef MAINFRAME_H
 #define MAINFRAME_H
 
-#include "aweye/AbstractMainFrame.h"
+#include "aweye/core/AbstractMainFrame.h"
 
 //(*Headers(MainFrame)
 #include <wx/sizer.h>

@@ -22,7 +22,7 @@
 #ifndef TASKBARSTUB_H
 #define TASKBARSTUB_H
 
-#include "aweye/AbstractTaskBar.h"
+#include "aweye/core/AbstractTaskBar.h"
 
 namespace Aweye
 {

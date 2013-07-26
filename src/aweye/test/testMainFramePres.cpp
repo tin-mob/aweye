@@ -19,7 +19,7 @@
  **************************************************************/
 
 
-#include "aweye/MainFramePres.h"
+#include "aweye/core/MainFramePres.h"
 #include "aweye/test/EventHandlerStub.h"
 #include "aweye/test/MainFrameStub.h"
 #include "aweye/test/TKControllerStub.h"

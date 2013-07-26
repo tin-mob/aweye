@@ -22,10 +22,10 @@
 #ifndef TIMEKEEPERSTUB_H
 #define TIMEKEEPERSTUB_H
 
-#include "aweye/AbstractPresenceHandler.h"
-#include "aweye/AbstractTimeHandler.h"
-#include "aweye/AbstractTimeKeeper.h"
-#include "aweye/BaseException.h"
+#include "aweye/core/AbstractPresenceHandler.h"
+#include "aweye/core/AbstractTimeHandler.h"
+#include "aweye/core/AbstractTimeKeeper.h"
+#include "aweye/core/BaseException.h"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/date_defs.hpp>

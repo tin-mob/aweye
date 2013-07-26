@@ -21,8 +21,8 @@
 #ifndef VIEWPRESSTUB_H
 #define VIEWPRESSTUB_H
 
-#include "aweye/AbstractEventHandler.h"
-#include "aweye/TKControllerObserver.h"
+#include "aweye/core/AbstractEventHandler.h"
+#include "aweye/core/TKControllerObserver.h"
 
 namespace Aweye
 {

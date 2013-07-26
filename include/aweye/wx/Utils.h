@@ -21,7 +21,7 @@
 #ifndef UTILSIMPL_H
 #define UTILSIMPL_H
 
-#include "aweye/AbstractUtils.h"
+#include "aweye/core/AbstractUtils.h"
 #include <wx/filefn.h>
 
 namespace Aweye { namespace WX {

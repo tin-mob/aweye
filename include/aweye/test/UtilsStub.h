@@ -21,7 +21,7 @@
 #ifndef UTILSIMPLSTUB_H
 #define UTILSIMPLSTUB_H
 
-#include "aweye/AbstractUtils.h"
+#include "aweye/core/AbstractUtils.h"
 
 #include <string>
 

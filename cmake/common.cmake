@@ -23,14 +23,14 @@ if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 endif()
 
-file(GLOB ISHERECMD_SOURCES "${CMAKE_SOURCE_DIR}/src/aweye/WebcamHandler.cpp" "${CMAKE_SOURCE_DIR}/src/aweye/main-IsHereCmd.cpp")
-file(GLOB ISHERECMD_HEADERS "${CMAKE_SOURCE_DIR}/include/aweye/WebcamHandler.h" "${CMAKE_SOURCE_DIR}/include/aweye/IsHereCmd.h")
+file(GLOB ISHERECMD_SOURCES "${CMAKE_SOURCE_DIR}/src/aweye/core/WebcamHandler.cpp" "${CMAKE_SOURCE_DIR}/src/aweye/core/main-IsHereCmd.cpp")
+file(GLOB ISHERECMD_HEADERS "${CMAKE_SOURCE_DIR}/include/aweye/core/WebcamHandler.h" "${CMAKE_SOURCE_DIR}/include/aweye/core/IsHereCmd.h")
 
-file(GLOB AWEYE_SOURCES ${CMAKE_SOURCE_DIR}/src/aweye/*.cpp )
+file(GLOB AWEYE_SOURCES ${CMAKE_SOURCE_DIR}/src/aweye/core/*.cpp )
 list(REMOVE_ITEM AWEYE_SOURCES ${ISHERECMD_SOURCES})
 
-file(GLOB AWEYE_HEADERS ${CMAKE_SOURCE_DIR}/include/aweye/*.h )
-list(REMOVE_ITEM AWEYE_HEADERS "${CMAKE_SOURCE_DIR}/include/aweye/WebcamHandler.h")
+file(GLOB AWEYE_HEADERS ${CMAKE_SOURCE_DIR}/include/aweye/core/*.h )
+list(REMOVE_ITEM AWEYE_HEADERS "${CMAKE_SOURCE_DIR}/include/aweye/core/WebcamHandler.h")
 
 include_directories(${CMAKE_SOURCE_DIR}/src/)
 include_directories(${CMAKE_SOURCE_DIR}/include/)

@@ -19,7 +19,7 @@
  **************************************************************/
 
 
-#include "aweye/TaskBarPres.h"
+#include "aweye/core/TaskBarPres.h"
 #include "aweye/test/EventHandlerStub.h"
 #include "aweye/test/TaskBarStub.h"
 #include "aweye/test/TKControllerStub.h"

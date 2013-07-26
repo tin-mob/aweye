@@ -22,7 +22,7 @@
 #ifndef TIMEHANDLERSTUB_H
 #define TIMEHANDLERSTUB_H
 
-#include "aweye/AbstractTimeHandler.h"
+#include "aweye/core/AbstractTimeHandler.h"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 

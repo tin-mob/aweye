@@ -19,8 +19,8 @@
  **************************************************************/
 
 
-#include "aweye/BaseException.h"
-#include "aweye/EventHandler.h"
+#include "aweye/core/BaseException.h"
+#include "aweye/core/EventHandler.h"
 #include "aweye/test/EventHandlerStub.h"
 #include "aweye/test/MsgHandlerStub.h"
 #include "aweye/test/TKControllerStub.h"

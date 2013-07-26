@@ -22,7 +22,7 @@
 #ifndef WXCONFIGIMPL_H
 #define WXCONFIGIMPL_H
 
-#include "aweye/AbstractConfigImpl.h"
+#include "aweye/core/AbstractConfigImpl.h"
 
 class wxConfigBase;
 namespace Aweye { namespace WX {

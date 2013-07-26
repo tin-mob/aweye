@@ -23,7 +23,7 @@
 #ifndef CONFIGIMPLSTUB_H
 #define CONFIGIMPLSTUB_H
 
-#include "aweye/AbstractConfigImpl.h"
+#include "aweye/core/AbstractConfigImpl.h"
 
 #include <map>
 #include <string>

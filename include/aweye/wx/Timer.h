@@ -22,7 +22,7 @@
 #ifndef MYWXTIMER_H
 #define MYWXTIMER_H
 
-#include "aweye/AbstractTimer.h"
+#include "aweye/core/AbstractTimer.h"
 
 #include <wx/timer.h>
 

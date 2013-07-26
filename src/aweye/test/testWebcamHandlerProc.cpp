@@ -19,9 +19,9 @@
  **************************************************************/
 
 
-#include "aweye/IsHereCmd.h"
-#include "aweye/TaskContext.h"
-#include "aweye/WebcamHandlerProc.h"
+#include "aweye/core/IsHereCmd.h"
+#include "aweye/core/TaskContext.h"
+#include "aweye/core/WebcamHandlerProc.h"
 #include "aweye/test/TaskExceptionObserverStub.h"
 #include "aweye/test/UtilsStub.h"
 

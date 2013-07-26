@@ -22,7 +22,7 @@
 #ifndef SETTOPWINDOWSTUB_H
 #define SETTOPWINDOWSTUB_H
 
-#include "aweye/SetTopWindowInt.h"
+#include "aweye/core/SetTopWindowInt.h"
 
 namespace Aweye
 {

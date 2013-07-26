@@ -22,7 +22,7 @@
 #ifndef OBSERVERSTUB_H
 #define OBSERVERSTUB_H
 
-#include "aweye/TKControllerObserver.h"
+#include "aweye/core/TKControllerObserver.h"
 
 namespace Aweye
 {

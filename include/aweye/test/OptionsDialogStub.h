@@ -22,7 +22,7 @@
 #ifndef CONFIGDIALOGSTUB_H
 #define CONFIGDIALOGSTUB_H
 
-#include "aweye/AbstractOptionsDialog.h"
+#include "aweye/core/AbstractOptionsDialog.h"
 #include "aweye/test/OptionsDialogPresStub.h"
 
 namespace Aweye

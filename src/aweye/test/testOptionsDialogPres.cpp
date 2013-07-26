@@ -19,8 +19,8 @@
  **************************************************************/
 
 
-#include "aweye/ConfigData.h"
-#include "aweye/OptionsDialogPres.h"
+#include "aweye/core/ConfigData.h"
+#include "aweye/core/OptionsDialogPres.h"
 #include "aweye/test/ConfigStub.h"
 #include "aweye/test/MsgHandlerStub.h"
 #include "aweye/test/OptionsDialogStub.h"

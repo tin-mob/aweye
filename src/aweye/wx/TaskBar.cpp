@@ -19,7 +19,7 @@
  **************************************************************/
 
 
-#include "aweye/AbstractEventHandler.h"
+#include "aweye/core/AbstractEventHandler.h"
 #include "aweye/wx/ObservableMenu.h"
 #include "aweye/wx/TaskBar.h"
 #include "aweye/wx/wx_pch.h"

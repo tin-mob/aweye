@@ -22,7 +22,7 @@
 #ifndef MSGHANDLERSTUB_H
 #define MSGHANDLERSTUB_H
 
-#include "aweye/AbstractMsgHandler.h"
+#include "aweye/core/AbstractMsgHandler.h"
 
 #include <string>
 

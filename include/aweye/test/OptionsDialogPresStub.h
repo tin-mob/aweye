@@ -22,9 +22,9 @@
 #ifndef OPTIONSDIALOGPRESSTUB_H
 #define OPTIONSDIALOGPRESSTUB_H
 
-#include "aweye/AbstractConfig.h"
-#include "aweye/AbstractMsgHandler.h"
-#include "aweye/AbstractOptionsDialogPres.h"
+#include "aweye/core/AbstractConfig.h"
+#include "aweye/core/AbstractMsgHandler.h"
+#include "aweye/core/AbstractOptionsDialogPres.h"
 
 namespace Aweye
 {
