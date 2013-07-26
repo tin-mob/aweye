@@ -39,7 +39,7 @@ struct TKControllerFixture
 {
     public:
         TKControllerFixture() :
-            utils("", "path/"), data(ConfigData::getDefault(utils.m_DataDir)),
+            utils("", "path/"), data(ConfigData::getDefault(utils.m_Dir)),
             msgHandler(), timeHandler(), keeper(), clockTimer(),
             dialog(), viewObserver(),
             controller(TKController(msgHandler, keeper,

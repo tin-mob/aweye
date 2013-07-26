@@ -30,8 +30,8 @@ namespace Aweye {
 class UtilsStub : public AbstractUtils
 {
     public:
-        UtilsStub(std::string failName = "", std::string dataDir = "") :
-            m_FailName(failName), m_DataDir(dataDir) {}
+        UtilsStub(std::string failName = "", std::string dir = "") :
+            m_FailName(failName), m_Dir(dir), m_FindPath(true){}
         virtual ~UtilsStub() {}
 
         virtual bool fileExists(std::string name) const
@@ -45,11 +45,23 @@ class UtilsStub : public AbstractUtils
 
         virtual std::string getDataPath(std::string item) const
         {
-            return m_DataDir + item;
+            if (m_FindPath)
+                return m_Dir + item;
+            else
+                return "";
+        }
+
+        virtual std::string getBinPath(std::string item) const
+        {
+            if (m_FindPath)
+                return m_Dir + item;
+            else
+                return "";
         }
 
         std::string m_FailName;
-        std::string m_DataDir;
+        std::string m_Dir;
+        bool m_FindPath;
     protected:
     private:
 };

@@ -33,9 +33,11 @@ class Utils : public AbstractUtils
         virtual ~Utils();
         virtual bool fileExists(std::string name) const;
         virtual std::string getDataPath(std::string item) const;
+        virtual std::string getBinPath(std::string item) const;
     protected:
     private:
         wxPathList m_DataDirs;
+        wxPathList m_BinDirs;
 };
 }}
 

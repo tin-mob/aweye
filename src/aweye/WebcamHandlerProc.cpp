@@ -70,8 +70,15 @@ void WebcamHandlerProc::isHere(std::function<void (bool)> callBack)
     {
         throw MissingCascadeFileException();
     }
+
+    std::string binStr = m_Utils.getBinPath("IsHereCmd");
+    if (binStr == "")
+    {
+        throw GenericPresenceHandlerException();
+    }
+
     std::ostringstream s;
-    s  << "./IsHereCmd '" << m_index << "' '" << m_FaceCascadeName << "' '"
+    s  << binStr << " '" << m_index << "' '" << m_FaceCascadeName << "' '"
         << m_FaceSizeX << "' '" << m_FaceSizeY << "'";
 
     std::shared_ptr<const TaskContext> contextPtr(new IsHereTaskContext(s.str(), *this, callBack));

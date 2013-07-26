@@ -33,10 +33,6 @@ Utils::Utils()
 {
     m_DataDirs.Add(wxT("data/"));
 
-    #ifdef AWEYE_DATA_DIR
-        m_DataDirs.Add(wxT(AWEYE_DATA_DIR));
-    #endif
-
     #ifndef NDEBUG
     #ifdef AWEYE_SRC_BASE
         std::string path = AWEYE_SRC_BASE;
@@ -44,6 +40,11 @@ Utils::Utils()
         m_DataDirs.Add(path);
     #endif
     #endif
+    #ifdef AWEYE_DATA_DIR
+        m_DataDirs.Add(wxT(AWEYE_DATA_DIR));
+    #endif
+    wxFileName fn(wxStandardPaths::Get().GetExecutablePath());
+    m_BinDirs.Add(fn.GetPath());
 }
 
 Utils::~Utils()
@@ -63,6 +64,11 @@ bool Utils::fileExists(std::string name) const
 std::string Utils::getDataPath(std::string item) const
 {
     return std::string(m_DataDirs.FindAbsoluteValidPath(item));
+}
+
+std::string Utils::getBinPath(std::string item) const
+{
+    return std::string(m_BinDirs.FindAbsoluteValidPath(item));
 }
 
 }}

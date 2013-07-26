@@ -36,7 +36,7 @@ namespace Aweye {
 
 struct WebcamHandlerProcFixture
 {
-    WebcamHandlerProcFixture() : utils(), index(1), cascade("cascade"),
+    WebcamHandlerProcFixture() : utils("", "dir/"), index(1), cascade("cascade"),
         faceX(2), faceY(3), commandString(""),
         cmd( [this] (std::shared_ptr<const TaskContext> context)
         {
@@ -66,9 +66,28 @@ SUITE(TestWebcamHandlerProc)
         handler.isHere(callback);
 
         std::ostringstream s;
-        s  << "./IsHereCmd '" << index << "' '" << cascade << "' '"
+        s  << "dir/IsHereCmd '" << index << "' '" << cascade << "' '"
             << faceX << "' '" << faceY << "'";
         CHECK_EQUAL(s.str(), commandString);
+    }
+
+    TEST_FIXTURE(WebcamHandlerProcFixture, TestCmdNoBin)
+    {
+        utils.m_FindPath = false;
+        auto callback = [&] (bool) {};
+
+        bool trown = false;
+        try
+        {
+            handler.isHere(callback);
+        }
+        catch (GenericPresenceHandlerException)
+        {
+            trown = true;
+        }
+
+        CHECK_EQUAL(true, trown);
+        CHECK_EQUAL("", commandString);
     }
 
     TEST_FIXTURE(WebcamHandlerProcFixture, TestCmdInvalidFile)

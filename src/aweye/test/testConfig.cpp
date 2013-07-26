@@ -34,7 +34,7 @@ struct ConfigFixture
 {
     ConfigFixture()
     {
-        utils.m_DataDir = "path/";
+        utils.m_Dir = "path/";
     }
     ~ConfigFixture() {}
 
@@ -99,13 +99,13 @@ SUITE(TestConfig)
         const Config config(impl, utils);
 
         ConfigData data = config.getData();
-        CHECK_EQUAL(ConfigData::getDefault(utils.m_DataDir), data);
+        CHECK_EQUAL(ConfigData::getDefault(utils.m_Dir), data);
     }
 
     TEST_FIXTURE(ConfigFixture, TestSaveLoad)
     {
-        ConfigData data(ConfigData::getDefault(utils.m_DataDir));
-        const ConfigData srcData = ConfigStub::getTestData(utils.m_DataDir);
+        ConfigData data(ConfigData::getDefault(utils.m_Dir));
+        const ConfigData srcData = ConfigStub::getTestData(utils.m_Dir);
 
         Config config(impl, utils);
         Config config2(impl, utils);
@@ -126,7 +126,7 @@ SUITE(TestConfig)
 
     TEST_FIXTURE(ConfigFixture, TestInvalidSave)
     {
-        const ConfigData data(ConfigData::getDefault(utils.m_DataDir, boost::posix_time::neg_infin));
+        const ConfigData data(ConfigData::getDefault(utils.m_Dir, boost::posix_time::neg_infin));
         Config config(impl, utils);
         CHECK_THROW(config.save(data), InvalidConfigDataException);
     }
@@ -134,7 +134,7 @@ SUITE(TestConfig)
     TEST_FIXTURE(ConfigFixture, TestInvalidLoad)
     {
         Config config(impl, utils);
-        config.save(ConfigData::getDefault(utils.m_DataDir));
+        config.save(ConfigData::getDefault(utils.m_Dir));
         CHECK_EQUAL(false, config.hasInvalidData());
 
         utils.m_FailName = impl.read(std::string("CascadePath"), std::string("ShouldNotBeUsed"));

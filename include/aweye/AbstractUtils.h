@@ -31,6 +31,7 @@ class AbstractUtils
         virtual ~AbstractUtils() {}
         virtual bool fileExists(std::string name) const = 0;
         virtual std::string getDataPath(std::string item) const = 0;
+        virtual std::string getBinPath(std::string item) const = 0;
     protected:
     private:
 };
