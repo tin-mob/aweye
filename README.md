@@ -18,8 +18,8 @@ Required
 
 *	[WxWidgets 2.9.5](http://www.wxwidgets.org/)
 *	[OpenCV](http://opencv.org/)
-	(minimally core, objdetect imgproc and highgui)
-*	A Webcam (for now) 
+	(minimally core, objdetect, imgproc and highgui)
+*	A Webcam
 
 Installation
 -------------------------
@@ -45,7 +45,7 @@ The app is rather straightforward.  You can issue commands using the
 menu or by right clicking the icon :
 
 *	Start/Stop to start/stop(!) the checking.
-*	Mute/Resume to whether to pester you when it should be pause time.
+*	Mute/Resume to pester you or not when it should be pause time.
 *	Options to tweak the settings.
 *	About to display a bunch of legalese.
 *	You can guess what Exit does.
@@ -59,8 +59,8 @@ the icon. The icon will change colour depending on the status.
 *	Red: Too late!
 
 A thing to note is that using the webcam to determine if you are
-there is not always right. Therefore, it takes a few tries before it
-changes state, to be certain that it is not a fluke.
+there means it's not always right. Therefore, it takes a few tries before
+it changes state, to be certain that it is not a fluke.
 
 Anyway, you will [soon](github.com/tin-mob/aweye/issues) be able to
 hover over everything to see what it does.
