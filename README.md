@@ -34,7 +34,7 @@ Installation
 
 After that, you have a few options:
 
-1.	make install (no support for uninstalling).
+1.	sudo make install. (make uninstall to remove)
 2.	make package + install with your favourite package manager
 	(deb only for now).
 
