@@ -98,5 +98,5 @@ webcam.ico is part of WPZOOM Developer Icon Set by WPZOOM,
 designed by David Ferreira. <http://www.wpzoom.com>
 webcam- * .png are derived from webcam.ico.
 
-The icons are licensed under a Creative Commons Attribution-Share Alike
+These icons are licensed under a Creative Commons Attribution-Share Alike
 3.0 Unported License <http://creativecommons.org/licenses/by-nc-sa/3.0/>.

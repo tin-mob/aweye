@@ -65,7 +65,7 @@ add_custom_target(uninstall
 # (http://www.cmake.org/Wiki/CMake:Packaging_With_CPack#Using_CPack_with_CMake)
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Aweye")
-set(CPACK_PACKAGE_DESCRIPTION "Looks if you spend some time away from the computer.")
+set(CPACK_PACKAGE_DESCRIPTION "Watches your eyes and reminds you to take a break.")
 set(CPACK_PACKAGE_CONTACT "Robert Morin tin.mob.error@gmail.com")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/license.txt")
