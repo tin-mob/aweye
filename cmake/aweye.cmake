@@ -29,12 +29,9 @@ set(DEST_DATA_DIR share/${CMAKE_PROJECT_NAME})
 ########################################################################
 
 # @todo umph. seems to work without it... (is it because it is used to build opencv?)
-#find_package( OpenCV REQUIRED )
+find_package( OpenCV REQUIRED )
 
-# use only what is needed (some are not necessarily installed)
-set(OpenCV_LIBS opencv_core opencv_objdetect opencv_imgproc opencv_highgui)
-
-# use static because we use 2.9 = compile from source...
+# use static?
 #set_property(GLOBAL PROPERTY wxWidgets_USE_STATIC)
 find_package(wxWidgets COMPONENTS core base adv REQUIRED)
 include(${wxWidgets_USE_FILE})
@@ -54,6 +51,6 @@ configure_file(${CMAKE_SOURCE_DIR}/cmake/Defines.in.h ${CMAKE_BINARY_DIR}/CMakeD
 include_directories(${CMAKE_BINARY_DIR})
 
 add_executable( Aweye ${AWEYE_SOURCES} ${AWEYE_WX_SOURCES} ${AWEYE_HEADERS} ${AWEYE_WX_HEADERS} ${CMAKE_BINARY_DIR}/CMakeDefines.h)
-target_link_libraries( Aweye ${wxWidgets_LIBRARIES})
+target_link_libraries( Aweye ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES})
 add_dependencies(Aweye IsHereCmd)
 

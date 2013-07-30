@@ -277,14 +277,14 @@ ConfigData OptionsDialog::getData() const
             remMinSpinCtrl->GetValue() * 60 + remSecSpinCtrl->GetValue()),
         boost::posix_time::seconds(
             chkMinSpinCtrl->GetValue() * 60 + chkSecSpinCtrl->GetValue()),
-        pauseTolSpinCtrl->GetValue(),
-        workTolSpinCtrl->GetValue(),
+        (unsigned int)pauseTolSpinCtrl->GetValue(),
+        (unsigned int)workTolSpinCtrl->GetValue(),
         soundCheckBox->GetValue(),
         popupCheckBox->GetValue(),
         trayIconCheckBox->GetValue(),
         indexSpinCtrl->GetValue(),
-        FaceSizeXSpinCtrl->GetValue(),
-        FaceSizeYSpinCtrl->GetValue(),
+        (unsigned int)FaceSizeXSpinCtrl->GetValue(),
+        (unsigned int)FaceSizeYSpinCtrl->GetValue(),
         std::string(cascadeFilePickerCtrl->GetPath().mb_str()),
         std::string(soundLocFilePickerCtrl->GetPath().mb_str()),
         boost::posix_time::seconds(

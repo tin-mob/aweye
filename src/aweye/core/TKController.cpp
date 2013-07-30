@@ -63,7 +63,7 @@ void TKController::start()
     }
     catch (...)
     {
-        onException(std::current_exception());
+        onException(/*std::current_exception()*/);
     }
 }
 
@@ -111,7 +111,7 @@ void TKController::onTimerRing(AbstractTimer*)
     }
     catch (...)
     {
-        onException(std::current_exception());
+        onException(/*std::current_exception()*/);
     }
 }
 
@@ -136,11 +136,11 @@ void TKController::toggleStart()
 ///@note convert to real shared_ptr to remove silly try?
 /// No, it allows to Exception not derived from BaseException
 /// to stop the app.
-void TKController::onException(const std::exception_ptr exception)
+void TKController::onException(/*const std::exception_ptr exception*/)
 {
     try
     {
-        std::rethrow_exception(exception);
+        //std::rethrow_exception(exception);
     }
     catch (const BaseException& e)
     {

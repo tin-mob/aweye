@@ -90,7 +90,7 @@ void WebcamHandlerProc::onTaskEnded(int status, std::shared_ptr<const TaskContex
     const IsHereTaskContext* isHereContext = dynamic_cast<const IsHereTaskContext*>(&*context);
     if (isHereContext == nullptr)
     {
-        notify(&TaskExceptionObserver::onException, std::make_exception_ptr(GenericPresenceHandlerException()));
+        notify(&TaskExceptionObserver::onException/*, std::make_exception_ptr(GenericPresenceHandlerException())*/);
     }
     else
     {
@@ -104,17 +104,17 @@ void WebcamHandlerProc::onTaskEnded(int status, std::shared_ptr<const TaskContex
                 isHereContext->m_TimeKeeperCallback(false);
                 break;
             case IsHereCmdRetCode::INVALID_CAMERA:
-                notify(&TaskExceptionObserver::onException, std::make_exception_ptr(InvalidCameraException()));
+                notify(&TaskExceptionObserver::onException/*, std::make_exception_ptr(InvalidCameraException())*/);
                 break;
             case IsHereCmdRetCode::INVALID_CASCADE:
-                notify(&TaskExceptionObserver::onException, std::make_exception_ptr(MissingCascadeFileException()));
+                notify(&TaskExceptionObserver::onException/*, std::make_exception_ptr(MissingCascadeFileException())*/);
                 break;
             case IsHereCmdRetCode::INVALID_FACEX:
             case IsHereCmdRetCode::INVALID_FACEY:
             case IsHereCmdRetCode::INVALID_INDEX:
             case IsHereCmdRetCode::INVALID_NB_ARGS:
             case IsHereCmdRetCode::OTHER_ERROR:
-                notify(&TaskExceptionObserver::onException, std::make_exception_ptr(GenericPresenceHandlerException()));
+                notify(&TaskExceptionObserver::onException/*, std::make_exception_ptr(GenericPresenceHandlerException())*/);
                 break;
             default:
                 // wxExecute is buggy, could happen...

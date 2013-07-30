@@ -37,7 +37,7 @@ class AbstractUtils;
 enum class IsHereCmdRetCode;
 class TaskExceptionObserver;
 class WebcamHandlerProc : public AbstractPresenceHandler, public TaskCaller,
-    public Subject<TaskExceptionObserver, std::exception_ptr>
+    public Subject<TaskExceptionObserver/*, std::exception_ptr*/>
 {
     public:
         WebcamHandlerProc(AbstractUtils& utils,

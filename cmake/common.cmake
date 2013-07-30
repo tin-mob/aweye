@@ -19,9 +19,27 @@
 ########################################################################
 
 cmake_minimum_required(VERSION 2.8)
-if(UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+
+#todo other compilers
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 endif()
+
+set(BOOST_ROOT_CACHE "" CACHE PATH "Boost directory.")
+if(NOT BOOST_ROOT_CACHE EQUAL "")
+	set(BOOST_ROOT ${BOOST_ROOT_CACHE})
+endif()
+
+set (BOOST_LIBRARYDIR_CACHE "" CACHE PATH "Boost library directory")
+if(NOT BOOST_LIBRARYDIR_CACHE EQUAL "")
+	set(BOOST_LIBRARYDIR ${BOOST_LIBRARYDIR_CACHE})
+endif()
+
+# set(Boost_USE_STATIC_LIBS OFF) 
+# set(Boost_USE_MULTITHREADED ON)  
+# set(Boost_USE_STATIC_RUNTIME OFF) 
+find_package(Boost 1.54.0 REQUIRED date_time) 
+include_directories(${Boost_INCLUDE_DIRS})
 
 file(GLOB ISHERECMD_SOURCES "${CMAKE_SOURCE_DIR}/src/aweye/core/WebcamHandler.cpp" "${CMAKE_SOURCE_DIR}/src/aweye/core/main-IsHereCmd.cpp")
 file(GLOB ISHERECMD_HEADERS "${CMAKE_SOURCE_DIR}/include/aweye/core/WebcamHandler.h" "${CMAKE_SOURCE_DIR}/include/aweye/core/IsHereCmd.h")
