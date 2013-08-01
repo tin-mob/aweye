@@ -66,8 +66,8 @@ SUITE(TestWebcamHandlerProc)
         handler.isHere(callback);
 
         std::ostringstream s;
-        s  << "dir/IsHereCmd '" << index << "' '" << cascade << "' '"
-            << faceX << "' '" << faceY << "'";
+        s  << "dir/IsHereCmd \"" << index << "\" \"" << cascade << "\" \""
+            << faceX << "\" \"" << faceY << "\"";
         CHECK_EQUAL(s.str(), commandString);
     }
 

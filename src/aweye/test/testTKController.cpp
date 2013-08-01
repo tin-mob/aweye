@@ -42,8 +42,8 @@ struct TKControllerFixture
             utils("", "path/"), data(ConfigData::getDefault(utils.m_Dir)),
             msgHandler(), timeHandler(), keeper(), clockTimer(),
             dialog(), viewObserver(),
-            controller(TKController(msgHandler, keeper,
-                clockTimer, timeHandler, utils, data.popupAlarm, true, data.soundPath))
+            controller(msgHandler, keeper,
+                clockTimer, timeHandler, utils, data.popupAlarm, true, data.soundPath)
         {
             data.soundAlarm = true;
             controller.attach(&viewObserver);
@@ -264,8 +264,6 @@ SUITE(TestTKController)
     {
         controller.toggleStart();
         clockTimer.ring();
-		clockTimer.attach(&controller);
-		clockTimer.ring();
         CHECK_EQUAL(viewObserver.checkTimeUpdated(), true);
     }
 }
