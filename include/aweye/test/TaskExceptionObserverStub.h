@@ -32,16 +32,9 @@ class TaskExceptionObserverStub : public TaskExceptionObserver
     public:
         TaskExceptionObserverStub() : what("") {}
         virtual ~TaskExceptionObserverStub() {}
-        virtual void onException(/*const std::exception_ptr exception*/)
+        virtual void onException(std::shared_ptr<const BaseException> exception)
         {
-            try
-            {
-                //std::rethrow_exception(exception);
-            }
-            catch (const BaseException& e)
-            {
-                what = e.what();
-            }
+		    what = exception->what();
         }
         std::string what;
 

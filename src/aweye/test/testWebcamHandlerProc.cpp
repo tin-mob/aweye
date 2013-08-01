@@ -42,7 +42,7 @@ struct WebcamHandlerProcFixture
         {
             commandString = context->m_Command;
         }),
-        handler(utils, cmd, index, cascade, faceX, faceY)
+        handler(utils, cmd, index, cascade, faceX, faceY, "IsHereCmd")
     {
     }
     ~WebcamHandlerProcFixture() {}

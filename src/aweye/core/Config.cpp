@@ -48,7 +48,7 @@ const ConfigData& Config::getData() const
 
 ConfigData Config::getLoadedData() const
 {
-    return {
+    return ConfigData(
         boost::posix_time::duration_from_string(m_Impl.read("WorkLength",
             boost::posix_time::to_simple_string(ConfigData::default_WorkLength))),
         boost::posix_time::duration_from_string(m_Impl.read("PauseLength",
@@ -70,7 +70,7 @@ ConfigData Config::getLoadedData() const
         boost::posix_time::duration_from_string(m_Impl.read("RunningLateThreshold",
             boost::posix_time::to_simple_string(ConfigData::default_RunningLateThreshold))),
         m_Impl.read("CummulPause", ConfigData::default_CummulPause)
-    };
+    );
 }
 
 void Config::load()

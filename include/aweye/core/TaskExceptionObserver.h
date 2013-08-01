@@ -22,13 +22,16 @@
 #ifndef TASKEXCEPTIONOBSERVER_H
 #define TASKEXCEPTIONOBSERVER_H
 
+#include <memory>
+
 namespace Aweye {
 
+class BaseException;
 class TaskExceptionObserver
 {
     public:
         virtual ~TaskExceptionObserver() {}
-        virtual void onException(/*const std::exception_ptr exception*/) = 0;
+        virtual void onException(std::shared_ptr<const BaseException> exception) = 0;
     private:
 };
 }

@@ -50,9 +50,11 @@ class TimeKeeper : public AbstractTimeKeeper
                    bool cummulPause);
         virtual ~TimeKeeper();
 
+// Visual studio does not support deleted methods...
+#ifndef _MSC_VER
         TimeKeeper(const TimeKeeper&) = delete;
         TimeKeeper& operator=(const TimeKeeper&) = delete;
-
+#endif
         virtual void start();
         virtual void stop();
 

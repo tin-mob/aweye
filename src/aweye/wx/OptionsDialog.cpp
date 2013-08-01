@@ -268,7 +268,7 @@ OptionsDialog::~OptionsDialog()
 
 ConfigData OptionsDialog::getData() const
 {
-    return {
+    return ConfigData(
         boost::posix_time::seconds(
             wrkMinSpinCtrl->GetValue() * 60 + wrkSecSpinCtrl->GetValue()),
         boost::posix_time::seconds(
@@ -290,7 +290,7 @@ ConfigData OptionsDialog::getData() const
         boost::posix_time::seconds(
             runningLateMinSpinCtrl->GetValue() * 60 + runningLateSecSpinCtrl->GetValue()),
         cummulCheckBox->GetValue()
-    };
+    );
 }
 
 void OptionsDialog::setData(const ConfigData& data)

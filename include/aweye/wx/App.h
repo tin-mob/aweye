@@ -66,8 +66,11 @@ class App : public wxApp, public SetTopWindowInt
         App();
         ~App();
 
+// Visual studio does not support deleted methods...
+#ifndef _MSC_VER
         App(const App&) = delete;
         App& operator=(const App&) = delete;
+#endif
 
         virtual bool OnInit();
         virtual void OnInitCmdLine(wxCmdLineParser& parser);

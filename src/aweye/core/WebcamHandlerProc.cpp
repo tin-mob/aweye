@@ -34,9 +34,10 @@ namespace Aweye {
 
 WebcamHandlerProc::WebcamHandlerProc(AbstractUtils& utils,
     std::function<void (std::shared_ptr<const TaskContext> context)> cmd,
-    int index, std::string faceCascadeName, int faceSizeX, int faceSizeY) :
+    int index, std::string faceCascadeName, int faceSizeX, int faceSizeY,
+	std::string isHereCmd) :
     m_Utils(utils), m_Cmd(cmd), m_index(index), m_FaceCascadeName(faceCascadeName),
-    m_FaceSizeX(faceSizeX), m_FaceSizeY(faceSizeY)
+	m_FaceSizeX(faceSizeX), m_FaceSizeY(faceSizeY), m_IsHereCmd(isHereCmd)
 {
     //ctor
 }
@@ -71,15 +72,15 @@ void WebcamHandlerProc::isHere(std::function<void (bool)> callBack)
         throw MissingCascadeFileException();
     }
 
-    std::string binStr = m_Utils.getBinPath("IsHereCmd");
+    std::string binStr = m_Utils.getBinPath(m_IsHereCmd);
     if (binStr == "")
     {
         throw GenericPresenceHandlerException();
     }
 
     std::ostringstream s;
-    s  << binStr << " '" << m_index << "' '" << m_FaceCascadeName << "' '"
-        << m_FaceSizeX << "' '" << m_FaceSizeY << "'";
+    s  << binStr << " \"" << m_index << "\" \"" << m_FaceCascadeName << "\" \""
+        << m_FaceSizeX << "\" \"" << m_FaceSizeY << "\"";
 
     std::shared_ptr<const TaskContext> contextPtr(new IsHereTaskContext(s.str(), *this, callBack));
     m_Cmd(contextPtr);
@@ -90,7 +91,8 @@ void WebcamHandlerProc::onTaskEnded(int status, std::shared_ptr<const TaskContex
     const IsHereTaskContext* isHereContext = dynamic_cast<const IsHereTaskContext*>(&*context);
     if (isHereContext == nullptr)
     {
-        notify(&TaskExceptionObserver::onException/*, std::make_exception_ptr(GenericPresenceHandlerException())*/);
+        notify(&TaskExceptionObserver::onException,
+               std::shared_ptr<const BaseException>(new GenericPresenceHandlerException()));
     }
     else
     {
@@ -104,17 +106,20 @@ void WebcamHandlerProc::onTaskEnded(int status, std::shared_ptr<const TaskContex
                 isHereContext->m_TimeKeeperCallback(false);
                 break;
             case IsHereCmdRetCode::INVALID_CAMERA:
-                notify(&TaskExceptionObserver::onException/*, std::make_exception_ptr(InvalidCameraException())*/);
+                notify(&TaskExceptionObserver::onException,
+                       std::shared_ptr<const BaseException>(new InvalidCameraException()));
                 break;
             case IsHereCmdRetCode::INVALID_CASCADE:
-                notify(&TaskExceptionObserver::onException/*, std::make_exception_ptr(MissingCascadeFileException())*/);
+                notify(&TaskExceptionObserver::onException,
+                       std::shared_ptr<const BaseException>(new MissingCascadeFileException()));
                 break;
             case IsHereCmdRetCode::INVALID_FACEX:
             case IsHereCmdRetCode::INVALID_FACEY:
             case IsHereCmdRetCode::INVALID_INDEX:
             case IsHereCmdRetCode::INVALID_NB_ARGS:
             case IsHereCmdRetCode::OTHER_ERROR:
-                notify(&TaskExceptionObserver::onException/*, std::make_exception_ptr(GenericPresenceHandlerException())*/);
+                notify(&TaskExceptionObserver::onException,
+                       std::shared_ptr<const BaseException>(new GenericPresenceHandlerException()));
                 break;
             default:
                 // wxExecute is buggy, could happen...

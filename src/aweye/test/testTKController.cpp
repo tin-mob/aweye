@@ -264,6 +264,8 @@ SUITE(TestTKController)
     {
         controller.toggleStart();
         clockTimer.ring();
+		clockTimer.attach(&controller);
+		clockTimer.ring();
         CHECK_EQUAL(viewObserver.checkTimeUpdated(), true);
     }
 }

@@ -64,7 +64,7 @@ ConfigData ConfigData::getDefault(std::string path, boost::posix_time::time_dura
     bool sa, bool pa, bool tr, int wi, unsigned int fx, unsigned int fy,
     std::string cp, std::string sp, boost::posix_time::time_duration lt, bool cup)
 {
-    return { wl, pl, rf, cf, pt, wt, sa, pa, tr, wi, fx, fy, path + cp, path + sp, lt, cup};
+    return ConfigData(wl, pl, rf, cf, pt, wt, sa, pa, tr, wi, fx, fy, path + cp, path + sp, lt, cup);
 }
 
 bool ConfigData::operator==(const ConfigData& other) const

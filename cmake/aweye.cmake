@@ -46,6 +46,9 @@ file(GLOB AWEYE_WX_HEADERS ${CMAKE_SOURCE_DIR}/include/aweye/wx/*.h)
 add_executable( IsHereCmd ${ISHERECMD_SOURCES} ${ISHERECMD_HEADERS})
 target_link_libraries( IsHereCmd ${OpenCV_LIBS} )
 
+get_target_property( ISHERECMD_FULL_NAME IsHereCmd LOCATION_CONFIG)
+get_filename_component(ISHERECMD_NAME ${ISHERECMD_FULL_NAME} NAME)
+
 set(AWEYE_DATA_DIR ${CMAKE_INSTALL_PREFIX}/${DEST_DATA_DIR})
 configure_file(${CMAKE_SOURCE_DIR}/cmake/Defines.in.h ${CMAKE_BINARY_DIR}/CMakeDefines.h)
 include_directories(${CMAKE_BINARY_DIR})

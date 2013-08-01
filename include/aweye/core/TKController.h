@@ -30,6 +30,7 @@
 #include "aweye/core/TaskExceptionObserver.h"
 
 #include <boost/date_time/posix_time/posix_time_types.hpp>
+#include <memory>
 #include <string>
 
 namespace Aweye {
@@ -37,6 +38,7 @@ namespace Aweye {
 class AbstractMsgHandler;
 class AbstractTimeHandler;
 class AbstractTimeKeeper;
+class BaseException;
 class TKController : public AbstractTKController, public TimerInterface, public TaskExceptionObserver
 {
     public:
@@ -71,10 +73,11 @@ class TKController : public AbstractTKController, public TimerInterface, public 
         virtual void setSoundAlarm(bool soundAlarm);
         virtual void setSoundPath(std::string soundPath);
 
-        virtual void onException(/*const std::exception_ptr exception*/);
+        virtual void onException(std::shared_ptr<const BaseException> exception);
 
     protected:
     private:
+        void manageException(const BaseException& exception);
         static std::string durationToString(boost::posix_time::time_duration duration);
 
         void alert();

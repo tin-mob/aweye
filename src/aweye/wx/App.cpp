@@ -41,6 +41,7 @@
 #include "aweye/wx/TaskBar.h"
 #include "aweye/wx/Utils.h"
 #include "aweye/wx/wx_pch.h"
+#include "CMakeDefines.h"
 
 #include <memory>
 #include <wx/cmdline.h>
@@ -62,7 +63,7 @@ template <class T> class no_delete
 template <>
 struct PtrTraits<WX::MainFrame>
 {
-  typedef typename std::unique_ptr<WX::MainFrame, no_delete<WX::MainFrame>> Ptr;
+  typedef std::unique_ptr<WX::MainFrame, no_delete<WX::MainFrame>> Ptr;
 };
 
 template <>
@@ -76,7 +77,7 @@ struct PresenceHandlerFactory<WebcamHandlerProc>
             WX::Task::run(context);
         };
         return new WebcamHandlerProc(*(b.m_Utils), cmd, data.webcamIndex, data.cascadePath,
-            data.faceSizeX, data.faceSizeY);
+            data.faceSizeX, data.faceSizeY, ISHERECMD_NAME);
     }
 };
 
