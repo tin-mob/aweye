@@ -66,6 +66,13 @@ struct PtrTraits<WX::MainFrame>
   typedef std::unique_ptr<WX::MainFrame, no_delete<WX::MainFrame>> Ptr;
 };
 
+// TaskBar must delete itself because of windows...
+template <>
+struct PtrTraits<WX::TaskBar>
+{
+  typedef std::unique_ptr<WX::TaskBar, no_delete<WX::TaskBar>> Ptr;
+};
+
 template <>
 struct PresenceHandlerFactory<WebcamHandlerProc>
 {

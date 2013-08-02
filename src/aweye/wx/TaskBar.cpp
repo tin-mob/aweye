@@ -107,6 +107,8 @@ void TaskBar::setIcon(std::string loc)
     else
     {
         RemoveIcon();
+		// In windows, its not enough to remove the icon...
+		Destroy();
     }
 
 }
