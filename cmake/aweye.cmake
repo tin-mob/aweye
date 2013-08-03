@@ -28,7 +28,6 @@ set(DEST_DATA_DIR share/${CMAKE_PROJECT_NAME})
 # Import Packages
 ########################################################################
 
-# @todo umph. seems to work without it... (is it because it is used to build opencv?)
 find_package( OpenCV REQUIRED )
 
 # use static?
@@ -53,7 +52,11 @@ set(AWEYE_DATA_DIR ${CMAKE_INSTALL_PREFIX}/${DEST_DATA_DIR})
 configure_file(${CMAKE_SOURCE_DIR}/cmake/Defines.in.h ${CMAKE_BINARY_DIR}/CMakeDefines.h)
 include_directories(${CMAKE_BINARY_DIR})
 
-add_executable( Aweye ${AWEYE_SOURCES} ${AWEYE_WX_SOURCES} ${AWEYE_HEADERS} ${AWEYE_WX_HEADERS} ${CMAKE_BINARY_DIR}/CMakeDefines.h)
+if(WIN32)
+	add_executable( Aweye WIN32 ${AWEYE_SOURCES} ${AWEYE_WX_SOURCES} ${AWEYE_HEADERS} ${AWEYE_WX_HEADERS} ${CMAKE_BINARY_DIR}/CMakeDefines.h)
+else(WIN32)
+	add_executable( Aweye ${AWEYE_SOURCES} ${AWEYE_WX_SOURCES} ${AWEYE_HEADERS} ${AWEYE_WX_HEADERS} ${CMAKE_BINARY_DIR}/CMakeDefines.h)
+endif(WIN32)
+
 target_link_libraries( Aweye ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES})
 add_dependencies(Aweye IsHereCmd)
-
