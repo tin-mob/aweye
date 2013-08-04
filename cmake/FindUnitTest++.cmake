@@ -8,19 +8,6 @@
 SET(UNITTESTXX_PATH "" CACHE PATH "UnitTest root path.")
 SET (UNITTEST++_FOUND FALSE)
 
-# if(WIN32)
-	# LIST(APPEND UNITTEST++_ROOT_LIST 
-		# C:/Program Files (x86)
-		# C:/Program Files
-		# )
-# elseif(UNIX)
-	# LIST(APPEND UNITTEST++_ROOT_LIST 
-		# /usr/include/unittest++ 
-		# /usr/local/include/unittest++ 
-		# /opt/local/include/unittest++
-		# )
-# endif
-
 FIND_PATH (UNITTEST++_INCLUDE_DIR UnitTest++.h ${UNITTESTXX_PATH} PATH_SUFFIXES
 	"" unittest++ src include/unittest++ DOC "UnitTest++ header location.")
 FIND_LIBRARY (UNITTEST++_LIBRARY UnitTest++ ${UNITTESTXX_PATH} PATH_SUFFIXES
