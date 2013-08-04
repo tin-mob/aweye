@@ -35,6 +35,11 @@ find_package( OpenCV REQUIRED )
 find_package(wxWidgets COMPONENTS core base adv REQUIRED)
 include(${wxWidgets_USE_FILE})
 
+# wxwidgets makes a bunch of warnings in msvc. silence them.
+if(MSVC OR MSVC_IDE)
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+endif()
+
 ########################################################################
 # Executables
 ########################################################################

@@ -31,7 +31,7 @@
 #include "aweye/test/TKControllerObserverStub.h"
 #include "aweye/test/UtilsStub.h"
 
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++.h>
 
 namespace Aweye
 {

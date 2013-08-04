@@ -25,7 +25,7 @@
 #include "aweye/test/PresenceHandlerStub.h"
 #include "aweye/test/TimeHandlerStub.h"
 
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++.h>
 
 namespace Aweye
 {

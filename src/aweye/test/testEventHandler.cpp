@@ -26,7 +26,7 @@
 #include "aweye/test/TKControllerStub.h"
 
 #include <functional>
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++.h>
 
 namespace Aweye
 {

@@ -28,7 +28,7 @@
 #include <functional>
 #include <sstream>
 #include <string>
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++.h>
 
 #include <iostream>
 

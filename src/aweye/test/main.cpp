@@ -21,8 +21,8 @@
 
 /// @todo if you have a lot of time to lose, correct CHECK_EQUAL expected and actual...
 
-#include <unittest++/UnitTest++.h>
-#include <unittest++/TestReporterStdout.h>
+#include <UnitTest++.h>
+#include <TestReporterStdout.h>
 
 int main()
 {
