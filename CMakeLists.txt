@@ -28,7 +28,11 @@ include(cmake/aweye.cmake)
 # Install
 ########################################################################
 
-set(DEST_RUNTIME_DIR bin)
+if(WIN32)
+	set(DEST_RUNTIME_DIR ".")
+else(WIN32)
+	set(DEST_RUNTIME_DIR bin)
+endif(WIN32)
 set(CASCADE_DIR cascades)
 set(ICONS_DIR icons)
 
@@ -40,9 +44,15 @@ set(DATA_SOUND ${CMAKE_SOURCE_DIR}/data/beep-1.wav)
 install(TARGETS IsHereCmd RUNTIME DESTINATION ${DEST_RUNTIME_DIR})
 install(TARGETS Aweye RUNTIME DESTINATION ${DEST_RUNTIME_DIR})
 
-install(FILES ${DATA_CASCADE} DESTINATION ${DEST_DATA_DIR}/${CASCADE_DIR}/)
-install(FILES ${DATA_ICONS} DESTINATION ${DEST_DATA_DIR}/${ICONS_DIR}/)
-install(FILES ${DATA_SOUND} DESTINATION ${DEST_DATA_DIR}/)
+if(${DEST_DATA_DIR})
+	install(FILES ${DATA_CASCADE} DESTINATION ${DEST_DATA_DIR}/${CASCADE_DIR}/)
+	install(FILES ${DATA_ICONS} DESTINATION ${DEST_DATA_DIR}/${ICONS_DIR}/)
+	install(FILES ${DATA_SOUND} DESTINATION ${DEST_DATA_DIR}/)
+else(${DEST_DATA_DIR})
+	install(FILES ${DATA_CASCADE} DESTINATION ${CASCADE_DIR}/)
+	install(FILES ${DATA_ICONS} DESTINATION ${ICONS_DIR}/)
+	install(FILES ${DATA_SOUND} DESTINATION ".")
+endif(${DEST_DATA_DIR})
 
 # @todo install readme
 # @todo install install_manifest.txt so that it could be uninstalled ?
@@ -76,18 +86,21 @@ set(CPACK_PACKAGE_VERSION_PATCH "0")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Aweye")
 IF(WIN32 AND NOT UNIX)
 	# @todo this
-	set(CPACK_GENERATOR "${CPACK_GENERATOR};NSIS")
+	set(CPACK_GENERATOR "ZIP;NSIS")
+	file(TO_NATIVE_PATH "${CMAKE_SOURCE_DIR}\\\\data/icons/webcam.ico" ICON_PATH)
+	
 	# There is a bug in NSI that does not handle full unix paths properly. Make
 	# sure there is at least one set of four (4) backlasshes.
-	set(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/Data/icons\\\\webcam.ico")
-	set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\Aweye.exe")
-	set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY} Aweye")
-	#set(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.my-project-home-page.org")
-	#set(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.my-personal-home-page.com")
-	#set(CPACK_NSIS_CONTACT "me@my-personal-home-page.com")
-	set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/Data/icons\\\\webcam.ico")
-	set(CPACK_NSIS_MUI_UNIICON "${CMAKE_SOURCE_DIR}/Data/icons\\\\webcam.ico")
-	set(CPACK_NSIS_MENU_LINKS "programs\\Aweye" "Aweye")
+	
+	set(CPACK_PACKAGE_ICON ${ICON_PATH})
+	set(CPACK_NSIS_INSTALLED_ICON_NAME "Aweye.exe")
+	set(CPACK_NSIS_DISPLAY_NAME "Aweye")
+	set(CPACK_NSIS_HELP_LINK "https://github.com/tin-mob/aweye")
+	set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/tin-mob/aweye")
+	set(CPACK_NSIS_CONTACT "tin.mob.error@gmail.com")
+	set(CPACK_NSIS_MUI_ICON ${ICON_PATH})
+	set(CPACK_NSIS_MUI_UNIICON ${ICON_PATH})
+	set(CPACK_NSIS_MENU_LINKS "programs\\\\Aweye" "Aweye")
 	set(CPACK_NSIS_MODIFY_PATH ON)
 ELSE(WIN32 AND NOT UNIX)
 	set(CPACK_SET_DESTDIR ON)

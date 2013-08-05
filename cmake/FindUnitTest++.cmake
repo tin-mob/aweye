@@ -1,5 +1,5 @@
-# Source : https://github.com/erwincoumans/rbdl/blob/master/CMake/FindUnitTest%2B%2B.cmake
-# Modded because I prefer cache variables and to work in windows
+# Sources : https://github.com/erwincoumans/rbdl/blob/master/CMake/FindUnitTest%2B%2B.cmake
+# and https://github.com/libamqp/libamqp/blob/develop/FindUnitTest%2B%2B.cmake
 
 # - Try to find UnitTest++
 #
@@ -10,8 +10,24 @@ SET (UNITTEST++_FOUND FALSE)
 
 FIND_PATH (UNITTEST++_INCLUDE_DIR UnitTest++.h ${UNITTESTXX_PATH} PATH_SUFFIXES
 	"" unittest++ src include/unittest++ DOC "UnitTest++ header location.")
-FIND_LIBRARY (UNITTEST++_LIBRARY UnitTest++ ${UNITTESTXX_PATH} PATH_SUFFIXES
+FIND_LIBRARY (UNITTEST++_RELEASE_LIBRARY
+	NAMES UnitTest++ UnitTest++.vsnet2005 UnitTest++.vsnet2008
+	PATHS ${UNITTESTXX_PATH} PATH_SUFFIXES
 	"" Release lib DOC "UnitTest++ library location.")
+	
+# Windows is harder (hopefully if finds the debug version, since both have the same name)
+IF (WIN32)
+	FIND_LIBRARY (UNITTEST++_DEBUG_LIBRARY
+		NAMES UnitTest++ UnitTest++.vsnet2005 UnitTest++.vsnet2008
+		PATHS ${UNITTESTXX_PATH} PATH_SUFFIXES
+		"" Debug lib DOC "UnitTest++ library location.")
+ENDIF (WIN32)
+
+IF (WIN32)
+	SET(UNITTEST++_LIBRARY optimized ${UNITTEST++_RELEASE_LIBRARY} debug ${UNITTEST++_DEBUG_LIBRARY})
+ELSE (WIN32)
+	SET(UNITTEST++_LIBRARY ${UNITTEST++_RELEASE_LIBRARY})
+ENDIF (WIN32)
 
 IF (UNITTEST++_INCLUDE_DIR AND UNITTEST++_LIBRARY)
 	SET (UNITTEST++_FOUND TRUE)

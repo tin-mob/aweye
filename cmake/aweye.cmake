@@ -22,7 +22,11 @@ cmake_minimum_required(VERSION 2.8)
 project(Aweye)
 
 # @todo should this change for windows? 
-set(DEST_DATA_DIR share/${CMAKE_PROJECT_NAME})
+if(WIN32)
+	set(DEST_DATA_DIR "")
+else(WIN32)
+	set(DEST_DATA_DIR share/${CMAKE_PROJECT_NAME})
+endif(WIN32)
 
 ########################################################################
 # Import Packages
@@ -53,7 +57,11 @@ target_link_libraries( IsHereCmd ${OpenCV_LIBS} )
 get_target_property( ISHERECMD_FULL_NAME IsHereCmd LOCATION_CONFIG)
 get_filename_component(ISHERECMD_NAME ${ISHERECMD_FULL_NAME} NAME)
 
-set(AWEYE_DATA_DIR ${CMAKE_INSTALL_PREFIX}/${DEST_DATA_DIR})
+if(${DEST_DATA_DIR})
+	set(AWEYE_DATA_DIR ${CMAKE_INSTALL_PREFIX}/${DEST_DATA_DIR})
+else(${DEST_DATA_DIR})
+	set(AWEYE_DATA_DIR ${CMAKE_INSTALL_PREFIX})
+endif(${DEST_DATA_DIR})	
 configure_file(${CMAKE_SOURCE_DIR}/cmake/Defines.in.h ${CMAKE_BINARY_DIR}/CMakeDefines.h)
 include_directories(${CMAKE_BINARY_DIR})
 
