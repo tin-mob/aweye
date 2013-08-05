@@ -51,7 +51,15 @@ endif()
 file(GLOB AWEYE_WX_SOURCES ${CMAKE_SOURCE_DIR}/src/aweye/wx/*.cpp)
 file(GLOB AWEYE_WX_HEADERS ${CMAKE_SOURCE_DIR}/include/aweye/wx/*.h)
 
-add_executable( IsHereCmd ${ISHERECMD_SOURCES} ${ISHERECMD_HEADERS})
+if(WIN32)
+	add_executable( IsHereCmd ${ISHERECMD_SOURCES} ${ISHERECMD_HEADERS} ${AWEYE_RC})
+	add_executable( Aweye WIN32 ${AWEYE_SOURCES} ${AWEYE_WX_SOURCES} ${AWEYE_HEADERS} ${AWEYE_WX_HEADERS}
+		${CMAKE_BINARY_DIR}/CMakeDefines.h ${AWEYE_RC})
+else(WIN32)
+	add_executable( IsHereCmd ${ISHERECMD_SOURCES} ${ISHERECMD_HEADERS})
+	add_executable( Aweye ${AWEYE_SOURCES} ${AWEYE_WX_SOURCES} ${AWEYE_HEADERS} ${AWEYE_WX_HEADERS} ${CMAKE_BINARY_DIR}/CMakeDefines.h)
+endif(WIN32)
+
 target_link_libraries( IsHereCmd ${OpenCV_LIBS} )
 
 get_target_property( ISHERECMD_FULL_NAME IsHereCmd LOCATION_CONFIG)
@@ -61,15 +69,10 @@ if(${DEST_DATA_DIR})
 	set(AWEYE_DATA_DIR ${CMAKE_INSTALL_PREFIX}/${DEST_DATA_DIR})
 else(${DEST_DATA_DIR})
 	set(AWEYE_DATA_DIR ${CMAKE_INSTALL_PREFIX})
-endif(${DEST_DATA_DIR})	
+endif(${DEST_DATA_DIR})
+
 configure_file(${CMAKE_SOURCE_DIR}/cmake/Defines.in.h ${CMAKE_BINARY_DIR}/CMakeDefines.h)
 include_directories(${CMAKE_BINARY_DIR})
-
-if(WIN32)
-	add_executable( Aweye WIN32 ${AWEYE_SOURCES} ${AWEYE_WX_SOURCES} ${AWEYE_HEADERS} ${AWEYE_WX_HEADERS} ${CMAKE_BINARY_DIR}/CMakeDefines.h)
-else(WIN32)
-	add_executable( Aweye ${AWEYE_SOURCES} ${AWEYE_WX_SOURCES} ${AWEYE_HEADERS} ${AWEYE_WX_HEADERS} ${CMAKE_BINARY_DIR}/CMakeDefines.h)
-endif(WIN32)
 
 target_link_libraries( Aweye ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES})
 add_dependencies(Aweye IsHereCmd)

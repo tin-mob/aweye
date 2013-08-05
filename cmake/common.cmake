@@ -68,3 +68,12 @@ list(REMOVE_ITEM AWEYE_HEADERS "${CMAKE_SOURCE_DIR}/include/aweye/core/WebcamHan
 
 include_directories(${CMAKE_SOURCE_DIR}/src/)
 include_directories(${CMAKE_SOURCE_DIR}/include/)
+
+if(MSVC OR MSVC_IDE)
+	set(AWEYE_ICON ${ICONS_DIR}/webcam.ico)
+	set(AWEYE_RC ${CMAKE_BINARY_DIR}/Aweye.rc)
+	configure_file(${CMAKE_SOURCE_DIR}/cmake/Aweye.in.rc ${AWEYE_RC})
+	
+	# need that for in source build
+	include_directories(${CMAKE_SOURCE_DIR}/data/)
+endif(MSVC OR MSVC_IDE)

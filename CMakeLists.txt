@@ -20,14 +20,6 @@
 
 cmake_minimum_required(VERSION 2.8)
 
-include(cmake/common.cmake)
-include(cmake/aweyeTest.cmake)
-include(cmake/aweye.cmake)
-
-########################################################################
-# Install
-########################################################################
-
 if(WIN32)
 	set(DEST_RUNTIME_DIR ".")
 else(WIN32)
@@ -35,6 +27,14 @@ else(WIN32)
 endif(WIN32)
 set(CASCADE_DIR cascades)
 set(ICONS_DIR icons)
+
+include(cmake/common.cmake)
+include(cmake/aweyeTest.cmake)
+include(cmake/aweye.cmake)
+
+########################################################################
+# Install
+########################################################################
 
 file(GLOB DATA_CASCADE ${CMAKE_SOURCE_DIR}/data/${CASCADE_DIR}/*)
 file(GLOB DATA_ICONS ${CMAKE_SOURCE_DIR}/data/${ICONS_DIR}/*)
@@ -81,7 +81,7 @@ set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/license.txt")
 set(CPACK_PACKAGE_VERSION_MAJOR "0")
 set(CPACK_PACKAGE_VERSION_MINOR "1")
-set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_VERSION_PATCH "1")
 
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Aweye")
 IF(WIN32 AND NOT UNIX)
