@@ -16,27 +16,29 @@ for shy people)
 Required
 -------------------------
 
+*	[CMake 2.8](http://www.cmake.org/)
 *	[WxWidgets 2.9.5](http://www.wxwidgets.org/)
 *	[OpenCV](http://opencv.org/)
-	(minimally core, objdetect, imgproc and highgui)
+*	[Boost 1.45+](http://www.boost.org/)
+*	[UnitTest++](http://unittest-cpp.sourceforge.net/) if testing
+*	[Microsoft Visual C++ Compiler Nov 2012 CTP](http://www.microsoft.com/en-ca/download/details.aspx?id=35515) if using this compiler
 *	A Webcam
 
 Installation
 -------------------------
 
-*@todo windows + test everything* 
+**Linux**
 
 *	Download the project
 *	Go to the project download directory
 *	mkdir build
 *	cd build
-*	cmake ..
+*	cmake .. - or use CMakeGUI
 
 After that, you have a few options:
 
 1.	sudo make install. (make uninstall to remove)
-2.	make package + install with your favourite package manager
-	(deb only for now).
+2.	make package + use the resulting package
 
 Documentation
 -------------------------
