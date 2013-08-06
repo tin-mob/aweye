@@ -22,6 +22,7 @@
 #include "aweye/wx/ConfigImpl.h"
 
 #include <wx/config.h>
+#include <wx/fileconf.h>
 #include <wx/filename.h>
 
 namespace Aweye { namespace WX {

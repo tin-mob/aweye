@@ -25,7 +25,7 @@
 namespace Aweye {
 
 class AbstractOptionsDialog;
-class ConfigData;
+struct ConfigData;
 class AbstractOptionsDialogPres
 {
     public:

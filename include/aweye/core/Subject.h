@@ -32,6 +32,7 @@ namespace Aweye {
 
 // cannot have notify methods with different arguments in the same observer,
 // but allow us to have implicit conversion...
+
 template <class TObserver, class... TParams>
 class Subject
 {

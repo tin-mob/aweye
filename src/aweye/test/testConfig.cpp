@@ -26,7 +26,7 @@
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <string>
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++.h>
 
 namespace Aweye
 {

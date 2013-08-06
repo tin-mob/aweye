@@ -29,7 +29,7 @@
 
 namespace Aweye {
 
-class ConfigData;
+struct ConfigData;
 class TKControllerObserver;
 class AbstractTKController : public Subject<TKControllerObserver>
 {

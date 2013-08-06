@@ -25,7 +25,7 @@
 #include "aweye/test/MsgHandlerStub.h"
 #include "aweye/test/OptionsDialogStub.h"
 
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++.h>
 
 namespace Aweye
 {

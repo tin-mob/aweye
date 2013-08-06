@@ -39,7 +39,7 @@
 #include "aweye/test/ViewPresStub.h"
 
 #include <memory>
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++.h>
 
 namespace Aweye
 {

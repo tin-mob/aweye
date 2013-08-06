@@ -42,7 +42,7 @@
 namespace Aweye {
 
 class AbstractOptionsDialogPres;
-class ConfigData;
+struct ConfigData;
 
 namespace WX {
 
