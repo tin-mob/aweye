@@ -21,7 +21,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(Aweye)
 
-# @todo should this change for windows? 
 if(WIN32)
 	set(DEST_DATA_DIR "")
 else(WIN32)
