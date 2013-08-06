@@ -31,7 +31,7 @@
 #include "aweye/test/TKControllerObserverStub.h"
 #include "aweye/test/UtilsStub.h"
 
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++.h>
 
 namespace Aweye
 {
@@ -42,8 +42,8 @@ struct TKControllerFixture
             utils("", "path/"), data(ConfigData::getDefault(utils.m_Dir)),
             msgHandler(), timeHandler(), keeper(), clockTimer(),
             dialog(), viewObserver(),
-            controller(TKController(msgHandler, keeper,
-                clockTimer, timeHandler, utils, data.popupAlarm, true, data.soundPath))
+            controller(msgHandler, keeper,
+                clockTimer, timeHandler, utils, data.popupAlarm, true, data.soundPath)
         {
             data.soundAlarm = true;
             controller.attach(&viewObserver);

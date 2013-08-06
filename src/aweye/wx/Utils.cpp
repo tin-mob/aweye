@@ -33,18 +33,22 @@ Utils::Utils()
 {
     m_DataDirs.Add(wxT("data/"));
 
-    #ifndef NDEBUG
+	// in source
     #ifdef AWEYE_SRC_BASE
         std::string path = AWEYE_SRC_BASE;
         path += "/data/";
         m_DataDirs.Add(path);
     #endif
-    #endif
+	// make install or package in linux
     #ifdef AWEYE_DATA_DIR
         m_DataDirs.Add(wxT(AWEYE_DATA_DIR));
     #endif
     wxFileName fn(wxStandardPaths::Get().GetExecutablePath());
     m_BinDirs.Add(fn.GetPath());
+
+	// in windows, user can choose where he wants it, so AWEYE_DATA_DIR is useless
+	// but, data is at the same place as the executable
+	m_DataDirs.Add(fn.GetPath());
 }
 
 Utils::~Utils()

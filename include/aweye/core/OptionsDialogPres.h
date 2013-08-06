@@ -29,7 +29,7 @@ namespace Aweye {
 class AbstractConfig;
 class AbstractMsgHandler;
 class AbstractOptionsDialog;
-class ConfigData;
+struct ConfigData;
 class OptionsDialogPres :  public AbstractOptionsDialogPres
 {
     public:

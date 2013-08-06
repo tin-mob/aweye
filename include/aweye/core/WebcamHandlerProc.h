@@ -34,15 +34,17 @@
 namespace Aweye {
 
 class AbstractUtils;
+class BaseException;
 enum class IsHereCmdRetCode;
 class TaskExceptionObserver;
 class WebcamHandlerProc : public AbstractPresenceHandler, public TaskCaller,
-    public Subject<TaskExceptionObserver, std::exception_ptr>
+    public Subject<TaskExceptionObserver, std::shared_ptr<const BaseException>>
 {
     public:
         WebcamHandlerProc(AbstractUtils& utils,
             std::function<void (std::shared_ptr<const TaskContext> context)> cmd,
-            int index, std::string faceCascadeName, int faceSizeX, int faceSizeY);
+            int index, std::string faceCascadeName, int faceSizeX, int faceSizeY, 
+			std::string isHereCmd);
         ~WebcamHandlerProc();
 
         virtual void isHere(std::function<void (bool)> callBack);
@@ -59,6 +61,7 @@ class WebcamHandlerProc : public AbstractPresenceHandler, public TaskCaller,
         std::string m_FaceCascadeName;
         int m_FaceSizeX;
         int m_FaceSizeY;
+		std::string m_IsHereCmd;
 };
 
 struct IsHereTaskContext : public TaskContext

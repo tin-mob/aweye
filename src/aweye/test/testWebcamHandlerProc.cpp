@@ -28,7 +28,7 @@
 #include <functional>
 #include <sstream>
 #include <string>
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++.h>
 
 #include <iostream>
 
@@ -42,7 +42,7 @@ struct WebcamHandlerProcFixture
         {
             commandString = context->m_Command;
         }),
-        handler(utils, cmd, index, cascade, faceX, faceY)
+        handler(utils, cmd, index, cascade, faceX, faceY, "IsHereCmd")
     {
     }
     ~WebcamHandlerProcFixture() {}
@@ -66,8 +66,8 @@ SUITE(TestWebcamHandlerProc)
         handler.isHere(callback);
 
         std::ostringstream s;
-        s  << "dir/IsHereCmd '" << index << "' '" << cascade << "' '"
-            << faceX << "' '" << faceY << "'";
+        s  << "dir/IsHereCmd \"" << index << "\" \"" << cascade << "\" \""
+            << faceX << "\" \"" << faceY << "\"";
         CHECK_EQUAL(s.str(), commandString);
     }
 

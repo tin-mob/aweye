@@ -164,8 +164,12 @@ class Builder
                 throw;
             }
         }
+
+// Visual studio does not support deleted methods...
+#ifndef _MSC_VER
         Builder(const Builder&) = delete;
         Builder& operator=(const Builder&) = delete;
+#endif
 
         virtual ~Builder() {}
     protected:
@@ -176,35 +180,41 @@ class Builder
                 TOptionsDialogPres, TOptionsDialog, TTKConfigObserver,
                 TPresHdlrConfigObserver, TPresConfigObserver, TUtils> getBuild()
         {
-            return {&*m_MsgHandler, &*m_ConfigImpl, &*m_Config, &*m_PresenceHandler,
+            const Build<TMsgHandler, TConfigImpl, TConfig, TPresenceHandler,
+                TTimeHandler, TTimeKeeper, TTimer, TTKController, TEventHandler,
+                TMainFramePres, TMainFrame, TTaskBarPres, TTaskBar,
+                TOptionsDialogPres, TOptionsDialog, TTKConfigObserver,
+                TPresHdlrConfigObserver, TPresConfigObserver, TUtils> build = {
+				&*m_MsgHandler, &*m_ConfigImpl, &*m_Config, &*m_PresenceHandler,
                 &*m_TimeHandler, &*m_TimeKeeper, &*m_ClockTimer, &*m_TKController,
                 &*m_EventHandler, &*m_MainFramePres, &*m_MainFrame, &*m_TaskBarPres,
                 &*m_TaskBar, &*m_OptionsPres, &m_DisplayOptionsDialogCmd,
                 &*m_TKConfigObserver, &*m_PresHdlrConfigObserver, &*m_PresConfigObserver,
-                &*m_Utils};
+				&*m_Utils};
+			return build;
         }
 
     private:
-        friend class PresenceHandlerFactory<TPresenceHandler>;
+        friend struct PresenceHandlerFactory<TPresenceHandler>;
 
-        typedef class PtrTraits<TMsgHandler>::Ptr TMsgHandlerPtr;
-        typedef class PtrTraits<TConfigImpl>::Ptr TConfigImplPtr;
-        typedef class PtrTraits<TConfig>::Ptr TConfigPtr;
-        typedef class PtrTraits<TPresenceHandler>::Ptr TPresenceHandlerPtr;
-        typedef class PtrTraits<TTimeHandler>::Ptr TTimeHandlerPtr;
-        typedef class PtrTraits<TTimeKeeper>::Ptr TTimeKeeperPtr;
-        typedef class PtrTraits<TTimer>::Ptr TTimerPtr;
-        typedef class PtrTraits<TTKController>::Ptr TTKControllerPtr;
-        typedef class PtrTraits<TEventHandler>::Ptr TEventHandlerPtr;
-        typedef class PtrTraits<TMainFramePres>::Ptr TMainFramePresPtr;
-        typedef class PtrTraits<TMainFrame>::Ptr TMainFramePtr;
-        typedef class PtrTraits<TTaskBarPres>::Ptr TTaskBarPresPtr;
-        typedef class PtrTraits<TTaskBar>::Ptr TTaskBarPtr;
-        typedef class PtrTraits<TOptionsDialogPres>::Ptr TOptionsDialogPresPtr;
-        typedef class PtrTraits<TTKConfigObserver>::Ptr TTKConfigObserverPtr;
-        typedef class PtrTraits<TPresHdlrConfigObserver>::Ptr TPresHdlrConfigObserverPtr;
-        typedef class PtrTraits<TPresConfigObserver>::Ptr TPresConfigObserverPtr;
-        typedef class PtrTraits<TUtils>::Ptr TUtilsPtr;
+        typedef typename PtrTraits<TMsgHandler>::Ptr TMsgHandlerPtr;
+        typedef typename PtrTraits<TConfigImpl>::Ptr TConfigImplPtr;
+        typedef typename PtrTraits<TConfig>::Ptr TConfigPtr;
+        typedef typename PtrTraits<TPresenceHandler>::Ptr TPresenceHandlerPtr;
+        typedef typename PtrTraits<TTimeHandler>::Ptr TTimeHandlerPtr;
+        typedef typename PtrTraits<TTimeKeeper>::Ptr TTimeKeeperPtr;
+        typedef typename PtrTraits<TTimer>::Ptr TTimerPtr;
+        typedef typename PtrTraits<TTKController>::Ptr TTKControllerPtr;
+        typedef typename PtrTraits<TEventHandler>::Ptr TEventHandlerPtr;
+        typedef typename PtrTraits<TMainFramePres>::Ptr TMainFramePresPtr;
+        typedef typename PtrTraits<TMainFrame>::Ptr TMainFramePtr;
+        typedef typename PtrTraits<TTaskBarPres>::Ptr TTaskBarPresPtr;
+        typedef typename PtrTraits<TTaskBar>::Ptr TTaskBarPtr;
+        typedef typename PtrTraits<TOptionsDialogPres>::Ptr TOptionsDialogPresPtr;
+        typedef typename PtrTraits<TTKConfigObserver>::Ptr TTKConfigObserverPtr;
+        typedef typename PtrTraits<TPresHdlrConfigObserver>::Ptr TPresHdlrConfigObserverPtr;
+        typedef typename PtrTraits<TPresConfigObserver>::Ptr TPresConfigObserverPtr;
+        typedef typename PtrTraits<TUtils>::Ptr TUtilsPtr;
 
         TMsgHandlerPtr m_MsgHandler;
         TConfigImplPtr m_ConfigImpl;

@@ -25,7 +25,7 @@
 
 namespace Aweye {
 
-class TaskContext;
+struct TaskContext;
 class TaskCaller
 {
     public:

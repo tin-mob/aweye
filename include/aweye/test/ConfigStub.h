@@ -61,7 +61,7 @@ class ConfigStub : public AbstractConfig
 
         static ConfigData getTestData(std::string path = "")
         {
-            return {
+            return ConfigData(
                     ConfigData::default_WorkLength + boost::posix_time::seconds(1),
                     ConfigData::default_PauseLength + boost::posix_time::seconds(1),
                     ConfigData::default_RemFreq + boost::posix_time::seconds(1),
@@ -78,7 +78,7 @@ class ConfigStub : public AbstractConfig
                     path + "test.wav",
                     ConfigData::default_CheckFreq + boost::posix_time::seconds(1),
                     !ConfigData::default_CummulPause
-                };
+                );
         }
 
         AbstractConfigImpl* m_Impl;

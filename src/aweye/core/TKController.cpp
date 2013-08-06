@@ -61,9 +61,9 @@ void TKController::start()
         notify(&TKControllerObserver::OnStatusUpdate);
         m_ClockTimer.startTimer(1000, false);
     }
-    catch (...)
+    catch (BaseException e)
     {
-        onException(std::current_exception());
+        manageException(e);
     }
 }
 
@@ -109,9 +109,9 @@ void TKController::onTimerRing(AbstractTimer*)
             notify(&TKControllerObserver::OnTimeUpdate);
         }
     }
-    catch (...)
+    catch (BaseException e)
     {
-        onException(std::current_exception());
+        manageException(e);
     }
 }
 
@@ -133,20 +133,15 @@ void TKController::toggleStart()
     }
 }
 
-///@note convert to real shared_ptr to remove silly try?
-/// No, it allows to Exception not derived from BaseException
-/// to stop the app.
-void TKController::onException(const std::exception_ptr exception)
+void TKController::onException(std::shared_ptr<const BaseException> exception)
 {
-    try
-    {
-        std::rethrow_exception(exception);
-    }
-    catch (const BaseException& e)
-    {
-        stop();
-        m_MsgHandler.displayError(e.what());
-    }
+    manageException(*exception);
+}
+
+void TKController::manageException(const BaseException& exception)
+{
+    stop();
+    m_MsgHandler.displayError(exception.what());
 }
 
 std::string TKController::getHideButtonLabel() const

@@ -38,7 +38,7 @@ Task::~Task()
 void Task::run(std::shared_ptr<const TaskContext> context)
 {
     Task* task = new Task(context);
-    wxExecute(context->m_Command, wxEXEC_ASYNC, task);
+    wxExecute(context->m_Command, wxEXEC_ASYNC | wxEXEC_HIDE_CONSOLE, task);
 }
 
 void Task::OnTerminate(int pid, int status)
